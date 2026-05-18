@@ -1,0 +1,8 @@
+[gd_resource type="Keystone" format=3]
+
+[resource]
+id = "second_wind"
+display_name = "Second Wind"
+description = "Once per round, if quota is unmet at 10 seconds remaining, the timer pauses for 5 seconds."
+is_starter = false
+second_wind = true

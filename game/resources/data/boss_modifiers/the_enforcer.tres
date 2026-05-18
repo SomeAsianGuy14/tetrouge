@@ -1,0 +1,7 @@
+[gd_resource type="BossModifier" format=3]
+
+[resource]
+id = "the_enforcer"
+display_name = "The Enforcer"
+description = "Time limit reduced to 45 seconds. Quota unchanged."
+time_limit_override = 45.0

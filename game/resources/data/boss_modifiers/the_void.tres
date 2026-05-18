@@ -1,0 +1,7 @@
+[gd_resource type="BossModifier" format=3]
+
+[resource]
+id = "the_void"
+display_name = "The Void"
+description = "Hold piece is disabled for this round."
+disable_hold = true

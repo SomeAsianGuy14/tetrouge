@@ -1,0 +1,9 @@
+[gd_resource type="Consumable" format=3]
+
+[resource]
+id = "piece_lock"
+display_name = "Piece Lock"
+description = "Your next piece is guaranteed to be a T-piece."
+cost = 4
+use_timing = 0
+guarantees_next_t = true

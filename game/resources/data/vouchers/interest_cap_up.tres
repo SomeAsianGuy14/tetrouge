@@ -1,0 +1,7 @@
+[gd_resource type="Voucher" format=3]
+
+[resource]
+id = "interest_cap_up"
+display_name = "Interest Cap Up"
+description = "Maximum interest per shop visit increased from 5 to 8 coins."
+cost = 10

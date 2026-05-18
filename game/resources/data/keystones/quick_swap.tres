@@ -1,0 +1,8 @@
+[gd_resource type="Keystone" format=3]
+
+[resource]
+id = "quick_swap"
+display_name = "Quick Swap"
+description = "Hold piece has no lockout — re-hold immediately after a swap."
+is_starter = true
+disable_hold_lockout = true

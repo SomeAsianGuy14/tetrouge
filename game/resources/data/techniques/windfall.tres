@@ -1,0 +1,8 @@
+[gd_resource type="Technique" format=3]
+
+[resource]
+id = "windfall"
+display_name = "Windfall"
+description = "Earn 1 coin per T-spin during a round."
+cost = 5
+coins_per_tspin = 1

@@ -1,0 +1,8 @@
+[gd_resource type="Keystone" format=3]
+
+[resource]
+id = "bag_shift"
+display_name = "Bag Shift"
+description = "The 7-bag randomiser resets every 5 pieces instead of 7."
+is_starter = false
+bag_reset_interval_override = 5

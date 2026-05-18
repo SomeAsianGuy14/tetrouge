@@ -1,0 +1,8 @@
+[gd_resource type="Keystone" format=3]
+
+[resource]
+id = "deep_sight"
+display_name = "Deep Sight"
+description = "Ghost piece shows the exact drop distance as a number."
+is_starter = false
+deep_sight = true

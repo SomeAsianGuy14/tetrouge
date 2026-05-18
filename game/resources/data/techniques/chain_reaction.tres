@@ -1,0 +1,8 @@
+[gd_resource type="Technique" format=3]
+
+[resource]
+id = "chain_reaction"
+display_name = "Chain Reaction"
+description = "Combo attack bonus increased by 1 per step."
+cost = 5
+combo_bonus_per_step = 1

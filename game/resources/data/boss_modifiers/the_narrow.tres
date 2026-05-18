@@ -1,0 +1,7 @@
+[gd_resource type="BossModifier" format=3]
+
+[resource]
+id = "the_narrow"
+display_name = "The Narrow"
+description = "Board width reduced to 8 columns. The leftmost 2 columns are walled off."
+board_width_override = 8

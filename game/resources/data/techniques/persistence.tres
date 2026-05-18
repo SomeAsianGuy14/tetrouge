@@ -1,0 +1,8 @@
+[gd_resource type="Technique" format=3]
+
+[resource]
+id = "persistence"
+display_name = "Persistence"
+description = "Back-to-back chain does not reset on Doubles."
+cost = 5
+b2b_persists_on_doubles = true

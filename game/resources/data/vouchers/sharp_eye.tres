@@ -1,0 +1,7 @@
+[gd_resource type="Voucher" format=3]
+
+[resource]
+id = "sharp_eye"
+display_name = "Sharp Eye"
+description = "After Elite Blind rounds, see the upcoming Boss Blind modifier before the shop."
+cost = 14

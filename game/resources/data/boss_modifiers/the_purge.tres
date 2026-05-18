@@ -1,0 +1,7 @@
+[gd_resource type="BossModifier" format=3]
+
+[resource]
+id = "the_purge"
+display_name = "The Purge"
+description = "Only Triples, Tetrises, and T-spins count toward the quota."
+quota_whitelist = ["triple", "tetris", "tspin_single", "tspin_double", "tspin_triple", "perfect_clear"]

@@ -1,0 +1,7 @@
+[gd_resource type="Voucher" format=3]
+
+[resource]
+id = "bonus_round"
+display_name = "Bonus Round"
+description = "Speed bonus payout formula doubled."
+cost = 12

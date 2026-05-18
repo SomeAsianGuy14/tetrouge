@@ -1,0 +1,8 @@
+[gd_resource type="Keystone" format=3]
+
+[resource]
+id = "loose_lock"
+display_name = "Loose Lock"
+description = "Lock delay increased by 150ms."
+is_starter = true
+lock_delay_ms_override = 650.0

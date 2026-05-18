@@ -1,0 +1,7 @@
+[gd_resource type="BossModifier" format=3]
+
+[resource]
+id = "the_blinder"
+display_name = "The Blinder"
+description = "Preview is reduced to 1 next piece."
+preview_override = 1

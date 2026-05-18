@@ -1,0 +1,8 @@
+[gd_resource type="Technique" format=3]
+
+[resource]
+id = "momentum"
+display_name = "Momentum"
+description = "Back-to-back bonus is +2 instead of +1."
+cost = 5
+b2b_bonus_override = 2

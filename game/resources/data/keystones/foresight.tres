@@ -1,0 +1,8 @@
+[gd_resource type="Keystone" format=3]
+
+[resource]
+id = "foresight"
+display_name = "Foresight"
+description = "Preview shows 7 next pieces instead of 5."
+is_starter = true
+preview_count_override = 7

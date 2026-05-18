@@ -1,0 +1,7 @@
+[gd_resource type="BossModifier" format=3]
+
+[resource]
+id = "the_surgeon"
+display_name = "The Surgeon"
+description = "Only T-spins count toward the quota. All other clears send 0."
+quota_whitelist = ["tspin_single", "tspin_double", "tspin_triple"]

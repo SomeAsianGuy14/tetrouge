@@ -1,0 +1,8 @@
+[gd_resource type="Keystone" format=3]
+
+[resource]
+id = "iron_will"
+display_name = "Iron Will"
+description = "Lock delay maximum resets increased from 15 to 25."
+is_starter = true
+lock_max_resets_override = 25

@@ -1,0 +1,8 @@
+[gd_resource type="Technique" format=3]
+
+[resource]
+id = "perfectionist"
+display_name = "Perfectionist"
+description = "Perfect Clears send 16 lines instead of 10."
+cost = 8
+perfect_clear_bonus = 6

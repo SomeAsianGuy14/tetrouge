@@ -1,0 +1,7 @@
+[gd_resource type="Voucher" format=3]
+
+[resource]
+id = "consumable_expert"
+display_name = "Consumable Expert"
+description = "Consumable inventory capacity increased from 2 to 3."
+cost = 10

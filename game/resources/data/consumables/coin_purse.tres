@@ -1,0 +1,9 @@
+[gd_resource type="Consumable" format=3]
+
+[resource]
+id = "coin_purse"
+display_name = "Coin Purse"
+description = "Gain 6 coins immediately."
+cost = 3
+use_timing = 2
+adds_coins = 6

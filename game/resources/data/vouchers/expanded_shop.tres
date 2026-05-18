@@ -1,0 +1,7 @@
+[gd_resource type="Voucher" format=3]
+
+[resource]
+id = "expanded_shop"
+display_name = "Expanded Shop"
+description = "Shop Technique slots increased from 3 to 4."
+cost = 12

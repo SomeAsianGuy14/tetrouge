@@ -1,0 +1,9 @@
+[gd_resource type="Consumable" format=3]
+
+[resource]
+id = "time_shard"
+display_name = "Time Shard"
+description = "Add 8 seconds to the round timer."
+cost = 5
+use_timing = 1
+adds_time = 8.0

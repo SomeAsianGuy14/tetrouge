@@ -1,0 +1,7 @@
+[gd_resource type="BossModifier" format=3]
+
+[resource]
+id = "the_tide"
+display_name = "The Tide"
+description = "A garbage line appears at the bottom every 20 seconds."
+garbage_interval = 20.0
