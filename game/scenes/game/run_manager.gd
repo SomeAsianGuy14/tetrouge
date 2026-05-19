@@ -83,6 +83,7 @@ func _load_starter_keystone_pool() -> Array:
 
 func start_round() -> void:
 	current_config = _build_round_config()
+	hud.setup(current_config)
 	quota_accumulated = 0.0
 	technique_income_this_round = 0
 	surplus_attack = 0
@@ -128,7 +129,7 @@ func start_round() -> void:
 
 func _build_round_config() -> RoundConfig:
 	var cfg := RoundConfig.new()
-	cfg.quota = RunState.calculate_quota(RunState.ante, RunState.round_index)
+	cfg.quota = RunState.calculate_quota(RunState.stage, RunState.round_index)
 
 	# Apply keystones
 	for keystone in RunState.keystones:
@@ -141,7 +142,7 @@ func _build_round_config() -> RoundConfig:
 			cfg.boss_modifier = modifier
 			modifier.apply_to_config(cfg)
 
-	cfg.time_limit = RunState.calculate_time_limit(RunState.ante, cfg.boss_modifier.id if cfg.boss_modifier else "")
+	cfg.time_limit = RunState.calculate_time_limit(RunState.stage, cfg.boss_modifier.id if cfg.boss_modifier else "")
 	return cfg
 
 func _select_boss_modifier() -> BossModifier:
@@ -162,7 +163,11 @@ func _load_all_boss_modifiers() -> Array:
 		var f := dir.get_next()
 		while f != "":
 			if f.ends_with(".tres"):
-				result.append(load("res://resources/data/boss_modifiers/" + f))
+				var res := load("res://resources/data/boss_modifiers/" + f)
+				if res != null:
+					result.append(res)
+				else:
+					push_warning("RunManager: failed to load boss modifier: " + f)
 			f = dir.get_next()
 	return result
 
@@ -349,7 +354,7 @@ func _show_failure() -> void:
 	var scene: PackedScene = load(SCENE_RUN_FAILURE)
 	var screen = scene.instantiate()
 	add_child(screen)
-	screen.setup(RunState.ante, RunState.round_index)
+	screen.setup(RunState.stage, RunState.round_index)
 
 func _show_victory() -> void:
 	var scene: PackedScene = load(SCENE_RUN_VICTORY)

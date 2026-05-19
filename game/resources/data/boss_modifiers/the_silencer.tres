@@ -1,7 +1,7 @@
-[gd_resource type="BossModifier" format=3]
+[gd_resource type="BossModifier" format=3 uid="uid://cmq76jge48sw3"]
 
 [resource]
-id = "the_silencer"
-display_name = "The Silencer"
-description = "Back-to-back chains are disabled. Every clear starts fresh."
+id = "the_silent"
+display_name = "The Silent"
+description = "Back-to-back chains are disabled."
 disable_b2b = true

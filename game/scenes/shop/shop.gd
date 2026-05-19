@@ -6,9 +6,9 @@ signal shop_closed
 @onready var technique_slots: HBoxContainer = $Panel/VBox/TechniqueSlots
 @onready var consumable_slot: Control = $Panel/VBox/BottomRow/ConsumableSlot
 @onready var voucher_slot: Control = $Panel/VBox/BottomRow/VoucherSlot
-@onready var coin_label: Label = $Panel/Header/CoinLabel
-@onready var interest_label: Label = $Panel/Header/InterestLabel
-@onready var exit_button: Button = $Panel/Footer/ExitButton
+@onready var coin_label: Label = $Panel/VBox/Header/CoinLabel
+@onready var interest_label: Label = $Panel/VBox/Header/InterestLabel
+@onready var exit_button: Button = $Panel/VBox/Footer/ExitButton
 
 var _all_techniques: Array = []
 var _all_consumables: Array = []
@@ -36,7 +36,11 @@ func _load_from_dir(path: String, _type: String) -> Array:
 		var f := dir.get_next()
 		while f != "":
 			if f.ends_with(".tres"):
-				result.append(load(path + f))
+				var res := load(path + f)
+				if res != null:
+					result.append(res)
+				else:
+					push_warning("Shop: failed to load resource: " + path + f)
 			f = dir.get_next()
 	return result
 
@@ -57,8 +61,8 @@ func _populate_technique_slots() -> void:
 		_populate_slot(slot, item)
 
 func _populate_voucher_slot() -> void:
-	var ante_chance := RunState.ante * 0.15  # 15% per ante
-	if randf() > ante_chance:
+	var stage_chance := RunState.stage * 0.15  # 15% per stage
+	if randf() > stage_chance:
 		_populate_slot(voucher_slot, null)
 		return
 	var available := _all_vouchers.filter(func(v): return not RunState.has_voucher(v.id))

@@ -1,7 +1,7 @@
-[gd_resource type="BossModifier" format=3]
+[gd_resource type="BossModifier" format=3 uid="uid://d18k5uo55x57x"]
 
 [resource]
-id = "the_blinder"
-display_name = "The Blinder"
-description = "Preview is reduced to 1 next piece."
+id = "the_oracle"
+display_name = "The Oracle"
+description = "No Queue displayed"
 preview_override = 1

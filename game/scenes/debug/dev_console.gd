@@ -53,8 +53,8 @@ func _dispatch(text: String) -> void:
 			_cmd_help()
 		"skip_round":
 			_cmd_skip_round()
-		"set_ante":
-			_cmd_set_ante(args)
+		"set_stage":
+			_cmd_set_stage(args)
 		"add_coins":
 			_cmd_add_coins(args)
 		"give_keystone":
@@ -74,7 +74,7 @@ func _cmd_help() -> void:
 	_log("Available commands:")
 	_log("  help                  — show this list")
 	_log("  skip_round            — end current round as success")
-	_log("  set_ante <n>          — set current ante (1-5)")
+	_log("  set_stage <n>         — set current stage (1-5)")
 	_log("  add_coins <n>         — add n coins to balance")
 	_log("  give_keystone <id>    — activate a keystone by id")
 	_log("  give_technique <id>   — activate a technique by id")
@@ -89,13 +89,13 @@ func _cmd_skip_round() -> void:
 	else:
 		_log("Error: no active run.")
 
-func _cmd_set_ante(args: PackedStringArray) -> void:
+func _cmd_set_stage(args: PackedStringArray) -> void:
 	if args.is_empty() or not args[0].is_valid_int():
-		_log("Usage: set_ante <1-5>")
+		_log("Usage: set_stage <1-5>")
 		return
 	var n: int = clampi(int(args[0]), 1, 5)
-	RunState.ante = n
-	_log("Ante set to %d." % n)
+	RunState.stage = n
+	_log("Stage set to %d." % n)
 
 func _cmd_add_coins(args: PackedStringArray) -> void:
 	if args.is_empty() or not args[0].is_valid_int():

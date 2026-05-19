@@ -1,7 +1,7 @@
-[gd_resource type="BossModifier" format=3]
+[gd_resource type="BossModifier" format=3 uid="uid://dgya7o33rjngo"]
 
 [resource]
-id = "the_purge"
-display_name = "The Purge"
+id = "the_aristocrat"
+display_name = "The Aristocrat"
 description = "Only Triples, Tetrises, and T-spins count toward the quota."
 quota_whitelist = ["triple", "tetris", "tspin_single", "tspin_double", "tspin_triple", "perfect_clear"]

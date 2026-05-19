@@ -3,13 +3,13 @@ extends Node
 func _ready() -> void:
 	Settings.apply_saved_bindings()
 
-const TOTAL_ANTES := 5
-const ROUNDS_PER_ANTE := 4
-const ROUND_NAMES := ["Small Blind", "Big Blind", "Elite Blind", "Boss Blind"]
+const TOTAL_STAGES := 5
+const ROUNDS_PER_STAGE := 4
+const ROUND_NAMES := ["Small Round", "Big Round", "Elite Round", "Boss Round"]
 const STARTING_COINS := 8
 
-var ante: int = 1
-var round_index: int = 0  # 0-3 within each ante
+var stage: int = 1
+var round_index: int = 0  # 0-3 within each stage
 
 var keystones: Array = []       # Array[Keystone]
 var techniques: Array = []      # Array[Technique]
@@ -26,10 +26,10 @@ var consumable_capacity: int = 2
 var sharp_eye_active: bool = false
 
 signal run_started
-signal round_changed(ante: int, round_index: int)
+signal round_changed(stage: int, round_index: int)
 
 func reset() -> void:
-	ante = 1
+	stage = 1
 	round_index = 0
 	keystones.clear()
 	techniques.clear()
@@ -47,14 +47,14 @@ func is_boss_round() -> bool:
 
 func advance_round() -> void:
 	round_index += 1
-	if round_index >= ROUNDS_PER_ANTE:
+	if round_index >= ROUNDS_PER_STAGE:
 		round_index = 0
-		ante += 1
+		stage += 1
 	second_wind_used_this_round = false
-	emit_signal("round_changed", ante, round_index)
+	emit_signal("round_changed", stage, round_index)
 
 func is_run_complete() -> bool:
-	return ante > TOTAL_ANTES
+	return stage > TOTAL_STAGES
 
 func get_round_name() -> String:
 	return ROUND_NAMES[round_index]
@@ -114,10 +114,10 @@ func _apply_voucher_effects(voucher) -> void:
 		"sharp_eye":
 			sharp_eye_active = true
 
-func calculate_quota(current_ante: int, current_round: int) -> int:
-	return 20 + (current_ante - 1) * 15 + current_round * 8
+func calculate_quota(current_stage: int, current_round: int) -> int:
+	return 20 + (current_stage - 1) * 15 + current_round * 8
 
-func calculate_time_limit(_current_ante: int, boss_modifier_id: String) -> float:
+func calculate_time_limit(_current_stage: int, boss_modifier_id: String) -> float:
 	if boss_modifier_id == "the_enforcer":
 		return 45.0
 	return 60.0
