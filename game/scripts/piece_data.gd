@@ -73,14 +73,17 @@ const SPAWN_COL := 4
 # Spawn row in 22-row grid (row 0 = top hidden, row 2 = first visible)
 const SPAWN_ROW := 1
 
-static func get_cells(piece_type: String, rotation: int) -> Array:
-	return ROTATIONS[piece_type][rotation]
+static func get_cells(piece_type: String, rotation: int) -> Array[Vector2i]:
+	var raw: Array = ROTATIONS[piece_type][rotation]
+	var result: Array[Vector2i] = []
+	result.assign(raw)
+	return result
 
 static func get_color_id(piece_type: String) -> int:
 	return COLOR_IDS[piece_type]
 
-static func get_world_cells(piece_type: String, rotation: int, pivot: Vector2i) -> Array:
-	var cells := []
-	for offset in get_cells(piece_type, rotation):
+static func get_world_cells(piece_type: String, rotation: int, pivot: Vector2i) -> Array[Vector2i]:
+	var cells: Array[Vector2i] = []
+	for offset: Vector2i in get_cells(piece_type, rotation):
 		cells.append(pivot + offset)
 	return cells

@@ -52,8 +52,8 @@ func _populate_technique_slots() -> void:
 	for i in range(technique_slots.get_child_count()):
 		technique_slots.get_child(i).visible = i < count
 	for i in range(count):
-		var slot := technique_slots.get_child(i) if i < technique_slots.get_child_count() else _create_slot()
-		var item = available[i] if i < available.size() else null
+		var slot: Control = technique_slots.get_child(i) as Control if i < technique_slots.get_child_count() else _create_slot()
+		var item: Resource = available[i] as Resource if i < available.size() else null
 		_populate_slot(slot, item)
 
 func _populate_voucher_slot() -> void:

@@ -7,7 +7,7 @@
 script = ExtResource("1")
 
 [node name="BoardContainer" type="Node2D" parent="."]
-position = Vector2(320, 64)
+position = Vector2(460, 64)
 
 [node name="HUD" type="Control" parent="."]
 layout_mode = 3

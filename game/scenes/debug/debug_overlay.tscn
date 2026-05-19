@@ -1,0 +1,45 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scenes/debug/debug_overlay.gd" id="1"]
+
+[node name="DebugOverlay" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1")
+
+[node name="Panel" type="PanelContainer" parent="."]
+offset_right = 340.0
+offset_bottom = 200.0
+modulate = Color(1, 1, 1, 0.85)
+
+[node name="VBox" type="VBoxContainer" parent="Panel"]
+theme_override_constants/separation = 2
+
+[node name="LblRound" type="Label" parent="Panel/VBox"]
+text = "Ante — Round"
+
+[node name="LblQuota" type="Label" parent="Panel/VBox"]
+text = "Quota: 0 / 0"
+
+[node name="LblTimer" type="Label" parent="Panel/VBox"]
+text = "Timer: 60.0s"
+
+[node name="LblCombo" type="Label" parent="Panel/VBox"]
+text = "Combo: -1 | B2B: no"
+
+[node name="LblPiece" type="Label" parent="Panel/VBox"]
+text = "Piece: — rot 0"
+
+[node name="LblKeystones" type="Label" parent="Panel/VBox"]
+text = "Keystones: —"
+autowrap_mode = 3
+
+[node name="LblTechniques" type="Label" parent="Panel/VBox"]
+text = "Techniques: —"
+autowrap_mode = 3
+
+[node name="LblCoins" type="Label" parent="Panel/VBox"]
+text = "Coins: 0"
+
+[node name="RefreshTimer" type="Timer" parent="."]
+wait_time = 0.25
+autostart = true

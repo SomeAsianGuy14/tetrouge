@@ -36,14 +36,18 @@ const KICKS_O: Dictionary = {
 	"L0": [Vector2i(0,0)], "0L": [Vector2i(0,0)],
 }
 
-const STATE_NAMES := ["0", "R", "2", "L"]
+const STATE_NAMES: Array[String] = ["0", "R", "2", "L"]
 
-static func get_kicks(piece_type: String, from_rot: int, to_rot: int) -> Array:
-	var key := STATE_NAMES[from_rot] + STATE_NAMES[to_rot]
+static func get_kicks(piece_type: String, from_rot: int, to_rot: int) -> Array[Vector2i]:
+	var key: String = STATE_NAMES[from_rot] + STATE_NAMES[to_rot]
+	var raw: Array
 	match piece_type:
-		"I": return KICKS_I.get(key, [Vector2i(0,0)])
-		"O": return KICKS_O.get(key, [Vector2i(0,0)])
-		_:   return KICKS_JLSZT.get(key, [Vector2i(0,0)])
+		"I": raw = KICKS_I.get(key, [Vector2i(0, 0)])
+		"O": raw = KICKS_O.get(key, [Vector2i(0, 0)])
+		_:   raw = KICKS_JLSZT.get(key, [Vector2i(0, 0)])
+	var result: Array[Vector2i] = []
+	result.assign(raw)
+	return result
 
 static func next_rotation_cw(rot: int) -> int:
 	return (rot + 1) % 4

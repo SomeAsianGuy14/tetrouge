@@ -45,7 +45,7 @@ func _on_arr_changed(_val: float) -> void:
 
 func _update_labels() -> void:
 	das_label.text = "DAS: %dms" % int(das_slider.value)
-	arr_label.text = "ARR: %dms" % int(arr_slider.value)
+	arr_label.text = "ARR: Instant" if arr_slider.value == 0 else "ARR: %dms" % int(arr_slider.value)
 
 func _on_close() -> void:
 	queue_free()

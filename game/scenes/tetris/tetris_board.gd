@@ -123,10 +123,16 @@ func _handle_das(delta: float) -> void:
 		return
 	das_timer += delta
 	if das_timer >= das_delay:
-		arr_timer += delta
-		while arr_timer >= arr_rate:
-			arr_timer -= arr_rate
-			_move_horizontal(das_direction)
+		if arr_rate <= 0.0:
+			# ARR = 0: instant — move all the way to the wall in one frame
+			while _cells_valid(current_type, current_rotation, current_pivot + Vector2i(das_direction, 0)):
+				_move_horizontal(das_direction)
+			arr_timer = 0.0
+		else:
+			arr_timer += delta
+			while arr_timer >= arr_rate:
+				arr_timer -= arr_rate
+				_move_horizontal(das_direction)
 
 func _handle_gravity(delta: float) -> void:
 	var speed := GRAVITY_SPEED * (20.0 if soft_dropping else 1.0)
@@ -229,9 +235,9 @@ func _try_move(new_pivot: Vector2i) -> bool:
 	return false
 
 func _try_rotate(new_rot: int) -> void:
-	var kicks := SRS.get_kicks(current_type, current_rotation, new_rot)
-	for kick in kicks:
-		var test_pivot := current_pivot + kick
+	var kicks: Array[Vector2i] = SRS.get_kicks(current_type, current_rotation, new_rot)
+	for kick: Vector2i in kicks:
+		var test_pivot: Vector2i = current_pivot + kick
 		if _cells_valid(current_type, new_rot, test_pivot):
 			current_pivot = test_pivot
 			current_rotation = new_rot
@@ -261,8 +267,8 @@ func get_ghost_distance() -> int:
 
 func _cells_valid(piece_type: String, rotation: int, pivot: Vector2i) -> bool:
 	var effective_cols := config.board_width
-	for offset in PieceData.get_cells(piece_type, rotation):
-		var cell := pivot + offset
+	for offset: Vector2i in PieceData.get_cells(piece_type, rotation):
+		var cell: Vector2i = pivot + offset
 		if cell.x < 0 or cell.x >= effective_cols:
 			return false
 		if cell.y >= TOTAL_ROWS:
@@ -276,9 +282,9 @@ func _cells_valid(piece_type: String, rotation: int, pivot: Vector2i) -> bool:
 func _lock_piece() -> void:
 	if not is_active:
 		return
-	var cells := PieceData.get_world_cells(current_type, current_rotation, current_pivot)
+	var cells: Array[Vector2i] = PieceData.get_world_cells(current_type, current_rotation, current_pivot)
 	var color_id := PieceData.get_color_id(current_type)
-	for cell in cells:
+	for cell: Vector2i in cells:
 		if cell.y >= 0 and cell.y < TOTAL_ROWS:
 			grid[cell.y][cell.x] = color_id
 	var was_rotation := last_move_was_rotation
@@ -362,13 +368,13 @@ func _detect_tspin(piece_type: String, pivot: Vector2i, rotation: int, was_rotat
 	if piece_type != "T" or not was_rotation:
 		return false
 	# The 4 diagonal corners of the T pivot
-	var corners := [
+	var corners: Array[Vector2i] = [
 		Vector2i(-1, -1), Vector2i(1, -1),
 		Vector2i(-1, 1), Vector2i(1, 1),
 	]
 	var filled := 0
-	for c in corners:
-		var cell := pivot + c
+	for c: Vector2i in corners:
+		var cell: Vector2i = pivot + c
 		if cell.x < 0 or cell.x >= config.board_width or cell.y >= TOTAL_ROWS or cell.y < 0:
 			filled += 1
 		elif grid[cell.y][cell.x] != 0:
@@ -490,16 +496,16 @@ func _draw() -> void:
 
 	# Grid cells (visible rows only)
 	for screen_row in range(VISIBLE_ROWS):
-		var grid_row := HIDDEN_ROWS + screen_row
+		var grid_row: int = HIDDEN_ROWS + screen_row
 		for col in range(config.board_width):
-			var cell_val := grid[grid_row][col]
+			var cell_val: int = grid[grid_row][col]
 			if cell_val != 0:
 				var color: Color = PIECE_COLORS.get(cell_val, Color.WHITE)
 				_draw_cell(col, screen_row, color)
 
 	# Ghost piece
-	var ghost_cells := get_ghost_cells()
-	for cell in ghost_cells:
+	var ghost_cells: Array[Vector2i] = get_ghost_cells()
+	for cell: Vector2i in ghost_cells:
 		var screen_row := cell.y - HIDDEN_ROWS
 		if screen_row >= 0 and screen_row < VISIBLE_ROWS:
 			_draw_cell(cell.x, screen_row, PIECE_COLORS[PieceData.COLOR_GHOST])
@@ -508,8 +514,8 @@ func _draw() -> void:
 				draw_string(ThemeDB.fallback_font, Vector2(cell.x * CELL_SIZE + 2, screen_row * CELL_SIZE + 22), str(dist), HORIZONTAL_ALIGNMENT_LEFT, -1, 10, Color.WHITE)
 
 	# Current piece
-	var current_cells := get_current_cells()
-	for cell in current_cells:
+	var current_cells: Array[Vector2i] = get_current_cells()
+	for cell: Vector2i in current_cells:
 		var screen_row := cell.y - HIDDEN_ROWS
 		if screen_row >= 0 and screen_row < VISIBLE_ROWS:
 			_draw_cell(cell.x, screen_row, PIECE_COLORS.get(PieceData.get_color_id(current_type), Color.WHITE))
