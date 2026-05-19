@@ -172,9 +172,9 @@ func input_move_released() -> void:
 	arr_timer = 0.0
 
 func input_soft_drop(pressed: bool) -> void:
+	if pressed and not soft_dropping:
+		gravity_accumulator = 0.0  # reset only on initial press for immediate response
 	soft_dropping = pressed
-	if pressed:
-		gravity_accumulator = 0.0
 
 func input_hard_drop() -> void:
 	current_pivot = ghost_pivot
@@ -508,7 +508,8 @@ func _draw() -> void:
 	for cell: Vector2i in ghost_cells:
 		var screen_row := cell.y - HIDDEN_ROWS
 		if screen_row >= 0 and screen_row < VISIBLE_ROWS:
-			_draw_cell(cell.x, screen_row, PIECE_COLORS[PieceData.COLOR_GHOST])
+			var ghost_color := Color(0.85, 0.85, 0.85) if soft_dropping else PIECE_COLORS[PieceData.COLOR_GHOST]
+			_draw_cell(cell.x, screen_row, ghost_color)
 			if config.deep_sight_enabled:
 				var dist := get_ghost_distance()
 				draw_string(ThemeDB.fallback_font, Vector2(cell.x * CELL_SIZE + 2, screen_row * CELL_SIZE + 22), str(dist), HORIZONTAL_ALIGNMENT_LEFT, -1, 10, Color.WHITE)

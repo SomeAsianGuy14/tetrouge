@@ -1,2 +1,4 @@
 res://scenes/screens/settings.gd
 res://scenes/tetris/tetris_board.gd
+res://scenes/game/run_manager.gd
+res://autoloads/run_state.gd

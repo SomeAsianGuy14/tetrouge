@@ -313,9 +313,9 @@ func _on_board_updated() -> void:
 func _show_round_success(speed_bonus: int, surplus_income: int) -> void:
 	var scene: PackedScene = load(SCENE_ROUND_SUCCESS)
 	var screen = scene.instantiate()
-	screen.setup(BASE_PAYOUT, speed_bonus, technique_income_this_round + surplus_income)
-	screen.connect("proceed", _on_success_proceed)
 	add_child(screen)
+	screen.connect("proceed", _on_success_proceed)
+	screen.setup(BASE_PAYOUT, speed_bonus, technique_income_this_round + surplus_income)
 
 func _on_success_proceed() -> void:
 	_show_shop()
@@ -323,8 +323,8 @@ func _on_success_proceed() -> void:
 func _show_shop() -> void:
 	var scene: PackedScene = load(SCENE_SHOP)
 	var shop = scene.instantiate()
-	shop.connect("shop_closed", _on_shop_closed)
 	add_child(shop)
+	shop.connect("shop_closed", _on_shop_closed)
 
 func _on_shop_closed() -> void:
 	start_round()
@@ -332,8 +332,8 @@ func _on_shop_closed() -> void:
 func _show_keystone_selection() -> void:
 	var scene: PackedScene = load(SCENE_KEYSTONE_SELECTION)
 	var screen = scene.instantiate()
-	screen.connect("keystone_chosen", _on_keystone_chosen)
 	add_child(screen)
+	screen.connect("keystone_chosen", _on_keystone_chosen)
 
 func _on_keystone_chosen(_keystone: Keystone) -> void:
 	_show_round_success_after_boss()
@@ -341,21 +341,21 @@ func _on_keystone_chosen(_keystone: Keystone) -> void:
 func _show_round_success_after_boss() -> void:
 	var scene: PackedScene = load(SCENE_ROUND_SUCCESS)
 	var screen = scene.instantiate()
-	screen.setup(BASE_PAYOUT, Economy.calculate_speed_bonus(round_timer, current_config.time_limit), technique_income_this_round)
-	screen.connect("proceed", _on_success_proceed)
 	add_child(screen)
+	screen.connect("proceed", _on_success_proceed)
+	screen.setup(BASE_PAYOUT, Economy.calculate_speed_bonus(round_timer, current_config.time_limit), technique_income_this_round)
 
 func _show_failure() -> void:
 	var scene: PackedScene = load(SCENE_RUN_FAILURE)
 	var screen = scene.instantiate()
-	screen.setup(RunState.ante, RunState.round_index)
 	add_child(screen)
+	screen.setup(RunState.ante, RunState.round_index)
 
 func _show_victory() -> void:
 	var scene: PackedScene = load(SCENE_RUN_VICTORY)
 	var screen = scene.instantiate()
-	screen.setup(Economy.coins)
 	add_child(screen)
+	screen.setup(Economy.coins)
 
 # ── Consumable integration ────────────────────────────────────────────────
 

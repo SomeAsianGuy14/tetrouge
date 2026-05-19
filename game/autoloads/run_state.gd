@@ -1,5 +1,8 @@
 extends Node
 
+func _ready() -> void:
+	Settings.apply_saved_bindings()
+
 const TOTAL_ANTES := 5
 const ROUNDS_PER_ANTE := 4
 const ROUND_NAMES := ["Small Blind", "Big Blind", "Elite Blind", "Boss Blind"]
