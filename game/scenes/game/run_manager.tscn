@@ -75,6 +75,18 @@ modulate = Color(1, 0.6, 0.2, 1)
 theme_override_font_sizes/font_size = 11
 visible = false
 
+[node name="B2BLabel" type="Label" parent="HUD/InfoPanel"]
+text = "B2B"
+modulate = Color(1, 0.85, 0.1, 1)
+theme_override_font_sizes/font_size = 20
+visible = false
+
+[node name="ComboLabel" type="Label" parent="HUD/InfoPanel"]
+text = "Combo x1"
+modulate = Color(0.4, 1, 0.4, 1)
+theme_override_font_sizes/font_size = 20
+visible = false
+
 [node name="SidePanel" type="VBoxContainer" parent="HUD"]
 layout_mode = 1
 anchor_left = 1.0

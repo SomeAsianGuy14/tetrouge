@@ -13,6 +13,8 @@ extends Control
 @onready var timer_big_label: Label = $InfoPanel/TimerBigLabel
 @onready var round_big_label: Label = $InfoPanel/RoundBigLabel
 @onready var modifier_big_label: Label = $InfoPanel/ModifierBigLabel
+@onready var b2b_label: Label = $InfoPanel/B2BLabel
+@onready var combo_label: Label = $InfoPanel/ComboLabel
 
 func _ready() -> void:
 	Economy.connect("coins_changed", _on_coins_changed)
@@ -43,6 +45,15 @@ func setup(config: RoundConfig) -> void:
 
 	coin_label.text = "Coins: %d" % Economy.coins
 	_refresh_keystone_icons()
+	update_b2b_combo(false, 0, -1)
+
+func update_b2b_combo(is_b2b: bool, b2b_count: int, combo: int) -> void:
+	b2b_label.visible = is_b2b
+	if is_b2b:
+		b2b_label.text = "B2B x%d" % b2b_count
+	combo_label.visible = combo >= 0
+	if combo >= 0:
+		combo_label.text = "Combo x%d" % (combo + 1)
 
 func update_quota(accumulated: float, quota: int) -> void:
 	quota_bar.value = minf(accumulated, quota)

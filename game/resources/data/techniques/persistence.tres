@@ -1,6 +1,9 @@
-[gd_resource type="Technique" format=3]
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
 
 [resource]
+script = ExtResource("1")
 id = "persistence"
 display_name = "Persistence"
 description = "Back-to-back chain does not reset on Doubles."

@@ -12,6 +12,7 @@ const REBINDABLE_ACTIONS: Array[Dictionary] = [
 	{"action": "rotate_ccw",  "label": "Rotate CCW"},
 	{"action": "rotate_180",  "label": "Rotate 180"},
 	{"action": "hold_piece",  "label": "Hold"},
+	{"action": "pause",       "label": "Pause / Settings"},
 ]
 
 @onready var das_slider: HSlider = $Panel/VBox/DASRow/DASSlider
@@ -236,7 +237,7 @@ static func apply_saved_bindings() -> void:
 		return
 	var actions := [
 		"move_left", "move_right", "soft_drop", "hard_drop",
-		"rotate_cw", "rotate_ccw", "rotate_180", "hold_piece",
+		"rotate_cw", "rotate_ccw", "rotate_180", "hold_piece", "pause",
 	]
 	for action in actions:
 		if not cfg.has_section_key("bindings", action):

@@ -1,6 +1,9 @@
-[gd_resource type="Voucher" format=3]
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/voucher.gd" id="1"]
 
 [resource]
+script = ExtResource("1")
 id = "bonus_round"
 display_name = "Bonus Round"
 description = "Speed bonus payout formula doubled."

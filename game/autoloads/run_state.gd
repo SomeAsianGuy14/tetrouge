@@ -119,5 +119,5 @@ func calculate_quota(current_stage: int, current_round: int) -> int:
 
 func calculate_time_limit(_current_stage: int, boss_modifier_id: String) -> float:
 	if boss_modifier_id == "the_enforcer":
-		return 45.0
-	return 60.0
+		return 90.0
+	return 120.0

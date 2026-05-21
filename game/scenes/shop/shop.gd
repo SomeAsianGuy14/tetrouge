@@ -13,6 +13,7 @@ signal shop_closed
 var _all_techniques: Array = []
 var _all_consumables: Array = []
 var _all_vouchers: Array = []
+var _buy_buttons: Dictionary = {}  # slot node → buy Button (or null if owned)
 
 func _ready() -> void:
 	Economy.connect("coins_changed", _update_coin_display)
@@ -82,19 +83,59 @@ func _create_slot() -> Control:
 	return slot
 
 func _populate_slot(slot: Control, item: Resource) -> void:
+	_build_item_card(slot, item)
+
+func _build_item_card(slot: Control, item: Resource) -> void:
 	for child in slot.get_children():
-		child.queue_free()
+		child.free()
+
 	if item == null:
 		var empty := Label.new()
 		empty.text = "— Empty —"
+		empty.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		empty.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		empty.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		slot.add_child(empty)
+		_buy_buttons[slot] = null
+		slot.modulate = Color.WHITE
 		return
-	var btn := Button.new()
+
+	var vbox := VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 6)
+	slot.add_child(vbox)
+
+	var name_label := Label.new()
+	name_label.text = item.display_name
+	name_label.add_theme_font_size_override("font_size", 14)
+	vbox.add_child(name_label)
+
+	var desc_label := Label.new()
+	desc_label.text = item.description
+	desc_label.autowrap_mode = 3  # TextServer.AUTOWRAP_WORD_SMART
+	desc_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	vbox.add_child(desc_label)
+
+	var cost_label := Label.new()
+	cost_label.text = "%d coins" % item.cost
+	vbox.add_child(cost_label)
+
 	var owned := item is Technique and RunState.has_technique(item.id)
-	btn.text = "%s\n%s\n%d coins%s" % [item.display_name, item.description, item.cost, " [OWNED]" if owned else ""]
-	btn.disabled = owned or not Economy.can_afford(item.cost)
-	btn.connect("pressed", _on_purchase.bind(item, slot))
-	slot.add_child(btn)
+	if owned:
+		var owned_label := Label.new()
+		owned_label.text = "OWNED"
+		owned_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		vbox.add_child(owned_label)
+		_buy_buttons[slot] = null
+		slot.modulate = Color.WHITE
+	else:
+		var buy_btn := Button.new()
+		buy_btn.text = "Buy"
+		buy_btn.set_meta("cost", item.cost)
+		buy_btn.disabled = not Economy.can_afford(item.cost)
+		buy_btn.connect("pressed", _on_purchase.bind(item, slot))
+		vbox.add_child(buy_btn)
+		_buy_buttons[slot] = buy_btn
+		slot.modulate = Color.WHITE if Economy.can_afford(item.cost) else Color(0.55, 0.55, 0.55)
 
 func _on_purchase(item: Resource, slot: Control) -> void:
 	if not Economy.spend_coins(item.cost):
@@ -111,10 +152,13 @@ func _on_purchase(item: Resource, slot: Control) -> void:
 	_refresh_button_states()
 
 func _refresh_button_states() -> void:
-	for slot in technique_slots.get_children():
-		for btn in slot.get_children():
-			if btn is Button:
-				btn.disabled = not Economy.can_afford(0) or btn.text.contains("[OWNED]")
+	for slot in _buy_buttons:
+		var btn = _buy_buttons[slot]
+		if btn == null:
+			continue
+		var can_afford := Economy.can_afford(int(btn.get_meta("cost")))
+		btn.disabled = not can_afford
+		slot.modulate = Color.WHITE if can_afford else Color(0.55, 0.55, 0.55)
 
 func _update_coin_display(amount: int) -> void:
 	coin_label.text = "Coins: %d" % amount

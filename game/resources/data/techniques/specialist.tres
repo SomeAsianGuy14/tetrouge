@@ -1,6 +1,9 @@
-[gd_resource type="Technique" format=3]
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
 
 [resource]
+script = ExtResource("1")
 id = "specialist"
 display_name = "Specialist"
 description = "T-spin Singles +1, Doubles +2, Triples +3 attack."

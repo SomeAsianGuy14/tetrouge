@@ -1,6 +1,9 @@
-[gd_resource type="Consumable" format=3]
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/consumable.gd" id="1"]
 
 [resource]
+script = ExtResource("1")
 id = "time_shard"
 display_name = "Time Shard"
 description = "Add 8 seconds to the round timer."

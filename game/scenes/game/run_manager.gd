@@ -11,6 +11,8 @@ const SCENE_DEBUG_OVERLAY := "res://scenes/debug/debug_overlay.tscn"
 const SCENE_DEV_CONSOLE := "res://scenes/debug/dev_console.tscn"
 const SCENE_HOLD_DISPLAY := "res://scenes/game/hold_display.tscn"
 const SCENE_QUEUE_DISPLAY := "res://scenes/game/queue_display.tscn"
+const SCENE_PAUSE_MENU := "res://scenes/game/pause_menu.tscn"
+const SCENE_MAIN_MENU := "res://scenes/main_menu/main_menu.tscn"
 const BASE_PAYOUT := 4
 
 @onready var board_container: Node2D = $BoardContainer
@@ -31,6 +33,11 @@ var surplus_attack: int = 0
 
 var tide_timer: float = 0.0
 var second_wind_triggered: bool = false
+
+var _paused: bool = false
+var _pause_menu: Control = null
+var _board_was_active: bool = false
+var _active_overlay: Control = null
 
 signal round_ended(success: bool)
 
@@ -110,6 +117,7 @@ func start_round() -> void:
 	current_board.connect("attack_generated", _on_attack_generated)
 	current_board.connect("game_over", _on_game_over)
 	current_board.connect("board_updated", _on_board_updated)
+	current_board.connect("lock_processed", _on_lock_processed)
 
 	if _debug_overlay:
 		_debug_overlay.set_board(current_board)
@@ -174,7 +182,14 @@ func _load_all_boss_modifiers() -> Array:
 # ── Per-frame update ──────────────────────────────────────────────────────
 
 func _process(delta: float) -> void:
-	if current_board == null or not current_board.is_active:
+	if Input.is_action_just_pressed("pause"):
+		if _pause_menu == null:
+			_open_pause()
+		else:
+			_close_pause()
+		return
+
+	if _paused or current_board == null or not current_board.is_active:
 		return
 
 	current_board.tick(delta)
@@ -182,6 +197,38 @@ func _process(delta: float) -> void:
 	_tick_timer(delta)
 	_tick_tide(delta)
 	_check_second_wind()
+
+# ── Pause ─────────────────────────────────────────────────────────────────
+
+func _open_pause() -> void:
+	_paused = true
+	_board_was_active = current_board != null and current_board.is_active
+	if _board_was_active:
+		current_board.is_active = false
+		current_board.input_move_released()
+	var scene: PackedScene = load(SCENE_PAUSE_MENU)
+	_pause_menu = scene.instantiate()
+	add_child(_pause_menu)
+	_pause_menu.connect("resume_requested", _close_pause)
+	_pause_menu.connect("quit_requested", _quit_to_menu)
+
+func _close_pause() -> void:
+	_paused = false
+	if _board_was_active and current_board != null:
+		current_board.das_delay = Settings.load_das()
+		current_board.arr_rate = Settings.load_arr()
+		current_board.is_active = true
+	_board_was_active = false
+	if _pause_menu:
+		_pause_menu.queue_free()
+		_pause_menu = null
+
+func _quit_to_menu() -> void:
+	RunState.reset()
+	Economy.reset()
+	var scene: PackedScene = load(SCENE_MAIN_MENU)
+	get_tree().root.add_child(scene.instantiate())
+	queue_free()
 
 func _handle_input() -> void:
 	if Input.is_action_just_pressed("move_left"):
@@ -241,8 +288,9 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 	var modified := _apply_techniques(raw_attack, event_type)
 	_accumulate_technique_income(event_type, modified)
 
-	# Apply boss modifier quota filter
-	if current_config.boss_modifier:
+	# Apply boss modifier quota filter; bonus events always count if their parent clear qualified
+	var is_bonus_event := event_type == "b2b" or event_type == "combo"
+	if not is_bonus_event and current_config.boss_modifier:
 		if not current_config.boss_modifier.attack_counts_toward_quota(event_type):
 			return
 
@@ -309,6 +357,9 @@ func _calculate_surplus_income() -> int:
 			income += surplus_attack / technique.surplus_divisor
 	return income
 
+func _on_lock_processed() -> void:
+	hud.update_b2b_combo(current_board.is_b2b, current_board.b2b_count, current_board.combo)
+
 func _on_board_updated() -> void:
 	if current_board:
 		current_board.queue_redraw()
@@ -318,6 +369,7 @@ func _on_board_updated() -> void:
 func _show_round_success(speed_bonus: int, surplus_income: int) -> void:
 	var scene: PackedScene = load(SCENE_ROUND_SUCCESS)
 	var screen = scene.instantiate()
+	_active_overlay = screen
 	add_child(screen)
 	screen.connect("proceed", _on_success_proceed)
 	screen.setup(BASE_PAYOUT, speed_bonus, technique_income_this_round + surplus_income)
@@ -326,12 +378,17 @@ func _on_success_proceed() -> void:
 	_show_shop()
 
 func _show_shop() -> void:
+	for child in get_children():
+		if child is CanvasItem:
+			child.visible = false
 	var scene: PackedScene = load(SCENE_SHOP)
 	var shop = scene.instantiate()
 	add_child(shop)
 	shop.connect("shop_closed", _on_shop_closed)
 
 func _on_shop_closed() -> void:
+	board_container.visible = true
+	hud.visible = true
 	start_round()
 
 func _show_keystone_selection() -> void:
@@ -346,6 +403,7 @@ func _on_keystone_chosen(_keystone: Keystone) -> void:
 func _show_round_success_after_boss() -> void:
 	var scene: PackedScene = load(SCENE_ROUND_SUCCESS)
 	var screen = scene.instantiate()
+	_active_overlay = screen
 	add_child(screen)
 	screen.connect("proceed", _on_success_proceed)
 	screen.setup(BASE_PAYOUT, Economy.calculate_speed_bonus(round_timer, current_config.time_limit), technique_income_this_round)

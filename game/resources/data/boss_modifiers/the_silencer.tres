@@ -1,6 +1,9 @@
-[gd_resource type="BossModifier" format=3 uid="uid://cmq76jge48sw3"]
+[gd_resource type="Resource" format=3 uid="uid://cmq76jge48sw3"]
+
+[ext_resource type="Script" path="res://resources/boss_modifier.gd" id="1"]
 
 [resource]
+script = ExtResource("1")
 id = "the_silent"
 display_name = "The Silent"
 description = "Back-to-back chains are disabled."

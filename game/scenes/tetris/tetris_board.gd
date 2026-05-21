@@ -69,10 +69,12 @@ var soft_dropping: bool = false
 # ── Attack tracking ───────────────────────────────────────────────────────
 var combo: int = -1
 var is_b2b: bool = false
+var b2b_count: int = 0
 var attack_surge_remaining: int = 0  # Attack Surge consumable
 
 # ── Signals ───────────────────────────────────────────────────────────────
 signal piece_locked
+signal lock_processed
 signal lines_cleared(count: int, clear_type: String)
 signal attack_generated(raw_attack: int, event_type: String)
 signal game_over
@@ -91,6 +93,7 @@ func setup(round_config: RoundConfig) -> void:
 	hold_used = false
 	combo = -1
 	is_b2b = false
+	b2b_count = 0
 	attack_surge_remaining = 0
 	_fill_queue()
 	spawn_next_piece()
@@ -294,6 +297,7 @@ func _lock_piece() -> void:
 	emit_signal("piece_locked")
 	hold_used = false
 	_process_clears(locked_type, locked_pivot, locked_rotation, was_rotation)
+	emit_signal("lock_processed")
 	if not _spawn_next():
 		is_active = false
 		emit_signal("game_over")
@@ -323,6 +327,7 @@ func spawn_next_piece() -> void:
 # ── Line clear processing ─────────────────────────────────────────────────
 
 func _process_clears(piece_type: String, pivot: Vector2i, rotation: int, was_rotation: bool) -> void:
+	var is_tspin := _detect_tspin(piece_type, pivot, rotation, was_rotation)
 	var cleared_rows := _find_and_clear_rows()
 	var clear_count := cleared_rows.size()
 	if clear_count == 0:
@@ -330,15 +335,54 @@ func _process_clears(piece_type: String, pivot: Vector2i, rotation: int, was_rot
 		return
 
 	combo += 1
-	var is_tspin := _detect_tspin(piece_type, pivot, rotation, was_rotation)
 	var is_pc := _detect_perfect_clear()
 	var clear_type := _get_clear_type(clear_count, is_tspin, is_pc)
 	var is_qualifying := clear_type in ["tetris", "tspin_single", "tspin_double", "tspin_triple", "tspin_mini", "perfect_clear"]
 
-	var raw_attack := _calculate_attack(clear_count, clear_type, is_qualifying, is_pc)
 	emit_signal("lines_cleared", clear_count, clear_type)
-	emit_signal("attack_generated", raw_attack, clear_type)
+	_emit_attack_events(clear_type, is_qualifying, is_pc)
 	emit_signal("board_updated")
+
+func _emit_attack_events(clear_type: String, is_qualifying: bool, is_pc: bool) -> void:
+	var surge_mult := 1
+	if attack_surge_remaining > 0:
+		surge_mult = 2
+		attack_surge_remaining -= 1
+
+	if is_pc:
+		emit_signal("attack_generated", 10 * surge_mult, clear_type)
+		return
+
+	var base_attack: int = BASE_ATTACK.get(clear_type, 0)
+	var b2b_bonus := 0
+	var combo_bonus := 0
+
+	if not config.b2b_disabled:
+		if is_qualifying:
+			if is_b2b:
+				b2b_bonus = 1
+				b2b_count += 1
+			else:
+				b2b_count = 1
+			is_b2b = true
+		else:
+			if not (config.b2b_persists_on_doubles and clear_type == "double"):
+				is_b2b = false
+				b2b_count = 0
+	else:
+		is_b2b = false
+		b2b_count = 0
+
+	if combo >= 0 and combo < COMBO_TABLE.size():
+		combo_bonus = COMBO_TABLE[combo]
+	elif combo >= COMBO_TABLE.size():
+		combo_bonus = COMBO_TABLE[COMBO_TABLE.size() - 1]
+
+	emit_signal("attack_generated", base_attack * surge_mult, clear_type)
+	if b2b_bonus > 0:
+		emit_signal("attack_generated", b2b_bonus * surge_mult, "b2b")
+	if combo_bonus > 0:
+		emit_signal("attack_generated", combo_bonus * surge_mult, "combo")
 
 func _find_and_clear_rows() -> Array:
 	var cleared := []
@@ -428,13 +472,18 @@ func _calculate_attack(count: int, clear_type: String, is_qualifying: bool, is_p
 		if is_qualifying:
 			if is_b2b:
 				b2b_bonus = 1
+				b2b_count += 1
+			else:
+				b2b_count = 1
 			is_b2b = true
 		else:
 			# Persistence technique: doubles don't break B2B chain
 			if not (config.b2b_persists_on_doubles and clear_type == "double"):
 				is_b2b = false
+				b2b_count = 0
 	else:
 		is_b2b = false
+		b2b_count = 0
 
 	var combo_bonus := 0
 	if combo >= 0 and combo < COMBO_TABLE.size():

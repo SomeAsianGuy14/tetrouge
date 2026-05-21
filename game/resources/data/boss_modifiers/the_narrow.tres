@@ -1,6 +1,9 @@
-[gd_resource type="BossModifier" format=3]
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/boss_modifier.gd" id="1"]
 
 [resource]
+script = ExtResource("1")
 id = "the_narrow"
 display_name = "The Narrow"
 description = "Board width reduced to 8 columns. The leftmost 2 columns are walled off."
