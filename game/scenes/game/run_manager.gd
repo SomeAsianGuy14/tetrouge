@@ -61,30 +61,8 @@ func start_run() -> void:
 	RunState.reset()
 	Economy.reset()
 	Economy.add_coins(RunState.STARTING_COINS)
-	_assign_starting_keystone()
 	RunState.emit_signal("run_started")
 	start_round()
-
-func _assign_starting_keystone() -> void:
-	var pool := _load_starter_keystone_pool()
-	if pool.is_empty():
-		return
-	pool.shuffle()
-	RunState.add_keystone(pool[0])
-
-func _load_starter_keystone_pool() -> Array:
-	var dir := DirAccess.open("res://resources/data/keystones/")
-	var starters := []
-	if dir:
-		dir.list_dir_begin()
-		var f := dir.get_next()
-		while f != "":
-			if f.ends_with(".tres"):
-				var res: Keystone = load("res://resources/data/keystones/" + f)
-				if res and res.is_starter:
-					starters.append(res)
-			f = dir.get_next()
-	return starters
 
 # ── Round start ───────────────────────────────────────────────────────────
 
@@ -389,6 +367,7 @@ func _show_shop() -> void:
 func _on_shop_closed() -> void:
 	board_container.visible = true
 	hud.visible = true
+	RunSave.save()
 	start_round()
 
 func _show_keystone_selection() -> void:
@@ -409,12 +388,14 @@ func _show_round_success_after_boss() -> void:
 	screen.setup(BASE_PAYOUT, Economy.calculate_speed_bonus(round_timer, current_config.time_limit), technique_income_this_round)
 
 func _show_failure() -> void:
+	RunSave.delete()
 	var scene: PackedScene = load(SCENE_RUN_FAILURE)
 	var screen = scene.instantiate()
 	add_child(screen)
 	screen.setup(RunState.stage, RunState.round_index)
 
 func _show_victory() -> void:
+	RunSave.delete()
 	var scene: PackedScene = load(SCENE_RUN_VICTORY)
 	var screen = scene.instantiate()
 	add_child(screen)

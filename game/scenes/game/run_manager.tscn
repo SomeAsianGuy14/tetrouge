@@ -87,11 +87,24 @@ modulate = Color(0.4, 1, 0.4, 1)
 theme_override_font_sizes/font_size = 20
 visible = false
 
-[node name="SidePanel" type="VBoxContainer" parent="HUD"]
+[node name="InventoryPanel" type="VBoxContainer" parent="HUD"]
 layout_mode = 1
-anchor_left = 1.0
-anchor_right = 1.0
+anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = -200.0
+offset_left = 16.0
+offset_top = -180.0
+offset_right = 200.0
+offset_bottom = -8.0
+theme_override_constants/separation = 2
 
-[node name="KeystoneIcons" type="HBoxContainer" parent="HUD/SidePanel"]
+[node name="KeystonesHeader" type="Label" parent="HUD/InventoryPanel"]
+text = "Keystones"
+theme_override_font_sizes/font_size = 11
+
+[node name="KeystoneIcons" type="HBoxContainer" parent="HUD/InventoryPanel"]
+
+[node name="TechniquesHeader" type="Label" parent="HUD/InventoryPanel"]
+text = "Techniques"
+theme_override_font_sizes/font_size = 11
+
+[node name="TechniqueIcons" type="HBoxContainer" parent="HUD/InventoryPanel"]

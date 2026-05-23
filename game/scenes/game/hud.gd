@@ -7,7 +7,8 @@ extends Control
 @onready var coin_label: Label = $TopBar/CoinLabel
 @onready var round_label: Label = $TopBar/RoundLabel
 @onready var modifier_label: Label = $TopBar/ModifierLabel
-@onready var keystone_icons: HBoxContainer = $SidePanel/KeystoneIcons
+@onready var keystone_icons: HBoxContainer = $InventoryPanel/KeystoneIcons
+@onready var technique_icons: HBoxContainer = $InventoryPanel/TechniqueIcons
 
 @onready var score_label: Label = $InfoPanel/ScoreLabel
 @onready var timer_big_label: Label = $InfoPanel/TimerBigLabel
@@ -45,6 +46,7 @@ func setup(config: RoundConfig) -> void:
 
 	coin_label.text = "Coins: %d" % Economy.coins
 	_refresh_keystone_icons()
+	_refresh_technique_icons()
 	update_b2b_combo(false, 0, -1)
 
 func update_b2b_combo(is_b2b: bool, b2b_count: int, combo: int) -> void:
@@ -79,4 +81,15 @@ func _refresh_keystone_icons() -> void:
 		var lbl := Label.new()
 		lbl.text = keystone.display_name[0]
 		lbl.tooltip_text = keystone.display_name
+		lbl.mouse_filter = Control.MOUSE_FILTER_STOP
 		keystone_icons.add_child(lbl)
+
+func _refresh_technique_icons() -> void:
+	for child in technique_icons.get_children():
+		child.queue_free()
+	for technique in RunState.techniques:
+		var lbl := Label.new()
+		lbl.text = technique.display_name[0]
+		lbl.tooltip_text = "%s\n%s" % [technique.display_name, technique.description]
+		lbl.mouse_filter = Control.MOUSE_FILTER_STOP
+		technique_icons.add_child(lbl)
