@@ -5,7 +5,7 @@ extends Node2D
 const TOTAL_ROWS := 22
 const VISIBLE_ROWS := 20
 const COLS := 10
-const CELL_SIZE := 32
+const CELL_SIZE := 36
 const HIDDEN_ROWS := 2  # rows 0-1 are above the visible area
 
 # Gravity: cells per second at level 1 (standard guideline level 1 speed)
@@ -25,6 +25,7 @@ const PIECE_COLORS: Dictionary = {
 
 # ── Configuration (set by RunManager before round starts) ─────────────────
 var config: RoundConfig
+var _rng: RandomNumberGenerator = null
 
 # ── Grid ──────────────────────────────────────────────────────────────────
 var grid: Array = []  # grid[row][col] = int (0=empty, 1-7=piece, 9=garbage)
@@ -84,10 +85,11 @@ signal board_updated
 
 func setup(round_config: RoundConfig) -> void:
 	config = round_config
+	_rng = config.rng
 	lock_delay = config.lock_delay_ms / 1000.0
 	lock_max_resets = config.lock_max_resets
 	_init_grid()
-	bag = BagRandomizer.new(config.bag_reset_interval)
+	bag = BagRandomizer.new(config.bag_reset_interval, config.rng)
 	piece_queue.clear()
 	held_pieces.clear()
 	hold_used = false
@@ -504,7 +506,7 @@ func insert_garbage_row() -> void:
 	var garbage := []
 	garbage.resize(COLS)
 	garbage.fill(PieceData.COLOR_GARBAGE)
-	var gap := randi() % config.board_width
+	var gap := (_rng.randi() if _rng else randi()) % config.board_width
 	garbage[gap] = 0
 	grid.append(garbage)
 	_update_ghost()

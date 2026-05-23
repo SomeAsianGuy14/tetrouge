@@ -1,22 +1,4 @@
-## ADDED Requirements
-
-### Requirement: Each Boss Blind has exactly one modifier active
-Every Boss Blind round SHALL have one boss modifier applied for its entire duration. The modifier is selected from the boss modifier pool (randomly, without repeating within a run where possible).
-
-#### Scenario: Modifier is active from round start
-- **WHEN** a Boss Blind round begins
-- **THEN** the modifier effect is in place before the first piece spawns
-
-#### Scenario: Modifier is cleared after round ends
-- **WHEN** the Boss Blind round ends (success or failure)
-- **THEN** the modifier has no effect on subsequent rounds
-
-### Requirement: Boss modifiers are independent of augment rewards
-The modifier active in a Boss Blind round SHALL be chosen independently of which Augments are offered as rewards after that boss. There is no thematic or mechanical link required between them.
-
-#### Scenario: Modifier and augment pool are drawn independently
-- **WHEN** a Boss Blind is resolved
-- **THEN** the modifier was selected from the modifier pool and the augment options were drawn from the augment pool as separate operations
+## MODIFIED Requirements
 
 ### Requirement: Boss modifier pool for launch
 The following boss modifiers SHALL be available in the initial build as board-rule abilities assigned to boss enemies. The Tide modifier is removed; its garbage effect is now a universal enemy mechanic applied every round.
@@ -50,3 +32,9 @@ The following boss modifiers SHALL be available in the initial build as board-ru
 #### Scenario: The Surgeon restricts quota contribution
 - **WHEN** The Surgeon ability is active and the player clears lines with a non-T-spin
 - **THEN** attack is generated but does NOT accumulate toward the quota
+
+## REMOVED Requirements
+
+### Requirement: The Tide adds garbage periodically
+**Reason:** Garbage row insertion is now a universal enemy mechanic active every round. The Tide modifier served no other purpose and is removed. Every enemy has a base garbage interval; The Tide's effect is subsumed by the general garbage system.
+**Migration:** Remove `the_tide.tres`. Remove `garbage_interval` from `BossModifier`. Garbage timing is now owned by the `Enemy` resource and `RoundConfig.effective_garbage_interval`.

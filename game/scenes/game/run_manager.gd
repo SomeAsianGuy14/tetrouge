@@ -11,9 +11,11 @@ const SCENE_DEBUG_OVERLAY := "res://scenes/debug/debug_overlay.tscn"
 const SCENE_DEV_CONSOLE := "res://scenes/debug/dev_console.tscn"
 const SCENE_HOLD_DISPLAY := "res://scenes/game/hold_display.tscn"
 const SCENE_QUEUE_DISPLAY := "res://scenes/game/queue_display.tscn"
+const SCENE_ENEMY_DISPLAY := "res://scenes/game/enemy_display.tscn"
 const SCENE_PAUSE_MENU := "res://scenes/game/pause_menu.tscn"
 const SCENE_MAIN_MENU := "res://scenes/main_menu/main_menu.tscn"
 const BASE_PAYOUT := 4
+const ROUND_TIERS := ["Small", "Big", "Elite", "Boss"]
 
 @onready var board_container: Node2D = $BoardContainer
 @onready var hud: Control = $HUD
@@ -25,13 +27,14 @@ var _debug_overlay: DebugOverlay = null
 var _dev_console: DevConsole = null
 var _hold_display: HoldDisplay = null
 var _queue_display: QueueDisplay = null
+var _enemy_display: Control = null
 
 var round_timer: float = 0.0
+var _enemy_timer: float = 0.0
 var quota_accumulated: float = 0.0
 var technique_income_this_round: int = 0
 var surplus_attack: int = 0
 
-var tide_timer: float = 0.0
 var second_wind_triggered: bool = false
 
 var _paused: bool = false
@@ -76,7 +79,7 @@ func start_round() -> void:
 	technique_income_this_round = 0
 	surplus_attack = 0
 	round_timer = current_config.time_limit
-	tide_timer = 0.0
+	_enemy_timer = 0.0
 	second_wind_triggered = RunState.second_wind_used_this_round
 
 	if current_board:
@@ -85,6 +88,9 @@ func start_round() -> void:
 		_hold_display.queue_free()
 	if _queue_display:
 		_queue_display.queue_free()
+	if _enemy_display:
+		_enemy_display.queue_free()
+		_enemy_display = null
 
 	var board_scene: PackedScene = load(SCENE_TETRIS_BOARD)
 	current_board = board_scene.instantiate()
@@ -116,49 +122,61 @@ func start_round() -> void:
 	_queue_display.position = Vector2(TetrisBoard.COLS * TetrisBoard.CELL_SIZE + 16, 0)
 	_queue_display.setup(current_board)
 
+	var enemy_scene: PackedScene = load(SCENE_ENEMY_DISPLAY)
+	_enemy_display = enemy_scene.instantiate()
+	board_container.add_child(_enemy_display)
+	_enemy_display.position = Vector2(TetrisBoard.COLS * TetrisBoard.CELL_SIZE + 16 + 112 + 48, 0)
+	_enemy_display.setup(current_config.enemy, current_config.quota)
+	hud.set_enemy_display(_enemy_display)
+
 func _build_round_config() -> RoundConfig:
 	var cfg := RoundConfig.new()
+	cfg.rng = RunState.rng
 	cfg.quota = RunState.calculate_quota(RunState.stage, RunState.round_index)
 
-	# Apply keystones
 	for keystone in RunState.keystones:
 		keystone.apply_to_config(cfg)
 
-	# Apply boss modifier (boss round only)
-	if RunState.is_boss_round():
-		var modifier := _select_boss_modifier()
-		if modifier:
-			cfg.boss_modifier = modifier
-			modifier.apply_to_config(cfg)
+	var enemy := _draw_enemy()
+	cfg.enemy = enemy
+	cfg.effective_garbage_interval = enemy.garbage_interval * max(0.5, 1.0 - (RunState.stage - 1) * 0.1)
+
+	if enemy.ability:
+		cfg.boss_modifier = enemy.ability
+		enemy.ability.apply_to_config(cfg)
 
 	cfg.time_limit = RunState.calculate_time_limit(RunState.stage, cfg.boss_modifier.id if cfg.boss_modifier else "")
 	return cfg
 
-func _select_boss_modifier() -> BossModifier:
-	var all_modifiers := _load_all_boss_modifiers()
-	var available := all_modifiers.filter(func(m): return m.id not in RunState.used_boss_modifiers)
-	if available.is_empty():
-		available = all_modifiers
-	available.shuffle()
-	var chosen: BossModifier = available[0]
-	RunState.used_boss_modifiers.append(chosen.id)
-	return chosen
-
-func _load_all_boss_modifiers() -> Array:
-	var dir := DirAccess.open("res://resources/data/boss_modifiers/")
+func _load_enemy_pool(tier: String) -> Array:
+	var dir := DirAccess.open("res://resources/data/enemies/")
 	var result := []
 	if dir:
 		dir.list_dir_begin()
 		var f := dir.get_next()
 		while f != "":
 			if f.ends_with(".tres"):
-				var res := load("res://resources/data/boss_modifiers/" + f)
-				if res != null:
+				var res := load("res://resources/data/enemies/" + f)
+				if res != null and res.tier == tier:
 					result.append(res)
-				else:
-					push_warning("RunManager: failed to load boss modifier: " + f)
 			f = dir.get_next()
 	return result
+
+func _draw_enemy() -> Enemy:
+	var tier: String = ROUND_TIERS[RunState.round_index]
+	var pool := _load_enemy_pool(tier)
+	var available: Array
+	if tier == "Boss":
+		available = pool.filter(func(e): return e.id not in RunState.used_boss_enemy_ids)
+		if available.is_empty():
+			available = pool
+	else:
+		available = pool
+	RunState.seeded_shuffle(available)
+	var chosen: Enemy = available[0]
+	if tier == "Boss":
+		RunState.used_boss_enemy_ids.append(chosen.id)
+	return chosen
 
 # ── Per-frame update ──────────────────────────────────────────────────────
 
@@ -176,8 +194,10 @@ func _process(delta: float) -> void:
 	current_board.tick(delta)
 	_handle_input()
 	_tick_timer(delta)
-	_tick_tide(delta)
+	_tick_enemy_garbage(delta)
 	_check_second_wind()
+	if _enemy_display and current_config:
+		_enemy_display.update_windup(_enemy_timer, current_config.effective_garbage_interval)
 
 # ── Pause ─────────────────────────────────────────────────────────────────
 
@@ -243,15 +263,15 @@ func _tick_timer(delta: float) -> void:
 	if round_timer <= 0.0:
 		_end_round(false)
 
-func _tick_tide(delta: float) -> void:
-	if current_config.boss_modifier == null:
+func _tick_enemy_garbage(delta: float) -> void:
+	if current_config == null or current_config.effective_garbage_interval <= 0.0:
 		return
-	if current_config.boss_modifier.garbage_interval <= 0.0:
-		return
-	tide_timer += delta
-	if tide_timer >= current_config.boss_modifier.garbage_interval:
-		tide_timer = 0.0
+	_enemy_timer += delta
+	if _enemy_timer >= current_config.effective_garbage_interval:
+		_enemy_timer = 0.0
 		current_board.insert_garbage_row()
+		if _enemy_display:
+			_enemy_display.update_windup(0.0, current_config.effective_garbage_interval)
 
 func _check_second_wind() -> void:
 	if second_wind_triggered:

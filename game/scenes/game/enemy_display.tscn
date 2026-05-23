@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/game/enemy_display.gd" id="1"]
+
+[node name="EnemyDisplay" type="Control"]
+script = ExtResource("1")

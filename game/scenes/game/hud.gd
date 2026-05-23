@@ -1,8 +1,7 @@
 class_name HUD
 extends Control
 
-@onready var quota_bar: ProgressBar = $TopBar/QuotaBar
-@onready var quota_label: Label = $TopBar/QuotaLabel
+@onready var round_info_label: Label = $TopBar/RoundInfoLabel
 @onready var timer_label: Label = $TopBar/TimerLabel
 @onready var coin_label: Label = $TopBar/CoinLabel
 @onready var round_label: Label = $TopBar/RoundLabel
@@ -10,25 +9,25 @@ extends Control
 @onready var keystone_icons: HBoxContainer = $InventoryPanel/KeystoneIcons
 @onready var technique_icons: HBoxContainer = $InventoryPanel/TechniqueIcons
 
-@onready var score_label: Label = $InfoPanel/ScoreLabel
 @onready var timer_big_label: Label = $InfoPanel/TimerBigLabel
 @onready var round_big_label: Label = $InfoPanel/RoundBigLabel
 @onready var modifier_big_label: Label = $InfoPanel/ModifierBigLabel
 @onready var b2b_label: Label = $InfoPanel/B2BLabel
 @onready var combo_label: Label = $InfoPanel/ComboLabel
 
+var _enemy_display: Control = null
+
+func set_enemy_display(display: Control) -> void:
+	_enemy_display = display
+
 func _ready() -> void:
 	Economy.connect("coins_changed", _on_coins_changed)
 
 func setup(config: RoundConfig) -> void:
-	quota_bar.max_value = config.quota
-	quota_bar.value = 0
-
 	var round_text := "Stage %d — %s" % [RunState.stage, RunState.get_round_name()]
+	round_info_label.text = RunState.get_round_name()
 	round_label.text = round_text
 	round_big_label.text = round_text
-
-	score_label.text = "0 / %d" % config.quota
 
 	var total_secs := int(config.time_limit)
 	timer_big_label.text = "%d:%02d" % [total_secs / 60, total_secs % 60]
@@ -57,10 +56,9 @@ func update_b2b_combo(is_b2b: bool, b2b_count: int, combo: int) -> void:
 	if combo >= 0:
 		combo_label.text = "Combo x%d" % (combo + 1)
 
-func update_quota(accumulated: float, quota: int) -> void:
-	quota_bar.value = minf(accumulated, quota)
-	quota_label.text = "%d / %d" % [int(accumulated), quota]
-	score_label.text = "%d / %d" % [int(accumulated), quota]
+func update_quota(accumulated: float, _quota: int) -> void:
+	if _enemy_display:
+		_enemy_display.update_hp(accumulated)
 
 func update_timer(time_remaining: float) -> void:
 	var secs := maxf(0.0, time_remaining)

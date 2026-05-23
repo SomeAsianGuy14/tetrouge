@@ -1,0 +1,11 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/enemy.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "iron_shambler"
+display_name = "Iron Shambler"
+color = Color(0.4, 0.6, 0.8, 1)
+tier = "Big"
+garbage_interval = 17.0

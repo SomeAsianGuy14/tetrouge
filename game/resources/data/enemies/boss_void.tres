@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/enemy.gd" id="1"]
+[ext_resource type="Resource" path="res://resources/data/boss_modifiers/the_void.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = "boss_void"
+display_name = "The Void Keeper"
+color = Color(0.3, 0.0, 0.5, 1)
+tier = "Boss"
+garbage_interval = 12.0
+ability = ExtResource("2")

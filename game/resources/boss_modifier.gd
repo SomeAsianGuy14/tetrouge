@@ -11,7 +11,6 @@ extends Resource
 @export var time_limit_override: float = 0.0 # 0 = no override; 45 = The Enforcer
 @export var disable_b2b: bool = false
 @export var board_width_override: int = 0    # 0 = standard; 8 = The Narrow
-@export var garbage_interval: float = 0.0    # >0 = The Tide (seconds between rows)
 
 # Attack filter — which event types count toward quota (empty = all count)
 # The Purge: only triple/tetris/tspin; The Surgeon: only tspin

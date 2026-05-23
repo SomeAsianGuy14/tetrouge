@@ -29,7 +29,11 @@ static func save() -> void:
 	cfg.set_value("inventory", "consumable_ids", _ids_from(RunState.consumables))
 	cfg.set_value("inventory", "voucher_ids", _ids_from(RunState.vouchers))
 	cfg.set_value("inventory", "used_boss_modifier_ids", RunState.used_boss_modifiers)
+	cfg.set_value("inventory", "used_boss_enemy_ids", RunState.used_boss_enemy_ids)
 	cfg.set_value("inventory", "used_keystone_ids", RunState.used_keystone_ids)
+
+	cfg.set_value("rng", "seed", RunState.run_seed)
+	cfg.set_value("rng", "state", RunState.rng.state)
 
 	cfg.save(SAVE_PATH)
 
@@ -58,7 +62,12 @@ static func load_into_state() -> bool:
 	RunState.vouchers = _load_by_ids("res://resources/data/vouchers/",
 			cfg.get_value("inventory", "voucher_ids", []))
 	RunState.used_boss_modifiers = cfg.get_value("inventory", "used_boss_modifier_ids", [])
+	RunState.used_boss_enemy_ids = cfg.get_value("inventory", "used_boss_enemy_ids", [])
 	RunState.used_keystone_ids = cfg.get_value("inventory", "used_keystone_ids", [])
+
+	RunState.run_seed = cfg.get_value("rng", "seed", randi())
+	RunState.rng.seed = RunState.run_seed
+	RunState.rng.state = cfg.get_value("rng", "state", 0)
 
 	return true
 

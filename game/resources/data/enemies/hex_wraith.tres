@@ -1,0 +1,11 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/enemy.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "hex_wraith"
+display_name = "Hex Wraith"
+color = Color(0.2, 0.6, 0.6, 1)
+tier = "Big"
+garbage_interval = 17.0

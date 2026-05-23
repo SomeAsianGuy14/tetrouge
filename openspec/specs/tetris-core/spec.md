@@ -23,7 +23,7 @@ The game SHALL implement Super Rotation System (SRS) including all wall kick tab
 - **THEN** the rotation is rejected and the piece remains in its previous state
 
 ### Requirement: 7-bag piece randomiser
-The game SHALL use a standard 7-bag randomiser: all 7 tetrominoes are shuffled into a bag and drawn in order; a new shuffled bag is prepared when the current bag is exhausted.
+The game SHALL use a standard 7-bag randomiser: all 7 tetrominoes are shuffled into a bag and drawn in order; a new shuffled bag is prepared when the current bag is exhausted. All bag shuffles SHALL use the run-seeded PRNG from `RunState` rather than GDScript's global `randi()` so piece sequences are deterministic for a given seed.
 
 #### Scenario: All pieces appear within 14 draws
 - **WHEN** 14 pieces have been drawn
@@ -32,6 +32,10 @@ The game SHALL use a standard 7-bag randomiser: all 7 tetrominoes are shuffled i
 #### Scenario: Preview queue shows next pieces
 - **WHEN** the board is active
 - **THEN** the next 5 pieces in the queue are visible to the player (modifiable by Augments)
+
+#### Scenario: Piece sequence is deterministic per seed
+- **WHEN** two runs share the same seed
+- **THEN** the bag draw order is identical in both runs from the first piece onwards
 
 ### Requirement: Hold piece
 The player SHALL be able to hold one piece at a time. Holding swaps the current piece with the held piece. The player cannot hold again until the current piece locks.
@@ -132,3 +136,18 @@ The `soft_drop` input action SHALL accept both the Down arrow key and the S key.
 #### Scenario: Releasing S deactivates soft drop
 - **WHEN** the player releases S (and Down is not also held)
 - **THEN** the piece returns to normal gravity speed
+
+### Requirement: Garbage row insertion is triggered by the enemy attack timer
+Garbage row insertion SHALL be driven by `RoundConfig.effective_garbage_interval` for every round type, not exclusively by a boss modifier. The timer is managed by `RunManager` and resets after each insertion. This replaces the previous boss-modifier-only garbage mechanism.
+
+#### Scenario: Garbage fires in non-boss rounds
+- **WHEN** a Small, Big, or Elite round is active and the effective garbage interval elapses
+- **THEN** one garbage row is inserted at the bottom of the board
+
+#### Scenario: Garbage fires in boss rounds
+- **WHEN** a Boss round is active and the effective garbage interval elapses
+- **THEN** one garbage row is inserted, the same as in any other round
+
+#### Scenario: Garbage row has one random gap
+- **WHEN** a garbage row is inserted
+- **THEN** exactly one cell in the row is empty; all other cells are filled with garbage color; the gap position is determined by the run PRNG

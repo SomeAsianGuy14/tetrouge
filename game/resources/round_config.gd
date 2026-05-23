@@ -18,3 +18,7 @@ extends Resource
 @export var hold_disabled: bool = false
 @export var board_width: int = 10
 @export var blinder_preview: int = 5  # overridden by The Blinder boss modifier
+
+var rng: RandomNumberGenerator = null
+var enemy: Enemy = null
+var effective_garbage_interval: float = 0.0

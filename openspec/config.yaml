@@ -1,20 +1,15 @@
 schema: spec-driven
 
-# Project context (optional)
-# This is shown to AI when creating artifacts.
-# Add your tech stack, conventions, style guides, domain knowledge, etc.
-# Example:
-#   context: |
-#     Tech stack: TypeScript, React, Node.js
-#     We use conventional commits
-#     Domain: e-commerce platform
+context: |
+  Tech stack: Godot 4, GDScript
+  Game type: Tetris roguelite (attack-based scoring, run structure, shop, techniques/keystones/augments)
+  Automated testing: GUT (Godot Unit Test) — test files in game/tests/unit/test_*.gd, extend GutTest
+  Autoloads: RunState (run lifecycle, PRNG), Economy (coins/interest), Settings
+  Key classes: TetrisBoard, BagRandomizer, RoundConfig, RunManager, RunSave
 
-# Per-artifact rules (optional)
-# Add custom rules for specific artifacts.
-# Example:
-#   rules:
-#     proposal:
-#       - Keep proposals under 500 words
-#       - Always include a "Non-goals" section
-#     tasks:
-#       - Break tasks into chunks of max 2 hours
+rules:
+  tasks:
+    - Always include a "Testing" section at the end with unit test tasks for any pure functions,
+      deterministic logic, or calculations introduced by the change. Each test task should name
+      the specific scenario to cover (e.g. "add test for X returns Y when Z"). Omit this section
+      only if the change is purely visual/scene-layout with no testable logic.
