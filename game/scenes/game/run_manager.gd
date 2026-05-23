@@ -34,6 +34,9 @@ var _enemy_timer: float = 0.0
 var quota_accumulated: float = 0.0
 var technique_income_this_round: int = 0
 var surplus_attack: int = 0
+var pending_garbage: int = 0
+
+var _attack_bar: Control = null
 
 var second_wind_triggered: bool = false
 
@@ -73,6 +76,7 @@ func start_run() -> void:
 
 func start_round() -> void:
 	_round_ended = false
+	pending_garbage = 0
 	current_config = _build_round_config()
 	hud.setup(current_config)
 	quota_accumulated = 0.0
@@ -91,6 +95,9 @@ func start_round() -> void:
 	if _enemy_display:
 		_enemy_display.queue_free()
 		_enemy_display = null
+	if _attack_bar:
+		_attack_bar.queue_free()
+		_attack_bar = null
 
 	var board_scene: PackedScene = load(SCENE_TETRIS_BOARD)
 	current_board = board_scene.instantiate()
@@ -113,7 +120,7 @@ func start_round() -> void:
 	var hold_scene: PackedScene = load(SCENE_HOLD_DISPLAY)
 	_hold_display = hold_scene.instantiate()
 	board_container.add_child(_hold_display)
-	_hold_display.position = Vector2(-(4 * 24 + 16 + 8), 0)
+	_hold_display.position = Vector2(-(4 * 24 + 16 + 8 + 20), 0)
 	_hold_display.setup(current_board)
 
 	var queue_scene: PackedScene = load(SCENE_QUEUE_DISPLAY)
@@ -128,6 +135,11 @@ func start_round() -> void:
 	_enemy_display.position = Vector2(TetrisBoard.COLS * TetrisBoard.CELL_SIZE + 16 + 112 + 48, 0)
 	_enemy_display.setup(current_config.enemy, current_config.quota)
 	hud.set_enemy_display(_enemy_display)
+
+	var attack_bar_script := load("res://scenes/game/attack_bar.gd") as GDScript
+	_attack_bar = attack_bar_script.new()
+	board_container.add_child(_attack_bar)
+	_attack_bar.position = Vector2(-20, 0)
 
 func _build_round_config() -> RoundConfig:
 	var cfg := RoundConfig.new()
@@ -269,7 +281,8 @@ func _tick_enemy_garbage(delta: float) -> void:
 	_enemy_timer += delta
 	if _enemy_timer >= current_config.effective_garbage_interval:
 		_enemy_timer = 0.0
-		current_board.insert_garbage_row()
+		pending_garbage += 1
+		_notify_attack_bar()
 		if _enemy_display:
 			_enemy_display.update_windup(0.0, current_config.effective_garbage_interval)
 
@@ -295,9 +308,11 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 		if not current_config.boss_modifier.attack_counts_toward_quota(event_type):
 			return
 
-	quota_accumulated += modified
+	var to_quota := _drain_attack(modified)
+	quota_accumulated += to_quota
 	surplus_attack = maxi(0, int(quota_accumulated) - current_config.quota)
-	hud.update_quota(quota_accumulated, current_config.quota)
+	if hud:
+		hud.update_quota(quota_accumulated, current_config.quota)
 
 	if quota_accumulated >= current_config.quota:
 		_end_round(true)
@@ -323,6 +338,23 @@ func _accumulate_technique_income(event_type: String, _modified_attack: int) -> 
 		if technique.coins_per_b2b > 0 and event_type == Technique.EVENT_B2B:
 			technique_income_this_round += technique.coins_per_b2b
 
+# ── Attack buffer helpers ─────────────────────────────────────────────────
+
+func _drain_attack(modified: int) -> int:
+	var drain := mini(modified, pending_garbage)
+	pending_garbage -= drain
+	_notify_attack_bar()
+	return modified - drain
+
+func _flush_pending_garbage() -> int:
+	var flush := mini(pending_garbage, 8)
+	pending_garbage -= flush
+	return flush
+
+func _notify_attack_bar() -> void:
+	if _attack_bar:
+		_attack_bar.update_pending(pending_garbage)
+
 # ── Round end ─────────────────────────────────────────────────────────────
 
 func _on_game_over() -> void:
@@ -332,6 +364,8 @@ func _end_round(success: bool) -> void:
 	if _round_ended:
 		return
 	_round_ended = true
+	pending_garbage = 0
+	_notify_attack_bar()
 	if current_board:
 		current_board.is_active = false
 	if not success:
@@ -360,7 +394,13 @@ func _calculate_surplus_income() -> int:
 	return income
 
 func _on_lock_processed() -> void:
-	hud.update_b2b_combo(current_board.is_b2b, current_board.b2b_count, current_board.combo)
+	if hud and current_board:
+		hud.update_b2b_combo(current_board.is_b2b, current_board.b2b_count, current_board.combo)
+	var flush := _flush_pending_garbage()
+	if flush > 0 and current_board:
+		for i in range(flush):
+			current_board.insert_garbage_row()
+		_notify_attack_bar()
 
 func _on_board_updated() -> void:
 	if current_board:

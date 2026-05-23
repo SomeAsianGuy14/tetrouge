@@ -78,10 +78,14 @@ func test_rng_state_restore_matches_full_sequence() -> void:
 	RunState.rng.seed = 33333
 
 	var full_seq := []
-	for _i in 10:
+	for _i in 5:
 		full_seq.append(RunState.seeded_randf())
 
-	var saved_state := RunState.rng.state
+	var saved_state := RunState.rng.state  # checkpoint after draw #5
+
+	for _i in 5:
+		full_seq.append(RunState.seeded_randf())  # draws 6-10
+
 	for _i in 5:
 		RunState.seeded_randf()  # advance past the checkpoint
 
