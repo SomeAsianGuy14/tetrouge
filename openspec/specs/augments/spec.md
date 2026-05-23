@@ -61,3 +61,10 @@ The following Augments SHALL be available in the initial build:
 #### Scenario: Quick Swap removes hold lockout
 - **WHEN** Quick Swap is active
 - **THEN** the player can hold immediately after a hold swap without waiting for the next piece to lock
+
+### Requirement: Augment selection screen presents each option as a card with separated name and description
+The augment selection UI SHALL display each augment option as a distinct card. Each card SHALL present the augment name and its description as visually separated elements.
+
+#### Scenario: Augment card layout
+- **WHEN** the augment selection screen is shown
+- **THEN** each of the 3 options is rendered as a card with the augment name and description in separate, visually distinct areas of the card

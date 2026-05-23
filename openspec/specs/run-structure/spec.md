@@ -75,3 +75,10 @@ A run SHALL be persisted to disk after each completed round (when the shop is cl
 #### Scenario: Run deleted on natural conclusion
 - **WHEN** the run ends in victory or failure
 - **THEN** the save file is removed so the main menu no longer offers a Continue option
+
+### Requirement: Run failure screen properly starts a fresh run when the player chooses to play again
+When the run failure screen is displayed and the player selects the option to play again, the game SHALL start a completely fresh run rather than continuing or reloading any state from the failed run.
+
+#### Scenario: Play again from failure screen starts fresh run
+- **WHEN** the player is on the run failure screen and chooses to play again
+- **THEN** a new run is initialised from scratch with default starting state, with no carry-over from the failed run

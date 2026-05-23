@@ -38,6 +38,8 @@ var _paused: bool = false
 var _pause_menu: Control = null
 var _board_was_active: bool = false
 var _active_overlay: Control = null
+var _pending_keystone: bool = false
+var _round_ended: bool = false
 
 signal round_ended(success: bool)
 
@@ -67,6 +69,7 @@ func start_run() -> void:
 # ── Round start ───────────────────────────────────────────────────────────
 
 func start_round() -> void:
+	_round_ended = false
 	current_config = _build_round_config()
 	hud.setup(current_config)
 	quota_accumulated = 0.0
@@ -306,6 +309,9 @@ func _on_game_over() -> void:
 	_end_round(false)
 
 func _end_round(success: bool) -> void:
+	if _round_ended:
+		return
+	_round_ended = true
 	if current_board:
 		current_board.is_active = false
 	if not success:
@@ -323,10 +329,8 @@ func _end_round(success: bool) -> void:
 		_show_victory()
 		return
 
-	if was_boss:
-		_show_keystone_selection()
-	else:
-		_show_round_success(speed_bonus, surplus_income)
+	_pending_keystone = was_boss
+	_show_round_success(speed_bonus, surplus_income)
 
 func _calculate_surplus_income() -> int:
 	var income := 0
@@ -353,7 +357,11 @@ func _show_round_success(speed_bonus: int, surplus_income: int) -> void:
 	screen.setup(BASE_PAYOUT, speed_bonus, technique_income_this_round + surplus_income)
 
 func _on_success_proceed() -> void:
-	_show_shop()
+	if _pending_keystone:
+		_pending_keystone = false
+		_show_keystone_selection()
+	else:
+		_show_shop()
 
 func _show_shop() -> void:
 	for child in get_children():
@@ -373,19 +381,11 @@ func _on_shop_closed() -> void:
 func _show_keystone_selection() -> void:
 	var scene: PackedScene = load(SCENE_KEYSTONE_SELECTION)
 	var screen = scene.instantiate()
-	add_child(screen)
+	get_tree().root.add_child(screen)
 	screen.connect("keystone_chosen", _on_keystone_chosen)
 
 func _on_keystone_chosen(_keystone: Keystone) -> void:
-	_show_round_success_after_boss()
-
-func _show_round_success_after_boss() -> void:
-	var scene: PackedScene = load(SCENE_ROUND_SUCCESS)
-	var screen = scene.instantiate()
-	_active_overlay = screen
-	add_child(screen)
-	screen.connect("proceed", _on_success_proceed)
-	screen.setup(BASE_PAYOUT, Economy.calculate_speed_bonus(round_timer, current_config.time_limit), technique_income_this_round)
+	_show_shop()
 
 func _show_failure() -> void:
 	RunSave.delete()

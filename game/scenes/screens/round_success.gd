@@ -17,5 +17,5 @@ func setup(base_payout: int, speed_bonus: int, technique_income: int) -> void:
 	proceed_button.connect("pressed", _on_proceed)
 
 func _on_proceed() -> void:
-	queue_free()
 	emit_signal("proceed")
+	queue_free()

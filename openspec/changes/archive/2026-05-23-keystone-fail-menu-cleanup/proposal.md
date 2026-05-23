@@ -5,6 +5,8 @@ The keystone selection and run failure screens are functional but sparse — but
 ## What Changes
 
 - **Keystone selection**: Replace the single-text buttons with card-style panels that separate the augment name (prominent) from its description (secondary), making choices easier to read at a glance
+- **Keystone selection off-screen bug fix**: The panel is hardcoded 900 px wide; on smaller viewports the card row extends off-screen — switch to screen-relative sizing so the panel fits any resolution
+- **Run failure see-through bug fix**: The `PanelContainer` has no background style defined, making it transparent and hard to read — add a solid background via `theme_override_styles/panel`
 - **Run failure message**: Make the failure message more specific — show the ante, round name, and a brief cause
 - **Run failure "Try Again" bug fix**: `_on_restart()` currently calls `change_scene_to_file` which loads RunManager but never calls `start_run()`, resulting in a broken blank game; fix it to properly start a fresh run
 - **Run failure "Try Again" renamed to "New Run"**: Clarify that restarting begins a fresh run, not a retry of the same run

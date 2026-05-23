@@ -1,6 +1,17 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scenes/screens/run_failure.gd" id="1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1"]
+bg_color = Color(0.1, 0.1, 0.1, 0.95)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+content_margin_left = 16.0
+content_margin_top = 16.0
+content_margin_right = 16.0
+content_margin_bottom = 16.0
 
 [node name="RunFailure" type="Control"]
 layout_mode = 3
@@ -20,6 +31,7 @@ offset_left = -200.0
 offset_top = -130.0
 offset_right = 200.0
 offset_bottom = 130.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_1")
 
 [node name="VBox" type="VBoxContainer" parent="Panel"]
 theme_override_constants/separation = 12
@@ -30,7 +42,7 @@ horizontal_alignment = 1
 autowrap_mode = 3
 
 [node name="RestartButton" type="Button" parent="Panel/VBox"]
-text = "Try Again"
+text = "New Run"
 
 [node name="MenuButton" type="Button" parent="Panel/VBox"]
 text = "Main Menu"

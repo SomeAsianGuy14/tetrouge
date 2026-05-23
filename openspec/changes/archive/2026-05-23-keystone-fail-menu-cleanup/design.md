@@ -1,10 +1,10 @@
 ## Context
 
-Two screens need cleanup:
+Two screens need cleanup, each with both visual bugs and UX issues:
 
-**Keystone selection** — currently renders each choice as a single `Button` with `"%s\n%s" % [name, description]` as its text. This works but gives no visual hierarchy; the name and description are indistinguishable at a glance.
+**Keystone selection** — currently renders each choice as a single `Button` with `"%s\n%s" % [name, description]` as its text. This works but gives no visual hierarchy; the name and description are indistinguishable at a glance. Additionally, the panel is hardcoded at `offset_left = -450 / offset_right = 450` (900 px), and the three buttons at `260 × 120` each push the `HBoxContainer` to ~820 px before panel padding — this overflows smaller viewports.
 
-**Run failure** — has a critical bug: `_on_restart()` calls `get_tree().change_scene_to_file("res://scenes/game/run_manager.tscn")`, which instantiates RunManager but never calls `start_run()`. The player lands on a blank, unresponsive screen. Additionally, the button label "Try Again" implies retrying the same run, but the game is permadeath — it starts a fresh run.
+**Run failure** — the `PanelContainer` has no `theme_override_styles/panel` set, so Godot 4 renders it with a transparent background, making text and buttons hard to read against the game scene behind it. There is also a critical logic bug: `_on_restart()` calls `get_tree().change_scene_to_file("res://scenes/game/run_manager.tscn")`, which instantiates RunManager but never calls `start_run()`. The player lands on a blank, unresponsive screen. Additionally, the button label "Try Again" implies retrying the same run, but the game is permadeath — it starts a fresh run.
 
 ## Goals / Non-Goals
 
@@ -32,7 +32,14 @@ Mirror the pattern already used in `main_menu.gd:_on_new_run()`: delete the save
 
 Alternative considered: `change_scene_to_file` then signal `start_run` via group. Rejected — `change_scene_to_file` is fire-and-forget with no hook to call `start_run()` after the scene is ready without extra autoload machinery.
 
+**Run failure background — StyleBoxFlat via theme_override_styles/panel**
+Set `theme_override_styles/panel` on the `PanelContainer` in the `.tscn` to a `StyleBoxFlat` with a solid dark background (e.g. `Color(0.1, 0.1, 0.1, 0.95)`). This is the standard Godot 4 approach for opaque panels without a project-wide theme.
+
+**Keystone panel sizing — use screen-relative anchors instead of fixed offsets**
+Replace the fixed `offset_left/right = ±450` approach with `anchors_preset = 8` (centre) and size the panel using `size` or percentage-based custom_minimum_size so it fits any resolution. Cards inside get a reduced `custom_minimum_size` (e.g. `Vector2(200, 140)`) so three fit comfortably within a 720 px-wide panel.
+
 ## Risks / Trade-offs
 
 - [Keystone card click area] Overlaying a transparent button over a PanelContainer can have z-order quirks → use `mouse_filter = PASS` on the inner labels and make the Panel itself the clickable area via `connect("gui_input", ...)`, or build the card as a Button subclass. Simplest is to keep the Button as the root and use `add_theme_*_override` to increase font size for the name portion, accepting slightly less visual separation.
 - [Restart path and RunState] The fix must call `RunState.reset()` and `Economy.reset()` via `start_run()` — these are already called inside `start_run()`, so mirroring the main menu pattern is safe.
+- [StyleBoxFlat in .tscn] Inline `StyleBoxFlat` resources in `.tscn` files are verbose but self-contained — acceptable here since this is the only panel needing the override.
