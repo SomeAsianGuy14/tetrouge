@@ -7,6 +7,7 @@ signal keystone_chosen(keystone: Keystone)
 @onready var title_label: Label = $Panel/VBox/Title
 
 var _offered: Array = []
+var starter_only: bool = false
 
 func _ready() -> void:
 	title_label.text = "Choose a Keystone"
@@ -23,9 +24,11 @@ func _draw_three_keystones() -> Array:
 			if f.ends_with(".tres"):
 				var ks: Keystone = load("res://resources/data/keystones/" + f)
 				if ks and ks.id not in RunState.used_keystone_ids:
-					all_keystones.append(ks)
+					if not starter_only or ks.is_starter:
+						if ks.requires_keystone_id == "" or ks.requires_keystone_id in RunState.used_keystone_ids:
+							all_keystones.append(ks)
 			f = dir.get_next()
-	all_keystones.shuffle()
+	RunState.seeded_shuffle(all_keystones)
 	return all_keystones.slice(0, 3)
 
 func _populate_options() -> void:
@@ -34,7 +37,7 @@ func _populate_options() -> void:
 	options_container.alignment = BoxContainer.ALIGNMENT_CENTER
 	for keystone in _offered:
 		var btn := Button.new()
-		btn.custom_minimum_size = Vector2(200, 140)
+		btn.custom_minimum_size = Vector2(200, 180)
 		btn.connect("pressed", _on_keystone_selected.bind(keystone))
 
 		var vbox := VBoxContainer.new()
@@ -44,7 +47,7 @@ func _populate_options() -> void:
 		vbox.offset_top = 8
 		vbox.offset_right = -8
 		vbox.offset_bottom = -8
-		vbox.alignment = BoxContainer.ALIGNMENT_CENTER
+		vbox.alignment = BoxContainer.ALIGNMENT_BEGIN
 		vbox.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 		var name_lbl := Label.new()
@@ -58,6 +61,7 @@ func _populate_options() -> void:
 		desc_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		desc_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD
 		desc_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		desc_lbl.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		desc_lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 		vbox.add_child(name_lbl)

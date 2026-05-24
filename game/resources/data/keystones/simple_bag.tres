@@ -4,8 +4,9 @@
 
 [resource]
 script = ExtResource("1")
-id = "quick_swap"
-display_name = "Quick Swap"
-description = "Hold piece has no lockout — re-hold immediately after a swap."
+id = "simple_bag"
+display_name = "Simple Bag"
+description = "Gain one extra hold slot."
 is_starter = true
-disable_hold_lockout = true
+category = "Starter"
+hold_slots_bonus = 1

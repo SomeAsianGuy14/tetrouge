@@ -4,8 +4,8 @@
 
 [resource]
 script = ExtResource("1")
-id = "loose_lock"
-display_name = "Loose Lock"
-description = "Lock delay increased by 150ms."
-is_starter = true
-lock_delay_ms_override = 650.0
+id = "daze"
+display_name = "Daze"
+description = "Tetrises delay the next garbage drop by 2 seconds."
+category = "Tetris"
+daze_stun_seconds = 2.0

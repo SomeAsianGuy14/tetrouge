@@ -4,8 +4,9 @@
 
 [resource]
 script = ExtResource("1")
-id = "extended_buffer"
-display_name = "Extended Buffer"
-description = "Hold piece stores 2 pieces instead of 1."
+id = "simple_sword"
+display_name = "Simple Sword"
+description = "Tetrises deal +2 damage."
 is_starter = true
-hold_slots_override = 2
+category = "Starter"
+quad_bonus = 2

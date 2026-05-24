@@ -4,8 +4,8 @@
 
 [resource]
 script = ExtResource("1")
-id = "foresight"
-display_name = "Foresight"
-description = "See 2 additional pieces in the preview queue."
+id = "risky_business"
+display_name = "Risky Business"
+description = "Clears that include a row in the top 5 visible rows deal 2x damage."
 category = "Utility"
-preview_count_bonus = 2
+risky_business = true

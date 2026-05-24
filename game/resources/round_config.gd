@@ -19,6 +19,13 @@ extends Resource
 @export var board_width: int = 10
 @export var blinder_preview: int = 5  # overridden by The Blinder boss modifier
 
+# ── Keystone-driven extensions ─────────────────────────────────────────────
+@export var b2b_shield_count: int = 0
+@export var flexible_b2b: bool = false
+@export var instant_arr: bool = false
+@export var instant_soft_drop: bool = false
+@export var garbage_flush_reduction: int = 0
+
 var rng: RandomNumberGenerator = null
 var enemy: Enemy = null
 var effective_garbage_interval: float = 0.0

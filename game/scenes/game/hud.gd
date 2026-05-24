@@ -78,7 +78,7 @@ func _refresh_keystone_icons() -> void:
 	for keystone in RunState.keystones:
 		var lbl := Label.new()
 		lbl.text = keystone.display_name[0]
-		lbl.tooltip_text = keystone.display_name
+		lbl.tooltip_text = keystone.display_name + "\n" + keystone.description
 		lbl.mouse_filter = Control.MOUSE_FILTER_STOP
 		keystone_icons.add_child(lbl)
 

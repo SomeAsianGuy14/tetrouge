@@ -1,0 +1,12 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "great_sword"
+display_name = "Great Sword"
+description = "Tetrises deal +8 damage. Requires: Slightly Magical Coin."
+category = "Tetris"
+requires_keystone_id = "slightly_magical_coin"
+quad_bonus = 8

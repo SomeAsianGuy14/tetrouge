@@ -18,7 +18,6 @@ static func save() -> void:
 	cfg.set_value("run", "shop_technique_slots", RunState.shop_technique_slots)
 	cfg.set_value("run", "consumable_capacity", RunState.consumable_capacity)
 	cfg.set_value("run", "sharp_eye_active", RunState.sharp_eye_active)
-	cfg.set_value("run", "second_wind_used_this_round", RunState.second_wind_used_this_round)
 
 	cfg.set_value("economy", "coins", Economy.coins)
 	cfg.set_value("economy", "interest_cap", Economy.interest_cap)
@@ -47,7 +46,6 @@ static func load_into_state() -> bool:
 	RunState.shop_technique_slots = cfg.get_value("run", "shop_technique_slots", 3)
 	RunState.consumable_capacity = cfg.get_value("run", "consumable_capacity", 2)
 	RunState.sharp_eye_active = cfg.get_value("run", "sharp_eye_active", false)
-	RunState.second_wind_used_this_round = cfg.get_value("run", "second_wind_used_this_round", false)
 
 	Economy.coins = cfg.get_value("economy", "coins", 0)
 	Economy.interest_cap = cfg.get_value("economy", "interest_cap", 5)

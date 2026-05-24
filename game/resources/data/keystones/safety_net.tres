@@ -1,0 +1,11 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "safety_net"
+display_name = "Safety Net"
+description = "Your B2B streak can be broken one extra time before it resets."
+category = "B2B"
+safety_net = true

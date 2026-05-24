@@ -1,0 +1,11 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "sharpen"
+display_name = "Sharpen"
+description = "Each Tetris-applicable technique adds +2 damage to Tetrises."
+category = "Tetris"
+per_technique_quad_bonus = 2

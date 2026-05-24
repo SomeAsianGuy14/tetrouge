@@ -1,0 +1,11 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "veterans_luck"
+display_name = "Veteran's Luck"
+description = "Every Perfect Clear after the first deals 2x damage."
+category = "PC"
+pc_after_first_multiplier = 2.0

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "midas_touch"
+display_name = "Midas Touch"
+description = "At round end, earn coins equal to your overkill damage."
+category = "Economic"
+overkill_coins = true

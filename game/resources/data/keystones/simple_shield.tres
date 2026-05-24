@@ -4,8 +4,9 @@
 
 [resource]
 script = ExtResource("1")
-id = "iron_will"
-display_name = "Iron Will"
-description = "Lock delay maximum resets increased from 15 to 25."
+id = "simple_shield"
+display_name = "Simple Shield"
+description = "Incoming garbage is reduced by 2 lines per flush."
 is_starter = true
-lock_max_resets_override = 25
+category = "Starter"
+garbage_flush_reduction = 2

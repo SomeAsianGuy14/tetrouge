@@ -77,7 +77,10 @@ var attack_surge_remaining: int = 0  # Attack Surge consumable
 signal piece_locked
 signal lock_processed
 signal lines_cleared(count: int, clear_type: String)
+signal rows_cleared(row_indices: Array[int])
 signal attack_generated(raw_attack: int, event_type: String)
+signal b2b_broken(streak: int)
+signal piece_rotated(piece_type: String)
 signal game_over
 signal board_updated
 
@@ -88,6 +91,8 @@ func setup(round_config: RoundConfig) -> void:
 	_rng = config.rng
 	lock_delay = config.lock_delay_ms / 1000.0
 	lock_max_resets = config.lock_max_resets
+	if config.instant_arr:
+		arr_rate = 0.0
 	_init_grid()
 	bag = BagRandomizer.new(config.bag_reset_interval, config.rng)
 	piece_queue.clear()
@@ -140,7 +145,8 @@ func _handle_das(delta: float) -> void:
 				_move_horizontal(das_direction)
 
 func _handle_gravity(delta: float) -> void:
-	var speed := GRAVITY_SPEED * (20.0 if soft_dropping else 1.0)
+	var soft_mult := 1000.0 if config.instant_soft_drop else 20.0
+	var speed := GRAVITY_SPEED * (soft_mult if soft_dropping else 1.0)
 	gravity_accumulator += speed * delta
 	while gravity_accumulator >= 1.0:
 		gravity_accumulator -= 1.0
@@ -250,6 +256,7 @@ func _try_rotate(new_rot: int) -> void:
 			if is_on_ground:
 				_reset_lock()
 			_update_ghost()
+			emit_signal("piece_rotated", current_type)
 			emit_signal("board_updated")
 			return
 
@@ -342,10 +349,11 @@ func _process_clears(piece_type: String, pivot: Vector2i, rotation: int, was_rot
 	var is_qualifying := clear_type in ["tetris", "tspin_single", "tspin_double", "tspin_triple", "tspin_mini", "perfect_clear"]
 
 	emit_signal("lines_cleared", clear_count, clear_type)
-	_emit_attack_events(clear_type, is_qualifying, is_pc)
+	emit_signal("rows_cleared", cleared_rows)
+	_emit_attack_events(clear_type, is_qualifying, is_pc, was_rotation)
 	emit_signal("board_updated")
 
-func _emit_attack_events(clear_type: String, is_qualifying: bool, is_pc: bool) -> void:
+func _emit_attack_events(clear_type: String, is_qualifying: bool, is_pc: bool, was_rotation: bool) -> void:
 	var surge_mult := 1
 	if attack_surge_remaining > 0:
 		surge_mult = 2
@@ -360,7 +368,8 @@ func _emit_attack_events(clear_type: String, is_qualifying: bool, is_pc: bool) -
 	var combo_bonus := 0
 
 	if not config.b2b_disabled:
-		if is_qualifying:
+		var effective_qualifying := is_qualifying or (config.flexible_b2b and was_rotation)
+		if effective_qualifying:
 			if is_b2b:
 				b2b_bonus = 1
 				b2b_count += 1
@@ -369,8 +378,14 @@ func _emit_attack_events(clear_type: String, is_qualifying: bool, is_pc: bool) -
 			is_b2b = true
 		else:
 			if not (config.b2b_persists_on_doubles and clear_type == "double"):
-				is_b2b = false
-				b2b_count = 0
+				if is_b2b:
+					if config.b2b_shield_count > 0:
+						config.b2b_shield_count -= 1
+					else:
+						var broken_streak := b2b_count
+						is_b2b = false
+						b2b_count = 0
+						emit_signal("b2b_broken", broken_streak)
 	else:
 		is_b2b = false
 		b2b_count = 0

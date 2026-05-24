@@ -23,8 +23,6 @@ var used_boss_modifiers: Array = []   # ids already seen this run
 var used_boss_enemy_ids: Array = []   # boss enemy ids already seen this run
 var used_keystone_ids: Array = []     # ids already owned this run
 
-var second_wind_used_this_round: bool = false
-
 var shop_technique_slots: int = 3
 var consumable_capacity: int = 2
 var sharp_eye_active: bool = false
@@ -42,7 +40,6 @@ func reset() -> void:
 	used_boss_modifiers.clear()
 	used_boss_enemy_ids.clear()
 	used_keystone_ids.clear()
-	second_wind_used_this_round = false
 	shop_technique_slots = 3
 	consumable_capacity = 2
 	sharp_eye_active = false
@@ -57,7 +54,6 @@ func advance_round() -> void:
 	if round_index >= ROUNDS_PER_STAGE:
 		round_index = 0
 		stage += 1
-	second_wind_used_this_round = false
 	emit_signal("round_changed", stage, round_index)
 
 func is_run_complete() -> bool:

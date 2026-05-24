@@ -1,0 +1,14 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "simple_wand"
+display_name = "Simple Wand"
+description = "All T-Spins deal +2 damage."
+is_starter = true
+category = "Starter"
+tspin_single_bonus = 2
+tspin_double_bonus = 2
+tspin_triple_bonus = 2

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "magical_coin"
+display_name = "Magical Coin"
+description = "Earn 2 extra coins at the end of each round. Requires: Slightly Magical Coin."
+category = "Economic"
+requires_keystone_id = "slightly_magical_coin"
+end_round_coins = 2

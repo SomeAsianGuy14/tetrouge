@@ -38,7 +38,10 @@ var pending_garbage: int = 0
 
 var _attack_bar: Control = null
 
-var second_wind_triggered: bool = false
+var _last_attack_was_quad: bool = false
+var _t_spin_rotations: int = 0
+var _pc_count_this_round: int = 0
+var _last_cleared_rows: Array[int] = []
 
 var _paused: bool = false
 var _pause_menu: Control = null
@@ -70,6 +73,16 @@ func start_run() -> void:
 	Economy.reset()
 	Economy.add_coins(RunState.STARTING_COINS)
 	RunState.emit_signal("run_started")
+	_show_starter_keystone_selection()
+
+func _show_starter_keystone_selection() -> void:
+	var scene: PackedScene = load(SCENE_KEYSTONE_SELECTION)
+	var screen = scene.instantiate()
+	screen.starter_only = true
+	get_tree().root.add_child(screen)
+	screen.connect("keystone_chosen", _on_starter_keystone_chosen)
+
+func _on_starter_keystone_chosen(_keystone: Keystone) -> void:
 	start_round()
 
 # ── Round start ───────────────────────────────────────────────────────────
@@ -84,7 +97,10 @@ func start_round() -> void:
 	surplus_attack = 0
 	round_timer = current_config.time_limit
 	_enemy_timer = 0.0
-	second_wind_triggered = RunState.second_wind_used_this_round
+	_last_attack_was_quad = false
+	_t_spin_rotations = 0
+	_pc_count_this_round = 0
+	_last_cleared_rows = []
 
 	if current_board:
 		current_board.queue_free()
@@ -112,6 +128,9 @@ func start_round() -> void:
 	current_board.connect("game_over", _on_game_over)
 	current_board.connect("board_updated", _on_board_updated)
 	current_board.connect("lock_processed", _on_lock_processed)
+	current_board.connect("piece_rotated", _on_piece_rotated)
+	current_board.connect("rows_cleared", _on_rows_cleared)
+	current_board.connect("b2b_broken", _on_b2b_broken)
 
 	if _debug_overlay:
 		_debug_overlay.set_board(current_board)
@@ -207,7 +226,6 @@ func _process(delta: float) -> void:
 	_handle_input()
 	_tick_timer(delta)
 	_tick_enemy_garbage(delta)
-	_check_second_wind()
 	if _enemy_display and current_config:
 		_enemy_display.update_windup(_enemy_timer, current_config.effective_garbage_interval)
 
@@ -286,27 +304,43 @@ func _tick_enemy_garbage(delta: float) -> void:
 		if _enemy_display:
 			_enemy_display.update_windup(0.0, current_config.effective_garbage_interval)
 
-func _check_second_wind() -> void:
-	if second_wind_triggered:
-		return
-	if not RunState.has_keystone("second_wind"):
-		return
-	if round_timer <= 10.0 and quota_accumulated < current_config.quota:
-		second_wind_triggered = true
-		RunState.second_wind_used_this_round = true
-		round_timer += 5.0
-
 # ── Attack signal handler ─────────────────────────────────────────────────
+
+func _on_piece_rotated(piece_type: String) -> void:
+	if piece_type == "T":
+		_t_spin_rotations += 1
+	else:
+		_t_spin_rotations = 0
+
+func _on_rows_cleared(row_indices: Array[int]) -> void:
+	_last_cleared_rows = row_indices
+
+func _on_b2b_broken(streak: int) -> void:
+	for ks in RunState.keystones:
+		if ks.final_blow:
+			quota_accumulated += streak * 2
+			if current_config:
+				current_config.b2b_disabled = true
+			break
 
 func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 	var modified := _apply_techniques(raw_attack, event_type)
 	_accumulate_technique_income(event_type, modified)
+	modified = _apply_keystone_suppressions(modified, event_type)
+	modified = _apply_keystone_flat_bonuses(modified, event_type)
+	modified = _apply_keystone_multipliers(modified, event_type)
 
 	# Apply boss modifier quota filter; bonus events always count if their parent clear qualified
 	var is_bonus_event := event_type == "b2b" or event_type == "combo"
 	if not is_bonus_event and current_config.boss_modifier:
 		if not current_config.boss_modifier.attack_counts_toward_quota(event_type):
 			return
+
+	# Update per-round trackers (skip bonus events so they don't reset the quad streak)
+	if event_type != "b2b" and event_type != "combo":
+		_last_attack_was_quad = (event_type == "tetris")
+	if event_type == "perfect_clear":
+		_pc_count_this_round += 1
 
 	var to_quota := _drain_attack(modified)
 	quota_accumulated += to_quota
@@ -316,6 +350,105 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 
 	if quota_accumulated >= current_config.quota:
 		_end_round(true)
+
+# ── Keystone attack modifiers ─────────────────────────────────────────────
+
+func _apply_keystone_suppressions(attack: int, event_type: String) -> int:
+	for ks in RunState.keystones:
+		if ks.suppress_spins and event_type in ["tspin_mini", "tspin_single", "tspin_double", "tspin_triple", "tspin_any"]:
+			return 0
+		if ks.suppress_tspin_single and event_type == "tspin_single":
+			return 0
+		if ks.suppress_tspin_double and event_type == "tspin_double":
+			return 0
+		if ks.suppress_tspin_triple and event_type == "tspin_triple":
+			return 0
+		if ks.suppress_non_singles and event_type != "single":
+			return 0
+	return attack
+
+func _apply_keystone_flat_bonuses(attack: int, event_type: String) -> int:
+	if attack == 0:
+		return 0
+	var bonus := 0
+	for ks in RunState.keystones:
+		match event_type:
+			"single":
+				bonus += ks.single_bonus
+			"double":
+				bonus += ks.double_bonus
+			"triple":
+				bonus += ks.triple_bonus
+			"tetris":
+				bonus += ks.quad_bonus
+				if ks.per_technique_quad_bonus > 0:
+					for t in RunState.techniques:
+						if t.flat_bonus_by_event.get("tetris", 0) > 0 or t.flat_bonus_by_event.get("any_clear", 0) > 0:
+							bonus += ks.per_technique_quad_bonus
+			"tspin_mini":
+				bonus += ks.tspin_mini_bonus + ks.tspin_any_bonus
+			"tspin_single":
+				bonus += ks.tspin_single_bonus + ks.tspin_any_bonus
+				if ks.per_technique_tspin_bonus > 0:
+					for t in RunState.techniques:
+						if t.flat_bonus_by_event.get("tspin_single", 0) > 0 or t.flat_bonus_by_event.get("tspin_any", 0) > 0 or t.flat_bonus_by_event.get("any_clear", 0) > 0:
+							bonus += ks.per_technique_tspin_bonus
+			"tspin_double":
+				bonus += ks.tspin_double_bonus + ks.tspin_any_bonus
+				if ks.per_technique_tspin_bonus > 0:
+					for t in RunState.techniques:
+						if t.flat_bonus_by_event.get("tspin_double", 0) > 0 or t.flat_bonus_by_event.get("tspin_any", 0) > 0 or t.flat_bonus_by_event.get("any_clear", 0) > 0:
+							bonus += ks.per_technique_tspin_bonus
+			"tspin_triple":
+				bonus += ks.tspin_triple_bonus + ks.tspin_any_bonus
+				if ks.per_technique_tspin_bonus > 0:
+					for t in RunState.techniques:
+						if t.flat_bonus_by_event.get("tspin_triple", 0) > 0 or t.flat_bonus_by_event.get("tspin_any", 0) > 0 or t.flat_bonus_by_event.get("any_clear", 0) > 0:
+							bonus += ks.per_technique_tspin_bonus
+			"b2b":
+				bonus += ks.b2b_bonus
+		# Dizzy: >4 T rotations adds +4 to the next T-spin
+		if ks.dizzy and "tspin" in event_type and event_type != "tspin_mini" and _t_spin_rotations > 4:
+			bonus += 4
+	return attack + bonus
+
+func _apply_keystone_multipliers(attack: int, event_type: String) -> int:
+	if attack == 0:
+		return 0
+	var mult := 1.0
+	for ks in RunState.keystones:
+		match event_type:
+			"single":
+				if ks.single_multiplier > 0.0:
+					mult *= ks.single_multiplier
+			"tetris":
+				if ks.quad_multiplier > 0.0:
+					mult *= ks.quad_multiplier
+				if ks.consecutive_quad_multiplier > 0.0 and _last_attack_was_quad:
+					mult *= ks.consecutive_quad_multiplier
+				if ks.daze_stun_seconds > 0.0:
+					_enemy_timer = maxf(0.0, _enemy_timer - ks.daze_stun_seconds)
+			"tspin_double":
+				if ks.tspin_double_multiplier > 0.0:
+					mult *= ks.tspin_double_multiplier
+			"tspin_triple":
+				if ks.tspin_triple_multiplier > 0.0:
+					mult *= ks.tspin_triple_multiplier
+			"combo":
+				if ks.combo_multiplier > 0.0 and current_board and current_board.combo > ks.combo_multiplier_threshold:
+					mult *= ks.combo_multiplier
+			"perfect_clear":
+				if ks.pc_first_multiplier > 0.0 and _pc_count_this_round == 0:
+					mult *= ks.pc_first_multiplier
+				elif ks.pc_after_first_multiplier > 0.0 and _pc_count_this_round > 0:
+					mult *= ks.pc_after_first_multiplier
+		# Risky Business: any cleared row in top 5 visible rows doubles damage
+		if ks.risky_business and event_type not in ["b2b", "combo"]:
+			for row_idx in _last_cleared_rows:
+				if row_idx >= TetrisBoard.HIDDEN_ROWS and row_idx < TetrisBoard.HIDDEN_ROWS + 5:
+					mult *= 2.0
+					break
+	return int(float(attack) * mult)
 
 func _apply_techniques(raw_attack: int, event_type: String) -> int:
 	var result := raw_attack
@@ -347,7 +480,8 @@ func _drain_attack(modified: int) -> int:
 	return modified - drain
 
 func _flush_pending_garbage() -> int:
-	var flush := mini(pending_garbage, 8)
+	var reduction := current_config.garbage_flush_reduction if current_config else 0
+	var flush := maxi(0, mini(pending_garbage, 8) - reduction)
 	pending_garbage -= flush
 	return flush
 
@@ -374,6 +508,7 @@ func _end_round(success: bool) -> void:
 
 	var speed_bonus := Economy.calculate_speed_bonus(round_timer, current_config.time_limit)
 	var surplus_income := _calculate_surplus_income()
+	_apply_keystone_economy()
 	Economy.pay_round(BASE_PAYOUT, speed_bonus, technique_income_this_round + surplus_income)
 
 	var was_boss := RunState.is_boss_round()
@@ -386,6 +521,15 @@ func _end_round(success: bool) -> void:
 	_pending_keystone = was_boss
 	_show_round_success(speed_bonus, surplus_income)
 
+func _apply_keystone_economy() -> void:
+	for ks in RunState.keystones:
+		if ks.end_round_coins > 0:
+			Economy.coins += ks.end_round_coins
+		if ks.overkill_coins:
+			Economy.coins += surplus_attack
+		if ks.time_coins:
+			Economy.coins += int(round_timer / 5.0)
+
 func _calculate_surplus_income() -> int:
 	var income := 0
 	for technique in RunState.techniques:
@@ -394,6 +538,8 @@ func _calculate_surplus_income() -> int:
 	return income
 
 func _on_lock_processed() -> void:
+	_t_spin_rotations = 0
+	_last_cleared_rows = []
 	if hud and current_board:
 		hud.update_b2b_combo(current_board.is_b2b, current_board.b2b_count, current_board.combo)
 	var flush := _flush_pending_garbage()
