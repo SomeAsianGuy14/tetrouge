@@ -1,0 +1,121 @@
+Godot Engine v4.6.2.stable.official.71f334935 - https://godotengine.org
+
+---  GUT  ---
+[1m[INFO]:  [0musing [C:/Users/user/AppData/Roaming/Godot/app_userdata/Tetris Roguelike] for temporary output.
+Godot version:  4.6.2
+GUT version:  9.6.0
+[33m[WARNING]:  [0mIgnoring script res://tests/unit/test_enemy_encounters.gd because it does not extend GutTest
+[4m
+
+res://tests/unit/test_attack_buffer.gd
+[0m* test_garbage_timer_fire_increments_pending_garbage
+* test_garbage_timer_fire_does_not_advance_past_one_per_call
+* test_three_timer_fires_accumulate_to_three
+* test_drain_fully_cancels_when_attack_exceeds_buffer
+* test_drain_partial_when_attack_less_than_buffer
+* test_drain_zero_buffer_full_attack_goes_to_quota
+* test_flush_within_cap_clears_all_pending
+* test_flush_capped_at_8_rows
+* test_flush_empty_buffer_returns_zero
+* test_pending_garbage_zero_after_buffer_reset
+* test_drain_then_flush_order_correct
+[1m11/11 passed.
+[0m[4m
+
+res://tests/unit/test_attack_system.gd
+[0m* test_single_sends_0
+* test_double_sends_1
+* test_triple_sends_2
+* test_tetris_sends_4
+* test_tspin_single_sends_2
+* test_tspin_double_sends_4
+* test_tspin_triple_sends_6
+* test_b2b_bonus_adds_1_to_second_tetris
+* test_b2b_resets_after_non_qualifying_clear
+* test_b2b_disabled_never_gives_bonus
+* test_perfect_clear_returns_10
+* test_perfect_clear_overrides_tspin_value
+* test_combo_step_0_adds_0
+* test_combo_step_2_adds_1
+* test_combo_step_4_adds_2
+* test_attack_surge_doubles_next_3_clears
+* test_attack_surge_4th_clear_is_normal
+[1m17/17 passed.
+[0m[4m
+
+res://tests/unit/test_bag_randomizer.gd
+[0m* test_all_7_types_appear_in_first_7_draws
+* test_14_draws_each_type_appears_exactly_twice
+* test_peek_does_not_consume_pieces
+* test_bag_shift_refills_after_5_draws
+* test_standard_bag_has_7_items_after_init
+* test_seeded_bag_produces_deterministic_sequence
+[1m6/6 passed.
+[0m[4m
+
+res://tests/unit/test_economy.gd
+[0m* test_interest_on_12_coins_is_2
+* test_interest_on_50_coins_capped_at_5
+* test_interest_on_4_coins_is_0
+* test_interest_cap_up_voucher_raises_cap
+* test_spend_coins_sufficient_balance_succeeds
+* test_spend_coins_insufficient_balance_fails
+* test_spend_exact_balance_succeeds
+* test_pay_round_credits_all_components
+* test_pay_round_adds_to_existing_balance
+* test_speed_bonus_40s_remaining_of_60s_is_2
+* test_speed_bonus_0s_remaining_is_0
+* test_speed_bonus_60s_remaining_is_3
+[1m12/12 passed.
+[0m[4m
+
+res://tests/unit/test_round_config.gd
+[0m* test_ante1_small_blind_quota_is_20
+* test_ante1_big_blind_quota_is_28
+* test_ante1_elite_blind_quota_is_36
+* test_ante1_boss_blind_quota_is_44
+* test_ante3_small_blind_quota_is_50
+* test_ante5_boss_blind_quota_is_104
+* test_quota_increases_with_ante
+* test_quota_increases_within_ante
+[1m8/8 passed.
+[0m[4m
+
+res://tests/unit/test_seeded_rng.gd
+[0m* test_seeded_shuffle_same_seed_produces_same_order
+* test_seeded_shuffle_preserves_elements
+* test_seeded_randf_same_seed_produces_same_value
+* test_seeded_randf_returns_value_in_0_1_range
+* test_rng_state_restore_continues_same_sequence
+* test_rng_state_restore_matches_full_sequence
+[1m6/6 passed.
+[0m[4m
+
+res://tests/unit/test_tspin_detection.gd
+[0m* test_3_corners_and_rotation_is_tspin
+* test_2_corners_is_not_tspin
+* test_no_rotation_is_not_tspin
+* test_non_t_piece_is_not_tspin
+* test_wall_counts_as_corner
+[1m5/5 passed.
+[0m
+
+
+
+[33m==============================================
+[0m[33m= Run Summary
+[0m[33m==============================================
+[0m
+Totals
+------
+Warnings              1
+
+Scripts               7
+Tests                65
+Passing Tests        65
+Asserts             125
+Time              0.567s
+
+
+[32m---- All tests passed! ----
+[0m

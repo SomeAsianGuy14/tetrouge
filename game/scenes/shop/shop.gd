@@ -52,7 +52,7 @@ func _populate_shop() -> void:
 
 func _populate_technique_slots() -> void:
 	var available := _all_techniques.filter(func(t): return not RunState.has_technique(t.id))
-	available.shuffle()
+	RunState.seeded_shuffle(available)
 	var count := RunState.shop_technique_slots
 	for i in range(technique_slots.get_child_count()):
 		technique_slots.get_child(i).visible = i < count
@@ -63,18 +63,18 @@ func _populate_technique_slots() -> void:
 
 func _populate_voucher_slot() -> void:
 	var stage_chance := RunState.stage * 0.15  # 15% per stage
-	if randf() > stage_chance:
+	if RunState.seeded_randf() > stage_chance:
 		_populate_slot(voucher_slot, null)
 		return
 	var available := _all_vouchers.filter(func(v): return not RunState.has_voucher(v.id))
-	available.shuffle()
+	RunState.seeded_shuffle(available)
 	_populate_slot(voucher_slot, available[0] if not available.is_empty() else null)
 
 func _pick_one(pool: Array, exclude_ids: Array) -> Resource:
 	var available := pool.filter(func(x): return x.id not in exclude_ids)
 	if available.is_empty():
 		return null
-	available.shuffle()
+	RunState.seeded_shuffle(available)
 	return available[0]
 
 func _create_slot() -> Control:

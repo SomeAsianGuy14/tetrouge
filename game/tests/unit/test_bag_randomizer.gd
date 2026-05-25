@@ -43,3 +43,22 @@ func test_standard_bag_has_7_items_after_init() -> void:
 	# peek forces the bag to be full
 	bag.peek(7)
 	assert_true(bag._bag.size() >= 7)
+
+# ── Seeded determinism ────────────────────────────────────────────────────
+
+func test_seeded_bag_produces_deterministic_sequence() -> void:
+	var rng_a := RandomNumberGenerator.new()
+	rng_a.seed = 42
+	var rng_b := RandomNumberGenerator.new()
+	rng_b.seed = 42
+
+	var bag_a := BagRandomizer.new(7, rng_a)
+	var bag_b := BagRandomizer.new(7, rng_b)
+
+	var seq_a := []
+	var seq_b := []
+	for _i in 14:
+		seq_a.append(bag_a.next())
+		seq_b.append(bag_b.next())
+
+	assert_eq(seq_a, seq_b, "Same-seeded bags should produce identical 14-draw sequences")
