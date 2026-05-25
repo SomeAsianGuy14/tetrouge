@@ -23,6 +23,7 @@ config/run/main_scene="res://scenes/main_menu/main_menu.tscn"
 
 Economy="*res://autoloads/economy.gd"
 RunState="*res://autoloads/run_state.gd"
+DevConsole="*res://scenes/debug/dev_console.tscn"
 
 [display]
 

@@ -1,4 +1,3 @@
-class_name DevConsole
 extends CanvasLayer
 
 @onready var panel: PanelContainer = $Panel
@@ -27,11 +26,15 @@ func _toggle() -> void:
 	panel.visible = not panel.visible
 	if panel.visible:
 		cmd_input.grab_focus()
-		if run_manager and run_manager.current_board:
-			run_manager.current_board.set_process_input(false)
+		if run_manager:
+			if run_manager.current_board:
+				run_manager.current_board.set_process_input(false)
+			run_manager._paused = true
 	else:
-		if run_manager and run_manager.current_board:
-			run_manager.current_board.set_process_input(true)
+		if run_manager:
+			if run_manager.current_board:
+				run_manager.current_board.set_process_input(true)
+			run_manager._paused = false
 
 func _on_command_submitted(text: String) -> void:
 	cmd_input.clear()
@@ -115,6 +118,8 @@ func _cmd_give_keystone(args: PackedStringArray) -> void:
 		_log("Keystone not found: " + id)
 		return
 	RunState.add_keystone(ks)
+	if run_manager:
+		run_manager.hud._refresh_keystone_icons()
 	_log("Keystone '%s' activated." % ks.display_name)
 
 func _cmd_give_technique(args: PackedStringArray) -> void:
@@ -127,6 +132,8 @@ func _cmd_give_technique(args: PackedStringArray) -> void:
 		_log("Technique not found: " + id)
 		return
 	RunState.add_technique(t)
+	if run_manager:
+		run_manager.hud._refresh_technique_icons()
 	_log("Technique '%s' activated." % t.display_name)
 
 func _cmd_insert_garbage(args: PackedStringArray) -> void:

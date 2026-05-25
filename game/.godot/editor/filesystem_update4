@@ -9,3 +9,4 @@ res://scenes/tetris/tetris_board.gd
 res://tests/unit/test_seeded_rng.gd
 res://scenes/game/attack_bar.gd
 res://resources/keystone.gd
+res://scenes/debug/dev_console.gd

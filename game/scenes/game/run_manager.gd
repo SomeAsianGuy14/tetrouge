@@ -8,7 +8,6 @@ const SCENE_ROUND_SUCCESS := "res://scenes/screens/round_success.tscn"
 const SCENE_RUN_FAILURE := "res://scenes/screens/run_failure.tscn"
 const SCENE_RUN_VICTORY := "res://scenes/screens/run_victory.tscn"
 const SCENE_DEBUG_OVERLAY := "res://scenes/debug/debug_overlay.tscn"
-const SCENE_DEV_CONSOLE := "res://scenes/debug/dev_console.tscn"
 const SCENE_HOLD_DISPLAY := "res://scenes/game/hold_display.tscn"
 const SCENE_QUEUE_DISPLAY := "res://scenes/game/queue_display.tscn"
 const SCENE_ENEMY_DISPLAY := "res://scenes/game/enemy_display.tscn"
@@ -24,7 +23,6 @@ var current_board: TetrisBoard = null
 var current_config: RoundConfig = null
 
 var _debug_overlay: DebugOverlay = null
-var _dev_console: DevConsole = null
 var _hold_display: HoldDisplay = null
 var _queue_display: QueueDisplay = null
 var _enemy_display: Control = null
@@ -58,15 +56,15 @@ func _ready() -> void:
 	add_to_group("run_manager")
 	_setup_debug_tools()
 
+func _exit_tree() -> void:
+	DevConsole.set_run_manager(null)
+
 func _setup_debug_tools() -> void:
 	var overlay_scene: PackedScene = load(SCENE_DEBUG_OVERLAY)
 	_debug_overlay = overlay_scene.instantiate()
 	add_child(_debug_overlay)
 
-	var console_scene: PackedScene = load(SCENE_DEV_CONSOLE)
-	_dev_console = console_scene.instantiate()
-	_dev_console.set_run_manager(self)
-	add_child(_dev_console)
+	DevConsole.set_run_manager(self)
 
 func start_run() -> void:
 	RunState.reset()
