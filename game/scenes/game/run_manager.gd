@@ -16,6 +16,23 @@ const SCENE_MAIN_MENU := "res://scenes/main_menu/main_menu.tscn"
 const BASE_PAYOUT := 4
 const ROUND_TIERS := ["Small", "Big", "Elite", "Boss"]
 
+const SMALL_INTERVAL_MIN := 18.0
+const SMALL_INTERVAL_MAX := 28.0
+const SMALL_LINES_MIN := 1
+const SMALL_LINES_MAX := 2
+const BIG_INTERVAL_MIN := 14.0
+const BIG_INTERVAL_MAX := 22.0
+const BIG_LINES_MIN := 1
+const BIG_LINES_MAX := 3
+const ELITE_INTERVAL_MIN := 11.0
+const ELITE_INTERVAL_MAX := 18.0
+const ELITE_LINES_MIN := 2
+const ELITE_LINES_MAX := 4
+const BOSS_INTERVAL_MIN := 10.0
+const BOSS_INTERVAL_MAX := 16.0
+const BOSS_LINES_MIN := 2
+const BOSS_LINES_MAX := 4
+
 @onready var board_container: Node2D = $BoardContainer
 @onready var hud: Control = $HUD
 
@@ -29,6 +46,7 @@ var _enemy_display: Control = null
 
 var round_timer: float = 0.0
 var _enemy_timer: float = 0.0
+var _next_garbage_interval: float = 0.0
 var quota_accumulated: float = 0.0
 var technique_income_this_round: int = 0
 var surplus_attack: int = 0
@@ -95,6 +113,7 @@ func start_round() -> void:
 	surplus_attack = 0
 	round_timer = current_config.time_limit
 	_enemy_timer = 0.0
+	_next_garbage_interval = randf_range(current_config.garbage_interval_min, current_config.garbage_interval_max)
 	_last_attack_was_quad = false
 	_t_spin_rotations = 0
 	_pc_count_this_round = 0
@@ -168,7 +187,26 @@ func _build_round_config() -> RoundConfig:
 
 	var enemy := _draw_enemy()
 	cfg.enemy = enemy
-	cfg.effective_garbage_interval = enemy.garbage_interval * max(0.5, 1.0 - (RunState.stage - 1) * 0.1)
+	var _stage_scalar := maxf(0.5, 1.0 - (RunState.stage - 1) * 0.1)
+	var _lines_bonus := (RunState.stage - 1) / 2
+	var _imin: float; var _imax: float; var _lmin: int; var _lmax: int
+	match enemy.tier:
+		"Small":
+			_imin = SMALL_INTERVAL_MIN; _imax = SMALL_INTERVAL_MAX
+			_lmin = SMALL_LINES_MIN;    _lmax = SMALL_LINES_MAX
+		"Big":
+			_imin = BIG_INTERVAL_MIN;   _imax = BIG_INTERVAL_MAX
+			_lmin = BIG_LINES_MIN;      _lmax = BIG_LINES_MAX
+		"Elite":
+			_imin = ELITE_INTERVAL_MIN; _imax = ELITE_INTERVAL_MAX
+			_lmin = ELITE_LINES_MIN;    _lmax = ELITE_LINES_MAX
+		_:
+			_imin = BOSS_INTERVAL_MIN;  _imax = BOSS_INTERVAL_MAX
+			_lmin = BOSS_LINES_MIN;     _lmax = BOSS_LINES_MAX
+	cfg.garbage_interval_min = _imin * _stage_scalar
+	cfg.garbage_interval_max = _imax * _stage_scalar
+	cfg.garbage_lines_min = _lmin + _lines_bonus
+	cfg.garbage_lines_max = _lmax + _lines_bonus
 
 	if enemy.ability:
 		cfg.boss_modifier = enemy.ability
@@ -225,7 +263,7 @@ func _process(delta: float) -> void:
 	_tick_timer(delta)
 	_tick_enemy_garbage(delta)
 	if _enemy_display and current_config:
-		_enemy_display.update_windup(_enemy_timer, current_config.effective_garbage_interval)
+		_enemy_display.update_windup(_enemy_timer, _next_garbage_interval)
 
 # ── Pause ─────────────────────────────────────────────────────────────────
 
@@ -292,15 +330,16 @@ func _tick_timer(delta: float) -> void:
 		_end_round(false)
 
 func _tick_enemy_garbage(delta: float) -> void:
-	if current_config == null or current_config.effective_garbage_interval <= 0.0:
+	if current_config == null or current_config.garbage_interval_max <= 0.0:
 		return
 	_enemy_timer += delta
-	if _enemy_timer >= current_config.effective_garbage_interval:
+	if _enemy_timer >= _next_garbage_interval:
 		_enemy_timer = 0.0
-		pending_garbage += 1
+		pending_garbage += randi_range(current_config.garbage_lines_min, current_config.garbage_lines_max)
+		_next_garbage_interval = randf_range(current_config.garbage_interval_min, current_config.garbage_interval_max)
 		_notify_attack_bar()
 		if _enemy_display:
-			_enemy_display.update_windup(0.0, current_config.effective_garbage_interval)
+			_enemy_display.update_windup(0.0, _next_garbage_interval)
 
 # ── Attack signal handler ─────────────────────────────────────────────────
 
@@ -542,8 +581,8 @@ func _on_lock_processed() -> void:
 		hud.update_b2b_combo(current_board.is_b2b, current_board.b2b_count, current_board.combo)
 	var flush := _flush_pending_garbage()
 	if flush > 0 and current_board:
-		for i in range(flush):
-			current_board.insert_garbage_row()
+		var col := randi() % current_config.board_width
+		current_board.insert_garbage_rows(flush, col)
 		_notify_attack_bar()
 
 func _on_board_updated() -> void:

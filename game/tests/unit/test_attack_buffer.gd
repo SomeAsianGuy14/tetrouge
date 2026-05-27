@@ -21,9 +21,13 @@ func after_each() -> void:
 func _make_manager(interval: float = 10.0, quota: int = 999) -> RunManager:
 	var rm := RunManager.new()
 	var cfg := RoundConfig.new()
-	cfg.effective_garbage_interval = interval
+	cfg.garbage_interval_min = interval
+	cfg.garbage_interval_max = interval
+	cfg.garbage_lines_min = 1
+	cfg.garbage_lines_max = 1
 	cfg.quota = quota
 	rm.current_config = cfg
+	rm._next_garbage_interval = interval
 	_managers.append(rm)
 	return rm
 

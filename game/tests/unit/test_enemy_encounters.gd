@@ -31,18 +31,18 @@ func _load_enemies_by_tier(tier: String) -> Array:
 
 func test_effective_garbage_interval_stage1() -> void:
 	var base := 35.0
-	var effective := base * max(0.5, 1.0 - (1 - 1) * 0.1)
+	var effective := base * maxf(0.5, 1.0 - (1 - 1) * 0.1)
 	assert_almost_eq(effective, base * 1.0, 0.001, "Stage 1 multiplier should be 1.0")
 
 func test_effective_garbage_interval_stage5() -> void:
 	var base := 35.0
-	var effective := base * max(0.5, 1.0 - (5 - 1) * 0.1)
+	var effective := base * maxf(0.5, 1.0 - (5 - 1) * 0.1)
 	assert_almost_eq(effective, base * 0.6, 0.001, "Stage 5 multiplier should be 0.6")
 
 func test_effective_garbage_interval_floor() -> void:
 	var base := 35.0
 	for stage in [10, 15, 20, 100]:
-		var effective := base * max(0.5, 1.0 - (stage - 1) * 0.1)
+		var effective := base * maxf(0.5, 1.0 - (stage - 1) * 0.1)
 		assert_true(effective >= base * 0.5,
 			"Interval should never drop below 50%% of base (stage %d)" % stage)
 

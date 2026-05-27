@@ -28,4 +28,7 @@ extends Resource
 
 var rng: RandomNumberGenerator = null
 var enemy: Enemy = null
-var effective_garbage_interval: float = 0.0
+var garbage_interval_min: float = 0.0
+var garbage_interval_max: float = 0.0
+var garbage_lines_min: int = 1
+var garbage_lines_max: int = 1

@@ -401,8 +401,8 @@ func _emit_attack_events(clear_type: String, is_qualifying: bool, is_pc: bool, w
 	if combo_bonus > 0:
 		emit_signal("attack_generated", combo_bonus * surge_mult, "combo")
 
-func _find_and_clear_rows() -> Array:
-	var cleared := []
+func _find_and_clear_rows() -> Array[int]:
+	var cleared: Array[int] = []
 	for r in range(TOTAL_ROWS - 1, -1, -1):
 		if _is_row_full(r):
 			cleared.append(r)
@@ -517,13 +517,17 @@ func _calculate_attack(count: int, clear_type: String, is_qualifying: bool, is_p
 # ── Garbage insertion (The Tide boss modifier) ────────────────────────────
 
 func insert_garbage_row() -> void:
-	grid.remove_at(0)
-	var garbage := []
-	garbage.resize(COLS)
-	garbage.fill(PieceData.COLOR_GARBAGE)
-	var gap := (_rng.randi() if _rng else randi()) % config.board_width
-	garbage[gap] = 0
-	grid.append(garbage)
+	var col := (_rng.randi() if _rng else randi()) % config.board_width
+	insert_garbage_rows(1, col)
+
+func insert_garbage_rows(count: int, col: int) -> void:
+	for _i in count:
+		grid.remove_at(0)
+		var garbage := []
+		garbage.resize(COLS)
+		garbage.fill(PieceData.COLOR_GARBAGE)
+		garbage[col] = 0
+		grid.append(garbage)
 	_update_ghost()
 	emit_signal("board_updated")
 
