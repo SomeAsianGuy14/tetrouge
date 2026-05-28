@@ -32,3 +32,12 @@ var garbage_interval_min: float = 0.0
 var garbage_interval_max: float = 0.0
 var garbage_lines_min: int = 1
 var garbage_lines_max: int = 1
+
+# ── Consumable-driven bonuses (applied via Consumable.apply_to_config) ──────
+var consumable_all_bonus: int = 0
+var consumable_quad_bonus: int = 0
+var consumable_tspin_bonus: int = 0
+var consumable_b2b_bonus: int = 0
+var consumable_combo_bonus: int = 0
+var consumable_pc_bonus: int = 0
+var consumable_surge_clears_remaining: int = 0

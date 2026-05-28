@@ -6,6 +6,6 @@
 script = ExtResource("1")
 id = "efficiency"
 display_name = "Efficiency"
-description = "Tetrises send 5 lines instead of 4."
+description = "Quads send 5 lines instead of 4."
 cost = 4
-flat_bonus_by_event = {"tetris": 1}
+flat_bonus_by_event = {"quad": 1}

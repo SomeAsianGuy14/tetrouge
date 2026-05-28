@@ -4,9 +4,9 @@
 
 [resource]
 script = ExtResource("1")
-id = "attack_surge"
-display_name = "Attack Surge"
-description = "Your first 3 clears this round send double attack."
-cost = 6
+id = "b2b_booster"
+display_name = "B2B Booster"
+description = "B2B attacks send +4 attack this round."
+cost = 5
 use_timing = 0
-attack_surge_clears = 3
+bonus_b2b = 4

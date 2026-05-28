@@ -54,7 +54,7 @@ func test_suppress_spins_does_not_affect_quad() -> void:
 	var ks := _make_keystone()
 	ks.suppress_spins = true
 	RunState.keystones.append(ks)
-	assert_eq(_rm._apply_keystone_suppressions(4, "tetris"), 4)
+	assert_eq(_rm._apply_keystone_suppressions(4, "quad"), 4)
 
 # ── Flat bonuses ──────────────────────────────────────────────────────────
 
@@ -62,16 +62,16 @@ func test_flat_bonus_added_to_matching_event() -> void:
 	var ks := _make_keystone()
 	ks.quad_bonus = 2
 	RunState.keystones.append(ks)
-	assert_eq(_rm._apply_keystone_flat_bonuses(4, "tetris"), 6)
+	assert_eq(_rm._apply_keystone_flat_bonuses(4, "quad"), 6)
 
 func test_per_technique_quad_bonus_counts_applicable_techniques() -> void:
 	var ks := _make_keystone()
 	ks.per_technique_quad_bonus = 2
 	RunState.keystones.append(ks)
-	RunState.techniques.append(_make_technique("tetris", 1))
-	RunState.techniques.append(_make_technique("tetris", 1))
+	RunState.techniques.append(_make_technique("quad", 1))
+	RunState.techniques.append(_make_technique("quad", 1))
 	# 4 base + (2 per technique * 2 techniques) = 8
-	assert_eq(_rm._apply_keystone_flat_bonuses(4, "tetris"), 8)
+	assert_eq(_rm._apply_keystone_flat_bonuses(4, "quad"), 8)
 
 # ── Multipliers ───────────────────────────────────────────────────────────
 
@@ -80,9 +80,9 @@ func test_multiplier_applied_after_flat_bonus() -> void:
 	ks.quad_bonus = 2
 	ks.quad_multiplier = 2.0
 	RunState.keystones.append(ks)
-	var after_flat := _rm._apply_keystone_flat_bonuses(4, "tetris")
+	var after_flat := _rm._apply_keystone_flat_bonuses(4, "quad")
 	assert_eq(after_flat, 6)
-	assert_eq(_rm._apply_keystone_multipliers(after_flat, "tetris"), 12)
+	assert_eq(_rm._apply_keystone_multipliers(after_flat, "quad"), 12)
 
 func test_quad_multiplier_does_not_affect_tspin() -> void:
 	var ks := _make_keystone()
@@ -111,9 +111,9 @@ func test_dual_wielding_fires_on_second_quad_not_first() -> void:
 	ks.consecutive_quad_multiplier = 2.0
 	RunState.keystones.append(ks)
 	_rm._last_attack_was_quad = false
-	assert_eq(_rm._apply_keystone_multipliers(4, "tetris"), 4, "first quad: no consecutive bonus")
+	assert_eq(_rm._apply_keystone_multipliers(4, "quad"), 4, "first quad: no consecutive bonus")
 	_rm._last_attack_was_quad = true
-	assert_eq(_rm._apply_keystone_multipliers(4, "tetris"), 8, "second quad: consecutive bonus fires")
+	assert_eq(_rm._apply_keystone_multipliers(4, "quad"), 8, "second quad: consecutive bonus fires")
 
 func test_dual_wielding_resets_after_non_quad_clear() -> void:
 	var ks := _make_keystone()
@@ -121,8 +121,8 @@ func test_dual_wielding_resets_after_non_quad_clear() -> void:
 	RunState.keystones.append(ks)
 	_rm._last_attack_was_quad = true
 	# simulate state reset that _on_attack_generated performs after a non-tetris clear
-	_rm._last_attack_was_quad = ("single" == "tetris")
-	assert_eq(_rm._apply_keystone_multipliers(4, "tetris"), 4, "no consecutive after non-quad reset")
+	_rm._last_attack_was_quad = ("single" == "quad")
+	assert_eq(_rm._apply_keystone_multipliers(4, "quad"), 4, "no consecutive after non-quad reset")
 
 func test_dizzy_no_bonus_at_exactly_4_rotations() -> void:
 	var ks := _make_keystone()

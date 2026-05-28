@@ -60,6 +60,9 @@ theme_override_constants/separation = 8
 [node name="ConsumableSlot" type="PanelContainer" parent="Panel/VBox/BottomRow"]
 custom_minimum_size = Vector2(220, 140)
 
+[node name="ConsumableSlot2" type="PanelContainer" parent="Panel/VBox/BottomRow"]
+custom_minimum_size = Vector2(220, 140)
+
 [node name="VoucherSlot" type="PanelContainer" parent="Panel/VBox/BottomRow"]
 custom_minimum_size = Vector2(220, 140)
 

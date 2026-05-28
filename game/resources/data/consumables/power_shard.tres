@@ -4,9 +4,9 @@
 
 [resource]
 script = ExtResource("1")
-id = "piece_lock"
-display_name = "Piece Lock"
-description = "Your next piece is guaranteed to be a T-piece."
+id = "power_shard"
+display_name = "Power Shard"
+description = "All clears send +2 attack this round."
 cost = 4
 use_timing = 0
-guarantees_next_t = true
+bonus_all_clears = 2

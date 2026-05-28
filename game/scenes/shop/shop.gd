@@ -5,6 +5,7 @@ signal shop_closed
 
 @onready var technique_slots: HBoxContainer = $Panel/VBox/TechniqueSlots
 @onready var consumable_slot: Control = $Panel/VBox/BottomRow/ConsumableSlot
+@onready var consumable_slot_2: Control = $Panel/VBox/BottomRow/ConsumableSlot2
 @onready var voucher_slot: Control = $Panel/VBox/BottomRow/VoucherSlot
 @onready var coin_label: Label = $Panel/VBox/Header/CoinLabel
 @onready var interest_label: Label = $Panel/VBox/Header/InterestLabel
@@ -47,7 +48,10 @@ func _load_from_dir(path: String, _type: String) -> Array:
 
 func _populate_shop() -> void:
 	_populate_technique_slots()
-	_populate_slot(consumable_slot, _pick_one(_all_consumables, []))
+	var first_consumable := _pick_one(_all_consumables, [])
+	var first_id: String = first_consumable.id if first_consumable else ""
+	_populate_slot(consumable_slot, first_consumable)
+	_populate_slot(consumable_slot_2, _pick_one(_all_consumables, [first_id]))
 	_populate_voucher_slot()
 
 func _populate_technique_slots() -> void:

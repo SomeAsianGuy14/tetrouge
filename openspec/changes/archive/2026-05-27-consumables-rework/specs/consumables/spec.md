@@ -1,4 +1,4 @@
-## ADDED Requirements
+## MODIFIED Requirements
 
 ### Requirement: Consumables are one-round attack buffs stored in a persistent backpack
 Consumables SHALL be purchasable from the shop and stored in the player's backpack (maximum 3 slots). Each consumable applies a flat attack bonus to one round's `RoundConfig` when activated by the player from the HUD before that round begins. After activation, the consumable is removed from the backpack. Unused consumables persist in the backpack across rounds and shop visits.
@@ -56,3 +56,13 @@ The following consumables SHALL be available in the initial build:
 #### Scenario: Bonus expires at round end
 - **WHEN** a round ends after an attack-buff consumable was activated
 - **THEN** the bonus no longer applies in subsequent rounds
+
+## REMOVED Requirements
+
+### Requirement: Consumables can be used between rounds or at round start (old board-manipulation model)
+**Reason**: Replaced by unified pre-round activation from the HUD backpack. Board manipulation effects (Clean Slate, Piece Lock) and economy effects (Coin Purse) are removed.
+**Migration**: No migration — the items do not exist in the new pool.
+
+### Requirement: Player inventory can hold up to 2 consumables
+**Reason**: Replaced by the 3-slot backpack requirement above.
+**Migration**: None — save data from old builds is not supported.

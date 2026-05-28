@@ -46,7 +46,7 @@ var hold_used: bool = false
 # ── Queue ─────────────────────────────────────────────────────────────────
 var bag: BagRandomizer
 var piece_queue: Array = []  # strings, maintained at preview_count+1 size
-var next_piece_forced_t: bool = false  # Piece Lock consumable
+var next_piece_forced_t: bool = false
 
 # ── Timing ────────────────────────────────────────────────────────────────
 var gravity_accumulator: float = 0.0
@@ -71,7 +71,6 @@ var soft_dropping: bool = false
 var combo: int = -1
 var is_b2b: bool = false
 var b2b_count: int = 0
-var attack_surge_remaining: int = 0  # Attack Surge consumable
 
 # ── Signals ───────────────────────────────────────────────────────────────
 signal piece_locked
@@ -101,7 +100,6 @@ func setup(round_config: RoundConfig) -> void:
 	combo = -1
 	is_b2b = false
 	b2b_count = 0
-	attack_surge_remaining = 0
 	_fill_queue()
 	spawn_next_piece()
 	is_active = true
@@ -346,7 +344,7 @@ func _process_clears(piece_type: String, pivot: Vector2i, rotation: int, was_rot
 	combo += 1
 	var is_pc := _detect_perfect_clear()
 	var clear_type := _get_clear_type(clear_count, is_tspin, is_pc)
-	var is_qualifying := clear_type in ["tetris", "tspin_single", "tspin_double", "tspin_triple", "tspin_mini", "perfect_clear"]
+	var is_qualifying := clear_type in ["quad", "tspin_single", "tspin_double", "tspin_triple", "tspin_mini", "perfect_clear"]
 
 	emit_signal("lines_cleared", clear_count, clear_type)
 	emit_signal("rows_cleared", cleared_rows)
@@ -354,13 +352,8 @@ func _process_clears(piece_type: String, pivot: Vector2i, rotation: int, was_rot
 	emit_signal("board_updated")
 
 func _emit_attack_events(clear_type: String, is_qualifying: bool, is_pc: bool, was_rotation: bool) -> void:
-	var surge_mult := 1
-	if attack_surge_remaining > 0:
-		surge_mult = 2
-		attack_surge_remaining -= 1
-
 	if is_pc:
-		emit_signal("attack_generated", 10 * surge_mult, clear_type)
+		emit_signal("attack_generated", 10, clear_type)
 		return
 
 	var base_attack: int = BASE_ATTACK.get(clear_type, 0)
@@ -395,11 +388,11 @@ func _emit_attack_events(clear_type: String, is_qualifying: bool, is_pc: bool, w
 	elif combo >= COMBO_TABLE.size():
 		combo_bonus = COMBO_TABLE[COMBO_TABLE.size() - 1]
 
-	emit_signal("attack_generated", base_attack * surge_mult, clear_type)
+	emit_signal("attack_generated", base_attack, clear_type)
 	if b2b_bonus > 0:
-		emit_signal("attack_generated", b2b_bonus * surge_mult, "b2b")
+		emit_signal("attack_generated", b2b_bonus, "b2b")
 	if combo_bonus > 0:
-		emit_signal("attack_generated", combo_bonus * surge_mult, "combo")
+		emit_signal("attack_generated", combo_bonus, "combo")
 
 func _find_and_clear_rows() -> Array[int]:
 	var cleared: Array[int] = []
@@ -465,13 +458,13 @@ func _get_clear_type(count: int, is_tspin: bool, is_pc: bool) -> String:
 		1: return "single"
 		2: return "double"
 		3: return "triple"
-		4: return "tetris"
+		4: return "quad"
 	return "single"
 
 # ── Attack calculation ────────────────────────────────────────────────────
 
 const BASE_ATTACK: Dictionary = {
-	"single": 0, "double": 1, "triple": 2, "tetris": 4,
+	"single": 0, "double": 1, "triple": 2, "quad": 4,
 	"tspin_mini": 1, "tspin_single": 2, "tspin_double": 4, "tspin_triple": 6,
 	"perfect_clear": 10,
 }
@@ -508,11 +501,7 @@ func _calculate_attack(count: int, clear_type: String, is_qualifying: bool, is_p
 	elif combo >= COMBO_TABLE.size():
 		combo_bonus = COMBO_TABLE[COMBO_TABLE.size() - 1]
 
-	var total := base + b2b_bonus + combo_bonus
-	if attack_surge_remaining > 0:
-		total *= 2
-		attack_surge_remaining -= 1
-	return total
+	return base + b2b_bonus + combo_bonus
 
 # ── Garbage insertion (The Tide boss modifier) ────────────────────────────
 
@@ -545,18 +534,6 @@ func get_visible_row(screen_row: int) -> Array:
 
 func get_preview_types() -> Array:
 	return piece_queue.slice(0, config.preview_count)
-
-# ── Consumable effects (called by RunManager) ─────────────────────────────
-
-func apply_clean_slate() -> void:
-	for r in range(TOTAL_ROWS):
-		for c in range(COLS):
-			if grid[r][c] != 0:
-				grid[r][c] = 0
-	emit_signal("board_updated")
-
-func activate_attack_surge(clears: int) -> void:
-	attack_surge_remaining = clears
 
 # ── Rendering ─────────────────────────────────────────────────────────────
 

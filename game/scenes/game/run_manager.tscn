@@ -103,3 +103,28 @@ text = "Techniques"
 theme_override_font_sizes/font_size = 11
 
 [node name="TechniqueIcons" type="HBoxContainer" parent="HUD/InventoryPanel"]
+
+[node name="BackpackHeader" type="Label" parent="HUD/InventoryPanel"]
+text = "Backpack"
+theme_override_font_sizes/font_size = 11
+
+[node name="BackpackContainer" type="HBoxContainer" parent="HUD/InventoryPanel"]
+theme_override_constants/separation = 4
+
+[node name="BackpackSlot0" type="Button" parent="HUD/InventoryPanel/BackpackContainer"]
+custom_minimum_size = Vector2(52, 40)
+text = "—"
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 11
+
+[node name="BackpackSlot1" type="Button" parent="HUD/InventoryPanel/BackpackContainer"]
+custom_minimum_size = Vector2(52, 40)
+text = "—"
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 11
+
+[node name="BackpackSlot2" type="Button" parent="HUD/InventoryPanel/BackpackContainer"]
+custom_minimum_size = Vector2(52, 40)
+text = "—"
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 11

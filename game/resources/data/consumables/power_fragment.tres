@@ -4,9 +4,9 @@
 
 [resource]
 script = ExtResource("1")
-id = "attack_surge"
-display_name = "Attack Surge"
-description = "Your first 3 clears this round send double attack."
-cost = 6
+id = "power_fragment"
+display_name = "Power Fragment"
+description = "All clears send +3 attack this round."
+cost = 5
 use_timing = 0
-attack_surge_clears = 3
+bonus_all_clears = 3

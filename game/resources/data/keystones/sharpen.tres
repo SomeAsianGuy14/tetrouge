@@ -7,5 +7,5 @@ script = ExtResource("1")
 id = "sharpen"
 display_name = "Sharpen"
 description = "Each Tetris-applicable technique adds +2 damage to Tetrises."
-category = "Tetris"
+category = "Quad"
 per_technique_quad_bonus = 2

@@ -9,7 +9,6 @@ func before_each() -> void:
 	board.config = cfg
 	board.combo = -1
 	board.is_b2b = false
-	board.attack_surge_remaining = 0
 
 func after_each() -> void:
 	board.free()
@@ -29,7 +28,7 @@ func test_triple_sends_2() -> void:
 	assert_eq(result, 2)
 
 func test_tetris_sends_4() -> void:
-	var result := board._calculate_attack(4, "tetris", true, false)
+	var result := board._calculate_attack(4, "quad", true, false)
 	assert_eq(result, 4)
 
 func test_tspin_single_sends_2() -> void:
@@ -48,23 +47,23 @@ func test_tspin_triple_sends_6() -> void:
 
 func test_b2b_bonus_adds_1_to_second_tetris() -> void:
 	# First qualifying clear sets the flag
-	board._calculate_attack(4, "tetris", true, false)
+	board._calculate_attack(4, "quad", true, false)
 	assert_true(board.is_b2b, "B2B flag should be set after first qualifying clear")
 	# Second qualifying clear should get +1 bonus
-	var result := board._calculate_attack(4, "tetris", true, false)
+	var result := board._calculate_attack(4, "quad", true, false)
 	assert_eq(result, 5)
 
 func test_b2b_resets_after_non_qualifying_clear() -> void:
-	board._calculate_attack(4, "tetris", true, false)  # set B2B
+	board._calculate_attack(4, "quad", true, false)  # set B2B
 	board._calculate_attack(1, "single", false, false)  # break B2B
 	assert_false(board.is_b2b, "B2B flag should be cleared after single")
-	var result := board._calculate_attack(4, "tetris", true, false)
+	var result := board._calculate_attack(4, "quad", true, false)
 	assert_eq(result, 4, "No B2B bonus after chain reset")
 
 func test_b2b_disabled_never_gives_bonus() -> void:
 	cfg.b2b_disabled = true
-	board._calculate_attack(4, "tetris", true, false)
-	var result := board._calculate_attack(4, "tetris", true, false)
+	board._calculate_attack(4, "quad", true, false)
+	var result := board._calculate_attack(4, "quad", true, false)
 	assert_eq(result, 4, "B2B disabled should give no bonus")
 
 # ── Perfect clear ─────────────────────────────────────────────────────────
@@ -94,22 +93,3 @@ func test_combo_step_4_adds_2() -> void:
 	var result := board._calculate_attack(1, "single", false, false)
 	assert_eq(result, 2)
 
-# ── Attack Surge ──────────────────────────────────────────────────────────
-
-func test_attack_surge_doubles_next_3_clears() -> void:
-	board.attack_surge_remaining = 3
-	var r1 := board._calculate_attack(4, "tetris", true, false)
-	var r2 := board._calculate_attack(4, "tetris", true, false)
-	var r3 := board._calculate_attack(4, "tetris", true, false)
-	assert_eq(r1, 8)
-	assert_eq(r2, 10)  # 4 base + 1 b2b, doubled = 10
-	assert_eq(r3, 10)
-
-func test_attack_surge_4th_clear_is_normal() -> void:
-	board.attack_surge_remaining = 3
-	board._calculate_attack(4, "tetris", true, false)
-	board._calculate_attack(4, "tetris", true, false)
-	board._calculate_attack(4, "tetris", true, false)
-	assert_eq(board.attack_surge_remaining, 0)
-	var r4 := board._calculate_attack(4, "tetris", true, false)
-	assert_eq(r4, 5, "4th clear: normal 4 + b2b 1 = 5, no surge")

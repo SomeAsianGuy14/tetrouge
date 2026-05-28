@@ -4,9 +4,9 @@
 
 [resource]
 script = ExtResource("1")
-id = "clean_slate"
-display_name = "Clean Slate"
-description = "Remove all blocks from the board before the round starts."
-cost = 5
+id = "perfected_spike"
+display_name = "Perfected Spike"
+description = "Perfect clears send +8 attack this round."
+cost = 6
 use_timing = 0
-clears_board = true
+bonus_pc = 8

@@ -15,13 +15,25 @@ extends Control
 @onready var b2b_label: Label = $InfoPanel/B2BLabel
 @onready var combo_label: Label = $InfoPanel/ComboLabel
 
+@onready var _backpack_slots: Array = [
+	$InventoryPanel/BackpackContainer/BackpackSlot0,
+	$InventoryPanel/BackpackContainer/BackpackSlot1,
+	$InventoryPanel/BackpackContainer/BackpackSlot2,
+]
+
 var _enemy_display: Control = null
+var _run_manager = null  # set by RunManager after instantiation
 
 func set_enemy_display(display: Control) -> void:
 	_enemy_display = display
 
+func set_run_manager(rm) -> void:
+	_run_manager = rm
+
 func _ready() -> void:
 	Economy.connect("coins_changed", _on_coins_changed)
+	for i in _backpack_slots.size():
+		_backpack_slots[i].connect("pressed", _on_backpack_slot_pressed.bind(i))
 
 func setup(config: RoundConfig) -> void:
 	var round_text := "Stage %d — %s" % [RunState.stage, RunState.get_round_name()]
@@ -48,6 +60,7 @@ func setup(config: RoundConfig) -> void:
 	coin_label.text = "Coins: %d" % Economy.coins
 	_refresh_keystone_icons()
 	_refresh_technique_icons()
+	_refresh_backpack_slots()
 	update_b2b_combo(false, 0, -1)
 
 func update_b2b_combo(is_b2b: bool, b2b_count: int, combo: int) -> void:
@@ -93,3 +106,22 @@ func _refresh_technique_icons() -> void:
 		lbl.tooltip_text = "%s\n%s" % [technique.display_name, technique.description]
 		lbl.mouse_filter = Control.MOUSE_FILTER_STOP
 		technique_icons.add_child(lbl)
+
+func _refresh_backpack_slots() -> void:
+	for i in _backpack_slots.size():
+		var btn: Button = _backpack_slots[i]
+		if i < RunState.consumables.size():
+			var item: Consumable = RunState.consumables[i]
+			btn.text = item.display_name
+			btn.tooltip_text = item.description
+			btn.disabled = false
+		else:
+			btn.text = "—"
+			btn.tooltip_text = ""
+			btn.disabled = true
+
+func _on_backpack_slot_pressed(index: int) -> void:
+	if _run_manager == null or index >= RunState.consumables.size():
+		return
+	_run_manager.apply_consumable(RunState.consumables[index])
+	_refresh_backpack_slots()

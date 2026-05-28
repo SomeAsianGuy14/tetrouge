@@ -4,9 +4,9 @@
 
 [resource]
 script = ExtResource("1")
-id = "coin_purse"
-display_name = "Coin Purse"
-description = "Gain 6 coins immediately."
-cost = 3
-use_timing = 2
-adds_coins = 6
+id = "combo_coil"
+display_name = "Combo Coil"
+description = "Combo attacks send +3 attack this round."
+cost = 5
+use_timing = 0
+bonus_combo = 3

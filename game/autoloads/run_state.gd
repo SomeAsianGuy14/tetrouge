@@ -24,7 +24,7 @@ var used_boss_enemy_ids: Array = []   # boss enemy ids already seen this run
 var used_keystone_ids: Array = []     # ids already owned this run
 
 var shop_technique_slots: int = 3
-var consumable_capacity: int = 2
+var consumable_capacity: int = 3
 var sharp_eye_active: bool = false
 
 signal run_started
@@ -41,7 +41,7 @@ func reset() -> void:
 	used_boss_enemy_ids.clear()
 	used_keystone_ids.clear()
 	shop_technique_slots = 3
-	consumable_capacity = 2
+	consumable_capacity = 3
 	sharp_eye_active = false
 	run_seed = randi()
 	rng.seed = run_seed

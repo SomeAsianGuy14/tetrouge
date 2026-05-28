@@ -14,7 +14,7 @@ A shop SHALL be presented to the player after the Small Blind, Big Blind, and El
 ### Requirement: Shop inventory is generated fresh each visit
 Each shop visit SHALL generate a new inventory drawn randomly from the available pools. The inventory SHALL contain:
 - 3 Technique slots
-- 1 Consumable slot
+- 2 Consumable slots
 - 1 Voucher slot (with a chance of being empty for early antes)
 
 #### Scenario: Shop generates inventory on open

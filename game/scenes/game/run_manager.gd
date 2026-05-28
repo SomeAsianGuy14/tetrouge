@@ -171,11 +171,13 @@ func start_round() -> void:
 	_enemy_display.position = Vector2(TetrisBoard.COLS * TetrisBoard.CELL_SIZE + 16 + 112 + 48, 0)
 	_enemy_display.setup(current_config.enemy, current_config.quota)
 	hud.set_enemy_display(_enemy_display)
+	hud.set_run_manager(self)
 
 	var attack_bar_script := load("res://scenes/game/attack_bar.gd") as GDScript
 	_attack_bar = attack_bar_script.new()
 	board_container.add_child(_attack_bar)
 	_attack_bar.position = Vector2(-20, 0)
+	hud._refresh_backpack_slots()
 
 func _build_round_config() -> RoundConfig:
 	var cfg := RoundConfig.new()
@@ -365,6 +367,8 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 	_accumulate_technique_income(event_type, modified)
 	modified = _apply_keystone_suppressions(modified, event_type)
 	modified = _apply_keystone_flat_bonuses(modified, event_type)
+	modified = _apply_consumable_flat_bonuses(modified, event_type)
+	modified = _apply_consumable_surge(modified, event_type)
 	modified = _apply_keystone_multipliers(modified, event_type)
 
 	# Apply boss modifier quota filter; bonus events always count if their parent clear qualified
@@ -375,7 +379,7 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 
 	# Update per-round trackers (skip bonus events so they don't reset the quad streak)
 	if event_type != "b2b" and event_type != "combo":
-		_last_attack_was_quad = (event_type == "tetris")
+		_last_attack_was_quad = (event_type == "quad")
 	if event_type == "perfect_clear":
 		_pc_count_this_round += 1
 
@@ -416,11 +420,11 @@ func _apply_keystone_flat_bonuses(attack: int, event_type: String) -> int:
 				bonus += ks.double_bonus
 			"triple":
 				bonus += ks.triple_bonus
-			"tetris":
+			"quad":
 				bonus += ks.quad_bonus
 				if ks.per_technique_quad_bonus > 0:
 					for t in RunState.techniques:
-						if t.flat_bonus_by_event.get("tetris", 0) > 0 or t.flat_bonus_by_event.get("any_clear", 0) > 0:
+						if t.flat_bonus_by_event.get("quad", 0) > 0 or t.flat_bonus_by_event.get("any_clear", 0) > 0:
 							bonus += ks.per_technique_quad_bonus
 			"tspin_mini":
 				bonus += ks.tspin_mini_bonus + ks.tspin_any_bonus
@@ -458,7 +462,7 @@ func _apply_keystone_multipliers(attack: int, event_type: String) -> int:
 			"single":
 				if ks.single_multiplier > 0.0:
 					mult *= ks.single_multiplier
-			"tetris":
+			"quad":
 				if ks.quad_multiplier > 0.0:
 					mult *= ks.quad_multiplier
 				if ks.consecutive_quad_multiplier > 0.0 and _last_attack_was_quad:
@@ -647,14 +651,35 @@ func _show_victory() -> void:
 # ── Consumable integration ────────────────────────────────────────────────
 
 func apply_consumable(consumable: Consumable) -> void:
-	if consumable.clears_board and current_board:
-		current_board.apply_clean_slate()
-	if consumable.guarantees_next_t and current_board:
-		current_board.next_piece_forced_t = true
 	if consumable.adds_time > 0.0:
 		round_timer = minf(round_timer + consumable.adds_time, current_config.time_limit + consumable.adds_time)
-	if consumable.adds_coins > 0:
-		Economy.add_coins(consumable.adds_coins)
-	if consumable.attack_surge_clears > 0 and current_board:
-		current_board.activate_attack_surge(consumable.attack_surge_clears)
+	else:
+		consumable.apply_to_config(current_config)
 	RunState.remove_consumable(consumable)
+	if hud:
+		hud._refresh_backpack_slots()
+
+func _apply_consumable_flat_bonuses(attack: int, event_type: String) -> int:
+	if attack == 0:
+		return 0
+	var bonus := current_config.consumable_all_bonus
+	match event_type:
+		"quad":
+			bonus += current_config.consumable_quad_bonus
+		"tspin_mini", "tspin_single", "tspin_double", "tspin_triple":
+			bonus += current_config.consumable_tspin_bonus
+		"b2b":
+			bonus += current_config.consumable_b2b_bonus
+		"combo":
+			bonus += current_config.consumable_combo_bonus
+		"perfect_clear":
+			bonus += current_config.consumable_pc_bonus
+	return attack + bonus
+
+func _apply_consumable_surge(attack: int, event_type: String) -> int:
+	if current_config.consumable_surge_clears_remaining <= 0:
+		return attack
+	if event_type == "b2b" or event_type == "combo":
+		return attack * 2
+	current_config.consumable_surge_clears_remaining -= 1
+	return attack * 2
