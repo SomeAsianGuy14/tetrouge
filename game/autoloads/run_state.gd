@@ -97,6 +97,9 @@ func add_consumable(consumable) -> bool:
 func remove_consumable(consumable) -> void:
 	consumables.erase(consumable)
 
+func remove_technique(technique) -> void:
+	techniques.erase(technique)
+
 func add_voucher(voucher) -> void:
 	vouchers.append(voucher)
 	_apply_voucher_effects(voucher)

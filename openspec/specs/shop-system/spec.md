@@ -21,9 +21,9 @@ Each shop visit SHALL generate a new inventory drawn randomly from the available
 - **WHEN** the shop opens
 - **THEN** each slot is filled by randomly drawing from the appropriate pool (Techniques, Consumables, Vouchers)
 
-#### Scenario: Purchased items are removed from the shop
+#### Scenario: Purchased items show a PURCHASED state
 - **WHEN** the player buys an item
-- **THEN** that slot becomes empty for the remainder of this shop visit
+- **THEN** the slot retains the item's name, description, and cost labels but the buy button is replaced by a "PURCHASED" label; the slot is no longer interactive
 
 ### Requirement: Items have a coin cost
 Every item in the shop SHALL display its name, description, and coin cost as separate, clearly labelled UI elements within its slot. The buy action SHALL be triggered by a dedicated "Buy" button that is distinct from the item information display. The buy button SHALL be disabled when the player cannot afford the item.
@@ -86,6 +86,58 @@ The shop SHALL display a section header label above the Technique row ("Techniqu
 #### Scenario: Section headers visible
 - **WHEN** the shop opens
 - **THEN** a "Techniques" label appears above the technique slots and an "Items" label appears above the consumable and voucher slots
+
+### Requirement: Shop displays player's owned collection
+The shop SHALL include a "Your Collection" section below the for-sale items showing the player's currently owned keystones, techniques, and backpack consumables. This section SHALL be built when the shop opens and reflects the state of `RunState` at that moment.
+
+#### Scenario: Collection section visible on shop open
+- **WHEN** the shop opens
+- **THEN** the "Your Collection" section is visible below the for-sale slots, showing owned keystones, techniques, and backpack contents
+
+#### Scenario: No keystones or techniques owned
+- **WHEN** the player has no keystones or techniques at shop open
+- **THEN** the respective icon rows are empty (headers remain visible)
+
+### Requirement: Owned keystones are shown as read-only icon labels
+Keystones SHALL be displayed as a row of compact non-interactive Labels, one per owned keystone, showing the first character of the keystone's `display_name`. Each label SHALL have a tooltip containing the keystone's `display_name` and `description`. Keystones are not sellable.
+
+#### Scenario: Keystone icon label displays initial and tooltip
+- **WHEN** the player owns a keystone with display_name "Great Sword"
+- **THEN** a label showing "G" appears in the Keystones row with tooltip "Great Sword\n<description>" and is non-interactive
+
+### Requirement: Owned techniques are shown as sell buttons
+Techniques SHALL be displayed as a row of compact Buttons, one per owned technique. Each button SHALL show the first character of the technique's `display_name` and its sell price (e.g. "E • 3¢"). Each button SHALL have a tooltip containing the technique's `display_name` and `description`. Clicking a technique button SHALL sell the technique: add `floor(technique.cost * 0.6)` coins via `Economy.add_coins`, remove it from `RunState` via `RunState.remove_technique`, and rebuild the technique icon row.
+
+#### Scenario: Technique sell button displays initial and sell price
+- **WHEN** the player owns a technique with display_name "Efficiency" and cost 4
+- **THEN** a button showing "E • 2¢" appears in the Techniques row with tooltip "Efficiency\n<description>"
+
+#### Scenario: Selling a technique adds coins and removes it from the row
+- **WHEN** the player clicks a technique sell button
+- **THEN** `floor(technique.cost * 0.6)` coins are added, the technique is removed from `RunState.techniques`, and the Techniques row is rebuilt without that entry
+
+#### Scenario: For-sale technique slots unchanged after technique sell
+- **WHEN** the player sells a technique from the collection panel
+- **THEN** the for-sale technique slots in the shop are not modified
+
+### Requirement: Backpack slots in the shop are sell buttons
+The 3 backpack slots in the "Your Collection" section SHALL each render as a Button. An occupied slot SHALL display the item's `display_name` and a sell price of `floor(item.cost * 0.6)` coins. Clicking an occupied slot SHALL sell the item: add `floor(item.cost * 0.6)` coins via `Economy.add_coins`, remove the consumable from `RunState`, and refresh the backpack display. The for-sale slots in the shop SHALL NOT refresh after a sell.
+
+#### Scenario: Sell button shows name and sell price
+- **WHEN** the player has a Power Fragment (cost 5) in a backpack slot
+- **THEN** the slot button displays the item name and "Sell • 3¢" (floor(5 * 0.6) = 3)
+
+#### Scenario: Selling a consumable adds coins and empties the slot
+- **WHEN** the player clicks a sell button for an occupied slot
+- **THEN** `floor(item.cost * 0.6)` coins are added, the consumable is removed from the backpack, and the slot becomes an empty disabled placeholder
+
+#### Scenario: Empty backpack slot is disabled
+- **WHEN** a backpack slot contains no item
+- **THEN** the slot button is disabled and displays "—"
+
+#### Scenario: For-sale slots unchanged after sell
+- **WHEN** the player sells a consumable from the backpack
+- **THEN** the technique, consumable, and voucher slots available for purchase are not modified
 
 ### Requirement: Shop inventory is deterministic per seed
 All random draws used to populate shop inventory (technique slots, consumable slots, voucher slots) SHALL use the run-seeded PRNG. Reloading the game before visiting the shop SHALL produce the same inventory.

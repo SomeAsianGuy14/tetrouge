@@ -125,3 +125,4 @@ func _on_backpack_slot_pressed(index: int) -> void:
 		return
 	_run_manager.apply_consumable(RunState.consumables[index])
 	_refresh_backpack_slots()
+	_backpack_slots[index].release_focus()

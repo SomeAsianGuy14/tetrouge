@@ -10,6 +10,13 @@ signal shop_closed
 @onready var coin_label: Label = $Panel/VBox/Header/CoinLabel
 @onready var interest_label: Label = $Panel/VBox/Header/InterestLabel
 @onready var exit_button: Button = $Panel/VBox/Footer/ExitButton
+@onready var keystone_icons: HBoxContainer = $Panel/VBox/CollectionPanel/KeystonesRow/KeystoneIcons
+@onready var technique_icons: HBoxContainer = $Panel/VBox/CollectionPanel/TechniquesRow/TechniqueIcons
+@onready var _collection_slots: Array = [
+	$Panel/VBox/CollectionPanel/BackpackRow/CollectionSlot0,
+	$Panel/VBox/CollectionPanel/BackpackRow/CollectionSlot1,
+	$Panel/VBox/CollectionPanel/BackpackRow/CollectionSlot2,
+]
 
 var _all_techniques: Array = []
 var _all_consumables: Array = []
@@ -19,11 +26,14 @@ var _buy_buttons: Dictionary = {}  # slot node → buy Button (or null if owned)
 func _ready() -> void:
 	Economy.connect("coins_changed", _update_coin_display)
 	exit_button.connect("pressed", _on_exit_pressed)
+	for i in _collection_slots.size():
+		_collection_slots[i].connect("pressed", _on_sell_consumable.bind(i))
 	var interest := Economy.apply_interest()
 	interest_label.text = "+%d interest" % interest if interest > 0 else ""
 	_load_item_pools()
 	_populate_shop()
 	_update_coin_display(Economy.coins)
+	_build_collection()
 
 func _load_item_pools() -> void:
 	_all_techniques = _load_from_dir("res://resources/data/techniques/", "Technique")
@@ -146,14 +156,79 @@ func _on_purchase(item: Resource, slot: Control) -> void:
 		return
 	if item is Technique:
 		RunState.add_technique(item)
+		_build_technique_icons()
 	elif item is Consumable:
 		if not RunState.add_consumable(item):
 			Economy.add_coins(item.cost)  # refund if full
 			return
+		_refresh_collection_backpack()
 	elif item is Voucher:
 		RunState.add_voucher(item)
-	_populate_slot(slot, null)
+	_mark_slot_purchased(slot, item)
 	_refresh_button_states()
+
+func _mark_slot_purchased(slot: Control, _item: Resource) -> void:
+	var btn = _buy_buttons.get(slot)
+	if btn != null:
+		btn.queue_free()
+	_buy_buttons.erase(slot)
+	var vbox := slot.get_child(0) as VBoxContainer
+	if vbox:
+		var lbl := Label.new()
+		lbl.text = "PURCHASED"
+		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		vbox.add_child(lbl)
+
+func _sell_price(item) -> int:
+	return int(item.cost * 0.6)
+
+func _build_collection() -> void:
+	_build_keystone_icons()
+	_build_technique_icons()
+	_refresh_collection_backpack()
+
+func _build_keystone_icons() -> void:
+	for child in keystone_icons.get_children():
+		child.queue_free()
+	for keystone in RunState.keystones:
+		var lbl := Label.new()
+		lbl.text = keystone.display_name[0]
+		lbl.tooltip_text = keystone.display_name + "\n" + keystone.description
+		lbl.mouse_filter = Control.MOUSE_FILTER_STOP
+		keystone_icons.add_child(lbl)
+
+func _build_technique_icons() -> void:
+	for child in technique_icons.get_children():
+		child.queue_free()
+	for technique in RunState.techniques:
+		var btn := Button.new()
+		btn.text = technique.display_name[0] + " • " + str(_sell_price(technique)) + "¢"
+		btn.tooltip_text = technique.display_name + "\n" + technique.description
+		btn.connect("pressed", _on_sell_technique.bind(technique))
+		technique_icons.add_child(btn)
+
+func _refresh_collection_backpack() -> void:
+	for i in _collection_slots.size():
+		var btn: Button = _collection_slots[i]
+		if i < RunState.consumables.size():
+			var item: Consumable = RunState.consumables[i]
+			btn.text = item.display_name + "\nSell • " + str(_sell_price(item)) + "¢"
+			btn.disabled = false
+		else:
+			btn.text = "—"
+			btn.disabled = true
+
+func _on_sell_technique(technique) -> void:
+	Economy.add_coins(_sell_price(technique))
+	RunState.remove_technique(technique)
+	_build_technique_icons()
+
+func _on_sell_consumable(index: int) -> void:
+	if index >= RunState.consumables.size():
+		return
+	Economy.add_coins(_sell_price(RunState.consumables[index]))
+	RunState.remove_consumable(RunState.consumables[index])
+	_refresh_collection_backpack()
 
 func _refresh_button_states() -> void:
 	for slot in _buy_buttons:

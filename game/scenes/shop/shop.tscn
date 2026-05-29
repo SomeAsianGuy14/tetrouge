@@ -71,3 +71,55 @@ custom_minimum_size = Vector2(220, 140)
 [node name="ExitButton" type="Button" parent="Panel/VBox/Footer"]
 text = "Leave Shop"
 size_flags_horizontal = 3
+
+[node name="CollectionHeader" type="Label" parent="Panel/VBox"]
+text = "Your Collection"
+theme_override_font_sizes/font_size = 13
+
+[node name="CollectionPanel" type="VBoxContainer" parent="Panel/VBox"]
+theme_override_constants/separation = 4
+
+[node name="KeystonesRow" type="HBoxContainer" parent="Panel/VBox/CollectionPanel"]
+theme_override_constants/separation = 6
+
+[node name="KeystonesLabel" type="Label" parent="Panel/VBox/CollectionPanel/KeystonesRow"]
+text = "Keystones:"
+custom_minimum_size = Vector2(80, 0)
+
+[node name="KeystoneIcons" type="HBoxContainer" parent="Panel/VBox/CollectionPanel/KeystonesRow"]
+theme_override_constants/separation = 4
+
+[node name="TechniquesRow" type="HBoxContainer" parent="Panel/VBox/CollectionPanel"]
+theme_override_constants/separation = 6
+
+[node name="TechniquesLabel" type="Label" parent="Panel/VBox/CollectionPanel/TechniquesRow"]
+text = "Techniques:"
+custom_minimum_size = Vector2(80, 0)
+
+[node name="TechniqueIcons" type="HBoxContainer" parent="Panel/VBox/CollectionPanel/TechniquesRow"]
+theme_override_constants/separation = 4
+
+[node name="BackpackRow" type="HBoxContainer" parent="Panel/VBox/CollectionPanel"]
+theme_override_constants/separation = 6
+
+[node name="BackpackLabel" type="Label" parent="Panel/VBox/CollectionPanel/BackpackRow"]
+text = "Backpack:"
+custom_minimum_size = Vector2(80, 0)
+
+[node name="CollectionSlot0" type="Button" parent="Panel/VBox/CollectionPanel/BackpackRow"]
+custom_minimum_size = Vector2(80, 32)
+text = "—"
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 11
+
+[node name="CollectionSlot1" type="Button" parent="Panel/VBox/CollectionPanel/BackpackRow"]
+custom_minimum_size = Vector2(80, 32)
+text = "—"
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 11
+
+[node name="CollectionSlot2" type="Button" parent="Panel/VBox/CollectionPanel/BackpackRow"]
+custom_minimum_size = Vector2(80, 32)
+text = "—"
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 11
