@@ -5,8 +5,8 @@
 
 [resource]
 script = ExtResource("1")
-id = "boss_enforcer"
-display_name = "The Enforcer"
+id = "boss_blitz"
+display_name = "The Blitz"
 color = Color(0.7, 0.3, 0.0, 1)
 tier = "Boss"
 garbage_interval = 12.0

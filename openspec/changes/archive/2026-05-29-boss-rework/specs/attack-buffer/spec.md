@@ -1,4 +1,4 @@
-## ADDED Requirements
+## MODIFIED Requirements
 
 ### Requirement: Pending garbage counter accumulates enemy attacks
 `RunManager` SHALL maintain a `_garbage_packets: Array` queue of dictionaries with shape `{lines: int, is_filth: bool}`. Each time the enemy garbage interval fires, one or more packets SHALL be appended to the queue depending on the active boss modifier. No garbage row SHALL be inserted into the board at that moment. The integer field `pending_garbage: int` is removed.

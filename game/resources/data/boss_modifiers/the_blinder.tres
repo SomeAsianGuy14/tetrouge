@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1")
-id = "the_oracle"
-display_name = "The Oracle"
-description = "No Queue displayed"
-preview_override = 1
+id = "the_fateless"
+display_name = "The Fateless"
+description = "The piece queue and next piece are completely hidden."
+hide_all_previews = true

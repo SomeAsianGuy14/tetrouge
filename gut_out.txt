@@ -4,23 +4,9 @@ Godot Engine v4.6.2.stable.official.71f334935 - https://godotengine.org
 [1m[INFO]:  [0musing [C:/Users/user/AppData/Roaming/Godot/app_userdata/Tetris Roguelike] for temporary output.
 Godot version:  4.6.2
 GUT version:  9.6.0
-[33m[WARNING]:  [0mIgnoring script res://tests/unit/test_enemy_encounters.gd because it does not extend GutTest
+[33m[WARNING]:  [0mIgnoring script res://tests/unit/test_attack_buffer.gd because it does not extend GutTest
+[33m[WARNING]:  [0mIgnoring script res://tests/unit/test_keystones.gd because it does not extend GutTest
 [4m
-
-res://tests/unit/test_attack_buffer.gd
-[0m* test_garbage_timer_fire_increments_pending_garbage
-* test_garbage_timer_fire_does_not_advance_past_one_per_call
-* test_three_timer_fires_accumulate_to_three
-* test_drain_fully_cancels_when_attack_exceeds_buffer
-* test_drain_partial_when_attack_less_than_buffer
-* test_drain_zero_buffer_full_attack_goes_to_quota
-* test_flush_within_cap_clears_all_pending
-* test_flush_capped_at_8_rows
-* test_flush_empty_buffer_returns_zero
-* test_pending_garbage_zero_after_buffer_reset
-* test_drain_then_flush_order_correct
-[1m11/11 passed.
-[0m[4m
 
 res://tests/unit/test_attack_system.gd
 [0m* test_single_sends_0
@@ -38,9 +24,7 @@ res://tests/unit/test_attack_system.gd
 * test_combo_step_0_adds_0
 * test_combo_step_2_adds_1
 * test_combo_step_4_adds_2
-* test_attack_surge_doubles_next_3_clears
-* test_attack_surge_4th_clear_is_normal
-[1m17/17 passed.
+[1m15/15 passed.
 [0m[4m
 
 res://tests/unit/test_bag_randomizer.gd
@@ -51,6 +35,20 @@ res://tests/unit/test_bag_randomizer.gd
 * test_standard_bag_has_7_items_after_init
 * test_seeded_bag_produces_deterministic_sequence
 [1m6/6 passed.
+[0m[4m
+
+res://tests/unit/test_consumables.gd
+[0m* test_apply_to_config_writes_bonus_quad
+* test_apply_to_config_writes_bonus_all_clears
+* test_apply_to_config_writes_surge_clears
+* test_flat_bonus_all_added_to_every_clear_type
+* test_flat_bonus_quad_only_added_to_quad
+* test_flat_bonus_tspin_added_to_all_tspin_variants
+* test_flat_bonus_returns_unchanged_when_all_zero
+* test_surge_doubles_attack_and_decrements_counter
+* test_surge_does_not_fire_on_4th_clear
+* test_add_consumable_returns_false_when_at_capacity
+[1m10/10 passed.
 [0m[4m
 
 res://tests/unit/test_economy.gd
@@ -67,6 +65,47 @@ res://tests/unit/test_economy.gd
 * test_speed_bonus_0s_remaining_is_0
 * test_speed_bonus_60s_remaining_is_3
 [1m12/12 passed.
+[0m[4m
+
+res://tests/unit/test_enemy_attacks.gd
+[0m* test_stage5_interval_is_60_percent_of_stage1_small
+* test_stage5_interval_is_60_percent_of_stage1_boss
+* test_lines_bonus_zero_at_stage1_and_2
+* test_lines_bonus_plus1_at_stage3_and_4
+* test_lines_bonus_plus2_at_stage5
+* test_lines_min_max_each_increase_by_bonus
+* test_tiers_get_progressively_faster_intervals
+* test_boss_interval_range_narrower_than_small
+[1m8/8 passed.
+[0m[4m
+
+res://tests/unit/test_enemy_encounters.gd
+[0m* test_effective_garbage_interval_stage1
+* test_effective_garbage_interval_stage5
+* test_effective_garbage_interval_floor
+* test_boss_enemy_not_repeated
+[31m    [Failed]:  [0m[9] expected to equal [7]:  Expected 7 boss enemies in pool
+      at line 55
+* test_common_enemy_from_correct_tier
+[1m4/5 passed.
+[0m[4m
+
+res://tests/unit/test_garbage_packets.gd
+[0m* test_drain_fully_removes_packet_when_attack_exceeds_lines
+* test_drain_partially_reduces_packet_in_place
+* test_drain_chains_across_multiple_packets
+[31m    [Failed]:  [0m[0] expected to equal [1]:  1 line should reach quota
+      at line 45
+* test_drain_empty_queue_full_attack_goes_to_quota
+* test_flush_consumes_all_lines_within_cap
+* test_flush_caps_at_8_lines_leaving_remainder
+* test_flush_does_nothing_on_empty_queue
+* test_flush_drains_across_packets_up_to_cap
+* test_reflection_half_of_4_is_2
+* test_reflection_odd_damage_floors_down
+* test_reflection_zero_damage_does_not_produce_packet
+* test_clearing_packets_array_empties_queue
+[1m11/12 passed.
 [0m[4m
 
 res://tests/unit/test_round_config.gd
@@ -91,6 +130,16 @@ res://tests/unit/test_seeded_rng.gd
 [1m6/6 passed.
 [0m[4m
 
+res://tests/unit/test_shop_collection.gd
+[0m* test_remove_technique_removes_matching_entry
+* test_remove_technique_leaves_others_intact
+* test_sell_price_cost_5_returns_3
+* test_sell_price_cost_4_returns_2
+* test_sell_consumable_removes_item_and_adds_coins
+* test_sell_technique_removes_item_and_adds_coins
+[1m6/6 passed.
+[0m[4m
+
 res://tests/unit/test_tspin_detection.gd
 [0m* test_3_corners_and_rotation_is_tspin
 * test_2_corners_is_not_tspin
@@ -105,17 +154,28 @@ res://tests/unit/test_tspin_detection.gd
 [33m==============================================
 [0m[33m= Run Summary
 [0m[33m==============================================
-[0m
+[0m[4m
+res://tests/unit/test_enemy_encounters.gd
+[0m- test_boss_enemy_not_repeated
+[31m    [Failed]:  [0m[9] expected to equal [7]:  Expected 7 boss enemies in pool
+          at line 55
+[4m
+res://tests/unit/test_garbage_packets.gd
+[0m- test_drain_chains_across_multiple_packets
+[31m    [Failed]:  [0m[0] expected to equal [1]:  1 line should reach quota
+          at line 45
+
 Totals
 ------
-Warnings              1
+Warnings              2
 
-Scripts               7
-Tests                65
-Passing Tests        65
-Asserts             125
-Time              0.567s
+Scripts              11
+Tests                93
+Passing Tests        91
+Failing Tests         2
+Asserts           205/207
+Time              4.209s
 
 
-[32m---- All tests passed! ----
+[31m---- 2 failing tests ----
 [0m

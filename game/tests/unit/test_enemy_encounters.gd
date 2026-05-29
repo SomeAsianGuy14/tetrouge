@@ -52,10 +52,10 @@ func test_boss_enemy_not_repeated() -> void:
 	RunState.used_boss_enemy_ids.clear()
 
 	var boss_pool := _load_enemies_by_tier("Boss")
-	assert_eq(boss_pool.size(), 7, "Expected 7 boss enemies in pool")
+	assert_eq(boss_pool.size(), 9, "Expected 9 boss enemies in pool")
 
 	var drawn_ids := []
-	for _i in 7:
+	for _i in 9:
 		var available := boss_pool.filter(func(e): return e.id not in RunState.used_boss_enemy_ids)
 		RunState.seeded_shuffle(available)
 		var chosen = available[0]

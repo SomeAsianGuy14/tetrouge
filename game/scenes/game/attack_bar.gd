@@ -1,26 +1,34 @@
 class_name AttackBar
-extends VBoxContainer
+extends Control
 
-const SEGMENT_COUNT := 20
 const BAR_WIDTH := 12
 const WARNING_COLOR := Color(0.85, 0.15, 0.1)
-const EMPTY_COLOR := Color(0.15, 0.15, 0.15, 0.6)
+const FILTH_COLOR := Color(0.95, 0.6, 0.1)
+const BG_COLOR := Color(0.08, 0.08, 0.08, 0.8)
+const GAP := 2.0
 
-var _segments: Array[ColorRect] = []
+var _packets: Array = []
 
 func _ready() -> void:
 	custom_minimum_size = Vector2(BAR_WIDTH, TetrisBoard.VISIBLE_ROWS * TetrisBoard.CELL_SIZE)
-	for i in range(SEGMENT_COUNT):
-		var seg := ColorRect.new()
-		seg.color = EMPTY_COLOR
-		seg.custom_minimum_size = Vector2(BAR_WIDTH, 0)
-		seg.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		add_child(seg)
-		_segments.append(seg)
 
-func update_pending(count: int) -> void:
-	var lit := mini(count, SEGMENT_COUNT)
-	for i in range(SEGMENT_COUNT):
-		# index 0 = top segment, index SEGMENT_COUNT-1 = bottom segment
-		var dist_from_bottom := SEGMENT_COUNT - 1 - i
-		_segments[i].color = WARNING_COLOR if dist_from_bottom < lit else EMPTY_COLOR
+func update_packets(packets: Array) -> void:
+	_packets = packets
+	queue_redraw()
+
+func _draw() -> void:
+	var bar_height := float(TetrisBoard.VISIBLE_ROWS * TetrisBoard.CELL_SIZE)
+	var pixels_per_line := bar_height / float(TetrisBoard.VISIBLE_ROWS)
+	var current_y := bar_height
+
+	draw_rect(Rect2(0.0, 0.0, BAR_WIDTH, bar_height), BG_COLOR)
+
+	for packet in _packets:
+		var color := FILTH_COLOR if packet.is_filth else WARNING_COLOR
+		for _i in range(packet.lines):
+			if current_y <= 0.0:
+				break
+			var row_h: float = minf(pixels_per_line, current_y)
+			var cell_h: float = maxf(0.0, row_h - GAP)
+			draw_rect(Rect2(0.0, current_y - cell_h, BAR_WIDTH, cell_h), color)
+			current_y -= row_h

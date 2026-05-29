@@ -11,6 +11,7 @@
 - Test files live in `game/tests/unit/` and follow the naming convention `test_<module>.gd`
 - All test files extend `GutTest`
 - Run via `game/tests/run_tests.tscn`
+- Run tests after implementing them
 
 ### What to test
 - Any pure function or deterministic logic (calculations, transformations, algorithms)

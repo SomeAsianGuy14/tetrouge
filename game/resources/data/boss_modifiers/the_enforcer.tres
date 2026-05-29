@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1")
-id = "the_enforcer"
-display_name = "The Enforcer"
-description = "Time limit reduced by 25%. Quota unchanged."
-time_limit_override = 45.0
+id = "the_blitz"
+display_name = "The Blitz"
+description = "Time limit cut to 60 seconds. Quota unchanged."
+time_limit_override = 60.0

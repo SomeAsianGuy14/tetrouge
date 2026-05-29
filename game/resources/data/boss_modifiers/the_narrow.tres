@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1")
-id = "the_narrow"
-display_name = "The Narrow"
+id = "the_thin"
+display_name = "The Thin"
 description = "Board width reduced to 8 columns. The leftmost 2 columns are walled off."
 board_width_override = 8

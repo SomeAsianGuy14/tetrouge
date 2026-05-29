@@ -26,6 +26,11 @@ extends Resource
 @export var instant_soft_drop: bool = false
 @export var garbage_flush_reduction: int = 0
 
+# Boss modifier: piece generation and garbage behaviour
+var random_pieces: bool = false
+var garbage_individual_lines: bool = false
+var reflect_ratio: float = 0.0
+
 var rng: RandomNumberGenerator = null
 var enemy: Enemy = null
 var garbage_interval_min: float = 0.0

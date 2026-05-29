@@ -114,7 +114,10 @@ func _init_grid() -> void:
 
 func _fill_queue() -> void:
 	while piece_queue.size() < config.preview_count + 1:
-		piece_queue.append(bag.next())
+		if config.random_pieces:
+			piece_queue.append(PieceData.ALL_TYPES[config.rng.randi_range(0, 6)])
+		else:
+			piece_queue.append(bag.next())
 
 # ── Per-frame update ──────────────────────────────────────────────────────
 

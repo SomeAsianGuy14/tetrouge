@@ -1,13 +1,13 @@
 [gd_resource type="Resource" format=3]
 
 [ext_resource type="Script" path="res://resources/enemy.gd" id="1"]
-[ext_resource type="Resource" path="res://resources/data/boss_modifiers/the_blinder.tres" id="2"]
+[ext_resource type="Resource" path="res://resources/data/boss_modifiers/the_filth.tres" id="2"]
 
 [resource]
 script = ExtResource("1")
-id = "boss_fateless"
-display_name = "The Fateless"
-color = Color(0.15, 0.15, 0.4, 1)
+id = "boss_filth"
+display_name = "The Filth"
+color = Color(0.3, 0.25, 0.05, 1)
 tier = "Boss"
 garbage_interval = 12.0
 ability = ExtResource("2")

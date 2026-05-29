@@ -50,7 +50,7 @@ var _next_garbage_interval: float = 0.0
 var quota_accumulated: float = 0.0
 var technique_income_this_round: int = 0
 var surplus_attack: int = 0
-var pending_garbage: int = 0
+var _garbage_packets: Array = []
 
 var _attack_bar: Control = null
 
@@ -105,7 +105,7 @@ func _on_starter_keystone_chosen(_keystone: Keystone) -> void:
 
 func start_round() -> void:
 	_round_ended = false
-	pending_garbage = 0
+	_garbage_packets = []
 	current_config = _build_round_config()
 	hud.setup(current_config)
 	quota_accumulated = 0.0
@@ -337,9 +337,15 @@ func _tick_enemy_garbage(delta: float) -> void:
 	_enemy_timer += delta
 	if _enemy_timer >= _next_garbage_interval:
 		_enemy_timer = 0.0
-		pending_garbage += randi_range(current_config.garbage_lines_min, current_config.garbage_lines_max)
+		if current_config.reflect_ratio <= 0.0:
+			var n := randi_range(current_config.garbage_lines_min, current_config.garbage_lines_max)
+			if current_config.garbage_individual_lines:
+				for _i in range(n):
+					_garbage_packets.append({lines = 1, is_filth = true})
+			else:
+				_garbage_packets.append({lines = n, is_filth = false})
+			_notify_attack_bar()
 		_next_garbage_interval = randf_range(current_config.garbage_interval_min, current_config.garbage_interval_max)
-		_notify_attack_bar()
 		if _enemy_display:
 			_enemy_display.update_windup(0.0, _next_garbage_interval)
 
@@ -388,6 +394,12 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 	surplus_attack = maxi(0, int(quota_accumulated) - current_config.quota)
 	if hud:
 		hud.update_quota(quota_accumulated, current_config.quota)
+
+	if current_config.reflect_ratio > 0.0 and to_quota > 0:
+		var reflect_lines := floori(to_quota * current_config.reflect_ratio)
+		if reflect_lines > 0:
+			_garbage_packets.append({lines = reflect_lines, is_filth = false})
+			_notify_attack_bar()
 
 	if quota_accumulated >= current_config.quota:
 		_end_round(true)
@@ -515,20 +527,42 @@ func _accumulate_technique_income(event_type: String, _modified_attack: int) -> 
 # ── Attack buffer helpers ─────────────────────────────────────────────────
 
 func _drain_attack(modified: int) -> int:
-	var drain := mini(modified, pending_garbage)
-	pending_garbage -= drain
+	var remaining := modified
+	while remaining > 0 and not _garbage_packets.is_empty():
+		var packet = _garbage_packets[0]
+		var drain := mini(remaining, packet.lines)
+		packet.lines -= drain
+		remaining -= drain
+		if packet.lines == 0:
+			_garbage_packets.remove_at(0)
 	_notify_attack_bar()
-	return modified - drain
+	return remaining
 
-func _flush_pending_garbage() -> int:
+func _flush_pending_garbage() -> void:
+	if current_board == null or _garbage_packets.is_empty():
+		return
 	var reduction := current_config.garbage_flush_reduction if current_config else 0
-	var flush := maxi(0, mini(pending_garbage, 8) - reduction)
-	pending_garbage -= flush
-	return flush
+	var capacity := maxi(0, 8 - reduction)
+	var remaining := capacity
+	while remaining > 0 and not _garbage_packets.is_empty():
+		var packet = _garbage_packets[0]
+		var to_flush := mini(remaining, packet.lines)
+		if packet.is_filth:
+			for _i in range(to_flush):
+				var col := randi() % current_config.board_width
+				current_board.insert_garbage_rows(1, col)
+		else:
+			var col := randi() % current_config.board_width
+			current_board.insert_garbage_rows(to_flush, col)
+		packet.lines -= to_flush
+		remaining -= to_flush
+		if packet.lines == 0:
+			_garbage_packets.remove_at(0)
+	_notify_attack_bar()
 
 func _notify_attack_bar() -> void:
 	if _attack_bar:
-		_attack_bar.update_pending(pending_garbage)
+		_attack_bar.update_packets(_garbage_packets)
 
 # ── Round end ─────────────────────────────────────────────────────────────
 
@@ -539,7 +573,7 @@ func _end_round(success: bool) -> void:
 	if _round_ended:
 		return
 	_round_ended = true
-	pending_garbage = 0
+	_garbage_packets = []
 	_notify_attack_bar()
 	if current_board:
 		current_board.is_active = false
@@ -583,11 +617,7 @@ func _on_lock_processed() -> void:
 	_last_cleared_rows = []
 	if hud and current_board:
 		hud.update_b2b_combo(current_board.is_b2b, current_board.b2b_count, current_board.combo)
-	var flush := _flush_pending_garbage()
-	if flush > 0 and current_board:
-		var col := randi() % current_config.board_width
-		current_board.insert_garbage_rows(flush, col)
-		_notify_attack_bar()
+	_flush_pending_garbage()
 
 func _on_board_updated() -> void:
 	if current_board:
