@@ -3,6 +3,10 @@ extends Control
 
 const SETTINGS_PATH := "user://settings.cfg"
 
+const DAS_PRESETS = [80, 90, 100, 110, 120, 130, 140, 150, 160]
+const ARR_PRESETS = [20, 30, 40, 50]
+const SDF_PRESETS = [5, 10, 15, 20]
+
 const REBINDABLE_ACTIONS: Array[Dictionary] = [
 	{"action": "move_left",   "label": "Move Left"},
 	{"action": "move_right",  "label": "Move Right"},
@@ -15,71 +19,71 @@ const REBINDABLE_ACTIONS: Array[Dictionary] = [
 	{"action": "pause",       "label": "Pause / Settings"},
 ]
 
-@onready var das_slider: HSlider = $Panel/VBox/DASRow/DASSlider
-@onready var das_label: Label = $Panel/VBox/DASRow/DASLabel
-@onready var das_spinbox: SpinBox = $Panel/VBox/DASRow/DASSpinBox
-@onready var arr_slider: HSlider = $Panel/VBox/ARRRow/ARRSlider
-@onready var arr_label: Label = $Panel/VBox/ARRRow/ARRLabel
-@onready var arr_spinbox: SpinBox = $Panel/VBox/ARRRow/ARRSpinBox
+@onready var das_buttons: HBoxContainer = $Panel/VBox/DASRow/DASButtons
+@onready var arr_buttons: HBoxContainer = $Panel/VBox/ARRRow/ARRButtons
+@onready var sdf_buttons: HBoxContainer = $Panel/VBox/SDFRow/SDFButtons
 @onready var bindings_container: VBoxContainer = $Panel/VBox/ScrollContainer/BindingsContainer
 @onready var rebind_status: Label = $Panel/VBox/RebindStatus
 @onready var reset_button: Button = $Panel/VBox/ResetButton
 @onready var close_button: Button = $Panel/VBox/CloseButton
 
-var _syncing: bool = false
+var _das_value: int = 130
+var _arr_value: int = 40
+var _sdf_value: int = 10
 var _rebinding_action: String = ""
-var _rebind_rows: Array[Dictionary] = []  # [{action, key_label, button}]
+var _rebind_rows: Array[Dictionary] = []
 
 func _ready() -> void:
+	_build_preset_buttons(das_buttons, DAS_PRESETS, "%dms", _on_das_preset)
+	_build_preset_buttons(arr_buttons, ARR_PRESETS, "%dms", _on_arr_preset)
+	_build_preset_buttons(sdf_buttons, SDF_PRESETS, "%dx", _on_sdf_preset)
 	_load_settings()
-	das_slider.connect("value_changed", _on_das_changed)
-	das_spinbox.connect("value_changed", _on_das_spinbox_changed)
-	arr_slider.connect("value_changed", _on_arr_changed)
-	arr_spinbox.connect("value_changed", _on_arr_spinbox_changed)
 	reset_button.connect("pressed", _on_reset_pressed)
 	close_button.connect("pressed", _on_close)
 	_load_bindings()
 	_build_binding_rows()
-	_update_labels()
 	set_process_unhandled_input(false)
 
-# ── DAS / ARR sync ────────────────────────────────────────────────────────
+# ── Preset helpers ────────────────────────────────────────────────────────
 
-func _on_das_changed(_val: float) -> void:
-	if not _syncing:
-		_syncing = true
-		das_spinbox.value = das_slider.value
-		_syncing = false
-	_update_labels()
+static func snap_to_nearest(value: int, presets: Array) -> int:
+	var best: int = presets[0]
+	var best_dist: int = abs(value - best)
+	for p in presets:
+		var d: int = abs(value - int(p))
+		if d < best_dist:
+			best_dist = d
+			best = int(p)
+	return best
+
+func _build_preset_buttons(container: HBoxContainer, presets: Array, fmt: String, callback: Callable) -> void:
+	var group := ButtonGroup.new()
+	for p in presets:
+		var btn := Button.new()
+		btn.text = fmt % p
+		btn.toggle_mode = true
+		btn.button_group = group
+		btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		btn.connect("pressed", callback.bind(p))
+		container.add_child(btn)
+
+func _select_preset(container: HBoxContainer, presets: Array, value: int) -> void:
+	var snapped := snap_to_nearest(value, presets)
+	for i in container.get_child_count():
+		var btn := container.get_child(i) as Button
+		btn.set_pressed_no_signal(presets[i] == snapped)
+
+func _on_das_preset(value: int) -> void:
+	_das_value = value
 	_save_settings()
 
-func _on_das_spinbox_changed(_val: float) -> void:
-	if not _syncing:
-		_syncing = true
-		das_slider.value = das_spinbox.value
-		_syncing = false
-	_update_labels()
+func _on_arr_preset(value: int) -> void:
+	_arr_value = value
 	_save_settings()
 
-func _on_arr_changed(_val: float) -> void:
-	if not _syncing:
-		_syncing = true
-		arr_spinbox.value = arr_slider.value
-		_syncing = false
-	_update_labels()
+func _on_sdf_preset(value: int) -> void:
+	_sdf_value = value
 	_save_settings()
-
-func _on_arr_spinbox_changed(_val: float) -> void:
-	if not _syncing:
-		_syncing = true
-		arr_slider.value = arr_spinbox.value
-		_syncing = false
-	_update_labels()
-	_save_settings()
-
-func _update_labels() -> void:
-	das_label.text = "DAS: %dms" % int(das_slider.value)
-	arr_label.text = "ARR: Instant" if arr_slider.value == 0 else "ARR: %dms" % int(arr_slider.value)
 
 # ── Keybinding rows ───────────────────────────────────────────────────────
 
@@ -164,7 +168,7 @@ func _on_reset_pressed() -> void:
 	InputMap.load_from_project_settings()
 	var cfg := ConfigFile.new()
 	cfg.load(SETTINGS_PATH)
-	cfg.erase_section_key("bindings", "")  # erase all entries under [bindings]
+	cfg.erase_section_key("bindings", "")
 	for entry in REBINDABLE_ACTIONS:
 		cfg.erase_section_key("bindings", entry["action"])
 	cfg.save(SETTINGS_PATH)
@@ -174,24 +178,26 @@ func _on_reset_pressed() -> void:
 
 func _load_settings() -> void:
 	var cfg := ConfigFile.new()
+	var das := 130
+	var arr := 40
+	var sdf := 10
 	if cfg.load(SETTINGS_PATH) == OK:
-		var das: float = cfg.get_value("timing", "das_ms", 167)
-		var arr: float = cfg.get_value("timing", "arr_ms", 33)
-		das_slider.value = das
-		das_spinbox.value = das
-		arr_slider.value = arr
-		arr_spinbox.value = arr
-	else:
-		das_slider.value = 167
-		das_spinbox.value = 167
-		arr_slider.value = 33
-		arr_spinbox.value = 33
+		das = snap_to_nearest(int(cfg.get_value("timing", "das_ms", 130)), DAS_PRESETS)
+		arr = snap_to_nearest(int(cfg.get_value("timing", "arr_ms", 40)), ARR_PRESETS)
+		sdf = snap_to_nearest(int(cfg.get_value("timing", "sdf_x", 10)), SDF_PRESETS)
+	_das_value = das
+	_arr_value = arr
+	_sdf_value = sdf
+	_select_preset(das_buttons, DAS_PRESETS, das)
+	_select_preset(arr_buttons, ARR_PRESETS, arr)
+	_select_preset(sdf_buttons, SDF_PRESETS, sdf)
 
 func _save_settings() -> void:
 	var cfg := ConfigFile.new()
 	cfg.load(SETTINGS_PATH)
-	cfg.set_value("timing", "das_ms", das_slider.value)
-	cfg.set_value("timing", "arr_ms", arr_slider.value)
+	cfg.set_value("timing", "das_ms", _das_value)
+	cfg.set_value("timing", "arr_ms", _arr_value)
+	cfg.set_value("timing", "sdf_x", _sdf_value)
 	cfg.save(SETTINGS_PATH)
 
 # ── Bindings load / save ──────────────────────────────────────────────────
@@ -253,11 +259,20 @@ static func apply_saved_bindings() -> void:
 static func load_das() -> float:
 	var cfg := ConfigFile.new()
 	if cfg.load("user://settings.cfg") == OK:
-		return cfg.get_value("timing", "das_ms", 167) / 1000.0
-	return 0.167
+		var raw := int(cfg.get_value("timing", "das_ms", 130))
+		return snap_to_nearest(raw, DAS_PRESETS) / 1000.0
+	return 0.130
 
 static func load_arr() -> float:
 	var cfg := ConfigFile.new()
 	if cfg.load("user://settings.cfg") == OK:
-		return cfg.get_value("timing", "arr_ms", 33) / 1000.0
-	return 0.033
+		var raw := int(cfg.get_value("timing", "arr_ms", 40))
+		return snap_to_nearest(raw, ARR_PRESETS) / 1000.0
+	return 0.040
+
+static func load_sdf() -> int:
+	var cfg := ConfigFile.new()
+	if cfg.load("user://settings.cfg") == OK:
+		var raw := int(cfg.get_value("timing", "sdf_x", 10))
+		return snap_to_nearest(raw, SDF_PRESETS)
+	return 10

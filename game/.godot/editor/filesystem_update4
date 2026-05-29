@@ -1,1 +1,4 @@
 res://scenes/game/attack_bar.gd
+res://scenes/game/run_manager.gd
+res://scenes/screens/settings.gd
+res://scenes/tetris/tetris_board.gd

@@ -137,6 +137,7 @@ func start_round() -> void:
 	board_container.add_child(current_board)
 	current_board.das_delay = Settings.load_das()
 	current_board.arr_rate = Settings.load_arr()
+	current_board.sdf_multiplier = Settings.load_sdf()
 	# Apply Persistence technique: doubles don't break B2B
 	if RunState.has_technique("persistence"):
 		current_config.b2b_persists_on_doubles = true
@@ -286,6 +287,7 @@ func _close_pause() -> void:
 	if _board_was_active and current_board != null:
 		current_board.das_delay = Settings.load_das()
 		current_board.arr_rate = Settings.load_arr()
+		current_board.sdf_multiplier = Settings.load_sdf()
 		current_board.is_active = true
 	_board_was_active = false
 	if _pause_menu:

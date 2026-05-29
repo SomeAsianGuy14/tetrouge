@@ -6,7 +6,11 @@
       "Bash(find /mnt/c/Users/user -name \"Godot*.exe\" 2>/dev/null | head -5)",
       "Read(//mnt/c/Users/**)",
       "Read(//c/Users/user/**)",
-      "PowerShell($proc = Start-Process -FilePath \"C:\\\\Users\\\\user\\\\bin\\\\godot.exe\" -ArgumentList \"--headless --path `\"C:\\\\School\\\\PP\\\\TR\\\\game`\" -s addons/gut/gut_cmdln.gd -gdir=res://tests/unit -gprefix=test_ -gsuffix=.gd -gexit\" -Wait -PassThru -NoNewWindow -RedirectStandardOutput \"C:\\\\School\\\\PP\\\\TR\\\\gut_out.txt\" -RedirectStandardError \"C:\\\\School\\\\PP\\\\TR\\\\gut_err.txt\"; $proc.ExitCode)"
+      "PowerShell($proc = Start-Process -FilePath \"C:\\\\Users\\\\user\\\\bin\\\\godot.exe\" -ArgumentList \"--headless --path `\"C:\\\\School\\\\PP\\\\TR\\\\game`\" -s addons/gut/gut_cmdln.gd -gdir=res://tests/unit -gprefix=test_ -gsuffix=.gd -gexit\" -Wait -PassThru -NoNewWindow -RedirectStandardOutput \"C:\\\\School\\\\PP\\\\TR\\\\gut_out.txt\" -RedirectStandardError \"C:\\\\School\\\\PP\\\\TR\\\\gut_err.txt\"; $proc.ExitCode)",
+      "Read(//usr/**)",
+      "Read(//usr/local/**)",
+      "Bash(godot --version)",
+      "Bash(godot --headless --path . -s addons/gut/gut_cmdln.gd)"
     ]
   }
 }

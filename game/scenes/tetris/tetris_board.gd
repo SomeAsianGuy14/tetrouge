@@ -59,6 +59,7 @@ var das_direction: int = 0  # -1 or 1 while held; 0 = not held
 # Configurable timing (read from config/settings)
 var das_delay: float = 0.167
 var arr_rate: float = 0.033
+var sdf_multiplier: int = 10
 var lock_delay: float = 0.5
 var lock_max_resets: int = 15
 
@@ -146,7 +147,7 @@ func _handle_das(delta: float) -> void:
 				_move_horizontal(das_direction)
 
 func _handle_gravity(delta: float) -> void:
-	var soft_mult := 1000.0 if config.instant_soft_drop else 20.0
+	var soft_mult := 1000.0 if config.instant_soft_drop else float(sdf_multiplier)
 	var speed := GRAVITY_SPEED * (soft_mult if soft_dropping else 1.0)
 	gravity_accumulator += speed * delta
 	while gravity_accumulator >= 1.0:
