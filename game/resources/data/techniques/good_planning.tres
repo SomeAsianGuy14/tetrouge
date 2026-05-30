@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "good_planning"
+display_name = "Good Planning"
+description = "If you do not use hold for 5 pieces, gain +2 attack on next clear."
+cost = 5
+tags = ["utility", "precision"]
+effect_type = "good_planning"
+params = {"bonus": 2}

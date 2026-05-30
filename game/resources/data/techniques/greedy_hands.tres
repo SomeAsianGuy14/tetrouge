@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "greedy_hands"
+display_name = "Greedy Hands"
+description = "Gain an additional 2 coins every round, but enemies gain +1 attack."
+cost = 6
+tags = ["risk", "economy"]
+effect_type = "greedy_hands"
+params = {}

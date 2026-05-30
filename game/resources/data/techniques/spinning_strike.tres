@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "spinning_strike"
+display_name = "Spinning Strike"
+description = "T-spins send +2 attack."
+cost = 5
+tags = ["tspin"]
+effect_type = "flat"
+params = {"on": "tspin", "bonus": 2}

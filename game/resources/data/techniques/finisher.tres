@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "finisher"
+display_name = "Finisher"
+description = "If the enemy is below 25% HP, line clears send +1 attack."
+cost = 5
+tags = ["general"]
+effect_type = "enemy_hp_below"
+params = {"threshold": 0.25, "bonus": 1}

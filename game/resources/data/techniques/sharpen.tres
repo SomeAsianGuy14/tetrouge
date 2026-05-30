@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "sharpen"
+display_name = "Sharpen"
+description = "Quads send +2 attack."
+cost = 5
+tags = ["general", "tetris"]
+effect_type = "flat"
+params = {"on": "quad", "bonus": 2}

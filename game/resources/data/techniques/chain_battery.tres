@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "chain_battery"
+display_name = "Chain Battery"
+description = "Every 4 combo clears, send +3 attack."
+cost = 6
+tags = ["combo"]
+effect_type = "every_nth_combo"
+params = {"n": 4, "bonus": 3}

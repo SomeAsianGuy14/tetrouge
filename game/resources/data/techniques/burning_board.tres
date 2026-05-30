@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "burning_board"
+display_name = "Burning Board"
+description = "All attacks send +3, but every 5 seconds take 1 damage."
+cost = 6
+tags = ["risk"]
+effect_type = "burning_board"
+params = {"attack_bonus": 3}

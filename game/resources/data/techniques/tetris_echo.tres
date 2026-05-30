@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "tetris_echo"
+display_name = "Tetris Echo"
+description = "After a Tetris, your next single/double/triple sends +1 attack."
+cost = 5
+tags = ["tetris", "general"]
+effect_type = "tetris_echo"
+params = {"bonus": 1}

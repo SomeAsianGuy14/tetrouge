@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "compact_setup"
+display_name = "Compact Setup"
+description = "T-spins performed while your board is below 50% height send +3 attack."
+cost = 7
+tags = ["tspin", "precision"]
+effect_type = "flat"
+params = {"on": "tspin", "board_below_pct": 0.5, "bonus": 3}

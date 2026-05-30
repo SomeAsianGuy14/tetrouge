@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "green_thumb"
+display_name = "Green Thumb"
+description = "Gain 1 coin for every 5 garbage rows cleared."
+cost = 3
+tags = ["economy", "garbage"]
+effect_type = "green_thumb"
+params = {"rows_per_coin": 5}

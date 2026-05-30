@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "chain_starter"
+display_name = "Chain Starter"
+description = "Your second consecutive line clear sends +1 attack."
+cost = 4
+tags = ["combo"]
+effect_type = "chain_starter"
+params = {"bonus": 1}

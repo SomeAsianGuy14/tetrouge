@@ -1,0 +1,11 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "whirl"
+display_name = "Whirl"
+description = "T-spins count as two combo steps."
+category = "T-Spin"
+whirl = true

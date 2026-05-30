@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "perfect_spark"
+display_name = "Perfect Spark"
+description = "Perfect clears send +6 attack."
+cost = 8
+tags = ["precision"]
+effect_type = "flat"
+params = {"on": "perfect_clear", "bonus": 6}

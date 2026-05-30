@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "brass_knuckles"
+display_name = "Brass Knuckles"
+description = "All line clears send +1 attack."
+cost = 3
+tags = ["general"]
+effect_type = "flat"
+params = {"on": "all_clear", "bonus": 1}

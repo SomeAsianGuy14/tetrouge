@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "flow_step"
+display_name = "Flow Step"
+description = "Placing 4 pieces without rotating grants +2 attack on your next clear."
+cost = 6
+tags = ["speed", "precision"]
+effect_type = "flow_step"
+params = {"bonus": 2}

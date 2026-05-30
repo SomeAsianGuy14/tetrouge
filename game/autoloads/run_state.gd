@@ -25,6 +25,7 @@ var used_keystone_ids: Array = []     # ids already owned this run
 
 var shop_technique_slots: int = 3
 var consumable_capacity: int = 3
+var technique_capacity: int = 4
 var sharp_eye_active: bool = false
 
 signal run_started
@@ -42,6 +43,7 @@ func reset() -> void:
 	used_keystone_ids.clear()
 	shop_technique_slots = 3
 	consumable_capacity = 3
+	technique_capacity = 4
 	sharp_eye_active = false
 	run_seed = randi()
 	rng.seed = run_seed
@@ -54,6 +56,7 @@ func advance_round() -> void:
 	if round_index >= ROUNDS_PER_STAGE:
 		round_index = 0
 		stage += 1
+	technique_capacity = 4 + (stage - 1)
 	emit_signal("round_changed", stage, round_index)
 
 func is_run_complete() -> bool:

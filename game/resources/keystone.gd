@@ -45,6 +45,7 @@ extends Resource
 # ── Special mechanics ─────────────────────────────────────────────────────
 @export var daze_stun_seconds: float = 0.0   # delay enemy timer on quad
 @export var dizzy: bool = false              # >4 T-rotations adds +4 to next T-spin
+@export var whirl: bool = false              # T-spins count as two combo steps
 @export var safety_net: bool = false         # first B2B break per round absorbed
 @export var final_blow: bool = false         # B2B break deals streak×2, disables B2B
 @export var flexible_b2b: bool = false       # all spin clears maintain B2B

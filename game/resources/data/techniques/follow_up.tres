@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "follow_up"
+display_name = "Follow-Up"
+description = "After any line clear, your next line clear sends +1 attack."
+cost = 4
+tags = ["general", "combo"]
+effect_type = "follow_up"
+params = {"bonus": 1}

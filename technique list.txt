@@ -1,0 +1,68 @@
+| Technique          | Effect                                                                    | Tags               |
+| ------------------ | ------------------------------------------------------------------------- | ------------------ |
+| **Brass Knuckles** | All line clears send +1 attack.                                           | General            |
+| **Clean Strike**   | Clearing 2+ lines sends +1 bonus attack.                                  | General, Precision |
+| **Sharpen**        | Quads send +2 attack.                                      		 | General, Quad      |
+| **Follow-Up**      | After any line clear, your next line clear sends +1 attack.               | General, Combo     |
+| **Attack Battery** | Every 4 line clears, send +3 attack.                                      | General            |
+| **Glancing Blow**    | If the cleared line contains no holes above it, send +1 attack.           | Precision, General |
+| **Opening Blow**   | Your first line clear each round sends +3 attack.                         | General            |
+| **Finisher**       | If the enemy is below 25% HP, line clears send +1 attack.          | General            |
+| **Escalation**     | Every 10 pieces placed, your next attack gains +2.                        | General, Speed     |
+| Technique                 | Effect                                                                                  | Tags              |
+| ------------------------- | --------------------------------------------------------------------------------------- | ----------------- |
+| **Back-to-Back Pressure** | Back-to-back Tetrises send +2 attack.                                                   | Tetris            |
+| **Side Strike**       | If your Tetris clears using the far-left or far-right column, send +1 extra attack.     | Tetris, Precision |
+| **Delayed Cannon**        | Every second Tetris sends +5 attack instead of +3.                                      | Tetris, Burst     |
+| **Reckless Assault**      | If your board is above 60% height, Tetrises send +4 attack.                             | Tetris, Risk      |
+| **Tetris Echo**           | After a Tetris, your next single/double/triple sends +1 attack.                         | Tetris, General   |
+| **Four Disciplines**  | Other line clears send -1 attack, but Tetrises send +5 attack.                                    | Tetris, Risk      |
+| Technique             | Effect                                                                                     | Tags              |
+| --------------------- | ------------------------------------------------------------------------------------------ | ----------------- |
+| **Spinning Strike**       | T-spins send +2 attack.                                                                    | T-Spin            |
+| **Mini Spark**        | T-spin minis send +1 attack.                                                               | T-Spin            |
+| **Back-to-Back Spin** | Back-to-back T-spins send +2 attack.                                                       | T-Spin            |
+| **Dualcasting**       | T-spin doubles send +3 extra attack.                                         | T-Spin            |
+| **Compact Setup**     | T-spins performed while your board is below 50% height send +3 attack.                     | T-Spin, Precision |
+| **Aggresive Positioning**       | T-spins performed above 60% board height send +4 attack.                                   | T-Spin, Risk      |
+| **Chain Starter**      | Your second consecutive line clear sends +1 attack.                                 | Combo          |
+| **Combo Spark**        | Every combo step sends +1 attack.                                                   | Combo          |
+| **Chain Battery**      | Every 4 combo clears, send +3 attack.                                               | Combo          |
+| **Flurry** | Singles during a combo send +1 attack.                                              | Combo          |
+| **Combo Spike**        | Every 5th combo clear sends +5 attack.                                              | Combo, Burst   |
+| Technique           | Effect                                                                                | Tags             |
+| ------------------- | ------------------------------------------------------------------------------------- | ---------------- |
+| **Constant pressure** | If a piece locks within 1 second of spawning, your next clear sends +1 attack.        | Speed            |
+| **Flash Step**   | After clearing at least 2 lines, gain 0 ARR for your next piece only.                          | Speed            |
+| **Flow Step**       | Placing 4 pieces without rotating grants +2 attack on your next clear.                | Speed, Precision |
+| **Switch-Up** | After a hard drop, your next soft-drop placement sends +1 attack if it clears a line. | Speed            |
+| Technique               | Effect                                                                           | Tags               |
+| ----------------------- | -------------------------------------------------------------------------------- | ------------------ |
+| **Flatline**            | If your board height is 2 or less after a clear, gain +2 attack.      | Precision          |      |
+| **Perfect Spark** | Perfect clears send +6 attack.                                                   | Precision, Burst   |
+| **Low Pressure**  | While your board is below 40% height, line clears send +1 attack.                | Precision          |
+| **Discipline**          | Attacks gain +2 if you did not use hold on that piece.                           | Precision, Risk    |
+| ------------------- | -------------------------------------------------------------------------------------------------- | -------------------- |
+| **Redzone**   | While above 70% board height, attacks send +3.                                                     | Risk                 |
+| **Glass Cannon**     | All attacks send +4, but incoming garbage is +2.                                                   | Risk                 |
+| **Adreniline Rush**        | Line clears in the top 4 lines send +5 attack.                                        | Risk                 |
+| **Gambler's Blade** | Attacks have a 25% chance to send +4 and a 25% chance to send -2.                                  | Risk                 |
+| **Burning Board**   | All attacks send +3, but every 5 seconds take 1 damage | Risk                 |
+| **Greedy Hands**    | Gain an additional 2 coins every toud, but enemies gain +1 attack.                                  | Risk, Economy        |
+| ----------------------- | ----------------------------------------------------------- | ------------------ |
+| **Coupon**       | Techniques cost 10% less.                                   | Economy            |
+| **Specialist Discount** | Techniques matching keystone tags cost 25% less.        | Economy            |
+| **Smooth Haggling**     | Selling a technique refunds more currency.                  | Economy            |
+| **Bounty List**         | Gain 10 coins after defeating bosses.                 | Economy            |
+| **Combo Payout**        | Gain 5 coins the first time you reach 5+ combo each round.                     | Economy, Combo     |
+| **Green Thumb**      | Gain 1 coin for every 5 garbage rows cleared.                    | Economy, Garbage   |
+| --------------------- | ----------------------------------------------------------------------------------- | ------------------ |
+| **Patience**       | After using hold, your next line clear gains +1 attack. Cooldown: 5 pieces.         | Utility            |
+| **Controlled Drop**   | Soft-dropped pieces that clear lines send +1 attack.                                | Utility, Speed     |
+| **Rotation Training** | Rotating a piece 2+ times before a clear sends +1 attack.                           | Utility, T-Spin    |
+| **Good Planning**   | If you do not use hold for 5 pieces, gain +2 attack on next clear.                  | Utility, Precision |
+| -------------------- | ---------------------------------------------------------------- | --------------------- |
+| **Recycling**   | T-spins that clear garbage send +3 attack.          | T-Spin, Garbage       |
+| **Whirl**       | T-spins count as two combo steps.                                | T-Spin, Combo         |
+| **Counter Strike**  | Canceling garbage while below 40% height sends +2 attack.        | Precision, Defense    |
+

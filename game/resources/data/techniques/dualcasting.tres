@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "dualcasting"
+display_name = "Dualcasting"
+description = "T-spin doubles send +3 extra attack."
+cost = 6
+tags = ["tspin"]
+effect_type = "flat"
+params = {"on": "tspin_double", "bonus": 3}

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "gamblers_blade"
+display_name = "Gambler's Blade"
+description = "Attacks have a 25% chance to send +4 and a 25% chance to send -2."
+cost = 5
+tags = ["risk"]
+effect_type = "gambler_rng"
+params = {"win_chance": 0.25, "win_bonus": 4, "loss_chance": 0.25, "loss_penalty": 2}

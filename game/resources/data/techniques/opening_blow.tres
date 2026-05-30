@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "opening_blow"
+display_name = "Opening Blow"
+description = "Your first line clear each round sends +3 attack."
+cost = 4
+tags = ["general"]
+effect_type = "first_clear"
+params = {"bonus": 3}

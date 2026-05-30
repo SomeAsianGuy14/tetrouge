@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "rotation_training"
+display_name = "Rotation Training"
+description = "Rotating a piece 2+ times before a clear sends +1 attack."
+cost = 4
+tags = ["utility", "tspin"]
+effect_type = "rotation_training"
+params = {"min_rotations": 2, "bonus": 1}

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "four_disciplines"
+display_name = "Four Disciplines"
+description = "Other line clears send -1 attack, but Tetrises send +5 attack."
+cost = 7
+tags = ["tetris", "risk"]
+effect_type = "four_disciplines"
+params = {"quad_bonus": 5, "penalty": -1}

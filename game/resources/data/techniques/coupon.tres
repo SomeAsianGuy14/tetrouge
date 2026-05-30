@@ -4,8 +4,10 @@
 
 [resource]
 script = ExtResource("1")
-id = "windfall"
-display_name = "Windfall"
-description = "Earn 1 coin per T-spin during a round."
-cost = 5
-coins_per_tspin = 1
+id = "coupon"
+display_name = "Coupon"
+description = "Techniques cost 10% less."
+cost = 4
+tags = ["economy"]
+effect_type = "coupon"
+params = {}

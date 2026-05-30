@@ -22,6 +22,8 @@ var _all_techniques: Array = []
 var _all_consumables: Array = []
 var _all_vouchers: Array = []
 var _buy_buttons: Dictionary = {}  # slot node → buy Button (or null if owned)
+var _technique_slot_nodes: Array = []  # tracks which slots show techniques
+var _capacity_label: Label = null
 
 func _ready() -> void:
 	Economy.connect("coins_changed", _update_coin_display)
@@ -30,10 +32,29 @@ func _ready() -> void:
 		_collection_slots[i].connect("pressed", _on_sell_consumable.bind(i))
 	var interest := Economy.apply_interest()
 	interest_label.text = "+%d interest" % interest if interest > 0 else ""
+	_setup_capacity_label()
 	_load_item_pools()
 	_populate_shop()
 	_update_coin_display(Economy.coins)
 	_build_collection()
+
+func _setup_capacity_label() -> void:
+	_capacity_label = Label.new()
+	_capacity_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_capacity_label.modulate = Color(1.0, 0.7, 0.3)
+	_capacity_label.visible = false
+	technique_slots.get_parent().add_child(_capacity_label)
+	technique_slots.get_parent().move_child(_capacity_label, technique_slots.get_index() + 1)
+
+func _is_at_technique_capacity() -> bool:
+	return RunState.techniques.size() >= RunState.technique_capacity
+
+func _update_capacity_label() -> void:
+	if _capacity_label == null:
+		return
+	var at_cap := _is_at_technique_capacity()
+	_capacity_label.text = "Technique slots full (%d/%d)" % [RunState.techniques.size(), RunState.technique_capacity]
+	_capacity_label.visible = at_cap
 
 func _load_item_pools() -> void:
 	_all_techniques = _load_from_dir("res://resources/data/techniques/", "Technique")
@@ -63,8 +84,10 @@ func _populate_shop() -> void:
 	_populate_slot(consumable_slot, first_consumable)
 	_populate_slot(consumable_slot_2, _pick_one(_all_consumables, [first_id]))
 	_populate_voucher_slot()
+	_update_capacity_label()
 
 func _populate_technique_slots() -> void:
+	_technique_slot_nodes.clear()
 	var available := _all_techniques.filter(func(t): return not RunState.has_technique(t.id))
 	RunState.seeded_shuffle(available)
 	var count := RunState.shop_technique_slots
@@ -74,6 +97,9 @@ func _populate_technique_slots() -> void:
 		var slot: Control = technique_slots.get_child(i) as Control if i < technique_slots.get_child_count() else _create_slot()
 		var item: Resource = available[i] as Resource if i < available.size() else null
 		_populate_slot(slot, item)
+		if item != null:
+			_technique_slot_nodes.append(slot)
+	_update_capacity_label()
 
 func _populate_voucher_slot() -> void:
 	var stage_chance := RunState.stage * 0.15  # 15% per stage
@@ -129,11 +155,13 @@ func _build_item_card(slot: Control, item: Resource) -> void:
 	desc_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	vbox.add_child(desc_label)
 
+	var display_cost: int = _effective_cost(item)
 	var cost_label := Label.new()
-	cost_label.text = "%d coins" % item.cost
+	cost_label.text = "%d coins" % display_cost
 	vbox.add_child(cost_label)
 
 	var owned := item is Technique and RunState.has_technique(item.id)
+	var at_cap := item is Technique and _is_at_technique_capacity() and not owned
 	if owned:
 		var owned_label := Label.new()
 		owned_label.text = "OWNED"
@@ -141,10 +169,19 @@ func _build_item_card(slot: Control, item: Resource) -> void:
 		vbox.add_child(owned_label)
 		_buy_buttons[slot] = null
 		slot.modulate = Color.WHITE
+	elif at_cap:
+		var cap_label := Label.new()
+		cap_label.text = "FULL"
+		cap_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		cap_label.modulate = Color(1.0, 0.6, 0.2)
+		vbox.add_child(cap_label)
+		_buy_buttons[slot] = null
+		slot.modulate = Color(0.55, 0.55, 0.55)
 	else:
 		var buy_btn := Button.new()
 		buy_btn.text = "Buy"
 		buy_btn.set_meta("cost", item.cost)
+		buy_btn.set_meta("is_technique", item is Technique)
 		buy_btn.disabled = not Economy.can_afford(item.cost)
 		buy_btn.connect("pressed", _on_purchase.bind(item, slot))
 		vbox.add_child(buy_btn)
@@ -180,7 +217,21 @@ func _mark_slot_purchased(slot: Control, _item: Resource) -> void:
 		vbox.add_child(lbl)
 
 func _sell_price(item) -> int:
-	return int(item.cost * 0.6)
+	var ratio := 0.8 if RunState.has_technique("smooth_haggling") else 0.6
+	return int(item.cost * ratio)
+
+func _effective_cost(item: Resource) -> int:
+	if not (item is Technique):
+		return item.cost
+	var cost: int = item.cost
+	if RunState.has_technique("coupon"):
+		cost = int(cost * 0.9)
+	if RunState.has_technique("specialist_discount"):
+		for ks in RunState.keystones:
+			if ks.category != "" and ks.category in item.tags:
+				cost = int(cost * 0.75)
+				break
+	return maxi(1, cost)
 
 func _build_collection() -> void:
 	_build_keystone_icons()
@@ -200,11 +251,20 @@ func _build_keystone_icons() -> void:
 func _build_technique_icons() -> void:
 	for child in technique_icons.get_children():
 		child.queue_free()
-	for technique in RunState.techniques:
+	for i in RunState.technique_capacity:
 		var btn := Button.new()
-		btn.text = technique.display_name[0] + " • " + str(_sell_price(technique)) + "¢"
-		btn.tooltip_text = technique.display_name + "\n" + technique.description
-		btn.connect("pressed", _on_sell_technique.bind(technique))
+		btn.custom_minimum_size = Vector2(80, 32)
+		btn.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		btn.add_theme_font_size_override("font_size", 11)
+		if i < RunState.techniques.size():
+			var technique: Technique = RunState.techniques[i]
+			btn.text = technique.display_name + "\nSell • " + str(_sell_price(technique)) + "¢"
+			btn.tooltip_text = technique.display_name + "\n" + technique.description
+			btn.disabled = false
+			btn.connect("pressed", _on_sell_technique.bind(technique))
+		else:
+			btn.text = "—"
+			btn.disabled = true
 		technique_icons.add_child(btn)
 
 func _refresh_collection_backpack() -> void:
@@ -222,6 +282,7 @@ func _on_sell_technique(technique) -> void:
 	Economy.add_coins(_sell_price(technique))
 	RunState.remove_technique(technique)
 	_build_technique_icons()
+	_refresh_button_states()
 
 func _on_sell_consumable(index: int) -> void:
 	if index >= RunState.consumables.size():
@@ -231,13 +292,17 @@ func _on_sell_consumable(index: int) -> void:
 	_refresh_collection_backpack()
 
 func _refresh_button_states() -> void:
+	var at_cap := _is_at_technique_capacity()
 	for slot in _buy_buttons:
 		var btn = _buy_buttons[slot]
 		if btn == null:
 			continue
+		var is_technique_btn: bool = btn.has_meta("is_technique") and btn.get_meta("is_technique")
 		var can_afford := Economy.can_afford(int(btn.get_meta("cost")))
-		btn.disabled = not can_afford
-		slot.modulate = Color.WHITE if can_afford else Color(0.55, 0.55, 0.55)
+		var blocked := is_technique_btn and at_cap
+		btn.disabled = not can_afford or blocked
+		slot.modulate = Color.WHITE if (can_afford and not blocked) else Color(0.55, 0.55, 0.55)
+	_update_capacity_label()
 
 func _update_coin_display(amount: int) -> void:
 	coin_label.text = "Coins: %d" % amount

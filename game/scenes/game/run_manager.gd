@@ -59,6 +59,17 @@ var _t_spin_rotations: int = 0
 var _pc_count_this_round: int = 0
 var _last_cleared_rows: Array[int] = []
 
+var _technique_round_state: TechniqueRoundState = null
+var _held_this_piece: bool = false
+var _used_soft_drop_this_piece: bool = false
+var _hard_drop_used_this_piece: bool = false
+var _rotations_this_piece: int = 0
+var _piece_spawn_time: float = 0.0
+var _burning_board_timer: float = 0.0
+var _burning_board_active: bool = false
+var _flash_step_arr_pending: bool = false
+var _greedy_hands_active: bool = false
+
 var _paused: bool = false
 var _pause_menu: Control = null
 var _board_was_active: bool = false
@@ -118,6 +129,16 @@ func start_round() -> void:
 	_t_spin_rotations = 0
 	_pc_count_this_round = 0
 	_last_cleared_rows = []
+	_technique_round_state = TechniqueRoundState.new()
+	_held_this_piece = false
+	_used_soft_drop_this_piece = false
+	_hard_drop_used_this_piece = false
+	_rotations_this_piece = 0
+	_piece_spawn_time = 0.0
+	_burning_board_active = RunState.has_technique("burning_board")
+	_burning_board_timer = 0.0
+	_flash_step_arr_pending = false
+	_greedy_hands_active = RunState.has_technique("greedy_hands")
 
 	if current_board:
 		current_board.queue_free()
@@ -149,6 +170,7 @@ func start_round() -> void:
 	current_board.connect("piece_rotated", _on_piece_rotated)
 	current_board.connect("rows_cleared", _on_rows_cleared)
 	current_board.connect("b2b_broken", _on_b2b_broken)
+	current_board.connect("piece_locked", _on_piece_locked)
 
 	if _debug_overlay:
 		_debug_overlay.set_board(current_board)
@@ -216,6 +238,16 @@ func _build_round_config() -> RoundConfig:
 		enemy.ability.apply_to_config(cfg)
 
 	cfg.time_limit = RunState.calculate_time_limit(RunState.stage, cfg.boss_modifier.id if cfg.boss_modifier else "")
+
+	# Glass Cannon: +2 incoming garbage lines per wave
+	if RunState.has_technique("glass_cannon"):
+		cfg.garbage_lines_min += 2
+		cfg.garbage_lines_max += 2
+	# Greedy Hands: enemy gains +1 attack per wave (reduce interval to simulate)
+	if RunState.has_technique("greedy_hands"):
+		cfg.garbage_lines_min += 1
+		cfg.garbage_lines_max += 1
+
 	return cfg
 
 func _load_enemy_pool(tier: String) -> Array:
@@ -264,6 +296,7 @@ func _process(delta: float) -> void:
 	current_board.tick(delta)
 	_handle_input()
 	_tick_timer(delta)
+	_tick_burning_board(delta)
 	_tick_enemy_garbage(delta)
 	if _enemy_display and current_config:
 		_enemy_display.update_windup(_enemy_timer, _next_garbage_interval)
@@ -314,9 +347,12 @@ func _handle_input() -> void:
 		if not Input.is_action_pressed("move_left"):
 			current_board.input_move_released()
 
+	if Input.is_action_pressed("soft_drop"):
+		_used_soft_drop_this_piece = true
 	current_board.input_soft_drop(Input.is_action_pressed("soft_drop"))
 
 	if Input.is_action_just_pressed("hard_drop"):
+		_hard_drop_used_this_piece = true
 		current_board.input_hard_drop()
 	if Input.is_action_just_pressed("rotate_cw"):
 		current_board.input_rotate_cw()
@@ -325,6 +361,7 @@ func _handle_input() -> void:
 	if Input.is_action_just_pressed("rotate_180"):
 		current_board.input_rotate_180()
 	if Input.is_action_just_pressed("hold_piece"):
+		_held_this_piece = true
 		current_board.input_hold()
 
 func _tick_timer(delta: float) -> void:
@@ -347,17 +384,58 @@ func _tick_enemy_garbage(delta: float) -> void:
 			else:
 				_garbage_packets.append({lines = n, is_filth = false})
 			_notify_attack_bar()
+			if _technique_round_state:
+				_technique_round_state.after_receive_pending = true
 		_next_garbage_interval = randf_range(current_config.garbage_interval_min, current_config.garbage_interval_max)
 		if _enemy_display:
 			_enemy_display.update_windup(0.0, _next_garbage_interval)
 
+func _tick_burning_board(delta: float) -> void:
+	if not _burning_board_active or current_board == null or not current_board.is_active:
+		return
+	_burning_board_timer += delta
+	if _burning_board_timer >= 5.0:
+		_burning_board_timer -= 5.0
+		quota_accumulated = maxf(0.0, quota_accumulated - 1.0)
+		if hud:
+			hud.update_quota(quota_accumulated, current_config.quota)
+
 # ── Attack signal handler ─────────────────────────────────────────────────
+
+func _on_piece_locked() -> void:
+	if _technique_round_state:
+		var rs := _technique_round_state
+		rs.pieces_placed += 1
+		if rs.pieces_placed % 10 == 0:
+			rs.escalation_pending = true
+		if rs.patience_cooldown_pieces > 0:
+			rs.patience_cooldown_pieces -= 1
+		# Constant Pressure: piece locked within 1 second of spawning
+		var elapsed: float = Time.get_ticks_msec() / 1000.0 - _piece_spawn_time
+		if elapsed <= 1.0:
+			rs.constant_pressure_pending = true
+		# Flow Step: 4 consecutive pieces without rotating
+		if _rotations_this_piece == 0:
+			rs.no_rotate_streak += 1
+			if rs.no_rotate_streak >= 4:
+				rs.flow_step_pending = true
+		else:
+			rs.no_rotate_streak = 0
+		# Good Planning: 5 consecutive pieces without using hold
+		if _held_this_piece:
+			rs.good_planning_consecutive_no_hold = 0
+			rs.good_planning_pending = false
+		else:
+			rs.good_planning_consecutive_no_hold += 1
+			if rs.good_planning_consecutive_no_hold >= 5:
+				rs.good_planning_pending = true
 
 func _on_piece_rotated(piece_type: String) -> void:
 	if piece_type == "T":
 		_t_spin_rotations += 1
 	else:
 		_t_spin_rotations = 0
+	_rotations_this_piece += 1
 
 func _on_rows_cleared(row_indices: Array[int]) -> void:
 	_last_cleared_rows = row_indices
@@ -371,27 +449,39 @@ func _on_b2b_broken(streak: int) -> void:
 			break
 
 func _on_attack_generated(raw_attack: int, event_type: String) -> void:
-	var modified := _apply_techniques(raw_attack, event_type)
-	_accumulate_technique_income(event_type, modified)
+	var is_bonus_event: bool = event_type == "b2b" or event_type == "combo"
+	var ctx := _build_attack_context(raw_attack, event_type)
+
+	# Technique evaluation (only on primary clear events, not b2b/combo bonus events)
+	var technique_atk: int = 0
+	var technique_coins: int = 0
+	if not is_bonus_event and _technique_round_state:
+		var eval_result: Dictionary = TechniqueEvaluator.evaluate(
+			RunState.techniques, ctx, _technique_round_state)
+		technique_atk = eval_result.get("attack_delta", 0)
+		technique_coins = eval_result.get("coins_delta", 0)
+		technique_income_this_round += technique_coins
+		_handle_technique_flags(eval_result.get("flags", []))
+		_update_round_state_after_eval(ctx, eval_result)
+
+	var modified: int = raw_attack + technique_atk
 	modified = _apply_keystone_suppressions(modified, event_type)
 	modified = _apply_keystone_flat_bonuses(modified, event_type)
 	modified = _apply_consumable_flat_bonuses(modified, event_type)
 	modified = _apply_consumable_surge(modified, event_type)
 	modified = _apply_keystone_multipliers(modified, event_type)
 
-	# Apply boss modifier quota filter; bonus events always count if their parent clear qualified
-	var is_bonus_event := event_type == "b2b" or event_type == "combo"
+	# Apply boss modifier quota filter
 	if not is_bonus_event and current_config.boss_modifier:
 		if not current_config.boss_modifier.attack_counts_toward_quota(event_type):
 			return
 
-	# Update per-round trackers (skip bonus events so they don't reset the quad streak)
 	if event_type != "b2b" and event_type != "combo":
 		_last_attack_was_quad = (event_type == "quad")
 	if event_type == "perfect_clear":
 		_pc_count_this_round += 1
 
-	var to_quota := _drain_attack(modified)
+	var to_quota: int = _drain_attack(modified)
 	quota_accumulated += to_quota
 	surplus_attack = maxi(0, int(quota_accumulated) - current_config.quota)
 	if hud:
@@ -405,6 +495,109 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 
 	if quota_accumulated >= current_config.quota:
 		_end_round(true)
+
+func _build_attack_context(raw_attack: int, event_type: String) -> AttackContext:
+	var ctx := AttackContext.new()
+	ctx.garbage_sent = raw_attack
+	ctx.b2b = current_board.is_b2b if current_board else false
+	ctx.combo = current_board.combo if current_board else -1
+	ctx.board_height = current_board.summit_height if current_board else 0
+	ctx.held_this_piece = _held_this_piece
+	ctx.used_soft_drop = _used_soft_drop_this_piece
+	ctx.rotations_this_placement = _rotations_this_piece
+	ctx.piece_placement_count = _technique_round_state.pieces_placed if _technique_round_state else 0
+	ctx.enemy_hp_pct = maxf(0.0, 1.0 - quota_accumulated / maxf(1.0, float(current_config.quota))) if current_config else 1.0
+	match event_type:
+		"single":          ctx.lines_cleared = 1
+		"double":          ctx.lines_cleared = 2
+		"triple":          ctx.lines_cleared = 3
+		"quad":            ctx.lines_cleared = 4
+		"tspin_mini":      ctx.lines_cleared = 1; ctx.tspin = "mini"
+		"tspin_single":    ctx.lines_cleared = 1; ctx.tspin = "single"
+		"tspin_double":    ctx.lines_cleared = 2; ctx.tspin = "double"
+		"tspin_triple":    ctx.lines_cleared = 3; ctx.tspin = "triple"
+		"perfect_clear":   ctx.lines_cleared = 4; ctx.perfect_clear = true
+	return ctx
+
+func _handle_technique_flags(flags: Array) -> void:
+	for flag: String in flags:
+		match flag:
+			"flash_step_arr":
+				_flash_step_arr_pending = true
+			"burning_board":
+				_burning_board_active = true
+			"glass_cannon":
+				pass  # +2 incoming handled in _build_round_config via technique check
+			"greedy_hands":
+				_greedy_hands_active = true
+
+func _update_round_state_after_eval(ctx: AttackContext, _eval: Dictionary) -> void:
+	if _technique_round_state == null:
+		return
+	var rs := _technique_round_state
+	if ctx.lines_cleared > 0:
+		rs.clears_this_round += 1
+		rs.attack_events_this_round += 1
+		rs.total_garbage_sent += ctx.garbage_sent
+
+		# Apply Whirl keystone: T-spins count as 2 combo steps
+		if ctx.tspin != "" and RunState.has_keystone("whirl") and current_board:
+			current_board.combo += 1  # already incremented once in board; add 1 more
+
+		if ctx.tspin != "":
+			rs.tspin_count += 1
+		if ctx.b2b:
+			rs.b2b_count += 1
+		if ctx.perfect_clear:
+			rs.perfect_clear_count += 1
+		if ctx.lines_cleared == 4:
+			rs.tetris_count += 1
+			rs.tetris_echo_pending = true
+			rs.last_clear_was_tetris = true
+		else:
+			rs.last_clear_was_tetris = false
+			rs.tetris_echo_pending = false
+
+		# Consume one-shot pending flags
+		if rs.opening_blow_used == false:
+			rs.opening_blow_used = true
+		if rs.follow_up_pending:
+			rs.follow_up_pending = false
+		else:
+			rs.follow_up_pending = true  # arm for next clear
+		if rs.tetris_echo_pending and ctx.lines_cleared != 4:
+			rs.tetris_echo_pending = false
+		if rs.escalation_pending:
+			rs.escalation_pending = false
+		if rs.after_receive_pending:
+			rs.after_receive_pending = false
+		if rs.patience_pending:
+			rs.patience_pending = false
+			rs.patience_cooldown_pieces = 5
+		if rs.constant_pressure_pending:
+			rs.constant_pressure_pending = false
+		if rs.flow_step_pending:
+			rs.flow_step_pending = false
+		if rs.good_planning_pending:
+			rs.good_planning_pending = false
+
+		# Flash Step: restore ARR after the piece that triggered it locks
+		if _flash_step_arr_pending and current_board:
+			current_board.arr_rate = 0.0
+			_flash_step_arr_pending = false
+
+		# Combo payout: mark used; coins already credited via TechniqueEvaluator
+		if ctx.combo >= 4 and not rs.combo_payout_used:
+			rs.combo_payout_used = true
+
+		# Patience cooldown
+		if _held_this_piece and rs.patience_cooldown_pieces == 0:
+			rs.patience_pending = true
+
+	# Reset per-piece flags
+	_held_this_piece = false
+	_used_soft_drop_this_piece = false
+	_rotations_this_piece = 0
 
 # ── Keystone attack modifiers ─────────────────────────────────────────────
 
@@ -438,7 +631,7 @@ func _apply_keystone_flat_bonuses(attack: int, event_type: String) -> int:
 				bonus += ks.quad_bonus
 				if ks.per_technique_quad_bonus > 0:
 					for t in RunState.techniques:
-						if t.flat_bonus_by_event.get("quad", 0) > 0 or t.flat_bonus_by_event.get("any_clear", 0) > 0:
+						if "tetris" in t.tags or "general" in t.tags:
 							bonus += ks.per_technique_quad_bonus
 			"tspin_mini":
 				bonus += ks.tspin_mini_bonus + ks.tspin_any_bonus
@@ -446,19 +639,19 @@ func _apply_keystone_flat_bonuses(attack: int, event_type: String) -> int:
 				bonus += ks.tspin_single_bonus + ks.tspin_any_bonus
 				if ks.per_technique_tspin_bonus > 0:
 					for t in RunState.techniques:
-						if t.flat_bonus_by_event.get("tspin_single", 0) > 0 or t.flat_bonus_by_event.get("tspin_any", 0) > 0 or t.flat_bonus_by_event.get("any_clear", 0) > 0:
+						if "tspin" in t.tags:
 							bonus += ks.per_technique_tspin_bonus
 			"tspin_double":
 				bonus += ks.tspin_double_bonus + ks.tspin_any_bonus
 				if ks.per_technique_tspin_bonus > 0:
 					for t in RunState.techniques:
-						if t.flat_bonus_by_event.get("tspin_double", 0) > 0 or t.flat_bonus_by_event.get("tspin_any", 0) > 0 or t.flat_bonus_by_event.get("any_clear", 0) > 0:
+						if "tspin" in t.tags:
 							bonus += ks.per_technique_tspin_bonus
 			"tspin_triple":
 				bonus += ks.tspin_triple_bonus + ks.tspin_any_bonus
 				if ks.per_technique_tspin_bonus > 0:
 					for t in RunState.techniques:
-						if t.flat_bonus_by_event.get("tspin_triple", 0) > 0 or t.flat_bonus_by_event.get("tspin_any", 0) > 0 or t.flat_bonus_by_event.get("any_clear", 0) > 0:
+						if "tspin" in t.tags:
 							bonus += ks.per_technique_tspin_bonus
 			"b2b":
 				bonus += ks.b2b_bonus
@@ -505,26 +698,6 @@ func _apply_keystone_multipliers(attack: int, event_type: String) -> int:
 					break
 	return int(float(attack) * mult)
 
-func _apply_techniques(raw_attack: int, event_type: String) -> int:
-	var result := raw_attack
-	for technique in RunState.techniques:
-		result += technique.get_flat_bonus(event_type)
-		if technique.b2b_bonus_override > 0 and event_type == Technique.EVENT_B2B:
-			result += technique.b2b_bonus_override - 1  # already have base +1
-		if technique.combo_bonus_per_step > 0 and event_type == Technique.EVENT_COMBO:
-			result += technique.combo_bonus_per_step
-		if technique.avalanche_threshold > 0 and current_board.combo >= technique.avalanche_threshold:
-			result *= 2
-		if technique.perfect_clear_bonus > 0 and event_type == Technique.EVENT_PERFECT_CLEAR:
-			result += technique.perfect_clear_bonus
-	return maxi(0, result)
-
-func _accumulate_technique_income(event_type: String, _modified_attack: int) -> void:
-	for technique in RunState.techniques:
-		if technique.coins_per_tspin > 0 and "tspin" in event_type:
-			technique_income_this_round += technique.coins_per_tspin
-		if technique.coins_per_b2b > 0 and event_type == Technique.EVENT_B2B:
-			technique_income_this_round += technique.coins_per_b2b
 
 # ── Attack buffer helpers ─────────────────────────────────────────────────
 
@@ -610,13 +783,30 @@ func _apply_keystone_economy() -> void:
 func _calculate_surplus_income() -> int:
 	var income := 0
 	for technique in RunState.techniques:
-		if technique.coins_per_attack_above_quota > 0:
-			income += surplus_attack / technique.surplus_divisor
+		if technique.effect_type == "economy" and technique.params.get("trigger", "") == "surplus":
+			var divisor: int = technique.params.get("divisor", 3)
+			income += surplus_attack / divisor
+	# Greedy Hands: +2 coins per round
+	if _greedy_hands_active:
+		income += 2
+	# Bounty List: +10 coins on boss kill
+	if RunState.is_boss_round() and RunState.has_technique("bounty_list"):
+		income += 10
 	return income
 
 func _on_lock_processed() -> void:
 	_t_spin_rotations = 0
+	_rotations_this_piece = 0
 	_last_cleared_rows = []
+	_piece_spawn_time = Time.get_ticks_msec() / 1000.0
+	# Switch-Up: arm for next piece based on whether THIS piece was hard-dropped
+	if _technique_round_state:
+		_technique_round_state.switch_up_armed = _hard_drop_used_this_piece
+	_hard_drop_used_this_piece = false
+	# Restore ARR after flash_step piece (the next piece after the 2+ clear is now locking)
+	if _flash_step_arr_pending and current_board:
+		current_board.arr_rate = Settings.load_arr()
+		_flash_step_arr_pending = false
 	if hud and current_board:
 		hud.update_b2b_combo(current_board.is_b2b, current_board.b2b_count, current_board.combo)
 	_flush_pending_garbage()

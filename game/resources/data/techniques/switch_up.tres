@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "switch_up"
+display_name = "Switch-Up"
+description = "After a hard drop, your next soft-drop placement sends +1 attack if it clears a line."
+cost = 4
+tags = ["speed"]
+effect_type = "switch_up"
+params = {"bonus": 1}

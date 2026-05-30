@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "aggressive_positioning"
+display_name = "Aggressive Positioning"
+description = "T-spins performed above 60% board height send +4 attack."
+cost = 7
+tags = ["tspin", "risk"]
+effect_type = "flat"
+params = {"on": "tspin", "board_above_pct": 0.6, "bonus": 4}

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "redzone"
+display_name = "Redzone"
+description = "While above 70% board height, attacks send +3."
+cost = 6
+tags = ["risk"]
+effect_type = "flat"
+params = {"on": "all_clear", "board_above_pct": 0.7, "bonus": 3}

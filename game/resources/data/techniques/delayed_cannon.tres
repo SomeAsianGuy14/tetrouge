@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "delayed_cannon"
+display_name = "Delayed Cannon"
+description = "Every second Tetris sends +5 attack instead of the usual bonus."
+cost = 7
+tags = ["tetris"]
+effect_type = "delayed_cannon"
+params = {"base_bonus": 3, "spike_bonus": 5}

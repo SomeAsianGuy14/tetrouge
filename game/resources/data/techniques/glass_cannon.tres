@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "glass_cannon"
+display_name = "Glass Cannon"
+description = "All attacks send +4, but incoming garbage is +2."
+cost = 7
+tags = ["risk"]
+effect_type = "glass_cannon"
+params = {"attack_bonus": 4}

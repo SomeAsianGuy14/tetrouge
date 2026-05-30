@@ -68,6 +68,9 @@ var is_active: bool = false
 var is_on_ground: bool = false
 var soft_dropping: bool = false
 
+# ── Telemetry ─────────────────────────────────────────────────────────────
+var summit_height: int = 0  # rows from top to highest filled cell (0=empty, 20=full)
+
 # ── Attack tracking ───────────────────────────────────────────────────────
 var combo: int = -1
 var is_b2b: bool = false
@@ -350,6 +353,7 @@ func _process_clears(piece_type: String, pivot: Vector2i, rotation: int, was_rot
 	var clear_type := _get_clear_type(clear_count, is_tspin, is_pc)
 	var is_qualifying := clear_type in ["quad", "tspin_single", "tspin_double", "tspin_triple", "tspin_mini", "perfect_clear"]
 
+	_update_summit_height()
 	emit_signal("lines_cleared", clear_count, clear_type)
 	emit_signal("rows_cleared", cleared_rows)
 	_emit_attack_events(clear_type, is_qualifying, is_pc, was_rotation)
@@ -522,7 +526,18 @@ func insert_garbage_rows(count: int, col: int) -> void:
 		garbage[col] = 0
 		grid.append(garbage)
 	_update_ghost()
+	_update_summit_height()
 	emit_signal("board_updated")
+
+# ── Board telemetry ───────────────────────────────────────────────────────
+
+func _update_summit_height() -> void:
+	summit_height = 0
+	for r in range(HIDDEN_ROWS, TOTAL_ROWS):
+		for c in range(COLS):
+			if grid[r][c] != 0:
+				summit_height = r - HIDDEN_ROWS + 1
+				return
 
 # ── Board query helpers ───────────────────────────────────────────────────
 

@@ -4,8 +4,10 @@
 
 [resource]
 script = ExtResource("1")
-id = "momentum"
-display_name = "Momentum"
-description = "Back-to-back bonus is +2 instead of +1."
+id = "flurry"
+display_name = "Flurry"
+description = "Singles during a combo send +1 attack."
 cost = 5
-b2b_bonus_override = 2
+tags = ["combo"]
+effect_type = "flurry"
+params = {"bonus": 1}

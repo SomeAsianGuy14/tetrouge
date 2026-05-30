@@ -10,7 +10,11 @@
       "Read(//usr/**)",
       "Read(//usr/local/**)",
       "Bash(godot --version)",
-      "Bash(godot --headless --path . -s addons/gut/gut_cmdln.gd)"
+      "Bash(godot --headless --path . -s addons/gut/gut_cmdln.gd)",
+      "Bash(dir /s /b \"c:\\\\School\\\\PP\\\\TR\\\\game\\\\*shop*\")",
+      "Bash(rm game/resources/data/techniques/avalanche.tres game/resources/data/techniques/chain_reaction.tres game/resources/data/techniques/efficiency.tres game/resources/data/techniques/momentum.tres game/resources/data/techniques/perfectionist.tres game/resources/data/techniques/persistence.tres game/resources/data/techniques/specialist.tres game/resources/data/techniques/stylist.tres game/resources/data/techniques/surplus.tres game/resources/data/techniques/windfall.tres)",
+      "Bash(ls game/resources/data/techniques/)",
+      "Bash(\"/c/Users/user/bin/godot.exe\" --headless -s addons/gut/gut_cmdln.gd -gdir=res://tests/unit -gprefix=test_ -gsuffix=.gd -gexit)"
     ]
   }
 }

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "constant_pressure"
+display_name = "Constant Pressure"
+description = "If a piece locks within 1 second of spawning, your next clear sends +1 attack."
+cost = 4
+tags = ["speed"]
+effect_type = "constant_pressure"
+params = {"bonus": 1}
