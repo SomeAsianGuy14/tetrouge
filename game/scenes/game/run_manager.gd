@@ -64,6 +64,7 @@ var _held_this_piece: bool = false
 var _used_soft_drop_this_piece: bool = false
 var _hard_drop_used_this_piece: bool = false
 var _rotations_this_piece: int = 0
+var _locked_pivot_col: int = -1
 var _piece_spawn_time: float = 0.0
 var _burning_board_timer: float = 0.0
 var _burning_board_active: bool = false
@@ -403,6 +404,7 @@ func _tick_burning_board(delta: float) -> void:
 # ── Attack signal handler ─────────────────────────────────────────────────
 
 func _on_piece_locked() -> void:
+	_locked_pivot_col = current_board.current_pivot.x if current_board else -1
 	if _technique_round_state:
 		var rs := _technique_round_state
 		rs.pieces_placed += 1
@@ -505,6 +507,7 @@ func _build_attack_context(raw_attack: int, event_type: String) -> AttackContext
 	ctx.held_this_piece = _held_this_piece
 	ctx.used_soft_drop = _used_soft_drop_this_piece
 	ctx.rotations_this_placement = _rotations_this_piece
+	ctx.locked_col = _locked_pivot_col
 	ctx.piece_placement_count = _technique_round_state.pieces_placed if _technique_round_state else 0
 	ctx.enemy_hp_pct = maxf(0.0, 1.0 - quota_accumulated / maxf(1.0, float(current_config.quota))) if current_config else 1.0
 	match event_type:
@@ -631,7 +634,7 @@ func _apply_keystone_flat_bonuses(attack: int, event_type: String) -> int:
 				bonus += ks.quad_bonus
 				if ks.per_technique_quad_bonus > 0:
 					for t in RunState.techniques:
-						if "tetris" in t.tags or "general" in t.tags:
+						if "quad" in t.tags or "general" in t.tags:
 							bonus += ks.per_technique_quad_bonus
 			"tspin_mini":
 				bonus += ks.tspin_mini_bonus + ks.tspin_any_bonus

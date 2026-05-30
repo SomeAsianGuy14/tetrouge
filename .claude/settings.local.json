@@ -14,7 +14,19 @@
       "Bash(dir /s /b \"c:\\\\School\\\\PP\\\\TR\\\\game\\\\*shop*\")",
       "Bash(rm game/resources/data/techniques/avalanche.tres game/resources/data/techniques/chain_reaction.tres game/resources/data/techniques/efficiency.tres game/resources/data/techniques/momentum.tres game/resources/data/techniques/perfectionist.tres game/resources/data/techniques/persistence.tres game/resources/data/techniques/specialist.tres game/resources/data/techniques/stylist.tres game/resources/data/techniques/surplus.tres game/resources/data/techniques/windfall.tres)",
       "Bash(ls game/resources/data/techniques/)",
-      "Bash(\"/c/Users/user/bin/godot.exe\" --headless -s addons/gut/gut_cmdln.gd -gdir=res://tests/unit -gprefix=test_ -gsuffix=.gd -gexit)"
+      "Bash(\"/c/Users/user/bin/godot.exe\" --headless -s addons/gut/gut_cmdln.gd -gdir=res://tests/unit -gprefix=test_ -gsuffix=.gd -gexit)",
+      "Bash(PowerShell -Command \"Remove-Item 'game\\\\resources\\\\data\\\\vouchers\\\\sharp_eye.tres'\")",
+      "Bash(PowerShell -Command \"Copy-Item 'game\\\\resources\\\\data\\\\keystones\\\\simple_bow.tres' 'game\\\\resources\\\\data\\\\keystones\\\\simple_flail.tres'; Remove-Item 'game\\\\resources\\\\data\\\\keystones\\\\simple_bow.tres'\")",
+      "Bash(\"C:\\\\Users\\\\user\\\\AppData\\\\Local\\\\Programs\\\\Godot\\\\Godot_v4.4.1-stable_win64.exe\" --headless --path game res://tests/run_tests.tscn)",
+      "Read(//c/Program Files/**)",
+      "PowerShell(& \"C:\\\\Users\\\\user\\\\bin\\\\godot.exe\" --version 2>&1)",
+      "PowerShell(& \"C:\\\\Users\\\\user\\\\bin\\\\godot.exe\" --headless --path \"c:\\\\School\\\\PP\\\\TR\\\\game\" \"res://tests/run_tests.tscn\" 2>&1)",
+      "PowerShell($file = \"C:\\\\Users\\\\user\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--School-PP-TR\\\\60097419-26ec-4905-a3ec-90c15c4879dd\\\\tasks\\\\b1skf76mz.output\"; if \\(Test-Path $file\\) { $size = \\(Get-Item $file\\).Length; Write-Output \"Size: $size bytes\" } else { Write-Output \"File not found\" })",
+      "PowerShell(Start-Sleep -Seconds 15; $file = \"C:\\\\Users\\\\user\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--School-PP-TR\\\\60097419-26ec-4905-a3ec-90c15c4879dd\\\\tasks\\\\bb91fy0rr.output\"; \\(Get-Item $file\\).Length)",
+      "PowerShell($logPath = \"$env:APPDATA\\\\Godot\\\\app_userdata\\\\TR\\\\logs\"; if \\(Test-Path $logPath\\) { Get-ChildItem $logPath | Sort-Object LastWriteTime -Descending | Select-Object -First 5 | Select-Object Name, LastWriteTime, Length })",
+      "PowerShell(Get-ChildItem \"$env:APPDATA\\\\Godot\" -Recurse -ErrorAction SilentlyContinue | Select-Object FullName | Select-Object -First 20)",
+      "PowerShell(Test-Path \"$env:APPDATA\\\\Godot\"; $env:APPDATA)",
+      "PowerShell(Get-ChildItem \"$env:APPDATA\\\\Godot\" -ErrorAction SilentlyContinue | Select-Object FullName)"
     ]
   }
 }

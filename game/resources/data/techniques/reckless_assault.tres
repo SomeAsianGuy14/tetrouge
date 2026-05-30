@@ -6,8 +6,8 @@
 script = ExtResource("1")
 id = "reckless_assault"
 display_name = "Reckless Assault"
-description = "If your board is above 60% height, Tetrises send +4 attack."
+description = "If your board is above 60% height, Quads send +4 attack."
 cost = 7
-tags = ["tetris", "risk"]
+tags = ["quad", "risk"]
 effect_type = "flat"
 params = {"on": "quad", "board_above_pct": 0.6, "bonus": 4}

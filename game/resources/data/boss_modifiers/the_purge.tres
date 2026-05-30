@@ -6,5 +6,5 @@
 script = ExtResource("1")
 id = "the_aristocrat"
 display_name = "The Aristocrat"
-description = "Only Tetrises and T-spins count toward the quota."
+description = "Only Quads and T-spins count toward the quota."
 quota_whitelist = ["quad", "tspin_single", "tspin_double", "tspin_triple", "perfect_clear"]

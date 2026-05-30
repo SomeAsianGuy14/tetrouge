@@ -150,6 +150,11 @@ static func _eval_attack(t: Resource, ctx: AttackContext, rs: TechniqueRoundStat
 				return p.get("bonus", 5)
 			return 0
 
+		"side_strike":
+			if ctx.lines_cleared == 4 and (ctx.locked_col == 0 or ctx.locked_col >= 6):
+				return p.get("bonus", 1)
+			return 0
+
 		"tspin_garbage":
 			if is_tspin and ctx.garbage_sent > 0:
 				return p.get("bonus", 3)

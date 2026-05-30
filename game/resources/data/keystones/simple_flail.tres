@@ -4,9 +4,10 @@
 
 [resource]
 script = ExtResource("1")
-id = "simple_bag"
-display_name = "Simple Bag"
-description = "Gain one extra hold slot."
+id = "simple_flail"
+display_name = "Simple Flail"
+description = "Singles and doubles deal +1 damage."
 is_starter = true
 category = "Starter"
-hold_slots_bonus = 1
+single_bonus = 1
+double_bonus = 1

@@ -216,6 +216,42 @@ func test_enemy_hp_below_fires_only_at_low_hp() -> void:
 	assert_eq(_TechniqueEvaluator.compute_attack_bonus([t], ctx_low, rs), 1)
 	assert_eq(_TechniqueEvaluator.compute_attack_bonus([t], ctx_high, rs), 0)
 
+func test_side_strike_fires_on_quad_at_far_left_col() -> void:
+	var t := Technique.new()
+	t.effect_type = "side_strike"
+	t.params = {"bonus": 1}
+	var ctx := _make_ctx(4)
+	ctx.locked_col = 0
+	var rs := TechniqueRoundState.new()
+	assert_eq(_TechniqueEvaluator.compute_attack_bonus([t], ctx, rs), 1)
+
+func test_side_strike_fires_on_quad_at_far_right_col() -> void:
+	var t := Technique.new()
+	t.effect_type = "side_strike"
+	t.params = {"bonus": 1}
+	var ctx := _make_ctx(4)
+	ctx.locked_col = 6
+	var rs := TechniqueRoundState.new()
+	assert_eq(_TechniqueEvaluator.compute_attack_bonus([t], ctx, rs), 1)
+
+func test_side_strike_does_not_fire_on_quad_at_centre_col() -> void:
+	var t := Technique.new()
+	t.effect_type = "side_strike"
+	t.params = {"bonus": 1}
+	var ctx := _make_ctx(4)
+	ctx.locked_col = 3
+	var rs := TechniqueRoundState.new()
+	assert_eq(_TechniqueEvaluator.compute_attack_bonus([t], ctx, rs), 0)
+
+func test_side_strike_does_not_fire_on_non_quad_even_at_edge() -> void:
+	var t := Technique.new()
+	t.effect_type = "side_strike"
+	t.params = {"bonus": 1}
+	var ctx := _make_ctx(2)
+	ctx.locked_col = 0
+	var rs := TechniqueRoundState.new()
+	assert_eq(_TechniqueEvaluator.compute_attack_bonus([t], ctx, rs), 0)
+
 func test_rotation_training_fires_at_two_or_more_rotations() -> void:
 	var t := Technique.new()
 	t.effect_type = "rotation_training"

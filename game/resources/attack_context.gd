@@ -11,5 +11,6 @@ extends Resource
 @export var held_this_piece: bool = false
 @export var used_soft_drop: bool = false
 @export var rotations_this_placement: int = 0
+@export var locked_col: int = -1
 @export var piece_placement_count: int = 0
 @export var enemy_hp_pct: float = 1.0   # 0.0–1.0; used by Finisher

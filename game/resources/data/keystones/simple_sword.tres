@@ -6,7 +6,7 @@
 script = ExtResource("1")
 id = "simple_sword"
 display_name = "Simple Sword"
-description = "Tetrises deal +2 damage."
+description = "Quads deal +2 damage."
 is_starter = true
 category = "Starter"
 quad_bonus = 2

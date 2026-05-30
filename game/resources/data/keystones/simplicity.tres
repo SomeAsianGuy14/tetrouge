@@ -6,7 +6,7 @@
 script = ExtResource("1")
 id = "simplicity"
 display_name = "Simplicity"
-description = "Tetrises deal 2x damage. T-Spins deal no damage."
+description = "Quads deal 2x damage. T-Spins deal no damage."
 category = "Quad"
 quad_multiplier = 2.0
 suppress_spins = true

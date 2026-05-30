@@ -1,11 +1,2 @@
-res://scenes/game/attack_bar.gd
-res://scenes/game/run_manager.gd
-res://scenes/screens/settings.gd
 res://scenes/tetris/tetris_board.gd
-res://autoloads/run_state.gd
-res://resources/technique.gd
-res://resources/attack_context.gd
-res://resources/keystone.gd
-res://resources/technique_round_state.gd
-res://scenes/game/technique_evaluator.gd
-res://scenes/shop/shop.gd
+res://tests/unit/test_hold_queue.gd

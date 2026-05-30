@@ -6,8 +6,8 @@
 script = ExtResource("1")
 id = "side_strike"
 display_name = "Side Strike"
-description = "Tetrises send +1 extra attack."
+description = "If a Quad clear uses the far-left or far-right column, send +1 extra attack."
 cost = 4
 tags = ["tetris", "precision"]
-effect_type = "flat"
-params = {"on": "quad", "bonus": 1}
+effect_type = "side_strike"
+params = {"bonus": 1}

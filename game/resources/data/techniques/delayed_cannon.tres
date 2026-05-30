@@ -6,8 +6,8 @@
 script = ExtResource("1")
 id = "delayed_cannon"
 display_name = "Delayed Cannon"
-description = "Every second Tetris sends +5 attack instead of the usual bonus."
+description = "Every second Quad sends +5 attack instead of the usual bonus."
 cost = 7
-tags = ["tetris"]
+tags = ["quad"]
 effect_type = "delayed_cannon"
 params = {"base_bonus": 3, "spike_bonus": 5}

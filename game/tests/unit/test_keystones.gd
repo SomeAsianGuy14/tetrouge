@@ -25,7 +25,6 @@ func before_each() -> void:
 	_rm._last_cleared_rows = []
 	_rm.surplus_attack = 0
 	_rm.round_timer = 0.0
-	_rm.pending_garbage = 0
 
 func after_each() -> void:
 	_rm.free()
@@ -37,9 +36,9 @@ func after_each() -> void:
 func _make_keystone() -> Keystone:
 	return Keystone.new()
 
-func _make_technique(event: String, bonus: int) -> Technique:
+func _make_technique(event: String) -> Technique:
 	var t := Technique.new()
-	t.flat_bonus_by_event = {event: bonus}
+	t.tags = [event]
 	return t
 
 # ── Suppression ────────────────────────────────────────────────────────────
@@ -68,8 +67,8 @@ func test_per_technique_quad_bonus_counts_applicable_techniques() -> void:
 	var ks := _make_keystone()
 	ks.per_technique_quad_bonus = 2
 	RunState.keystones.append(ks)
-	RunState.techniques.append(_make_technique("quad", 1))
-	RunState.techniques.append(_make_technique("quad", 1))
+	RunState.techniques.append(_make_technique("quad"))
+	RunState.techniques.append(_make_technique("quad"))
 	# 4 base + (2 per technique * 2 techniques) = 8
 	assert_eq(_rm._apply_keystone_flat_bonuses(4, "quad"), 8)
 
@@ -158,10 +157,15 @@ func test_pc_after_first_multiplier_applies_on_subsequent_pcs() -> void:
 
 func test_garbage_flush_reduction_reduces_flush_amount() -> void:
 	_rm.current_config.garbage_flush_reduction = 2
-	_rm.pending_garbage = 5
-	var flushed := _rm._flush_pending_garbage()
-	assert_eq(flushed, 3)
-	assert_eq(_rm.pending_garbage, 2)
+	_rm._garbage_packets.append({lines = 10, is_filth = false})
+	var board := TetrisBoard.new()
+	board.setup(_rm.current_config)
+	_rm.current_board = board
+	_rm._flush_pending_garbage()
+	# capacity = 8 - reduction(2) = 6; 10 lines - 6 flushed = 4 remaining
+	assert_eq(_rm._garbage_packets[0].lines, 4)
+	board.free()
+	_rm.current_board = null
 
 # ── Economy ───────────────────────────────────────────────────────────────
 

@@ -8,6 +8,6 @@ id = "sharpen"
 display_name = "Sharpen"
 description = "Quads send +2 attack."
 cost = 5
-tags = ["general", "tetris"]
+tags = ["general", "quad"]
 effect_type = "flat"
 params = {"on": "quad", "bonus": 2}

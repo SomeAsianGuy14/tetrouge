@@ -6,6 +6,6 @@
 script = ExtResource("1")
 id = "dual_wielding"
 display_name = "Dual Wielding"
-description = "Consecutive Tetrises deal 2x damage."
+description = "Consecutive Quads deal 2x damage."
 category = "Quad"
 consecutive_quad_multiplier = 2.0

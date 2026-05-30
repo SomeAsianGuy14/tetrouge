@@ -4,10 +4,9 @@
 
 [resource]
 script = ExtResource("1")
-id = "simple_bow"
-display_name = "Simple Bow"
-description = "Singles and doubles deal +1 damage."
+id = "slightly_magical_bag"
+display_name = "Slightly Magical Bag"
+description = "Gain one extra hold slot and freely swap held pieces without lockout."
 is_starter = true
 category = "Starter"
-single_bonus = 1
-double_bonus = 1
+hold_slots_bonus = 1

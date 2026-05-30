@@ -24,7 +24,7 @@ func _draw_three_keystones() -> Array:
 			if f.ends_with(".tres"):
 				var ks: Keystone = load("res://resources/data/keystones/" + f)
 				if ks and ks.id not in RunState.used_keystone_ids:
-					if not starter_only or ks.is_starter:
+					if ks.is_starter == starter_only:
 						if ks.requires_keystone_id == "" or ks.requires_keystone_id in RunState.used_keystone_ids:
 							all_keystones.append(ks)
 			f = dir.get_next()

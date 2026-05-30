@@ -26,7 +26,6 @@ var used_keystone_ids: Array = []     # ids already owned this run
 var shop_technique_slots: int = 3
 var consumable_capacity: int = 3
 var technique_capacity: int = 4
-var sharp_eye_active: bool = false
 
 signal run_started
 signal round_changed(stage: int, round_index: int)
@@ -44,7 +43,6 @@ func reset() -> void:
 	shop_technique_slots = 3
 	consumable_capacity = 3
 	technique_capacity = 4
-	sharp_eye_active = false
 	run_seed = randi()
 	rng.seed = run_seed
 
@@ -120,8 +118,6 @@ func _apply_voucher_effects(voucher) -> void:
 			consumable_capacity = 3
 		"bonus_round":
 			Economy.speed_bonus_multiplier = 2.0
-		"sharp_eye":
-			sharp_eye_active = true
 
 func calculate_quota(current_stage: int, current_round: int) -> int:
 	return 20 + (current_stage - 1) * 15 + current_round * 8

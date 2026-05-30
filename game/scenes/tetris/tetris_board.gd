@@ -211,18 +211,16 @@ func input_rotate_180() -> void:
 func input_hold() -> void:
 	if config.hold_disabled:
 		return
-	if hold_used and config.hold_lockout_enabled:
+	if hold_used and config.hold_lockout_enabled and config.hold_slots <= 1:
 		return
-	var swap_type := current_type
-	if held_pieces.size() > 0:
-		current_type = held_pieces[0]
-		held_pieces[0] = swap_type
-	else:
-		held_pieces.append(swap_type)
+	var held_type := current_type
+	if held_pieces.size() < config.hold_slots:
+		held_pieces.append(held_type)
 		current_type = piece_queue.pop_front()
 		_fill_queue()
-	if config.hold_slots > 1 and held_pieces.size() < config.hold_slots:
-		pass  # second slot stays empty until filled
+	else:
+		current_type = held_pieces.pop_front()
+		held_pieces.push_back(held_type)
 	current_rotation = 0
 	current_pivot = Vector2i(PieceData.SPAWN_COL, PieceData.SPAWN_ROW)
 	hold_used = true
@@ -240,7 +238,11 @@ func _move_horizontal(dir: int) -> void:
 	if _try_move(new_pivot):
 		last_move_was_rotation = false
 		if is_on_ground:
-			_reset_lock()
+			if _cells_valid(current_type, current_rotation, current_pivot + Vector2i(0, 1)):
+				is_on_ground = false
+				lock_timer = 0.0
+			else:
+				_reset_lock()
 
 func _try_move(new_pivot: Vector2i) -> bool:
 	if _cells_valid(current_type, current_rotation, new_pivot):

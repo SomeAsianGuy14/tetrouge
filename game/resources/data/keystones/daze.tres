@@ -6,6 +6,6 @@
 script = ExtResource("1")
 id = "daze"
 display_name = "Daze"
-description = "Tetrises delay the next garbage drop by 2 seconds."
+description = "Quads delay the next garbage drop by 2 seconds."
 category = "Quad"
 daze_stun_seconds = 2.0
