@@ -1,0 +1,11 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "blessed_stone"
+display_name = "Blessed Stone"
+description = "The first time you would die, your board is cleared and you gain 2 minutes."
+category = "Utility"
+blessed_stone = true

@@ -108,6 +108,18 @@ func setup(round_config: RoundConfig) -> void:
 	spawn_next_piece()
 	is_active = true
 
+func clear_board() -> void:
+	_init_grid()
+	held_pieces.clear()
+	hold_used = false
+	combo = -1
+	is_b2b = false
+	b2b_count = 0
+	piece_queue.clear()
+	_fill_queue()
+	spawn_next_piece()
+	queue_redraw()
+
 func _init_grid() -> void:
 	grid = []
 	for _r in range(TOTAL_ROWS):

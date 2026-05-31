@@ -82,6 +82,11 @@ func has_voucher(id: String) -> bool:
 	return false
 
 func add_keystone(keystone) -> void:
+	if keystone.replaces_keystone_id != "":
+		for i in range(keystones.size() - 1, -1, -1):
+			if keystones[i].id == keystone.replaces_keystone_id:
+				keystones.remove_at(i)
+				break
 	keystones.append(keystone)
 	used_keystone_ids.append(keystone.id)
 	_apply_keystone_effects(keystone)

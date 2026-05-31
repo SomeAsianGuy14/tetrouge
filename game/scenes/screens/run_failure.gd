@@ -6,7 +6,7 @@ extends Control
 @onready var menu_button: Button = $Panel/VBox/MenuButton
 
 func setup(ante: int, round_index: int) -> void:
-	message_label.text = "Run ended at Stage %d — %s\n\nQuota not met in time." % [ante, RunState.ROUND_NAMES[round_index]]
+	message_label.text = "Run ended at Stage %d — %s\n\nFailed to defeat the enemy in time." % [ante, RunState.ROUND_NAMES[round_index]]
 	restart_button.connect("pressed", _on_restart)
 	menu_button.connect("pressed", _on_menu)
 

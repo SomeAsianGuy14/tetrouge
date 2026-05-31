@@ -1,0 +1,14 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "mace_and_chain"
+display_name = "Mace and Chain"
+description = "Singles and Doubles deal +3 damage. Requires: Simple Flail."
+category = "Starter"
+requires_keystone_id = "simple_flail"
+replaces_keystone_id = "simple_flail"
+single_bonus = 3
+double_bonus = 3

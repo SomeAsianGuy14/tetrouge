@@ -1,2 +1,14 @@
+res://scenes/game/enemy_display.gd
+res://scenes/game/run_manager.gd
+res://scenes/shop/shop.gd
+res://scripts/run_save.gd
+res://autoloads/resource_registry.gd
+res://autoloads/run_state.gd
+res://resources/keystone.gd
+res://resources/technique.gd
+res://resources/data/keystones/double_trouble.tres
+res://resources/data/keystones/great_sword.tres
+res://resources/data/keystones/magical_coin.tres
+res://resources/data/keystones/simple_shield.tres
+res://resources/data/keystones/triple_threat.tres
 res://scenes/tetris/tetris_board.gd
-res://tests/unit/test_hold_queue.gd

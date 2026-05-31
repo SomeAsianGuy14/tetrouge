@@ -15,19 +15,12 @@ func _ready() -> void:
 	_populate_options()
 
 func _draw_three_keystones() -> Array:
-	var dir := DirAccess.open("res://resources/data/keystones/")
 	var all_keystones := []
-	if dir:
-		dir.list_dir_begin()
-		var f := dir.get_next()
-		while f != "":
-			if f.ends_with(".tres"):
-				var ks: Keystone = load("res://resources/data/keystones/" + f)
-				if ks and ks.id not in RunState.used_keystone_ids:
-					if ks.is_starter == starter_only:
-						if ks.requires_keystone_id == "" or ks.requires_keystone_id in RunState.used_keystone_ids:
-							all_keystones.append(ks)
-			f = dir.get_next()
+	for ks in ResourceRegistry.all_keystones:
+		if ks.id not in RunState.used_keystone_ids:
+			if ks.is_starter == starter_only:
+				if ks.requires_keystone_id == "" or ks.requires_keystone_id in RunState.used_keystone_ids:
+					all_keystones.append(ks)
 	RunState.seeded_shuffle(all_keystones)
 	return all_keystones.slice(0, 3)
 

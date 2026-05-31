@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "crystal_staff"
+display_name = "Crystal Staff"
+description = "All T-Spins deal +10 damage. Requires: Simple Wand."
+category = "Starter"
+requires_keystone_id = "simple_wand"
+replaces_keystone_id = "simple_wand"
+tspin_any_bonus = 10

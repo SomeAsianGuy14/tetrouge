@@ -6,7 +6,8 @@
 script = ExtResource("1")
 id = "great_sword"
 display_name = "Great Sword"
-description = "Quads deal +8 damage. Requires: Slightly Magical Coin."
+description = "Quads deal +10 damage. Requires: Simple Sword."
 category = "Quad"
-requires_keystone_id = "slightly_magical_coin"
-quad_bonus = 8
+requires_keystone_id = "simple_sword"
+replaces_keystone_id = "simple_sword"
+quad_bonus = 10

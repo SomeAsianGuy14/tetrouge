@@ -6,8 +6,6 @@
 script = ExtResource("1")
 id = "triple_threat"
 display_name = "Triple Threat"
-description = "T-Spin Triples deal 3x damage. T-Spin Singles and Doubles deal no damage."
+description = "T-Spin Triples deal 3x damage."
 category = "T-Spin"
 tspin_triple_multiplier = 3.0
-suppress_tspin_single = true
-suppress_tspin_double = true

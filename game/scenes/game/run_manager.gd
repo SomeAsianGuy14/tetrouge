@@ -71,6 +71,8 @@ var _burning_board_active: bool = false
 var _flash_step_arr_pending: bool = false
 var _greedy_hands_active: bool = false
 
+var _blessed_stone_spent: bool = false
+
 var _paused: bool = false
 var _pause_menu: Control = null
 var _board_was_active: bool = false
@@ -252,17 +254,10 @@ func _build_round_config() -> RoundConfig:
 	return cfg
 
 func _load_enemy_pool(tier: String) -> Array:
-	var dir := DirAccess.open("res://resources/data/enemies/")
 	var result := []
-	if dir:
-		dir.list_dir_begin()
-		var f := dir.get_next()
-		while f != "":
-			if f.ends_with(".tres"):
-				var res := load("res://resources/data/enemies/" + f)
-				if res != null and res.tier == tier:
-					result.append(res)
-			f = dir.get_next()
+	for res in ResourceRegistry.all_enemies:
+		if res.tier == tier:
+			result.append(res)
 	return result
 
 func _draw_enemy() -> Enemy:
@@ -369,6 +364,8 @@ func _tick_timer(delta: float) -> void:
 	round_timer -= delta
 	hud.update_timer(round_timer)
 	if round_timer <= 0.0:
+		if _try_blessed_stone():
+			return
 		_end_round(false)
 
 func _tick_enemy_garbage(delta: float) -> void:
@@ -397,9 +394,8 @@ func _tick_burning_board(delta: float) -> void:
 	_burning_board_timer += delta
 	if _burning_board_timer >= 5.0:
 		_burning_board_timer -= 5.0
-		quota_accumulated = maxf(0.0, quota_accumulated - 1.0)
-		if hud:
-			hud.update_quota(quota_accumulated, current_config.quota)
+		var col := randi() % current_config.board_width
+		current_board.insert_garbage_rows(1, col)
 
 # ── Attack signal handler ─────────────────────────────────────────────────
 
@@ -482,6 +478,18 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 		_last_attack_was_quad = (event_type == "quad")
 	if event_type == "perfect_clear":
 		_pc_count_this_round += 1
+
+	if modified > 0:
+		var tag_bonus := 0
+		for ks in RunState.keystones:
+			if ks.per_attack_tag_bonus > 0:
+				tag_bonus += ks.per_attack_tag_bonus
+		if tag_bonus > 0:
+			var qualifying := 0
+			for t in RunState.techniques:
+				if t.tags.size() >= 2:
+					qualifying += 1
+			modified += tag_bonus * qualifying
 
 	var to_quota: int = _drain_attack(modified)
 	quota_accumulated += to_quota
@@ -722,6 +730,10 @@ func _flush_pending_garbage() -> void:
 	var reduction := current_config.garbage_flush_reduction if current_config else 0
 	var capacity := maxi(0, 8 - reduction)
 	var remaining := capacity
+	var reflect_ratio := 0.0
+	for ks in RunState.keystones:
+		if ks.reflect_on_flush > 0.0:
+			reflect_ratio = maxf(reflect_ratio, ks.reflect_on_flush)
 	while remaining > 0 and not _garbage_packets.is_empty():
 		var packet = _garbage_packets[0]
 		var to_flush := mini(remaining, packet.lines)
@@ -732,6 +744,16 @@ func _flush_pending_garbage() -> void:
 		else:
 			var col := randi() % current_config.board_width
 			current_board.insert_garbage_rows(to_flush, col)
+		if reflect_ratio > 0.0:
+			var reflected := floori(to_flush * reflect_ratio)
+			if reflected > 0:
+				quota_accumulated += reflected
+				if hud:
+					hud.update_quota(quota_accumulated, current_config.quota)
+				if quota_accumulated >= current_config.quota:
+					_notify_attack_bar()
+					_end_round(true)
+					return
 		packet.lines -= to_flush
 		remaining -= to_flush
 		if packet.lines == 0:
@@ -745,7 +767,22 @@ func _notify_attack_bar() -> void:
 # ── Round end ─────────────────────────────────────────────────────────────
 
 func _on_game_over() -> void:
+	if _try_blessed_stone():
+		return
 	_end_round(false)
+
+func _try_blessed_stone() -> bool:
+	if _blessed_stone_spent:
+		return false
+	for ks in RunState.keystones:
+		if ks.blessed_stone:
+			_blessed_stone_spent = true
+			round_timer = 120.0
+			if current_board:
+				current_board.clear_board()
+				current_board.is_active = true
+			return true
+	return false
 
 func _end_round(success: bool) -> void:
 	if _round_ended:

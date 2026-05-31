@@ -23,6 +23,7 @@ var _all_consumables: Array = []
 var _all_vouchers: Array = []
 var _buy_buttons: Dictionary = {}  # slot node → buy Button (or null if owned)
 var _technique_slot_nodes: Array = []  # tracks which slots show techniques
+var _slot_item_map: Dictionary = {}  # slot node → resource item
 var _capacity_label: Label = null
 
 func _ready() -> void:
@@ -57,25 +58,9 @@ func _update_capacity_label() -> void:
 	_capacity_label.visible = at_cap
 
 func _load_item_pools() -> void:
-	_all_techniques = _load_from_dir("res://resources/data/techniques/", "Technique")
-	_all_consumables = _load_from_dir("res://resources/data/consumables/", "Consumable")
-	_all_vouchers = _load_from_dir("res://resources/data/vouchers/", "Voucher")
-
-func _load_from_dir(path: String, _type: String) -> Array:
-	var result := []
-	var dir := DirAccess.open(path)
-	if dir:
-		dir.list_dir_begin()
-		var f := dir.get_next()
-		while f != "":
-			if f.ends_with(".tres"):
-				var res := load(path + f)
-				if res != null:
-					result.append(res)
-				else:
-					push_warning("Shop: failed to load resource: " + path + f)
-			f = dir.get_next()
-	return result
+	_all_techniques = ResourceRegistry.all_techniques.duplicate()
+	_all_consumables = ResourceRegistry.all_consumables.duplicate()
+	_all_vouchers = ResourceRegistry.all_vouchers.duplicate()
 
 func _populate_shop() -> void:
 	_populate_technique_slots()
@@ -126,6 +111,7 @@ func _populate_slot(slot: Control, item: Resource) -> void:
 	_build_item_card(slot, item)
 
 func _build_item_card(slot: Control, item: Resource) -> void:
+	_slot_item_map[slot] = item
 	for child in slot.get_children():
 		child.free()
 
@@ -258,7 +244,7 @@ func _build_technique_icons() -> void:
 		btn.add_theme_font_size_override("font_size", 11)
 		if i < RunState.techniques.size():
 			var technique: Technique = RunState.techniques[i]
-			btn.text = technique.display_name + "\nSell • " + str(_sell_price(technique)) + "¢"
+			btn.text = technique.display_name + "\nSell - " + str(_sell_price(technique)) + "c"
 			btn.tooltip_text = technique.display_name + "\n" + technique.description
 			btn.disabled = false
 			btn.connect("pressed", _on_sell_technique.bind(technique))
@@ -272,7 +258,7 @@ func _refresh_collection_backpack() -> void:
 		var btn: Button = _collection_slots[i]
 		if i < RunState.consumables.size():
 			var item: Consumable = RunState.consumables[i]
-			btn.text = item.display_name + "\nSell • " + str(_sell_price(item)) + "¢"
+			btn.text = item.display_name + "\nSell - " + str(_sell_price(item)) + "c"
 			btn.disabled = false
 		else:
 			btn.text = "—"
@@ -282,6 +268,8 @@ func _on_sell_technique(technique) -> void:
 	Economy.add_coins(_sell_price(technique))
 	RunState.remove_technique(technique)
 	_build_technique_icons()
+	for slot in _technique_slot_nodes:
+		_build_item_card(slot, _slot_item_map.get(slot))
 	_refresh_button_states()
 
 func _on_sell_consumable(index: int) -> void:

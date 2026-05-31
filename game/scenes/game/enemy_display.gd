@@ -84,7 +84,7 @@ func _build_ui() -> void:
 	_windup_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_windup_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_windup_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_windup_label.text = "⚡ --s"
+	_windup_label.text = "ATK: --s"
 	windup_container.add_child(_windup_label)
 
 func update_hp(accumulated: float) -> void:
@@ -98,4 +98,4 @@ func update_windup(timer: float, interval: float) -> void:
 	if _windup_bar == null:
 		return
 	_windup_bar.value = timer / interval if interval > 0.0 else 0.0
-	_windup_label.text = "⚡ %ds" % max(0, int(interval - timer))
+	_windup_label.text = "ATK: %ds" % max(0, int(interval - timer))

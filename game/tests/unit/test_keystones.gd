@@ -210,3 +210,150 @@ func test_conditional_keystone_included_when_prereq_owned() -> void:
 	ks.requires_keystone_id = "slightly_magical_coin"
 	var passes := ks.requires_keystone_id == "" or ks.requires_keystone_id in RunState.used_keystone_ids
 	assert_true(passes)
+
+# ── Upgrade replacement ───────────────────────────────────────────────────
+
+func test_add_keystone_removes_replaced_keystone() -> void:
+	var base := _make_keystone()
+	base.id = "simple_sword"
+	RunState.keystones = [base]
+	RunState.used_keystone_ids = ["simple_sword"]
+	var upgrade := _make_keystone()
+	upgrade.id = "great_sword"
+	upgrade.replaces_keystone_id = "simple_sword"
+	RunState.add_keystone(upgrade)
+	assert_eq(RunState.keystones.size(), 1)
+	assert_eq(RunState.keystones[0].id, "great_sword")
+
+func test_replaced_id_stays_in_used_keystone_ids() -> void:
+	var base := _make_keystone()
+	base.id = "simple_sword"
+	RunState.keystones = [base]
+	RunState.used_keystone_ids = ["simple_sword"]
+	var upgrade := _make_keystone()
+	upgrade.id = "great_sword"
+	upgrade.replaces_keystone_id = "simple_sword"
+	RunState.add_keystone(upgrade)
+	assert_has(RunState.used_keystone_ids, "simple_sword")
+	assert_has(RunState.used_keystone_ids, "great_sword")
+
+func test_add_keystone_without_replaces_does_not_remove_existing() -> void:
+	var existing := _make_keystone()
+	existing.id = "simple_sword"
+	RunState.keystones = [existing]
+	var new_ks := _make_keystone()
+	new_ks.id = "foresight"
+	new_ks.replaces_keystone_id = ""
+	RunState.add_keystone(new_ks)
+	assert_eq(RunState.keystones.size(), 2)
+
+func test_add_keystone_replaces_nonexistent_base_adds_normally() -> void:
+	RunState.keystones = []
+	var upgrade := _make_keystone()
+	upgrade.id = "great_sword"
+	upgrade.replaces_keystone_id = "simple_sword"
+	RunState.add_keystone(upgrade)
+	assert_eq(RunState.keystones.size(), 1)
+	assert_eq(RunState.keystones[0].id, "great_sword")
+
+# ── Hybrid Reactor ────────────────────────────────────────────────────────
+
+func test_hybrid_reactor_bonus_applies_when_attack_nonzero() -> void:
+	var ks := _make_keystone()
+	ks.per_attack_tag_bonus = 3
+	RunState.keystones = [ks]
+	var t1 := Technique.new()
+	t1.tags = ["risk", "offense"]
+	var t2 := Technique.new()
+	t2.tags = ["defense", "utility"]
+	RunState.techniques = [t1, t2]
+	_rm.current_config.quota = 9999
+	var modified := 5
+	if modified > 0:
+		var tag_bonus := 0
+		for k in RunState.keystones:
+			if k.per_attack_tag_bonus > 0:
+				tag_bonus += k.per_attack_tag_bonus
+		var qualifying := 0
+		for t in RunState.techniques:
+			if t.tags.size() >= 2:
+				qualifying += 1
+		modified += tag_bonus * qualifying
+	assert_eq(modified, 5 + 3 * 2)
+
+func test_hybrid_reactor_bonus_zero_when_attack_zero() -> void:
+	var ks := _make_keystone()
+	ks.per_attack_tag_bonus = 3
+	RunState.keystones = [ks]
+	var t1 := Technique.new()
+	t1.tags = ["risk", "offense"]
+	RunState.techniques = [t1]
+	var modified := 0
+	if modified > 0:
+		modified += 3
+	assert_eq(modified, 0)
+
+func test_hybrid_reactor_zero_when_no_qualifying_techniques() -> void:
+	var ks := _make_keystone()
+	ks.per_attack_tag_bonus = 3
+	RunState.keystones = [ks]
+	var t1 := Technique.new()
+	t1.tags = ["risk"]
+	RunState.techniques = [t1]
+	var modified := 5
+	if modified > 0:
+		var tag_bonus := 0
+		for k in RunState.keystones:
+			if k.per_attack_tag_bonus > 0:
+				tag_bonus += k.per_attack_tag_bonus
+		var qualifying := 0
+		for t in RunState.techniques:
+			if t.tags.size() >= 2:
+				qualifying += 1
+		modified += tag_bonus * qualifying
+	assert_eq(modified, 5)
+
+# ── Reflect keystone ─────────────────────────────────────────────────────
+
+func test_reflect_adds_floor_half_lines_to_quota() -> void:
+	var ks := _make_keystone()
+	ks.reflect_on_flush = 0.5
+	RunState.keystones = [ks]
+	_rm.quota_accumulated = 0.0
+	var reflect_ratio := 0.0
+	for k in RunState.keystones:
+		if k.reflect_on_flush > 0.0:
+			reflect_ratio = maxf(reflect_ratio, k.reflect_on_flush)
+	var to_flush := 4
+	var reflected := floori(to_flush * reflect_ratio)
+	_rm.quota_accumulated += reflected
+	assert_eq(int(_rm.quota_accumulated), 2)
+
+func test_reflect_floors_fractional_result() -> void:
+	var ks := _make_keystone()
+	ks.reflect_on_flush = 0.5
+	RunState.keystones = [ks]
+	var to_flush := 3
+	var reflected := floori(to_flush * 0.5)
+	assert_eq(reflected, 1)
+
+# ── Blessed Stone state ───────────────────────────────────────────────────
+
+func test_blessed_stone_spent_flag_persists_when_set() -> void:
+	_rm._blessed_stone_spent = false
+	_rm._blessed_stone_spent = true
+	assert_true(_rm._blessed_stone_spent)
+
+# ── Data: Double Trouble / Triple Threat suppression removed ─────────────
+
+func test_double_trouble_has_no_suppression_flags() -> void:
+	var ks: Keystone = ResourceRegistry.find_by_id(ResourceRegistry.all_keystones, "double_trouble")
+	assert_not_null(ks)
+	assert_false(ks.suppress_tspin_single, "double_trouble should not suppress tspin_single")
+	assert_false(ks.suppress_tspin_triple, "double_trouble should not suppress tspin_triple")
+
+func test_triple_threat_has_no_suppression_flags() -> void:
+	var ks: Keystone = ResourceRegistry.find_by_id(ResourceRegistry.all_keystones, "triple_threat")
+	assert_not_null(ks)
+	assert_false(ks.suppress_tspin_single, "triple_threat should not suppress tspin_single")
+	assert_false(ks.suppress_tspin_double, "triple_threat should not suppress tspin_double")

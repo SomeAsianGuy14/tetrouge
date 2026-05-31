@@ -18,11 +18,13 @@ config/name="Tetris Roguelike"
 run/main_scene="res://scenes/main_menu/main_menu.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/run/main_scene="res://scenes/main_menu/main_menu.tscn"
+config/version="0.1.0"
 
 [autoload]
 
 Economy="*res://autoloads/economy.gd"
 RunState="*res://autoloads/run_state.gd"
+ResourceRegistry="*res://autoloads/resource_registry.gd"
 DevConsole="*res://scenes/debug/dev_console.tscn"
 
 [display]

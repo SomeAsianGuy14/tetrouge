@@ -49,13 +49,13 @@ static func load_into_state() -> bool:
 	Economy.interest_cap = cfg.get_value("economy", "interest_cap", 5)
 	Economy.speed_bonus_multiplier = cfg.get_value("economy", "speed_bonus_multiplier", 1.0)
 
-	RunState.keystones = _load_by_ids("res://resources/data/keystones/",
+	RunState.keystones = _load_by_ids(ResourceRegistry.all_keystones,
 			cfg.get_value("inventory", "keystone_ids", []))
-	RunState.techniques = _load_by_ids("res://resources/data/techniques/",
+	RunState.techniques = _load_by_ids(ResourceRegistry.all_techniques,
 			cfg.get_value("inventory", "technique_ids", []))
-	RunState.consumables = _load_by_ids("res://resources/data/consumables/",
+	RunState.consumables = _load_by_ids(ResourceRegistry.all_consumables,
 			cfg.get_value("inventory", "consumable_ids", []))
-	RunState.vouchers = _load_by_ids("res://resources/data/vouchers/",
+	RunState.vouchers = _load_by_ids(ResourceRegistry.all_vouchers,
 			cfg.get_value("inventory", "voucher_ids", []))
 	RunState.used_boss_modifiers = cfg.get_value("inventory", "used_boss_modifier_ids", [])
 	RunState.used_boss_enemy_ids = cfg.get_value("inventory", "used_boss_enemy_ids", [])
@@ -73,23 +73,12 @@ static func _ids_from(resources: Array) -> Array:
 		ids.append(res.id)
 	return ids
 
-static func _load_by_ids(dir_path: String, ids: Array) -> Array:
+static func _load_by_ids(collection: Array, ids: Array) -> Array:
 	if ids.is_empty():
 		return []
-	var by_id := {}
-	var dir := DirAccess.open(dir_path)
-	if not dir:
-		return []
-	dir.list_dir_begin()
-	var f := dir.get_next()
-	while f != "":
-		if f.ends_with(".tres"):
-			var res := load(dir_path + f)
-			if res != null and "id" in res:
-				by_id[res.id] = res
-		f = dir.get_next()
 	var result := []
 	for id in ids:
-		if id in by_id:
-			result.append(by_id[id])
+		var res := ResourceRegistry.find_by_id(collection, id)
+		if res != null:
+			result.append(res)
 	return result

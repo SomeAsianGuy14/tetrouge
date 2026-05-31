@@ -6,7 +6,7 @@
 script = ExtResource("1")
 id = "simple_shield"
 display_name = "Simple Shield"
-description = "Incoming garbage is reduced by 2 lines per flush."
+description = "Incoming garbage is reduced by 1 line per flush."
 is_starter = true
 category = "Starter"
-garbage_flush_reduction = 2
+garbage_flush_reduction = 1

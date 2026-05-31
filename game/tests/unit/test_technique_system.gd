@@ -407,3 +407,41 @@ func test_technique_capacity_reset_on_run_reset() -> void:
 	assert_eq(RunState.technique_capacity, 5)
 	RunState.reset()
 	assert_eq(RunState.technique_capacity, 4)
+
+# ── Burning Board ─────────────────────────────────────────────────────────────
+
+func test_burning_board_adds_attack_bonus_on_clear() -> void:
+	var t := Technique.new()
+	t.effect_type = "burning_board"
+	t.params = {"attack_bonus": 3}
+	var ctx := _make_ctx(1)
+	var rs := TechniqueRoundState.new()
+	var result: Dictionary = _TechniqueEvaluator.evaluate([t], ctx, rs)
+	assert_eq(result.attack_delta, 3)
+
+func test_burning_board_no_bonus_on_no_clear() -> void:
+	var t := Technique.new()
+	t.effect_type = "burning_board"
+	t.params = {"attack_bonus": 3}
+	var ctx := _make_ctx(0)
+	var rs := TechniqueRoundState.new()
+	var result: Dictionary = _TechniqueEvaluator.evaluate([t], ctx, rs)
+	assert_eq(result.attack_delta, 0)
+
+func test_burning_board_flag_emitted_on_clear() -> void:
+	var t := Technique.new()
+	t.effect_type = "burning_board"
+	t.params = {"attack_bonus": 3}
+	var ctx := _make_ctx(1)
+	var rs := TechniqueRoundState.new()
+	var result: Dictionary = _TechniqueEvaluator.evaluate([t], ctx, rs)
+	assert_has(result.flags, "burning_board")
+
+func test_burning_board_no_flag_on_no_clear() -> void:
+	var t := Technique.new()
+	t.effect_type = "burning_board"
+	t.params = {"attack_bonus": 3}
+	var ctx := _make_ctx(0)
+	var rs := TechniqueRoundState.new()
+	var result: Dictionary = _TechniqueEvaluator.evaluate([t], ctx, rs)
+	assert_does_not_have(result.flags, "burning_board")

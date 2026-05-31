@@ -4,9 +4,11 @@ extends Resource
 @export var id: String = ""
 @export var display_name: String = ""
 @export var description: String = ""
+@export var flavor_text: String = ""
 @export var is_starter: bool = false
 @export var category: String = ""
 @export var requires_keystone_id: String = ""
+@export var replaces_keystone_id: String = ""
 
 # ── Flat damage bonuses ───────────────────────────────────────────────────
 @export var single_bonus: int = 0
@@ -62,6 +64,9 @@ extends Resource
 @export var instant_soft_drop: bool = false
 @export var garbage_flush_reduction: int = 0
 @export var risky_business: bool = false
+@export var blessed_stone: bool = false
+@export var per_attack_tag_bonus: int = 0
+@export var reflect_on_flush: float = 0.0
 
 func apply_to_config(config: RoundConfig) -> void:
 	if hold_slots_bonus > 0:

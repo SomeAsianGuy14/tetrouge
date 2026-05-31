@@ -26,7 +26,29 @@
       "PowerShell($logPath = \"$env:APPDATA\\\\Godot\\\\app_userdata\\\\TR\\\\logs\"; if \\(Test-Path $logPath\\) { Get-ChildItem $logPath | Sort-Object LastWriteTime -Descending | Select-Object -First 5 | Select-Object Name, LastWriteTime, Length })",
       "PowerShell(Get-ChildItem \"$env:APPDATA\\\\Godot\" -Recurse -ErrorAction SilentlyContinue | Select-Object FullName | Select-Object -First 20)",
       "PowerShell(Test-Path \"$env:APPDATA\\\\Godot\"; $env:APPDATA)",
-      "PowerShell(Get-ChildItem \"$env:APPDATA\\\\Godot\" -ErrorAction SilentlyContinue | Select-Object FullName)"
+      "PowerShell(Get-ChildItem \"$env:APPDATA\\\\Godot\" -ErrorAction SilentlyContinue | Select-Object FullName)",
+      "PowerShell(gh auth status 2>&1; Write-Host \"---\"; Test-Path \"$env:APPDATA\\\\Godot\\\\export_templates\")",
+      "PowerShell(winget install GitHub.cli --accept-source-agreements --accept-package-agreements 2>&1)",
+      "PowerShell(Get-ChildItem \"C:\\\\Program Files\\\\GitHub CLI\" -ErrorAction SilentlyContinue; Get-ChildItem \"$env:LOCALAPPDATA\\\\Programs\\\\GitHub CLI\" -ErrorAction SilentlyContinue)",
+      "PowerShell(& \"C:\\\\Program Files\\\\GitHub CLI\\\\gh.exe\" auth status 2>&1)",
+      "PowerShell(& \"C:\\\\Program Files\\\\GitHub CLI\\\\gh.exe\" repo view SomeAsianGuy14/tetrouge 2>&1)",
+      "PowerShell(New-Item -ItemType Directory -Force \"c:\\\\School\\\\PP\\\\TR\\\\builds\\\\windows\")",
+      "PowerShell(godot --headless --path \"c:\\\\School\\\\PP\\\\TR\\\\game\" --export-release \"Windows Desktop\" 2>&1)",
+      "PowerShell(Get-ChildItem \"c:\\\\School\\\\PP\\\\TR\\\\builds\\\\windows\" -ErrorAction SilentlyContinue; Write-Host \"exit: $LASTEXITCODE\")",
+      "PowerShell(& \"C:\\\\Program Files\\\\GitHub CLI\\\\gh.exe\" release create v0.1.0 --repo SomeAsianGuy14/tetrouge --title \"Tetrouge v0.1.0\" --notes \"Initial public release.\" \"c:\\\\School\\\\PP\\\\TR\\\\dist\\\\TR-v0.1.0-windows.zip\" \"c:\\\\School\\\\PP\\\\TR\\\\dist\\\\TR-v0.1.0-web.zip\" 2>&1)",
+      "Bash(cd /c/School/PP/TR/game && find . -type f -name \"*.tscn\" -o -name \"*.gd\" | head -30)",
+      "Read(//c/c/School/PP/TR/**)",
+      "PowerShell(godot --headless --path \"c:\\\\School\\\\PP\\\\TR\\\\game\" --export-release \"Web\" \"c:\\\\School\\\\PP\\\\TR\\\\builds\\\\web\\\\index.html\" 2>&1)",
+      "PowerShell(Test-Path \"c:\\\\School\\\\PP\\\\TR\\\\builds\\\\web\\\\index.html\"; \\(Get-Item \"c:\\\\School\\\\PP\\\\TR\\\\builds\\\\web\\\\index.html\"\\).LastWriteTime)",
+      "PowerShell(& \"C:\\\\Program Files\\\\GitHub CLI\\\\gh.exe\" release upload v0.1.0 \"c:\\\\School\\\\PP\\\\TR\\\\dist\\\\TR-v0.1.0-web.zip\" --repo SomeAsianGuy14/tetrouge --clobber 2>&1)",
+      "Bash(Get-ChildItem -Path \"c:\\\\School\\\\PP\\\\TR\\\\game\" -Recurse -Directory)",
+      "Bash(Select-Object -First 20)",
+      "Bash(Format-Table FullName)",
+      "PowerShell(New-Item -ItemType Directory -Force \"c:\\\\School\\\\PP\\\\TR\\\\openspec\\\\changes\\\\archive\")",
+      "PowerShell(Move-Item \"c:\\\\School\\\\PP\\\\TR\\\\openspec\\\\changes\\\\keystone-overhaul\" \"c:\\\\School\\\\PP\\\\TR\\\\openspec\\\\changes\\\\archive\\\\2026-05-31-keystone-overhaul\")"
+    ],
+    "additionalDirectories": [
+      "c:\\School\\PP\\TR\\builds\\web"
     ]
   }
 }
