@@ -45,7 +45,13 @@
       "Bash(Select-Object -First 20)",
       "Bash(Format-Table FullName)",
       "PowerShell(New-Item -ItemType Directory -Force \"c:\\\\School\\\\PP\\\\TR\\\\openspec\\\\changes\\\\archive\")",
-      "PowerShell(Move-Item \"c:\\\\School\\\\PP\\\\TR\\\\openspec\\\\changes\\\\keystone-overhaul\" \"c:\\\\School\\\\PP\\\\TR\\\\openspec\\\\changes\\\\archive\\\\2026-05-31-keystone-overhaul\")"
+      "PowerShell(Move-Item \"c:\\\\School\\\\PP\\\\TR\\\\openspec\\\\changes\\\\keystone-overhaul\" \"c:\\\\School\\\\PP\\\\TR\\\\openspec\\\\changes\\\\archive\\\\2026-05-31-keystone-overhaul\")",
+      "Bash(git rm *)",
+      "PowerShell(godot --headless --path \"c:\\\\School\\\\PP\\\\TR\\\\game\" --quit 2>&1)",
+      "Bash(ascension)",
+      "Bash(unlock)",
+      "Bash(profile\")",
+      "PowerShell(Move-Item \"c:\\\\School\\\\PP\\\\TR\\\\openspec\\\\changes\\\\ascension-system\" \"c:\\\\School\\\\PP\\\\TR\\\\openspec\\\\changes\\\\archive\\\\2026-06-01-ascension-system\")"
     ],
     "additionalDirectories": [
       "c:\\School\\PP\\TR\\builds\\web"

@@ -16,7 +16,7 @@ func _ready() -> void:
 
 func _draw_three_keystones() -> Array:
 	var all_keystones := []
-	for ks in ResourceRegistry.all_keystones:
+	for ks in ResourceRegistry.get_available_keystones():
 		if ks.id not in RunState.used_keystone_ids:
 			if ks.is_starter == starter_only:
 				if ks.requires_keystone_id == "" or ks.requires_keystone_id in RunState.used_keystone_ids:

@@ -32,6 +32,9 @@ horizontal_alignment = 1
 text = "Final coins: 0"
 horizontal_alignment = 1
 
+[node name="AscensionLabel" type="Label" parent="Panel/VBox"]
+horizontal_alignment = 1
+
 [node name="RestartButton" type="Button" parent="Panel/VBox"]
 text = "Play Again"
 

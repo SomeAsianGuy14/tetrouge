@@ -142,3 +142,11 @@ static func find_by_id(collection: Array, id: String) -> Resource:
 		if res.id == id:
 			return res
 	return null
+
+static func get_available_keystones() -> Array:
+	return all_keystones.filter(func(ks):
+		return ks.unlock_condition_id == "" or ks.unlock_condition_id in ProfileSave.unlocked_ids)
+
+static func get_available_techniques() -> Array:
+	return all_techniques.filter(func(t):
+		return t.unlock_condition_id == "" or t.unlock_condition_id in ProfileSave.unlocked_ids)

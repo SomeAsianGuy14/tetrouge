@@ -9,6 +9,7 @@ extends Resource
 @export var category: String = ""
 @export var requires_keystone_id: String = ""
 @export var replaces_keystone_id: String = ""
+@export var unlock_condition_id: String = ""
 
 # ── Flat damage bonuses ───────────────────────────────────────────────────
 @export var single_bonus: int = 0

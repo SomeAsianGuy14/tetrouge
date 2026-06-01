@@ -7,6 +7,7 @@ extends Control
 @onready var quit_button: Button = $Panel/VBox/QuitButton
 
 func _ready() -> void:
+	ProfileSave.load_profile()
 	continue_button.visible = RunSave.exists()
 	continue_button.connect("pressed", _on_continue)
 	new_run_button.connect("pressed", _on_new_run)
@@ -25,6 +26,19 @@ func _on_continue() -> void:
 
 func _on_new_run() -> void:
 	RunSave.delete()
+	if ProfileSave.highest_beaten >= 0:
+		var selector_scene: PackedScene = load("res://scenes/screens/ascension_selector.tscn")
+		var selector = selector_scene.instantiate()
+		add_child(selector)
+		selector.connect("level_selected", _on_ascension_selected)
+	else:
+		_start_run(0)
+
+func _on_ascension_selected(level: int) -> void:
+	_start_run(level)
+
+func _start_run(level: int) -> void:
+	AscensionManager.current_level = level
 	var run_scene: PackedScene = load("res://scenes/game/run_manager.tscn")
 	var run := run_scene.instantiate()
 	get_tree().root.add_child(run)

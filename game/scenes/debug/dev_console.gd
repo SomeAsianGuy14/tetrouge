@@ -68,6 +68,8 @@ func _dispatch(text: String) -> void:
 			_cmd_insert_garbage(args)
 		"set_quota":
 			_cmd_set_quota(args)
+		"unlock_ascensions":
+			_cmd_unlock_ascensions()
 		_:
 			_log("Unknown command: %s. Type 'help' for commands." % cmd)
 
@@ -83,6 +85,7 @@ func _cmd_help() -> void:
 	_log("  give_technique <id>   — activate a technique by id")
 	_log("  insert_garbage <n>    — insert n garbage rows into board")
 	_log("  set_quota <n>         — set current round quota to n")
+	_log("  unlock_ascensions     — unlock all ascension levels in profile")
 
 func _cmd_skip_round() -> void:
 	if run_manager:
@@ -147,6 +150,11 @@ func _cmd_insert_garbage(args: PackedStringArray) -> void:
 	for _i in n:
 		run_manager.current_board.insert_garbage_row()
 	_log("Inserted %d garbage row(s)." % n)
+
+func _cmd_unlock_ascensions() -> void:
+	ProfileSave.highest_beaten = 6
+	ProfileSave.save_profile()
+	_log("All ascension levels unlocked (highest_beaten = 6).")
 
 func _cmd_set_quota(args: PackedStringArray) -> void:
 	if args.is_empty() or not args[0].is_valid_int():

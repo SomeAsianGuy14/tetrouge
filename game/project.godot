@@ -15,16 +15,18 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="Tetris Roguelike"
+config/version="0.1.0"
 run/main_scene="res://scenes/main_menu/main_menu.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/run/main_scene="res://scenes/main_menu/main_menu.tscn"
-config/version="0.1.0"
 
 [autoload]
 
 Economy="*res://autoloads/economy.gd"
 RunState="*res://autoloads/run_state.gd"
 ResourceRegistry="*res://autoloads/resource_registry.gd"
+ProfileSave="*res://scripts/profile_save.gd"
+AscensionManager="*res://autoloads/ascension_manager.gd"
 DevConsole="*res://scenes/debug/dev_console.tscn"
 
 [display]

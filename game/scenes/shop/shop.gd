@@ -58,7 +58,7 @@ func _update_capacity_label() -> void:
 	_capacity_label.visible = at_cap
 
 func _load_item_pools() -> void:
-	_all_techniques = ResourceRegistry.all_techniques.duplicate()
+	_all_techniques = ResourceRegistry.get_available_techniques()
 	_all_consumables = ResourceRegistry.all_consumables.duplicate()
 	_all_vouchers = ResourceRegistry.all_vouchers.duplicate()
 

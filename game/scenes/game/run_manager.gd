@@ -16,20 +16,20 @@ const SCENE_MAIN_MENU := "res://scenes/main_menu/main_menu.tscn"
 const BASE_PAYOUT := 4
 const ROUND_TIERS := ["Small", "Big", "Elite", "Boss"]
 
-const SMALL_INTERVAL_MIN := 18.0
-const SMALL_INTERVAL_MAX := 28.0
+const SMALL_INTERVAL_MIN := 22.5
+const SMALL_INTERVAL_MAX := 35.0
 const SMALL_LINES_MIN := 1
 const SMALL_LINES_MAX := 2
-const BIG_INTERVAL_MIN := 14.0
-const BIG_INTERVAL_MAX := 22.0
+const BIG_INTERVAL_MIN := 17.5
+const BIG_INTERVAL_MAX := 27.5
 const BIG_LINES_MIN := 1
 const BIG_LINES_MAX := 3
-const ELITE_INTERVAL_MIN := 11.0
-const ELITE_INTERVAL_MAX := 18.0
+const ELITE_INTERVAL_MIN := 13.75
+const ELITE_INTERVAL_MAX := 22.5
 const ELITE_LINES_MIN := 2
 const ELITE_LINES_MAX := 4
-const BOSS_INTERVAL_MIN := 10.0
-const BOSS_INTERVAL_MAX := 16.0
+const BOSS_INTERVAL_MIN := 12.5
+const BOSS_INTERVAL_MAX := 20.0
 const BOSS_LINES_MIN := 2
 const BOSS_LINES_MAX := 4
 
@@ -73,6 +73,8 @@ var _greedy_hands_active: bool = false
 
 var _blessed_stone_spent: bool = false
 
+var _run_stats: RunStats = null
+
 var _paused: bool = false
 var _pause_menu: Control = null
 var _board_was_active: bool = false
@@ -102,8 +104,15 @@ func start_run() -> void:
 	RunState.reset()
 	Economy.reset()
 	Economy.add_coins(RunState.STARTING_COINS)
+	_run_stats = RunStats.new()
+	var _asc := AscensionManager.get_modifiers(AscensionManager.current_level)
+	RunState.consumable_capacity = maxi(0, RunState.consumable_capacity + _asc.get("consumable_capacity_delta", 0))
+	RunState.technique_capacity = maxi(1, RunState.technique_capacity + _asc.get("technique_capacity_delta", 0))
 	RunState.emit_signal("run_started")
-	_show_starter_keystone_selection()
+	if _asc.get("skip_starter_keystone", false):
+		start_round()
+	else:
+		_show_starter_keystone_selection()
 
 func _show_starter_keystone_selection() -> void:
 	var scene: PackedScene = load(SCENE_KEYSTONE_SELECTION)
@@ -209,6 +218,9 @@ func _build_round_config() -> RoundConfig:
 	var cfg := RoundConfig.new()
 	cfg.rng = RunState.rng
 	cfg.quota = RunState.calculate_quota(RunState.stage, RunState.round_index)
+	var _asc_quota: float = AscensionManager.get_modifiers(AscensionManager.current_level).get("quota_mult", 1.0)
+	if _asc_quota != 1.0:
+		cfg.quota = ceili(cfg.quota * _asc_quota)
 
 	for keystone in RunState.keystones:
 		keystone.apply_to_config(cfg)
@@ -231,10 +243,12 @@ func _build_round_config() -> RoundConfig:
 		_:
 			_imin = BOSS_INTERVAL_MIN;  _imax = BOSS_INTERVAL_MAX
 			_lmin = BOSS_LINES_MIN;     _lmax = BOSS_LINES_MAX
-	cfg.garbage_interval_min = _imin * _stage_scalar
-	cfg.garbage_interval_max = _imax * _stage_scalar
-	cfg.garbage_lines_min = _lmin + _lines_bonus
-	cfg.garbage_lines_max = _lmax + _lines_bonus
+	var _asc := AscensionManager.get_modifiers(AscensionManager.current_level)
+	var _interval_scalar := (1.0 / 1.25) if _asc.get("faster_attacks", false) else 1.0
+	cfg.garbage_interval_min = _imin * _stage_scalar * _interval_scalar
+	cfg.garbage_interval_max = _imax * _stage_scalar * _interval_scalar
+	cfg.garbage_lines_min = _lmin + _lines_bonus + _asc.get("extra_lines", 0)
+	cfg.garbage_lines_max = _lmax + _lines_bonus + _asc.get("extra_lines", 0)
 
 	if enemy.ability:
 		cfg.boss_modifier = enemy.ability
@@ -496,6 +510,12 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 	surplus_attack = maxi(0, int(quota_accumulated) - current_config.quota)
 	if hud:
 		hud.update_quota(quota_accumulated, current_config.quota)
+	if _run_stats and to_quota > 0:
+		_run_stats.total_damage += to_quota
+		if event_type == "quad":
+			_run_stats.quad_damage += to_quota
+		elif event_type.begins_with("tspin"):
+			_run_stats.tspin_damage += to_quota
 
 	if current_config.reflect_ratio > 0.0 and to_quota > 0:
 		var reflect_lines := floori(to_quota * current_config.reflect_ratio)
@@ -849,6 +869,9 @@ func _on_lock_processed() -> void:
 		_flash_step_arr_pending = false
 	if hud and current_board:
 		hud.update_b2b_combo(current_board.is_b2b, current_board.b2b_count, current_board.combo)
+	if _run_stats and current_board:
+		_run_stats.highest_combo_chain = max(_run_stats.highest_combo_chain, current_board.combo)
+		_run_stats.highest_b2b = max(_run_stats.highest_b2b, current_board.b2b_count)
 	_flush_pending_garbage()
 
 func _on_board_updated() -> void:
@@ -905,10 +928,17 @@ func _show_failure() -> void:
 
 func _show_victory() -> void:
 	RunSave.delete()
+	if _run_stats:
+		_run_stats.total_damage = int(quota_accumulated)
+	var beaten_level := AscensionManager.current_level
+	ProfileSave.record_victory(beaten_level)
+	if _run_stats:
+		ProfileSave.accumulate_stats(_run_stats)
+		UnlockChecker.check_all(_run_stats, ProfileSave)
 	var scene: PackedScene = load(SCENE_RUN_VICTORY)
 	var screen = scene.instantiate()
 	add_child(screen)
-	screen.setup(Economy.coins)
+	screen.setup(Economy.coins, beaten_level)
 
 # ── Consumable integration ────────────────────────────────────────────────
 

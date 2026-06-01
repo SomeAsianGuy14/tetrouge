@@ -5,6 +5,7 @@ extends Resource
 @export var display_name: String = ""
 @export var description: String = ""
 @export var flavor_text: String = ""
+@export var unlock_condition_id: String = ""
 @export var cost: int = 5
 @export var tags: Array = []          # Array of tag strings
 @export var effect_type: String = ""
