@@ -1,11 +1,12 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Keystone" format=3 uid="uid://di0t3x8nhyy6g"]
 
-[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+[ext_resource type="Script" uid="uid://cbdxscbm7yog0" path="res://resources/keystone.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "sharpen"
 display_name = "Sharpen"
 description = "Each Quad-applicable technique adds +2 damage to Quads."
+flavor_text = "The blade is only as sharp as the soul wielding it"
 category = "Quad"
 per_technique_quad_bonus = 2

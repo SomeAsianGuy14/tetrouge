@@ -1,10 +1,10 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="BossModifier" format=3 uid="uid://2bx3b6uorasm"]
 
-[ext_resource type="Script" path="res://resources/boss_modifier.gd" id="1"]
+[ext_resource type="Script" uid="uid://cb0ulqkbqer8l" path="res://resources/boss_modifier.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "the_ancient"
 display_name = "The Ancient"
-description = "All pieces are drawn at random — any of the 7 types each turn."
+description = "All pieces are drawn at random"
 random_pieces = true

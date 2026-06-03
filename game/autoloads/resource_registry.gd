@@ -88,7 +88,7 @@ const all_techniques: Array = [
 	preload("res://resources/data/techniques/recycling.tres"),
 	preload("res://resources/data/techniques/redzone.tres"),
 	preload("res://resources/data/techniques/rotation_training.tres"),
-	preload("res://resources/data/techniques/sharpen.tres"),
+	preload("res://resources/data/techniques/hone.tres"),
 	preload("res://resources/data/techniques/side_strike.tres"),
 	preload("res://resources/data/techniques/smooth_haggling.tres"),
 	preload("res://resources/data/techniques/specialist_discount.tres"),
@@ -106,7 +106,6 @@ const all_consumables: Array = [
 	preload("res://resources/data/consumables/power_shard.tres"),
 	preload("res://resources/data/consumables/quad_stone.tres"),
 	preload("res://resources/data/consumables/spin_amplifier.tres"),
-	preload("res://resources/data/consumables/time_shard.tres"),
 ]
 
 const all_vouchers: Array = [

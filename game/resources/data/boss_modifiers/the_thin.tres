@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="BossModifier" format=3 uid="uid://b5grn7b0622q7"]
+
+[ext_resource type="Script" uid="uid://cb0ulqkbqer8l" path="res://resources/boss_modifier.gd" id="1_pcngo"]
+
+[resource]
+script = ExtResource("1_pcngo")
+id = "the_thin"
+display_name = "The Thin"
+description = "Board width reduced to 8 columns."
+board_width_override = 8

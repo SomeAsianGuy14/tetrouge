@@ -11,6 +11,7 @@ var _hp_bar: ProgressBar = null
 var _hp_label: Label = null
 var _windup_bar: ProgressBar = null
 var _windup_label: Label = null
+var _windup_container: Control = null
 
 func setup(enemy: Enemy, quota: int) -> void:
 	_enemy = enemy
@@ -66,10 +67,11 @@ func _build_ui() -> void:
 	_hp_label.text = "%d / %d" % [_quota, _quota]
 	hp_container.add_child(_hp_label)
 
-	var windup_container := Control.new()
-	windup_container.custom_minimum_size = Vector2(0, 24)
-	windup_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	vbox.add_child(windup_container)
+	_windup_container = Control.new()
+	_windup_container.custom_minimum_size = Vector2(0, 24)
+	_windup_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	vbox.add_child(_windup_container)
+	var windup_container := _windup_container
 
 	_windup_bar = ProgressBar.new()
 	_windup_bar.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -86,6 +88,10 @@ func _build_ui() -> void:
 	_windup_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_windup_label.text = "ATK: --s"
 	windup_container.add_child(_windup_label)
+
+func set_attack_bar_visible(visible: bool) -> void:
+	if _windup_container:
+		_windup_container.visible = visible
 
 func update_hp(accumulated: float) -> void:
 	if _hp_bar == null:

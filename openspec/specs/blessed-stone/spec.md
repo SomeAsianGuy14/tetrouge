@@ -1,5 +1,5 @@
-### Requirement: Blessed Stone triggers on first death event of the run
-When the player holds the Blessed Stone keystone and a death event occurs for the first time in the run, the system SHALL intercept the failure, revive the player, and consume the stone. A death event is defined as either (a) the board topping out or (b) the round timer reaching zero.
+### Requirement: Blessed Stone triggers on first topout of the run
+When the player holds the Blessed Stone keystone and the board tops out for the first time in the run, the system SHALL intercept the failure, revive the player, and consume the stone. Blessed Stone SHALL NOT trigger on timer expiry — timeout is no longer a failure condition in standard rounds, and during The Blitz the stone does not activate.
 
 #### Scenario: Blessed Stone triggers on topout
 - **WHEN** the board emits `game_over` (topout)
@@ -10,17 +10,12 @@ When the player holds the Blessed Stone keystone and a death event occurs for th
 - **THEN** the round timer SHALL be increased by 120 seconds
 - **THEN** the stone SHALL be marked spent
 
-#### Scenario: Blessed Stone triggers on timeout
-- **WHEN** `round_timer` reaches zero or below
-- **AND** the player holds the Blessed Stone keystone
-- **AND** the stone has not yet been spent this run
-- **THEN** `_end_round(false)` SHALL NOT be called
-- **THEN** the board SHALL be cleared
-- **THEN** the round timer SHALL be set to 120 seconds
-- **THEN** the stone SHALL be marked spent
+#### Scenario: Blessed Stone does not trigger on timeout
+- **WHEN** the timer reaches zero in any round
+- **THEN** Blessed Stone SHALL NOT activate regardless of spent state
 
 #### Scenario: Blessed Stone does not trigger a second time
-- **WHEN** a death event occurs
+- **WHEN** the board tops out
 - **AND** the stone has already been spent this run
 - **THEN** the death SHALL proceed normally via `_end_round(false)`
 

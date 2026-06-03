@@ -1,11 +1,12 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Keystone" format=3 uid="uid://c0higt6dc4p86"]
 
-[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+[ext_resource type="Script" uid="uid://cbdxscbm7yog0" path="res://resources/keystone.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "whirl"
 display_name = "Whirl"
 description = "T-spins count as two combo steps."
+flavor_text = "Spin that thang"
 category = "T-Spin"
 whirl = true

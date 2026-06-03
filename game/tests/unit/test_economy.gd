@@ -51,26 +51,12 @@ func test_spend_exact_balance_succeeds() -> void:
 
 # ── pay_round ─────────────────────────────────────────────────────────────
 
-func test_pay_round_credits_all_components() -> void:
+func test_pay_round_credits_base_amount() -> void:
 	Economy.coins = 0
-	Economy.pay_round(4, 2, 1)
+	Economy.pay_round(7)
 	assert_eq(Economy.coins, 7)
 
 func test_pay_round_adds_to_existing_balance() -> void:
 	Economy.coins = 10
-	Economy.pay_round(4, 0, 0)
+	Economy.pay_round(4)
 	assert_eq(Economy.coins, 14)
-
-# ── Speed bonus ───────────────────────────────────────────────────────────
-
-func test_speed_bonus_40s_remaining_of_60s_is_2() -> void:
-	var bonus := Economy.calculate_speed_bonus(40.0, 60.0)
-	assert_eq(bonus, 2)
-
-func test_speed_bonus_0s_remaining_is_0() -> void:
-	var bonus := Economy.calculate_speed_bonus(0.0, 60.0)
-	assert_eq(bonus, 0)
-
-func test_speed_bonus_60s_remaining_is_3() -> void:
-	var bonus := Economy.calculate_speed_bonus(60.0, 60.0)
-	assert_eq(bonus, 3)

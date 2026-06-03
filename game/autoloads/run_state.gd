@@ -122,15 +122,13 @@ func _apply_voucher_effects(voucher) -> void:
 		"consumable_expert":
 			consumable_capacity = 3
 		"bonus_round":
-			Economy.speed_bonus_multiplier = 2.0
+			pass  # speed bonus removed; voucher kept for potential future effect
 
 func calculate_quota(current_stage: int, current_round: int) -> int:
 	return 20 + (current_stage - 1) * 15 + current_round * 8
 
-func calculate_time_limit(_current_stage: int, boss_modifier_id: String) -> float:
-	if boss_modifier_id == "the_enforcer":
-		return 90.0
-	return 120.0
+func calculate_time_limit(_current_stage: int) -> float:
+	return 180.0
 
 func seeded_shuffle(arr: Array) -> void:
 	var i := arr.size() - 1

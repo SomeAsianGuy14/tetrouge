@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Technique" format=3 uid="uid://dwinnohudp1bm"]
+
+[ext_resource type="Script" uid="uid://eexbry3dg1u" path="res://resources/technique.gd" id="1_lreus"]
+
+[resource]
+script = ExtResource("1_lreus")
+id = "hone"
+display_name = "Hone"
+description = "Quads send +2 attack."
+tags = ["general", "quad"]
+effect_type = "flat"
+params = {
+"bonus": 2,
+"on": "quad"
+}

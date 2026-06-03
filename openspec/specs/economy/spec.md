@@ -1,7 +1,7 @@
 ## ADDED Requirements
 
 ### Requirement: Base payout after every round
-After each round ends in success, the player SHALL receive a base coin payout. The base payout is fixed and does not scale with ante or round difficulty.
+At round end, `Economy.pay_round()` SHALL pay only the base payout. Speed bonus and technique income SHALL NOT be separate line items. Technique coins earned mid-round (via technique effects) SHALL be silently added to `Economy.coins` at round end without a dedicated UI row. The round success screen SHALL display the base payout total only.
 
 Starting reference value: 4 coins per round (subject to playtesting).
 
@@ -9,18 +9,15 @@ Starting reference value: 4 coins per round (subject to playtesting).
 - **WHEN** a round ends in success
 - **THEN** the base coin amount is added to the player's balance before the shop opens
 
-### Requirement: Speed bonus based on time remaining
-After each round, the player SHALL receive a speed bonus proportional to the time remaining when the quota was met. If the quota is not met (failure), no speed bonus is awarded.
+#### Scenario: Round success screen shows base payout only
+- **WHEN** the round success screen is shown
+- **THEN** only the base payout amount SHALL be displayed
+- **THEN** no speed bonus or technique income rows SHALL appear
 
-Starting reference: `speed_bonus = floor(time_remaining / 20)` (0–3 coins for a 60s round).
-
-#### Scenario: Speed bonus for fast clear
-- **WHEN** a round is cleared with 40 seconds remaining
-- **THEN** speed bonus is floor(40 / 20) = 2 coins
-
-#### Scenario: No speed bonus on failure
-- **WHEN** a round ends in failure (timer expired)
-- **THEN** no speed bonus is awarded (run ends)
+#### Scenario: No speed bonus paid
+- **WHEN** any round ends successfully
+- **THEN** `Economy.calculate_speed_bonus()` SHALL NOT be called
+- **THEN** no coins SHALL be awarded based on remaining time (except via Golden Watch keystone)
 
 ### Requirement: Interest on unspent coins
 At the start of each shop visit, the player SHALL earn interest on their current coin balance. Interest is 1 coin per 5 coins held, capped at 5 coins per visit.
@@ -75,8 +72,12 @@ When the player wins a round and owns Midas Touch, `RunManager` SHALL convert `s
 - **WHEN** Midas Touch is owned and the player meets quota exactly (surplus = 0)
 - **THEN** Midas Touch grants 0 coins
 
-### Requirement: Golden Watch — time-remaining coin bonus
-When the player wins a round and owns Golden Watch, `RunManager` SHALL grant `floor(time_remaining / 5)` coins at round end, where `time_remaining` is the seconds left on the round timer at the moment the quota is met.
+### Requirement: Golden Watch — timer visibility and time-remaining coin bonus
+Golden Watch SHALL set `RoundConfig.show_timer = true` at round build time, making the HUD timer visible. When the player wins a round and owns Golden Watch, `RunManager` SHALL grant `floor(time_remaining / 5)` coins at round end, where `time_remaining` is the seconds left on the round timer at the moment the quota is met. Description: "Gain a 3-minute timer. At round end, earn 1 coin for every 5 seconds remaining on the timer."
+
+#### Scenario: Golden Watch makes timer visible
+- **WHEN** the player holds Golden Watch and a round begins
+- **THEN** the HUD timer label SHALL be visible for that round
 
 #### Scenario: Coins granted proportional to time remaining
 - **WHEN** Golden Watch is owned and the round is won with 17 seconds remaining
@@ -85,3 +86,9 @@ When the player wins a round and owns Golden Watch, `RunManager` SHALL grant `fl
 #### Scenario: Zero coins when time remaining is less than 5 seconds
 - **WHEN** Golden Watch is owned and the round is won with 4 seconds remaining
 - **THEN** 0 coins are granted from Golden Watch
+
+## REMOVED Requirements
+
+### Requirement: Speed bonus rewards fast round completion
+**Reason:** Without a visible timer, players cannot track or optimise for speed bonus. The mechanic is hidden and therefore not meaningful.
+**Migration:** Remove `Economy.calculate_speed_bonus()`. Remove `speed_bonus` parameter from `Economy.pay_round()`. Remove speed bonus display from `round_success.gd`. The `speed_bonus_multiplier` field on Economy (used by Bonus Round voucher) becomes unused and is removed.

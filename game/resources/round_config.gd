@@ -3,6 +3,7 @@ extends Resource
 
 @export var quota: int = 20
 @export var time_limit: float = 60.0
+@export var show_timer: bool = false
 @export var boss_modifier: BossModifier = null
 
 # Keystone-driven parameters (set by RunManager from active keystones)

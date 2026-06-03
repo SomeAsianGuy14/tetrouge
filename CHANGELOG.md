@@ -1,0 +1,50 @@
+# Changelog
+
+## [0.1.0] — 2026-05-30
+Initial public release.
+
+---
+
+## Unreleased
+
+### New Features
+- **Flush threshold marker** — The attack bar now shows a line indicating the 8-line flush cap.
+- **Keystone flavor text** — Keystones with flavor text now display it in the selection screen, styled below the description.
+- **Timer removed as failure condition** — The round timer no longer kills the run on expiry. Topping out is now the only way to lose a round. The timer is hidden from the HUD entirely.
+- **Golden Watch reworked** — Now reveals a personal 3-minute timer and earns 1 coin per 5 seconds remaining at round end.
+- **The Blitz reworked** — Timer raised to 2 minutes. The timer is always visible during a Blitz round and failing to defeat the enemy before it expires still ends the run.
+
+### Balance
+- **Simple Shield / Legionnaire's Shield** — Damage reduction now applies when the attack enters the buffer (lines blocked before queuing), rather than reducing flush capacity. A 2-line attack with Simple Shield now puts only 1 line in the buffer; Legionnaire's Shield can block small attacks entirely.
+
+### Bug Fixes
+- The Reflection boss: enemy attack windup bar is now hidden (boss never attacks).
+- The Reflection boss: reflected garbage is now non-drainable — player attacks no longer cancel their own reflections.
+- The Reflection boss: fixed a bug where reflected lines were silently discarded instead of reaching the board.
+- The Blitz boss: timer now correctly starts at 1:00 (was being overwritten by the default after the boss modifier set it).
+
+---
+
+## [0.2.0] — 2026-06-02
+
+### New Features
+- **Ascension system** — Beat the game to unlock harder difficulty levels. Each ascension adds a new modifier on top of all previous ones (faster attacks, more garbage damage, reduced backpack capacity, increased enemy HP, no starter keystone, reduced technique capacity). The ascension selector appears before each new run once you've cleared the game at least once.
+- **Starter weapon upgrades** — Great Sword, Mace and Chain, Legionnaire's Shield, Crystal Staff, and Magical Coin are new keystones that replace their starter counterpart when picked.
+- **New keystones** — Blessed Stone (one-time revive: clears your board and adds 2 minutes on death), Hybrid Reactor (attacks deal bonus damage per technique with 2+ tags), Reflect (incoming garbage deals 50% back as damage to the enemy).
+- **Persistent profile save** — Ascension progress, run count, and damage stats are saved to a separate profile file that persists across runs.
+
+### Balance
+- **Enemy attacks slowed** — Base garbage intervals increased by ~25% across all enemy tiers, giving more breathing room at Ascension 0.
+- **Simple Shield** — Garbage reduction 2 → 1 line per flush.
+- **Great Sword** — Now requires Simple Sword (was Slightly Magical Coin); damage bonus 8 → 10.
+- **Double Trouble** — T-Spin Singles and Triples no longer deal 0 damage; only the 2x Double bonus remains.
+- **Triple Threat** — T-Spin Singles and Doubles no longer deal 0 damage; only the 3x Triple bonus remains.
+- **Magical Coin** — Now replaces Slightly Magical Coin on pick; coins per round 2 → 4.
+
+### Bug Fixes
+- The Reflection boss: attack bar is now hidden during the fight since the boss never sends garbage.
+- The Reflection boss: reflected garbage now enters the attack buffer and is visible before hitting the board, rather than being applied instantly on the same piece lock.
+- Web export: fixed shop slots and keystone selection not loading (directory scanning doesn't work in browser builds; replaced with preloaded registry).
+- Web export: fixed ⚡ emoji rendering as a box; replaced with "ATK:" text.
+- Burning Board: now correctly inserts a garbage row into the player's board every 5 seconds instead of healing the enemy.
+- Shop: selling a technique while at capacity now correctly re-enables Buy buttons on the remaining slots.

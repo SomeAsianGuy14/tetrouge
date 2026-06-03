@@ -1,12 +1,13 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Keystone" format=3 uid="uid://b3o1y7w0p3dq2"]
 
-[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+[ext_resource type="Script" uid="uid://cbdxscbm7yog0" path="res://resources/keystone.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "great_sword"
 display_name = "Great Sword"
 description = "Quads deal +10 damage. Requires: Simple Sword."
+flavor_text = "More like a massive sheet of metal"
 category = "Quad"
 requires_keystone_id = "simple_sword"
 replaces_keystone_id = "simple_sword"

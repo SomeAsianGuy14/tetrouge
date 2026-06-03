@@ -5,9 +5,11 @@ const BAR_WIDTH := 12
 const WARNING_COLOR := Color(0.85, 0.15, 0.1)
 const FILTH_COLOR := Color(0.95, 0.6, 0.1)
 const BG_COLOR := Color(0.08, 0.08, 0.08, 0.8)
+const MARKER_COLOR := Color(1.0, 1.0, 1.0, 0.5)
 const GAP := 2.0
 
 var _packets: Array = []
+var flush_capacity: int = 8
 
 func _ready() -> void:
 	custom_minimum_size = Vector2(BAR_WIDTH, TetrisBoard.VISIBLE_ROWS * TetrisBoard.CELL_SIZE)
@@ -32,3 +34,7 @@ func _draw() -> void:
 			var cell_h: float = maxf(0.0, row_h - GAP)
 			draw_rect(Rect2(0.0, current_y - cell_h, BAR_WIDTH, cell_h), color)
 			current_y -= row_h
+
+	# Flush threshold marker
+	var marker_y := bar_height - flush_capacity * pixels_per_line
+	draw_rect(Rect2(0.0, marker_y - 1.0, BAR_WIDTH, 2.0), MARKER_COLOR)

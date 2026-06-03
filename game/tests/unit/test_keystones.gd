@@ -155,17 +155,28 @@ func test_pc_after_first_multiplier_applies_on_subsequent_pcs() -> void:
 
 # ── Garbage flush ─────────────────────────────────────────────────────────
 
-func test_garbage_flush_reduction_reduces_flush_amount() -> void:
+func test_garbage_flush_reduction_reduces_lines_entering_buffer() -> void:
 	_rm.current_config.garbage_flush_reduction = 2
-	_rm._garbage_packets.append({lines = 10, is_filth = false})
-	var board := TetrisBoard.new()
-	board.setup(_rm.current_config)
-	_rm.current_board = board
-	_rm._flush_pending_garbage()
-	# capacity = 8 - reduction(2) = 6; 10 lines - 6 flushed = 4 remaining
-	assert_eq(_rm._garbage_packets[0].lines, 4)
-	board.free()
-	_rm.current_board = null
+	_rm.current_config.garbage_lines_min = 4
+	_rm.current_config.garbage_lines_max = 4
+	_rm.current_config.garbage_interval_min = 1.0
+	_rm.current_config.garbage_interval_max = 1.0
+	_rm._next_garbage_interval = 1.0
+	_rm._tick_enemy_garbage(1.1)
+	# 4 lines - reduction(2) = 2 lines enter buffer
+	assert_eq(_rm._garbage_packets.size(), 1)
+	assert_eq(_rm._garbage_packets[0].lines, 2)
+
+func test_garbage_flush_reduction_blocks_full_attack() -> void:
+	_rm.current_config.garbage_flush_reduction = 3
+	_rm.current_config.garbage_lines_min = 2
+	_rm.current_config.garbage_lines_max = 2
+	_rm.current_config.garbage_interval_min = 1.0
+	_rm.current_config.garbage_interval_max = 1.0
+	_rm._next_garbage_interval = 1.0
+	_rm._tick_enemy_garbage(1.1)
+	# 2 lines - reduction(3) = 0 — attack fully blocked, nothing enters buffer
+	assert_true(_rm._garbage_packets.is_empty())
 
 # ── Economy ───────────────────────────────────────────────────────────────
 

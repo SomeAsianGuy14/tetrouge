@@ -1,12 +1,13 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Keystone" format=3 uid="uid://baph63v5uyjui"]
 
-[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+[ext_resource type="Script" uid="uid://cbdxscbm7yog0" path="res://resources/keystone.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "slightly_magical_coin"
 display_name = "Slightly Magical Coin"
 description = "Earn 1 extra coin at the end of each round."
+flavor_text = "It seems a little dull"
 is_starter = true
 category = "Starter"
 end_round_coins = 1

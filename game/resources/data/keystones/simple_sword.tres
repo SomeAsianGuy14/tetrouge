@@ -1,12 +1,13 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Keystone" format=3 uid="uid://d2yhlorybsbni"]
 
-[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+[ext_resource type="Script" uid="uid://cbdxscbm7yog0" path="res://resources/keystone.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "simple_sword"
 display_name = "Simple Sword"
 description = "Quads deal +2 damage."
+flavor_text = "Just a sword"
 is_starter = true
 category = "Starter"
 quad_bonus = 2

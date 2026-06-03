@@ -9,6 +9,7 @@ extends Control
 @onready var keystone_icons: HBoxContainer = $InventoryPanel/KeystoneIcons
 @onready var technique_icons: HBoxContainer = $InventoryPanel/TechniqueIcons
 
+@onready var timer_header_label: Label = $InfoPanel/TimerHeaderLabel
 @onready var timer_big_label: Label = $InfoPanel/TimerBigLabel
 @onready var round_big_label: Label = $InfoPanel/RoundBigLabel
 @onready var modifier_big_label: Label = $ModifierBigLabel
@@ -34,6 +35,9 @@ func _ready() -> void:
 	Economy.connect("coins_changed", _on_coins_changed)
 	for i in _backpack_slots.size():
 		_backpack_slots[i].connect("pressed", _on_backpack_slot_pressed.bind(i))
+	timer_label.visible = false
+	timer_header_label.visible = false
+	timer_big_label.visible = false
 
 func setup(config: RoundConfig) -> void:
 	var round_text := "Stage %d — %s" % [RunState.stage, RunState.get_round_name()]
@@ -45,6 +49,9 @@ func setup(config: RoundConfig) -> void:
 	timer_big_label.text = "%d:%02d" % [total_secs / 60, total_secs % 60]
 	timer_big_label.modulate = Color.WHITE
 	timer_label.modulate = Color.WHITE
+	timer_label.visible = config.show_timer
+	timer_header_label.visible = config.show_timer
+	timer_big_label.visible = config.show_timer
 
 	if config.boss_modifier:
 		modifier_label.text = config.boss_modifier.display_name
@@ -76,6 +83,8 @@ func update_quota(accumulated: float, _quota: int) -> void:
 		_enemy_display.update_hp(accumulated)
 
 func update_timer(time_remaining: float) -> void:
+	if not timer_label.visible:
+		return
 	var secs := maxf(0.0, time_remaining)
 	var formatted := "%d:%02d" % [int(secs) / 60, int(secs) % 60]
 	timer_label.text = formatted

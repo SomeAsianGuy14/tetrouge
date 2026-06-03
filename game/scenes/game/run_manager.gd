@@ -48,7 +48,6 @@ var round_timer: float = 0.0
 var _enemy_timer: float = 0.0
 var _next_garbage_interval: float = 0.0
 var quota_accumulated: float = 0.0
-var technique_income_this_round: int = 0
 var surplus_attack: int = 0
 var _garbage_packets: Array = []
 
@@ -68,6 +67,7 @@ var _locked_pivot_col: int = -1
 var _piece_spawn_time: float = 0.0
 var _burning_board_timer: float = 0.0
 var _burning_board_active: bool = false
+var _deferred_reflect_lines: int = 0
 var _flash_step_arr_pending: bool = false
 var _greedy_hands_active: bool = false
 
@@ -115,6 +115,7 @@ func start_run() -> void:
 		_show_starter_keystone_selection()
 
 func _show_starter_keystone_selection() -> void:
+	hud.visible = false
 	var scene: PackedScene = load(SCENE_KEYSTONE_SELECTION)
 	var screen = scene.instantiate()
 	screen.starter_only = true
@@ -122,6 +123,7 @@ func _show_starter_keystone_selection() -> void:
 	screen.connect("keystone_chosen", _on_starter_keystone_chosen)
 
 func _on_starter_keystone_chosen(_keystone: Keystone) -> void:
+	hud.visible = true
 	start_round()
 
 # ── Round start ───────────────────────────────────────────────────────────
@@ -129,10 +131,10 @@ func _on_starter_keystone_chosen(_keystone: Keystone) -> void:
 func start_round() -> void:
 	_round_ended = false
 	_garbage_packets = []
+	_deferred_reflect_lines = 0
 	current_config = _build_round_config()
 	hud.setup(current_config)
 	quota_accumulated = 0.0
-	technique_income_this_round = 0
 	surplus_attack = 0
 	round_timer = current_config.time_limit
 	_enemy_timer = 0.0
@@ -205,6 +207,7 @@ func start_round() -> void:
 	board_container.add_child(_enemy_display)
 	_enemy_display.position = Vector2(TetrisBoard.COLS * TetrisBoard.CELL_SIZE + 16 + 112 + 48, 0)
 	_enemy_display.setup(current_config.enemy, current_config.quota)
+	_enemy_display.set_attack_bar_visible(current_config.reflect_ratio <= 0.0)
 	hud.set_enemy_display(_enemy_display)
 	hud.set_run_manager(self)
 
@@ -212,6 +215,7 @@ func start_round() -> void:
 	_attack_bar = attack_bar_script.new()
 	board_container.add_child(_attack_bar)
 	_attack_bar.position = Vector2(-20, 0)
+	_attack_bar.flush_capacity = 8
 	hud._refresh_backpack_slots()
 
 func _build_round_config() -> RoundConfig:
@@ -250,11 +254,14 @@ func _build_round_config() -> RoundConfig:
 	cfg.garbage_lines_min = _lmin + _lines_bonus + _asc.get("extra_lines", 0)
 	cfg.garbage_lines_max = _lmax + _lines_bonus + _asc.get("extra_lines", 0)
 
+	cfg.time_limit = RunState.calculate_time_limit(RunState.stage)
+
 	if enemy.ability:
 		cfg.boss_modifier = enemy.ability
 		enemy.ability.apply_to_config(cfg)
 
-	cfg.time_limit = RunState.calculate_time_limit(RunState.stage, cfg.boss_modifier.id if cfg.boss_modifier else "")
+	cfg.show_timer = RunState.has_keystone("golden_watch") or \
+		(cfg.boss_modifier != null and cfg.boss_modifier.id == "the_blitz")
 
 	# Glass Cannon: +2 incoming garbage lines per wave
 	if RunState.has_technique("glass_cannon"):
@@ -376,11 +383,12 @@ func _handle_input() -> void:
 
 func _tick_timer(delta: float) -> void:
 	round_timer -= delta
-	hud.update_timer(round_timer)
+	if hud:
+		hud.update_timer(round_timer)
 	if round_timer <= 0.0:
-		if _try_blessed_stone():
-			return
-		_end_round(false)
+		round_timer = 0.0
+		if current_config and current_config.boss_modifier != null and current_config.boss_modifier.id == "the_blitz":
+			_end_round(false)
 
 func _tick_enemy_garbage(delta: float) -> void:
 	if current_config == null or current_config.garbage_interval_max <= 0.0:
@@ -390,11 +398,13 @@ func _tick_enemy_garbage(delta: float) -> void:
 		_enemy_timer = 0.0
 		if current_config.reflect_ratio <= 0.0:
 			var n := randi_range(current_config.garbage_lines_min, current_config.garbage_lines_max)
-			if current_config.garbage_individual_lines:
-				for _i in range(n):
-					_garbage_packets.append({lines = 1, is_filth = true})
-			else:
-				_garbage_packets.append({lines = n, is_filth = false})
+			n = maxi(0, n - current_config.garbage_flush_reduction)
+			if n > 0:
+				if current_config.garbage_individual_lines:
+					for _i in range(n):
+						_garbage_packets.append({lines = 1, is_filth = true})
+				else:
+					_garbage_packets.append({lines = n, is_filth = false})
 			_notify_attack_bar()
 			if _technique_round_state:
 				_technique_round_state.after_receive_pending = true
@@ -472,7 +482,7 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 			RunState.techniques, ctx, _technique_round_state)
 		technique_atk = eval_result.get("attack_delta", 0)
 		technique_coins = eval_result.get("coins_delta", 0)
-		technique_income_this_round += technique_coins
+		Economy.add_coins(technique_coins)
 		_handle_technique_flags(eval_result.get("flags", []))
 		_update_round_state_after_eval(ctx, eval_result)
 
@@ -520,8 +530,7 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 	if current_config.reflect_ratio > 0.0 and to_quota > 0:
 		var reflect_lines := floori(to_quota * current_config.reflect_ratio)
 		if reflect_lines > 0:
-			_garbage_packets.append({lines = reflect_lines, is_filth = false})
-			_notify_attack_bar()
+			_deferred_reflect_lines += reflect_lines
 
 	if quota_accumulated >= current_config.quota:
 		_end_round(true)
@@ -734,22 +743,28 @@ func _apply_keystone_multipliers(attack: int, event_type: String) -> int:
 
 func _drain_attack(modified: int) -> int:
 	var remaining := modified
-	while remaining > 0 and not _garbage_packets.is_empty():
-		var packet = _garbage_packets[0]
+	var i := 0
+	while remaining > 0 and i < _garbage_packets.size():
+		var packet = _garbage_packets[i]
+		if packet.get("is_reflected", false):
+			i += 1
+			continue
 		var drain := mini(remaining, packet.lines)
 		packet.lines -= drain
 		remaining -= drain
 		if packet.lines == 0:
-			_garbage_packets.remove_at(0)
+			_garbage_packets.remove_at(i)
+		else:
+			i += 1
 	_notify_attack_bar()
 	return remaining
 
 func _flush_pending_garbage() -> void:
-	if current_board == null or _garbage_packets.is_empty():
+	if current_board == null:
 		return
-	var reduction := current_config.garbage_flush_reduction if current_config else 0
-	var capacity := maxi(0, 8 - reduction)
-	var remaining := capacity
+	if _garbage_packets.is_empty() and _deferred_reflect_lines == 0:
+		return
+	var remaining := 8
 	var reflect_ratio := 0.0
 	for ks in RunState.keystones:
 		if ks.reflect_on_flush > 0.0:
@@ -778,6 +793,9 @@ func _flush_pending_garbage() -> void:
 		remaining -= to_flush
 		if packet.lines == 0:
 			_garbage_packets.remove_at(0)
+	if _deferred_reflect_lines > 0:
+		_garbage_packets.append({lines = _deferred_reflect_lines, is_filth = false, is_reflected = true})
+		_deferred_reflect_lines = 0
 	_notify_attack_bar()
 
 func _notify_attack_bar() -> void:
@@ -816,10 +834,10 @@ func _end_round(success: bool) -> void:
 		_show_failure()
 		return
 
-	var speed_bonus := Economy.calculate_speed_bonus(round_timer, current_config.time_limit)
 	var surplus_income := _calculate_surplus_income()
 	_apply_keystone_economy()
-	Economy.pay_round(BASE_PAYOUT, speed_bonus, technique_income_this_round + surplus_income)
+	Economy.add_coins(surplus_income)
+	Economy.pay_round(BASE_PAYOUT)
 
 	var was_boss := RunState.is_boss_round()
 	RunState.advance_round()
@@ -829,7 +847,7 @@ func _end_round(success: bool) -> void:
 		return
 
 	_pending_keystone = was_boss
-	_show_round_success(speed_bonus, surplus_income)
+	_show_round_success()
 
 func _apply_keystone_economy() -> void:
 	for ks in RunState.keystones:
@@ -880,13 +898,13 @@ func _on_board_updated() -> void:
 
 # ── Scene transitions ─────────────────────────────────────────────────────
 
-func _show_round_success(speed_bonus: int, surplus_income: int) -> void:
+func _show_round_success() -> void:
 	var scene: PackedScene = load(SCENE_ROUND_SUCCESS)
 	var screen = scene.instantiate()
 	_active_overlay = screen
 	add_child(screen)
 	screen.connect("proceed", _on_success_proceed)
-	screen.setup(BASE_PAYOUT, speed_bonus, technique_income_this_round + surplus_income)
+	screen.setup(BASE_PAYOUT)
 
 func _on_success_proceed() -> void:
 	if _pending_keystone:

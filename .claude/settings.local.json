@@ -51,7 +51,15 @@
       "Bash(ascension)",
       "Bash(unlock)",
       "Bash(profile\")",
-      "PowerShell(Move-Item \"c:\\\\School\\\\PP\\\\TR\\\\openspec\\\\changes\\\\ascension-system\" \"c:\\\\School\\\\PP\\\\TR\\\\openspec\\\\changes\\\\archive\\\\2026-06-01-ascension-system\")"
+      "PowerShell(Move-Item \"c:\\\\School\\\\PP\\\\TR\\\\openspec\\\\changes\\\\ascension-system\" \"c:\\\\School\\\\PP\\\\TR\\\\openspec\\\\changes\\\\archive\\\\2026-06-01-ascension-system\")",
+      "PowerShell(New-Item -ItemType Directory -Force \"$env:USERPROFILE\\\\bin\" | Out-Null; Copy-Item \"C:\\\\Users\\\\user\\\\Downloads\\\\butler-windows-amd64\\\\butler.exe\" \"$env:USERPROFILE\\\\bin\\\\butler.exe\" -ErrorAction SilentlyContinue; if \\(-not \\(Test-Path \"$env:USERPROFILE\\\\bin\\\\butler.exe\"\\)\\) { Expand-Archive \"C:\\\\Users\\\\user\\\\Downloads\\\\butler-windows-amd64.zip\" \"$env:USERPROFILE\\\\bin\" -Force }; Test-Path \"$env:USERPROFILE\\\\bin\\\\butler.exe\")",
+      "PowerShell(& \"$env:USERPROFILE\\\\bin\\\\butler.exe\" login 2>&1 | Select-Object -First 5)",
+      "PowerShell(& \"$env:USERPROFILE\\\\bin\\\\butler.exe\" push \"c:\\\\School\\\\PP\\\\TR\\\\builds\\\\web\" \"SomeAsianGuy14/4628894:html\" --userversion \"0.2.0\" 2>&1)",
+      "PowerShell(& \"$env:USERPROFILE\\\\bin\\\\butler.exe\" push \"c:\\\\School\\\\PP\\\\TR\\\\builds\\\\web\" \"SomeAsianGuy14/tetrouge:html\" --userversion \"0.2.0\" 2>&1)",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(d['instruction'][:300]\\)\")",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(d['artifacts'][-1]['status']\\)\")",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(d['rules']\\)\")",
+      "PowerShell(Move-Item \"c:\\\\School\\\\PP\\\\TR\\\\openspec\\\\changes\\\\timer-overhaul\" \"c:\\\\School\\\\PP\\\\TR\\\\openspec\\\\changes\\\\archive\\\\2026-06-03-timer-overhaul\")"
     ],
     "additionalDirectories": [
       "c:\\School\\PP\\TR\\builds\\web"

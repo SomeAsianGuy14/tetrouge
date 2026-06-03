@@ -1,12 +1,13 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Keystone" format=3 uid="uid://dgur6hvhbi8bv"]
 
-[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+[ext_resource type="Script" uid="uid://cbdxscbm7yog0" path="res://resources/keystone.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "legionnaires_shield"
 display_name = "Legionnaire's Shield"
 description = "Incoming garbage is reduced by 3 lines per flush. Requires: Simple Shield."
+flavor_text = "An impressive defense"
 category = "Starter"
 requires_keystone_id = "simple_shield"
 replaces_keystone_id = "simple_shield"

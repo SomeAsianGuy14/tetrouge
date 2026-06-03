@@ -1,12 +1,13 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Keystone" format=3 uid="uid://c4msagt4s02qp"]
 
-[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+[ext_resource type="Script" uid="uid://cbdxscbm7yog0" path="res://resources/keystone.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "flurry"
 display_name = "Flurry"
 description = "Combos deal 2x damage when your combo count exceeds 5."
+flavor_text = "Just keep on hitting "
 category = "Combo"
 combo_multiplier = 2.0
 combo_multiplier_threshold = 5

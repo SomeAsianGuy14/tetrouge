@@ -1,9 +1,11 @@
-# Export TR v0.1.0 and create a GitHub release
-# Usage: .\export.ps1 [-GodotPath "C:\path\to\godot.exe"]
+# Export Tetrouge and publish to GitHub + itch.io
+# Usage: .\export.ps1 [-Version "0.1.1"] [-GodotPath "C:\path\to\godot.exe"] [-ItchUser "username"] [-ItchGame "game-slug"]
 
 param(
     [string]$GodotPath = "godot",
-    [string]$Version = "0.1.0"
+    [string]$Version = "0.2.0",
+    [string]$ItchUser = "SomeAsianGuy14",
+    [string]$ItchGame = "tetrouge"
 )
 
 $ErrorActionPreference = "Stop"
@@ -11,6 +13,18 @@ $ErrorActionPreference = "Stop"
 # Add gh to PATH if not already present
 if (-not (Get-Command gh -ErrorAction SilentlyContinue)) {
     $env:PATH += ";C:\Program Files\GitHub CLI"
+}
+
+# Find butler
+$ButlerCmd = "butler"
+if (-not (Get-Command butler -ErrorAction SilentlyContinue)) {
+    $ButlerLocal = "$env:USERPROFILE\bin\butler.exe"
+    if (Test-Path $ButlerLocal) {
+        $ButlerCmd = $ButlerLocal
+    } else {
+        Write-Error "butler not found. Install from https://itchio.itch.io/butler"
+        exit 1
+    }
 }
 
 $ProjectDir = Join-Path $PSScriptRoot "game"
@@ -66,4 +80,12 @@ gh release create $Tag `
     $WinZip $WebZip
 
 
-Write-Host "Done. Release $Tag published."
+# ── Push web build to itch.io ──────────────────────────────────────────────
+Write-Host "Pushing web build to itch.io ($ItchUser/$ItchGame:html)..."
+& $ButlerCmd push $WebDir "$ItchUser/$ItchGame`:html" --userversion $Version 2>&1
+if ($LASTEXITCODE -ne 0) {
+    Write-Error "itch.io push failed (exit $LASTEXITCODE)"
+    exit 1
+}
+
+Write-Host "Done. Release $Tag published to GitHub and itch.io."

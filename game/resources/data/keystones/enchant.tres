@@ -1,11 +1,12 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Keystone" format=3 uid="uid://ipmd0xwrukou"]
 
-[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+[ext_resource type="Script" uid="uid://cbdxscbm7yog0" path="res://resources/keystone.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "enchant"
 display_name = "Enchant"
 description = "Each T-Spin-applicable technique adds +2 damage to T-Spins."
+flavor_text = "A magical boost in strength"
 category = "T-Spin"
 per_technique_tspin_bonus = 2

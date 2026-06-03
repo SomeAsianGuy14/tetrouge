@@ -39,15 +39,10 @@ The following consumables SHALL be available in the initial build:
 | **Combo Coil** | +3 to combo bonus attacks | Pre-round |
 | **PC Bomb** | +8 to perfect clear attacks | Pre-round |
 | **Attack Surge** | First 3 clears deal double attack | Pre-round |
-| **Time Shard** | Add 8 seconds to the round timer | During round |
 
 #### Scenario: Attack-buff consumable raises clear damage for the round
 - **WHEN** an attack-buff consumable is activated before a round
 - **THEN** all attacks of the specified clear type deal additional damage for that round's duration
-
-#### Scenario: Time Shard extends timer mid-round
-- **WHEN** Time Shard is activated during an active round
-- **THEN** 8 seconds are added to the current timer
 
 #### Scenario: Attack Surge doubles the first 3 clears
 - **WHEN** Attack Surge is activated before a round and the player clears lines
@@ -56,3 +51,9 @@ The following consumables SHALL be available in the initial build:
 #### Scenario: Bonus expires at round end
 - **WHEN** a round ends after an attack-buff consumable was activated
 - **THEN** the bonus no longer applies in subsequent rounds
+
+## REMOVED Requirements
+
+### Requirement: Time Shard adds seconds to the round timer
+**Reason:** Without the timer as a failure condition, adding time has no survival value. The consumable is vestigial.
+**Migration:** Remove `time_shard.tres` from the data folder and remove its preload entry from `ResourceRegistry.all_consumables`. Any save file referencing `time_shard` in the consumable inventory will silently drop it on next load (the `_load_by_ids` helper already handles missing ids gracefully).

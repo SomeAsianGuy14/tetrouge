@@ -1,10 +1,10 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="BossModifier" format=3 uid="uid://noqt3cc4hjdi"]
 
-[ext_resource type="Script" path="res://resources/boss_modifier.gd" id="1"]
+[ext_resource type="Script" uid="uid://cb0ulqkbqer8l" path="res://resources/boss_modifier.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "the_filth"
 display_name = "The Filth"
-description = "All garbage arrives as individual lines, each with its own random hole."
+description = "All garbage arrives as individual lines"
 garbage_individual_lines = true

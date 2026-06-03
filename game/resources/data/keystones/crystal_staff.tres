@@ -1,12 +1,13 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Keystone" format=3 uid="uid://bsnqn88efn84w"]
 
-[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+[ext_resource type="Script" uid="uid://cbdxscbm7yog0" path="res://resources/keystone.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "crystal_staff"
 display_name = "Crystal Staff"
 description = "All T-Spins deal +10 damage. Requires: Simple Wand."
+flavor_text = "An archmage's grand conduit"
 category = "Starter"
 requires_keystone_id = "simple_wand"
 replaces_keystone_id = "simple_wand"

@@ -1,11 +1,12 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Keystone" format=3 uid="uid://c4hlvwdstnh4h"]
 
-[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+[ext_resource type="Script" uid="uid://cbdxscbm7yog0" path="res://resources/keystone.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "triple_threat"
 display_name = "Triple Threat"
 description = "T-Spin Triples deal 3x damage."
+flavor_text = "Setup, Spin, Style"
 category = "T-Spin"
 tspin_triple_multiplier = 3.0

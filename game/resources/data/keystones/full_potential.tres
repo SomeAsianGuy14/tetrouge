@@ -1,12 +1,13 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Keystone" format=3 uid="uid://df28kchubiwll"]
 
-[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+[ext_resource type="Script" uid="uid://cbdxscbm7yog0" path="res://resources/keystone.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "full_potential"
 display_name = "Full Potential"
 description = "Instant auto-repeat and instant soft drop."
+flavor_text = "I feel the power!!"
 category = "Utility"
 instant_arr = true
 instant_soft_drop = true

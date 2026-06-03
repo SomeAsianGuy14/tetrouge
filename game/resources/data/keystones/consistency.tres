@@ -1,11 +1,12 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Keystone" format=3 uid="uid://b16vv2u70f6tj"]
 
-[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+[ext_resource type="Script" uid="uid://cbdxscbm7yog0" path="res://resources/keystone.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "consistency"
 display_name = "Consistency"
 description = "Back-to-Back clears deal +1 damage."
+flavor_text = "Something about pushing a rock"
 category = "B2B"
 b2b_bonus = 1

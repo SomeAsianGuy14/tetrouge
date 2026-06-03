@@ -1,12 +1,13 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Keystone" format=3 uid="uid://cmh0dw4kk17n4"]
 
-[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+[ext_resource type="Script" uid="uid://cbdxscbm7yog0" path="res://resources/keystone.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "simplicity"
 display_name = "Simplicity"
 description = "Quads deal 2x damage. T-Spins deal no damage."
+flavor_text = "Keep it simple, stupid"
 category = "Quad"
 quad_multiplier = 2.0
 suppress_spins = true

@@ -29,3 +29,7 @@
 - Test names describe the scenario: `test_seeded_shuffle_same_seed_produces_same_order`
 - Group related tests under comment headers (`# ── Section ───`)
 - Prefer multiple focused tests over one large test that checks many things
+
+## Changelog
+
+After every significant change or bug fix, append player-facing notes to `CHANGELOG.md` under the `## Unreleased` block at the top. Use plain language grouped by category (New Features, Balance, Bug Fixes). When a public release is cut, that block gets promoted to a versioned heading.

@@ -12,15 +12,19 @@ A full run SHALL consist of 5 antes. Each ante SHALL contain 4 rounds: Small Bli
 - **THEN** the run is marked as a victory and the end screen is shown
 
 ### Requirement: Each round has a quota and time limit
-Every round SHALL have an attack quota (enemy HP that must be depleted) and a time limit (seconds). The player must reach the quota before the timer expires or the board tops out. The HUD SHALL be initialised with the correct quota and time limit at the start of each round so displayed values are accurate from the first frame. At ascension level 4 or above, the quota SHALL be multiplied by 1.2 (rounded up).
+Every round SHALL have an attack quota (enemy HP that must be depleted) and a time budget (seconds). The player must deplete the quota; topping out ends the run in failure. Reaching the time budget without depleting the quota no longer ends the run, except during The Blitz boss modifier round where timeout remains a failure condition. The base time budget is 180 seconds. The HUD SHALL be initialised with the correct quota and time budget at the start of each round so displayed values are accurate from the first frame. At ascension level 4 or above, the quota SHALL be multiplied by 1.2 (rounded up).
 
-#### Scenario: Quota met before time expires
+#### Scenario: Quota met before time budget expires
 - **WHEN** the player's accumulated modified attack reaches the quota
-- **THEN** the round ends as a success immediately; remaining time feeds the speed bonus
+- **THEN** the round ends as a success immediately
 
-#### Scenario: Time expires before quota met
-- **WHEN** the timer reaches zero and the quota has not been met
-- **AND** the Blessed Stone has already been spent or is not held
+#### Scenario: Time budget expires in a standard round
+- **WHEN** the timer reaches zero in a round that is not The Blitz
+- **THEN** the timer SHALL clamp to zero and the round SHALL continue
+- **THEN** the run SHALL NOT end
+
+#### Scenario: Time budget expires during The Blitz
+- **WHEN** the timer reaches zero during a Blitz round
 - **THEN** the round ends as a failure and the run ends (permadeath)
 
 #### Scenario: Board tops out before quota met
@@ -36,6 +40,18 @@ Every round SHALL have an attack quota (enemy HP that must be depleted) and a ti
 - **WHEN** ascension level >= 4
 - **AND** the base quota for a round would be 50
 - **THEN** the actual quota SHALL be ceil(50 * 1.2) = 60
+
+### Requirement: Blessed Stone only triggers on topout
+Blessed Stone SHALL only intercept the `game_over` signal (board topout). It SHALL NOT intercept a timer expiry.
+
+#### Scenario: Blessed Stone triggers on topout
+- **WHEN** the board tops out
+- **AND** Blessed Stone is held and unspent
+- **THEN** the board is cleared and 120 seconds are added to the round timer
+
+#### Scenario: Blessed Stone does not trigger on timeout
+- **WHEN** the timer reaches zero in any round
+- **THEN** Blessed Stone SHALL NOT activate regardless of spent state
 
 ### Requirement: Quota and time limit scale per ante and round
 Quotas SHALL increase with each ante and each round within an ante. The time limit SHALL remain fixed at 60 seconds per round for the initial build.

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="BossModifier" format=3 uid="uid://c5pftyx38m7bt"]
+
+[ext_resource type="Script" uid="uid://cb0ulqkbqer8l" path="res://resources/boss_modifier.gd" id="1_koufx"]
+
+[resource]
+script = ExtResource("1_koufx")
+id = "the_blitz"
+display_name = "The Blitz"
+description = "A 2-minute countdown begins. Defeat the enemy before time runs out or the run ends."
+time_limit_override = 120.0

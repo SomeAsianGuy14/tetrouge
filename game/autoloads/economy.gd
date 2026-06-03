@@ -3,14 +3,12 @@ extends Node
 var coins: int = 0
 
 var interest_cap: int = 5
-var speed_bonus_multiplier: float = 1.0
 
 signal coins_changed(new_amount: int)
 
 func reset() -> void:
 	coins = 0
 	interest_cap = 5
-	speed_bonus_multiplier = 1.0
 	emit_signal("coins_changed", coins)
 
 func add_coins(amount: int) -> void:
@@ -33,11 +31,5 @@ func apply_interest() -> int:
 		add_coins(interest)
 	return interest
 
-func pay_round(base: int, speed_bonus: int, technique_income: int) -> void:
-	var total := base + roundi(speed_bonus * speed_bonus_multiplier) + technique_income
-	add_coins(total)
-
-func calculate_speed_bonus(time_remaining: float, time_limit: float) -> int:
-	if time_remaining <= 0.0:
-		return 0
-	return roundi((time_remaining / time_limit) * 3.0 * speed_bonus_multiplier)
+func pay_round(base: int) -> void:
+	add_coins(base)

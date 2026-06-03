@@ -1,11 +1,12 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Keystone" format=3 uid="uid://b5wy8xkf8sik7"]
 
-[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+[ext_resource type="Script" uid="uid://cbdxscbm7yog0" path="res://resources/keystone.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "foresight"
 display_name = "Foresight"
 description = "See 2 additional pieces in the preview queue."
+flavor_text = "The more you know"
 category = "Utility"
 preview_count_bonus = 2

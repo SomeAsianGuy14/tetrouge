@@ -1,11 +1,12 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Keystone" format=3 uid="uid://dgqnns25rmmak"]
 
-[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+[ext_resource type="Script" uid="uid://cbdxscbm7yog0" path="res://resources/keystone.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "double_trouble"
 display_name = "Double Trouble"
 description = "T-Spin Doubles deal 2x damage."
+flavor_text = "Years of didgeridoo practice paid off"
 category = "T-Spin"
 tspin_double_multiplier = 2.0

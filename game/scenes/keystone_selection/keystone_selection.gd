@@ -59,6 +59,18 @@ func _populate_options() -> void:
 
 		vbox.add_child(name_lbl)
 		vbox.add_child(desc_lbl)
+
+		if keystone.flavor_text != "":
+			var flavor_lbl := Label.new()
+			flavor_lbl.text = keystone.flavor_text
+			flavor_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			flavor_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD
+			flavor_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			flavor_lbl.add_theme_font_size_override("font_size", 11)
+			flavor_lbl.modulate = Color(0.75, 0.75, 0.75, 1.0)
+			flavor_lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			vbox.add_child(flavor_lbl)
+
 		btn.add_child(vbox)
 		options_container.add_child(btn)
 

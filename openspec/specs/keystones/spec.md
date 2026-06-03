@@ -129,11 +129,15 @@ The following keystones SHALL exist as `.tres` data files and be registered in `
 - **THEN** the T-Spin attack SHALL receive +10 flat damage via `tspin_any_bonus`
 
 ### Requirement: Blessed Stone keystone exists in the keystone pool
-Blessed Stone SHALL exist as a `.tres` data file with `blessed_stone = true`, registered in `ResourceRegistry.all_keystones`.
+Blessed Stone SHALL exist as a `.tres` data file with `blessed_stone = true`, registered in `ResourceRegistry.all_keystones`. Description: "The first time your board tops out, it is cleared and you gain 2 minutes." Blessed Stone only triggers on topout — it SHALL NOT activate on timer expiry.
 
 #### Scenario: Blessed Stone is a non-starter keystone with no category prerequisite
 - **WHEN** the player does not hold any specific other keystone
 - **THEN** Blessed Stone SHALL be eligible for the keystone selection screen (no `requires_keystone_id`)
+
+#### Scenario: Blessed Stone description references topout as trigger
+- **WHEN** Blessed Stone is displayed
+- **THEN** the description SHALL reference topping out as the trigger condition, not time running out
 
 ### Requirement: Hybrid Reactor keystone exists in the keystone pool
 Hybrid Reactor SHALL exist as a `.tres` data file with `per_attack_tag_bonus = 3`, registered in `ResourceRegistry.all_keystones`.

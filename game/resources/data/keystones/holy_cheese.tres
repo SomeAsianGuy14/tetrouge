@@ -1,12 +1,13 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Keystone" format=3 uid="uid://cjt37oiyfx8b1"]
 
-[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+[ext_resource type="Script" uid="uid://cbdxscbm7yog0" path="res://resources/keystone.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "holy_cheese"
 display_name = "Holy Cheese"
 description = "Singles deal 2x damage. All other clear types deal no damage."
+flavor_text = "Man it stinks in here"
 category = "Combo"
 single_multiplier = 2.0
 suppress_non_singles = true

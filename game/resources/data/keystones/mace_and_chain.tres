@@ -1,12 +1,13 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Keystone" format=3 uid="uid://bgejvn6jtn0oh"]
 
-[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+[ext_resource type="Script" uid="uid://cbdxscbm7yog0" path="res://resources/keystone.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "mace_and_chain"
 display_name = "Mace and Chain"
 description = "Singles and Doubles deal +3 damage. Requires: Simple Flail."
+flavor_text = "Fast yet brutal"
 category = "Starter"
 requires_keystone_id = "simple_flail"
 replaces_keystone_id = "simple_flail"
