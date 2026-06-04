@@ -24,7 +24,6 @@ var _all_vouchers: Array = []
 var _buy_buttons: Dictionary = {}  # slot node → buy Button (or null if owned)
 var _technique_slot_nodes: Array = []  # tracks which slots show techniques
 var _slot_item_map: Dictionary = {}  # slot node → resource item
-var _capacity_label: Label = null
 
 func _ready() -> void:
 	Economy.connect("coins_changed", _update_coin_display)
@@ -33,29 +32,14 @@ func _ready() -> void:
 		_collection_slots[i].connect("pressed", _on_sell_consumable.bind(i))
 	var interest := Economy.apply_interest()
 	interest_label.text = "+%d interest" % interest if interest > 0 else ""
-	_setup_capacity_label()
-	_load_item_pools()
+		_load_item_pools()
 	_populate_shop()
 	_update_coin_display(Economy.coins)
 	_build_collection()
 
-func _setup_capacity_label() -> void:
-	_capacity_label = Label.new()
-	_capacity_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_capacity_label.modulate = Color(1.0, 0.7, 0.3)
-	_capacity_label.visible = false
-	technique_slots.get_parent().add_child(_capacity_label)
-	technique_slots.get_parent().move_child(_capacity_label, technique_slots.get_index() + 1)
-
 func _is_at_technique_capacity() -> bool:
 	return RunState.techniques.size() >= RunState.technique_capacity
 
-func _update_capacity_label() -> void:
-	if _capacity_label == null:
-		return
-	var at_cap := _is_at_technique_capacity()
-	_capacity_label.text = "Technique slots full (%d/%d)" % [RunState.techniques.size(), RunState.technique_capacity]
-	_capacity_label.visible = at_cap
 
 func _load_item_pools() -> void:
 	_all_techniques = ResourceRegistry.get_available_techniques()
@@ -69,8 +53,7 @@ func _populate_shop() -> void:
 	_populate_slot(consumable_slot, first_consumable)
 	_populate_slot(consumable_slot_2, _pick_one(_all_consumables, [first_id]))
 	_populate_voucher_slot()
-	_update_capacity_label()
-
+	
 func _populate_technique_slots() -> void:
 	_technique_slot_nodes.clear()
 	var available := _all_techniques.filter(func(t): return not RunState.has_technique(t.id))
@@ -84,8 +67,7 @@ func _populate_technique_slots() -> void:
 		_populate_slot(slot, item)
 		if item != null:
 			_technique_slot_nodes.append(slot)
-	_update_capacity_label()
-
+	
 func _populate_voucher_slot() -> void:
 	var stage_chance := RunState.stage * 0.15  # 15% per stage
 	if RunState.seeded_randf() > stage_chance:
@@ -290,8 +272,7 @@ func _refresh_button_states() -> void:
 		var blocked := is_technique_btn and at_cap
 		btn.disabled = not can_afford or blocked
 		slot.modulate = Color.WHITE if (can_afford and not blocked) else Color(0.55, 0.55, 0.55)
-	_update_capacity_label()
-
+	
 func _update_coin_display(amount: int) -> void:
 	coin_label.text = "Coins: %d" % amount
 

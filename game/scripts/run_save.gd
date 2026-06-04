@@ -20,7 +20,6 @@ static func save() -> void:
 
 	cfg.set_value("economy", "coins", Economy.coins)
 	cfg.set_value("economy", "interest_cap", Economy.interest_cap)
-	cfg.set_value("economy", "speed_bonus_multiplier", Economy.speed_bonus_multiplier)
 
 	cfg.set_value("inventory", "keystone_ids", _ids_from(RunState.keystones))
 	cfg.set_value("inventory", "technique_ids", _ids_from(RunState.techniques))
@@ -47,7 +46,6 @@ static func load_into_state() -> bool:
 
 	Economy.coins = cfg.get_value("economy", "coins", 0)
 	Economy.interest_cap = cfg.get_value("economy", "interest_cap", 5)
-	Economy.speed_bonus_multiplier = cfg.get_value("economy", "speed_bonus_multiplier", 1.0)
 
 	RunState.keystones = _load_by_ids(ResourceRegistry.all_keystones,
 			cfg.get_value("inventory", "keystone_ids", []))

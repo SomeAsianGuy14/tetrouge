@@ -402,9 +402,11 @@ func _tick_enemy_garbage(delta: float) -> void:
 			if n > 0:
 				if current_config.garbage_individual_lines:
 					for _i in range(n):
-						_garbage_packets.append({lines = 1, is_filth = true})
+						var filth_col := randi() % current_config.board_width
+						_garbage_packets.append({lines = 1, is_filth = true, col = filth_col})
 				else:
-					_garbage_packets.append({lines = n, is_filth = false})
+					var packet_col := randi() % current_config.board_width
+					_garbage_packets.append({lines = n, is_filth = false, col = packet_col})
 			_notify_attack_bar()
 			if _technique_round_state:
 				_technique_round_state.after_receive_pending = true
@@ -774,10 +776,10 @@ func _flush_pending_garbage() -> void:
 		var to_flush := mini(remaining, packet.lines)
 		if packet.is_filth:
 			for _i in range(to_flush):
-				var col := randi() % current_config.board_width
+				var col: int = packet.get("col", randi() % current_config.board_width)
 				current_board.insert_garbage_rows(1, col)
 		else:
-			var col := randi() % current_config.board_width
+			var col: int = packet.get("col", randi() % current_config.board_width)
 			current_board.insert_garbage_rows(to_flush, col)
 		if reflect_ratio > 0.0:
 			var reflected := floori(to_flush * reflect_ratio)
@@ -794,7 +796,8 @@ func _flush_pending_garbage() -> void:
 		if packet.lines == 0:
 			_garbage_packets.remove_at(0)
 	if _deferred_reflect_lines > 0:
-		_garbage_packets.append({lines = _deferred_reflect_lines, is_filth = false, is_reflected = true})
+		var reflect_col := randi() % (current_config.board_width if current_config else 10)
+		_garbage_packets.append({lines = _deferred_reflect_lines, is_filth = false, is_reflected = true, col = reflect_col})
 		_deferred_reflect_lines = 0
 	_notify_attack_bar()
 
@@ -875,6 +878,7 @@ func _calculate_surplus_income() -> int:
 func _on_lock_processed() -> void:
 	_t_spin_rotations = 0
 	_rotations_this_piece = 0
+	var _did_clear := not _last_cleared_rows.is_empty()
 	_last_cleared_rows = []
 	_piece_spawn_time = Time.get_ticks_msec() / 1000.0
 	# Switch-Up: arm for next piece based on whether THIS piece was hard-dropped
@@ -890,7 +894,8 @@ func _on_lock_processed() -> void:
 	if _run_stats and current_board:
 		_run_stats.highest_combo_chain = max(_run_stats.highest_combo_chain, current_board.combo)
 		_run_stats.highest_b2b = max(_run_stats.highest_b2b, current_board.b2b_count)
-	_flush_pending_garbage()
+	if not _did_clear:
+		_flush_pending_garbage()
 
 func _on_board_updated() -> void:
 	if current_board:

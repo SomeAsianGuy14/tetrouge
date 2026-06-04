@@ -1,9 +1,0 @@
-res://autoloads/economy.gd
-res://autoloads/resource_registry.gd
-res://autoloads/run_state.gd
-res://resources/round_config.gd
-res://resources/data/boss_modifiers/the_blitz.tres
-res://resources/data/keystones/blessed_stone.tres
-res://resources/data/keystones/golden_watch.tres
-res://scenes/game/hud.gd
-res://scenes/game/run_manager.gd

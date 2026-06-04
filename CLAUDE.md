@@ -32,4 +32,4 @@
 
 ## Changelog
 
-After every significant change or bug fix, append player-facing notes to `CHANGELOG.md` under the `## Unreleased` block at the top. Use plain language grouped by category (New Features, Balance, Bug Fixes). When a public release is cut, that block gets promoted to a versioned heading.
+After every `/opsx:archive` and after any standalone fix, append player-facing notes to `CHANGELOG.md` under the `## Unreleased` block. This is a required step of archiving — do it before the git commit so the notes ship in the same commit. Use plain language grouped by category (New Features, Balance, Bug Fixes). When a public release is cut, that block gets promoted to a versioned heading.

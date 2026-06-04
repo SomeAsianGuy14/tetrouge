@@ -5,7 +5,7 @@ Initial public release.
 
 ---
 
-## Unreleased
+## [0.2.1] — 2026-06-03
 
 ### New Features
 - **Flush threshold marker** — The attack bar now shows a line indicating the 8-line flush cap.
@@ -13,15 +13,24 @@ Initial public release.
 - **Timer removed as failure condition** — The round timer no longer kills the run on expiry. Topping out is now the only way to lose a round. The timer is hidden from the HUD entirely.
 - **Golden Watch reworked** — Now reveals a personal 3-minute timer and earns 1 coin per 5 seconds remaining at round end.
 - **The Blitz reworked** — Timer raised to 2 minutes. The timer is always visible during a Blitz round and failing to defeat the enemy before it expires still ends the run.
+- **Attack bar column visualization** — Garbage packets that share a hole column are shown as one solid block. When consecutive packets land in different columns a black separator bar appears between them.
+- **Garbage freeze on clear** — Incoming garbage is not flushed to the board on the same piece lock that clears lines, giving a brief moment of relief after a clear.
+
 
 ### Balance
 - **Simple Shield / Legionnaire's Shield** — Damage reduction now applies when the attack enters the buffer (lines blocked before queuing), rather than reducing flush capacity. A 2-line attack with Simple Shield now puts only 1 line in the buffer; Legionnaire's Shield can block small attacks entirely.
+
 
 ### Bug Fixes
 - The Reflection boss: enemy attack windup bar is now hidden (boss never attacks).
 - The Reflection boss: reflected garbage is now non-drainable — player attacks no longer cancel their own reflections.
 - The Reflection boss: fixed a bug where reflected lines were silently discarded instead of reaching the board.
-- The Blitz boss: timer now correctly starts at 1:00 (was being overwritten by the default after the boss modifier set it).
+- The Blitz boss: timer now correctly starts at 2 minutes.
+- Victory screen: Main Menu button now correctly returns to the main menu; restarting no longer leaves the victory screen visible behind the new run.
+- Shop: "Technique slots full" label removed — greyed-out buy buttons communicate this on their own.
+- HUD: Timer labels no longer flash briefly before being hidden at round start.
+- HUD: HUD is now hidden during the starter keystone selection screen.
+- Saves: Fixed a crash when pressing Continue after a run (leftover reference to removed speed bonus field).
 
 ---
 

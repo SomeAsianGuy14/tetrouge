@@ -19,7 +19,15 @@ func setup(final_coins: int, beaten_level: int) -> void:
 	menu_button.connect("pressed", _on_menu)
 
 func _on_restart() -> void:
-	get_tree().change_scene_to_file("res://scenes/game/run_manager.tscn")
+	var run_scene: PackedScene = load("res://scenes/game/run_manager.tscn")
+	var run := run_scene.instantiate()
+	get_tree().root.add_child(run)
+	get_parent().queue_free()
+	run.start_run()
 
 func _on_menu() -> void:
-	get_tree().change_scene_to_file("res://scenes/main_menu/main_menu.tscn")
+	RunState.reset()
+	Economy.reset()
+	var scene: PackedScene = load("res://scenes/main_menu/main_menu.tscn")
+	get_tree().root.add_child(scene.instantiate())
+	get_parent().queue_free()
