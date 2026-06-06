@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### Visual
+- **Dungeon board style** — Tetris cells now render with a bevelled stone-block look (highlight top/left, shadow bottom/right). Garbage blocks gain a position-varied crack pattern. The ghost piece renders as a dark void fill with a piece-coloured rune outline that turns white while soft-dropping. Board background shifted to a darker tone with slight violet warmth.
+
+---
+
 ## [0.1.0] — 2026-05-30
 Initial public release.
 

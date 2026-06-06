@@ -11,6 +11,12 @@ const HIDDEN_ROWS := 2  # rows 0-1 are above the visible area
 # Gravity: cells per second at level 1 (standard guideline level 1 speed)
 const GRAVITY_SPEED := 1.0
 
+const BEVEL_SIZE := 2
+const BEVEL_TOP_LIGHTEN    := 0.40
+const BEVEL_LEFT_LIGHTEN   := 0.25
+const BEVEL_RIGHT_DARKEN   := 0.40
+const BEVEL_BOTTOM_DARKEN  := 0.55
+
 const PIECE_COLORS: Dictionary = {
 	1: Color(0.0, 0.9, 0.9),   # I — cyan
 	2: Color(0.9, 0.9, 0.0),   # O — yellow
@@ -22,6 +28,19 @@ const PIECE_COLORS: Dictionary = {
 	8: Color(0.5, 0.5, 0.5),   # ghost
 	9: Color(0.35, 0.35, 0.35), # garbage
 }
+
+# Each pattern is an array of [x0,y0, x1,y1] segments in normalised (0–1) coords
+# within the inner cell rect. Selected by (col*7 + screen_row*13) % 4.
+const CRACK_PATTERNS: Array = [
+	# 0: diagonal + branch
+	[[0.25, 0.10, 0.55, 0.90], [0.55, 0.50, 0.82, 0.35]],
+	# 1: Z-crack
+	[[0.15, 0.20, 0.65, 0.35], [0.65, 0.35, 0.35, 0.70], [0.35, 0.70, 0.85, 0.82]],
+	# 2: Y-fork
+	[[0.50, 0.10, 0.50, 0.55], [0.50, 0.55, 0.20, 0.90], [0.50, 0.55, 0.80, 0.90]],
+	# 3: corner crack + branch
+	[[0.10, 0.10, 0.45, 0.52], [0.45, 0.52, 0.72, 0.40], [0.45, 0.52, 0.55, 0.87]],
+]
 
 # ── Configuration (set by RunManager before round starts) ─────────────────
 var config: RoundConfig
@@ -572,7 +591,7 @@ func get_preview_types() -> Array:
 
 func _draw() -> void:
 	# Board background
-	draw_rect(Rect2(0, 0, config.board_width * CELL_SIZE, VISIBLE_ROWS * CELL_SIZE), Color(0.1, 0.1, 0.1))
+	draw_rect(Rect2(0, 0, config.board_width * CELL_SIZE, VISIBLE_ROWS * CELL_SIZE), Color(0.08, 0.07, 0.10))
 
 	# Grid cells (visible rows only)
 	for screen_row in range(VISIBLE_ROWS):
@@ -580,16 +599,18 @@ func _draw() -> void:
 		for col in range(config.board_width):
 			var cell_val: int = grid[grid_row][col]
 			if cell_val != 0:
-				var color: Color = PIECE_COLORS.get(cell_val, Color.WHITE)
-				_draw_cell(col, screen_row, color)
+				if cell_val == 9:
+					_draw_garbage_cell(col, screen_row)
+				else:
+					_draw_cell(col, screen_row, PIECE_COLORS.get(cell_val, Color.WHITE))
 
 	# Ghost piece
 	var ghost_cells: Array[Vector2i] = get_ghost_cells()
+	var ghost_piece_color: Color = PIECE_COLORS.get(PieceData.get_color_id(current_type), Color.WHITE)
 	for cell: Vector2i in ghost_cells:
 		var screen_row := cell.y - HIDDEN_ROWS
 		if screen_row >= 0 and screen_row < VISIBLE_ROWS:
-			var ghost_color := Color(0.85, 0.85, 0.85) if soft_dropping else PIECE_COLORS[PieceData.COLOR_GHOST]
-			_draw_cell(cell.x, screen_row, ghost_color)
+			_draw_ghost_cell(cell.x, screen_row, ghost_piece_color, soft_dropping)
 			if config.deep_sight_enabled:
 				var dist := get_ghost_distance()
 				draw_string(ThemeDB.fallback_font, Vector2(cell.x * CELL_SIZE + 2, screen_row * CELL_SIZE + 22), str(dist), HORIZONTAL_ALIGNMENT_LEFT, -1, 10, Color.WHITE)
@@ -609,5 +630,47 @@ func _draw() -> void:
 		draw_line(Vector2(0, r * CELL_SIZE), Vector2(config.board_width * CELL_SIZE, r * CELL_SIZE), grid_color)
 
 func _draw_cell(col: int, screen_row: int, color: Color) -> void:
-	var rect := Rect2(col * CELL_SIZE + 1, screen_row * CELL_SIZE + 1, CELL_SIZE - 2, CELL_SIZE - 2)
-	draw_rect(rect, color)
+	var x := col * CELL_SIZE + 1
+	var y := screen_row * CELL_SIZE + 1
+	var s := CELL_SIZE - 2
+	# Base fill
+	draw_rect(Rect2(x, y, s, s), color)
+	# Bevel — top highlight
+	draw_rect(Rect2(x, y, s, BEVEL_SIZE), color.lightened(BEVEL_TOP_LIGHTEN))
+	# Bevel — left highlight
+	draw_rect(Rect2(x, y + BEVEL_SIZE, BEVEL_SIZE, s - BEVEL_SIZE), color.lightened(BEVEL_LEFT_LIGHTEN))
+	# Bevel — bottom shadow
+	draw_rect(Rect2(x, y + s - BEVEL_SIZE, s, BEVEL_SIZE), color.darkened(BEVEL_BOTTOM_DARKEN))
+	# Bevel — right shadow
+	draw_rect(Rect2(x + s - BEVEL_SIZE, y, BEVEL_SIZE, s - BEVEL_SIZE), color.darkened(BEVEL_RIGHT_DARKEN))
+
+func _draw_garbage_cell(col: int, screen_row: int) -> void:
+	_draw_cell(col, screen_row, PIECE_COLORS[9])
+	var x := float(col * CELL_SIZE + 1)
+	var y := float(screen_row * CELL_SIZE + 1)
+	var s := float(CELL_SIZE - 2)
+	var crack_color := Color(0.0, 0.0, 0.0, 0.70)
+	var pattern_idx: int = (col * 7 + screen_row * 13) % CRACK_PATTERNS.size()
+	for seg in CRACK_PATTERNS[pattern_idx]:
+		draw_line(
+			Vector2(x + seg[0] * s, y + seg[1] * s),
+			Vector2(x + seg[2] * s, y + seg[3] * s),
+			crack_color, 1.0
+		)
+
+func _draw_ghost_cell(col: int, screen_row: int, piece_color: Color, is_soft_drop: bool) -> void:
+	var x := col * CELL_SIZE + 1
+	var y := screen_row * CELL_SIZE + 1
+	var s := CELL_SIZE - 2
+	# Void fill
+	draw_rect(Rect2(x, y, s, s), Color(0.05, 0.04, 0.08))
+	# Rune outline
+	var outline_color: Color
+	if is_soft_drop:
+		outline_color = Color(1.0, 1.0, 1.0, 0.85)
+	else:
+		outline_color = Color(piece_color.r, piece_color.g, piece_color.b, 0.75)
+	draw_rect(Rect2(x, y, s, BEVEL_SIZE), outline_color)
+	draw_rect(Rect2(x, y + s - BEVEL_SIZE, s, BEVEL_SIZE), outline_color)
+	draw_rect(Rect2(x, y, BEVEL_SIZE, s), outline_color)
+	draw_rect(Rect2(x + s - BEVEL_SIZE, y, BEVEL_SIZE, s), outline_color)

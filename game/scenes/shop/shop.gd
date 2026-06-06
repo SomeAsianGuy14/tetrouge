@@ -32,7 +32,7 @@ func _ready() -> void:
 		_collection_slots[i].connect("pressed", _on_sell_consumable.bind(i))
 	var interest := Economy.apply_interest()
 	interest_label.text = "+%d interest" % interest if interest > 0 else ""
-		_load_item_pools()
+	_load_item_pools()
 	_populate_shop()
 	_update_coin_display(Economy.coins)
 	_build_collection()
