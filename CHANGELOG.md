@@ -2,8 +2,19 @@
 
 ## Unreleased
 
+---
+
+## [0.2.2] — 2026-06-05
+
+### New Features
+- **Window mode and size settings** — Settings screen now has Window and Size rows. Toggle between Windowed and Fullscreen; choose Small (1280×720), Medium (1600×900), or Large (1920×1080) when windowed. Preferences persist across sessions.
+
 ### Visual
 - **Dungeon board style** — Tetris cells now render with a bevelled stone-block look (highlight top/left, shadow bottom/right). Garbage blocks gain a position-varied crack pattern. The ghost piece renders as a dark void fill with a piece-coloured rune outline that turns white while soft-dropping. Board background shifted to a darker tone with slight violet warmth.
+
+### Bug Fixes
+- Web: starter keystone selection (Simple Sword, Flail, Shield, Wand, Slightly Magical Coin) now appears correctly on New Run.
+- Settings: window mode and size buttons no longer emit "Embedded window" warnings when used inside the Godot editor.
 
 ---
 

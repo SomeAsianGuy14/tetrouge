@@ -11,6 +11,9 @@ var starter_only: bool = false
 
 func _ready() -> void:
 	title_label.text = "Choose a Keystone"
+
+func setup(is_starter: bool) -> void:
+	starter_only = is_starter
 	_offered = _draw_three_keystones()
 	_populate_options()
 

@@ -1,6 +1,7 @@
 extends Node
 
 func _ready() -> void:
+	Settings.apply_saved_display()
 	Settings.apply_saved_bindings()
 
 const TOTAL_STAGES := 5

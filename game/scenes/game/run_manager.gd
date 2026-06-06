@@ -118,8 +118,8 @@ func _show_starter_keystone_selection() -> void:
 	hud.visible = false
 	var scene: PackedScene = load(SCENE_KEYSTONE_SELECTION)
 	var screen = scene.instantiate()
-	screen.starter_only = true
 	get_tree().root.add_child(screen)
+	screen.setup(true)
 	screen.connect("keystone_chosen", _on_starter_keystone_chosen)
 
 func _on_starter_keystone_chosen(_keystone: Keystone) -> void:
@@ -937,6 +937,7 @@ func _show_keystone_selection() -> void:
 	var scene: PackedScene = load(SCENE_KEYSTONE_SELECTION)
 	var screen = scene.instantiate()
 	get_tree().root.add_child(screen)
+	screen.setup(false)
 	screen.connect("keystone_chosen", _on_keystone_chosen)
 
 func _on_keystone_chosen(_keystone: Keystone) -> void:

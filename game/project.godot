@@ -15,7 +15,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="Tetris Roguelike"
-config/version="0.2.1"
+config/version="0.2.2"
 run/main_scene="res://scenes/main_menu/main_menu.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/run/main_scene="res://scenes/main_menu/main_menu.tscn"
@@ -31,7 +31,7 @@ DevConsole="*res://scenes/debug/dev_console.tscn"
 
 [display]
 
-window/size/viewport_width=1440
+window/size/viewport_width=1600
 window/size/viewport_height=900
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"

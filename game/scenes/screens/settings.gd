@@ -7,6 +7,9 @@ const DAS_PRESETS = [80, 90, 100, 110, 120, 130, 140, 150, 160]
 const ARR_PRESETS = [20, 30, 40, 50]
 const SDF_PRESETS = [5, 10, 15, 20]
 
+const WINDOW_SIZE_LABELS := ["Small", "Medium", "Large"]
+const WINDOW_SIZE_PRESETS := [Vector2i(1280, 720), Vector2i(1600, 900), Vector2i(1920, 1080)]
+
 const REBINDABLE_ACTIONS: Array[Dictionary] = [
 	{"action": "move_left",   "label": "Move Left"},
 	{"action": "move_right",  "label": "Move Right"},
@@ -26,10 +29,15 @@ const REBINDABLE_ACTIONS: Array[Dictionary] = [
 @onready var rebind_status: Label = $Panel/VBox/RebindStatus
 @onready var reset_button: Button = $Panel/VBox/ResetButton
 @onready var close_button: Button = $Panel/VBox/CloseButton
+@onready var window_mode_buttons: HBoxContainer = $Panel/VBox/WindowModeRow/WindowModeButtons
+@onready var window_size_row: HBoxContainer = $Panel/VBox/WindowSizeRow
+@onready var window_size_buttons: HBoxContainer = $Panel/VBox/WindowSizeRow/WindowSizeButtons
 
 var _das_value: int = 130
 var _arr_value: int = 40
 var _sdf_value: int = 10
+var _window_mode: String = "windowed"
+var _window_size: Vector2i = Vector2i(1600, 900)
 var _rebinding_action: String = ""
 var _rebind_rows: Array[Dictionary] = []
 
@@ -37,6 +45,8 @@ func _ready() -> void:
 	_build_preset_buttons(das_buttons, DAS_PRESETS, "%dms", _on_das_preset)
 	_build_preset_buttons(arr_buttons, ARR_PRESETS, "%dms", _on_arr_preset)
 	_build_preset_buttons(sdf_buttons, SDF_PRESETS, "%dx", _on_sdf_preset)
+	_build_window_mode_buttons()
+	_build_window_size_buttons()
 	_load_settings()
 	reset_button.connect("pressed", _on_reset_pressed)
 	close_button.connect("pressed", _on_close)
@@ -84,6 +94,58 @@ func _on_arr_preset(value: int) -> void:
 func _on_sdf_preset(value: int) -> void:
 	_sdf_value = value
 	_save_settings()
+
+# ── Window mode / size ────────────────────────────────────────────────────
+
+func _build_window_mode_buttons() -> void:
+	var group := ButtonGroup.new()
+	for mode in ["windowed", "fullscreen"]:
+		var btn := Button.new()
+		btn.text = mode.capitalize()
+		btn.toggle_mode = true
+		btn.button_group = group
+		btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		btn.connect("pressed", _on_window_mode_changed.bind(mode))
+		window_mode_buttons.add_child(btn)
+
+func _build_window_size_buttons() -> void:
+	var group := ButtonGroup.new()
+	for i in WINDOW_SIZE_PRESETS.size():
+		var btn := Button.new()
+		btn.text = WINDOW_SIZE_LABELS[i]
+		btn.toggle_mode = true
+		btn.button_group = group
+		btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		btn.connect("pressed", _on_window_size_preset.bind(WINDOW_SIZE_PRESETS[i]))
+		window_size_buttons.add_child(btn)
+
+func _on_window_mode_changed(mode: String) -> void:
+	_window_mode = mode
+	if not OS.has_feature("editor"):
+		if mode == "fullscreen":
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+		else:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+			DisplayServer.window_set_size(_window_size)
+	window_size_row.visible = (mode == "windowed")
+	_save_settings()
+
+func _on_window_size_preset(size: Vector2i) -> void:
+	_window_size = size
+	if not OS.has_feature("editor"):
+		DisplayServer.window_set_size(size)
+	_save_settings()
+
+func _select_window_mode(mode: String) -> void:
+	var modes := ["windowed", "fullscreen"]
+	for i in window_mode_buttons.get_child_count():
+		var btn := window_mode_buttons.get_child(i) as Button
+		btn.set_pressed_no_signal(modes[i] == mode)
+
+func _select_window_preset(size: Vector2i) -> void:
+	for i in window_size_buttons.get_child_count():
+		var btn := window_size_buttons.get_child(i) as Button
+		btn.set_pressed_no_signal(WINDOW_SIZE_PRESETS[i] == size)
 
 # ── Keybinding rows ───────────────────────────────────────────────────────
 
@@ -185,12 +247,19 @@ func _load_settings() -> void:
 		das = snap_to_nearest(int(cfg.get_value("timing", "das_ms", 130)), DAS_PRESETS)
 		arr = snap_to_nearest(int(cfg.get_value("timing", "arr_ms", 40)), ARR_PRESETS)
 		sdf = snap_to_nearest(int(cfg.get_value("timing", "sdf_x", 10)), SDF_PRESETS)
+		_window_mode = cfg.get_value("display", "window_mode", "windowed")
+		var w: int = cfg.get_value("display", "window_width", 1600)
+		var h: int = cfg.get_value("display", "window_height", 900)
+		_window_size = Vector2i(w, h)
 	_das_value = das
 	_arr_value = arr
 	_sdf_value = sdf
 	_select_preset(das_buttons, DAS_PRESETS, das)
 	_select_preset(arr_buttons, ARR_PRESETS, arr)
 	_select_preset(sdf_buttons, SDF_PRESETS, sdf)
+	_select_window_mode(_window_mode)
+	_select_window_preset(_window_size)
+	window_size_row.visible = (_window_mode == "windowed")
 
 func _save_settings() -> void:
 	var cfg := ConfigFile.new()
@@ -198,6 +267,9 @@ func _save_settings() -> void:
 	cfg.set_value("timing", "das_ms", _das_value)
 	cfg.set_value("timing", "arr_ms", _arr_value)
 	cfg.set_value("timing", "sdf_x", _sdf_value)
+	cfg.set_value("display", "window_mode", _window_mode)
+	cfg.set_value("display", "window_width", _window_size.x)
+	cfg.set_value("display", "window_height", _window_size.y)
 	cfg.save(SETTINGS_PATH)
 
 # ── Bindings load / save ──────────────────────────────────────────────────
@@ -236,6 +308,23 @@ func _on_close() -> void:
 	queue_free()
 
 # ── Static startup helpers ────────────────────────────────────────────────
+
+static func apply_saved_display() -> void:
+	if OS.has_feature("editor"):
+		return
+	var cfg := ConfigFile.new()
+	var mode := "windowed"
+	var size := Vector2i(1600, 900)
+	if cfg.load("user://settings.cfg") == OK:
+		mode = cfg.get_value("display", "window_mode", "windowed")
+		var w: int = cfg.get_value("display", "window_width", 1600)
+		var h: int = cfg.get_value("display", "window_height", 900)
+		size = Vector2i(w, h)
+	if mode == "fullscreen":
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+	else:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		DisplayServer.window_set_size(size)
 
 static func apply_saved_bindings() -> void:
 	var cfg := ConfigFile.new()

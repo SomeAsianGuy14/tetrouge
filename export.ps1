@@ -3,7 +3,7 @@
 
 param(
     [string]$GodotPath = "godot",
-    [string]$Version = "0.2.1",
+    [string]$Version = "0.2.2",
     [string]$ItchUser = "SomeAsianGuy14",
     [string]$ItchGame = "tetrouge"
 )
@@ -76,7 +76,17 @@ Write-Host "Creating GitHub release $Tag..."
 gh release create $Tag `
     --repo SomeAsianGuy14/tetrouge `
     --title "Tetrouge $Tag" `
-    --notes "Initial public release." `
+    --notes "## What's new in v$Version
+
+### New Features
+- Window mode and size settings (Windowed / Fullscreen, Small / Medium / Large presets)
+
+### Visual
+- Dungeon board style: bevelled stone cells, position-varied garbage cracks, ghost rune outline
+
+### Bug Fixes
+- Web: starter keystone selection now shows correctly on New Run
+- Settings: no more embedded-window warnings when running from the editor" `
     $WinZip $WebZip
 
 

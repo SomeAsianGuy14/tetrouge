@@ -32,6 +32,30 @@ theme_override_constants/separation = 10
 text = "Settings"
 horizontal_alignment = 1
 
+[node name="WindowModeRow" type="HBoxContainer" parent="Panel/VBox"]
+theme_override_constants/separation = 8
+
+[node name="WindowModeLabel" type="Label" parent="Panel/VBox/WindowModeRow"]
+text = "Window"
+custom_minimum_size = Vector2(80, 0)
+vertical_alignment = 1
+
+[node name="WindowModeButtons" type="HBoxContainer" parent="Panel/VBox/WindowModeRow"]
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="WindowSizeRow" type="HBoxContainer" parent="Panel/VBox"]
+theme_override_constants/separation = 8
+
+[node name="WindowSizeLabel" type="Label" parent="Panel/VBox/WindowSizeRow"]
+text = "Size"
+custom_minimum_size = Vector2(80, 0)
+vertical_alignment = 1
+
+[node name="WindowSizeButtons" type="HBoxContainer" parent="Panel/VBox/WindowSizeRow"]
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
 [node name="DASRow" type="HBoxContainer" parent="Panel/VBox"]
 theme_override_constants/separation = 8
 

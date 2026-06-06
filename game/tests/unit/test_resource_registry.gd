@@ -43,3 +43,26 @@ func test_no_duplicate_technique_ids() -> void:
 	for t in ResourceRegistry.all_techniques:
 		assert_false(t.id in seen, "duplicate technique id: %s" % t.id)
 		seen[t.id] = true
+
+# ── Starter keystone loading ──────────────────────────────────────────────
+
+func test_starter_keystones_have_is_starter_true() -> void:
+	var starter_ids := ["simple_sword", "simple_flail", "simple_shield", "simple_wand", "slightly_magical_coin"]
+	for id in starter_ids:
+		var ks := ResourceRegistry.find_by_id(ResourceRegistry.all_keystones, id)
+		assert_not_null(ks, "%s keystone should exist" % id)
+		assert_true(ks.is_starter, "%s should have is_starter = true" % id)
+
+func test_non_starter_keystones_have_is_starter_false() -> void:
+	for ks in ResourceRegistry.all_keystones:
+		if ks.id not in ["simple_sword", "simple_flail", "simple_shield", "simple_wand", "slightly_magical_coin"]:
+			assert_false(ks.is_starter, "%s should have is_starter = false" % ks.id)
+
+func test_get_available_keystones_includes_starters() -> void:
+	var available := ResourceRegistry.get_available_keystones()
+	var starters := available.filter(func(ks): return ks.is_starter)
+	assert_true(starters.size() >= 4, "at least 4 starter keystones should be available, got %d" % starters.size())
+
+func test_all_keystones_have_is_starter_property() -> void:
+	for ks in ResourceRegistry.all_keystones:
+		assert_true("is_starter" in ks, "keystone %s missing is_starter property (script not applied?)" % ks.id)
