@@ -3,6 +3,7 @@ extends Resource
 
 @export var id: String = ""
 @export var display_name: String = ""
+@export var flavor_text: String = ""
 @export var color: Color = Color.WHITE
 @export var sprite: Texture2D = null
 @export var tier: String = ""

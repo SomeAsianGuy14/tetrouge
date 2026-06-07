@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+### New Features
+- **Enemy panel redesign** — The right side of the screen now shows a full-height enemy panel with the enemy name, a large portrait area (initial-letter placeholder in enemy colour until artwork is added), stage/round label, optional flavor text, and boss modifier description.
+- **Enemy flavor text field** — Enemy data now has an optional flavor text field for lore descriptions (currently blank, to be filled in a future update).
+
+### Visual
+- **Lunge animation** — The enemy portrait lunges toward the board when an attack fires, then eases back into place.
+- **Anticipation pulse** — At 80% or more charge the portrait pulses slightly, signalling the incoming attack.
+- **Damage feedback** — When the player deals damage the portrait flashes red and a floating damage number drifts upward.
+
+### Bug Fixes
+- **Enemy portrait stops animating on pause** — Anticipation pulse, lunge, and damage flash now stop immediately when the pause menu opens.
+
 ---
 
 ## [0.2.2] — 2026-06-05

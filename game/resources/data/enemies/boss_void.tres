@@ -5,6 +5,7 @@
 
 [resource]
 script = ExtResource("1")
+flavor_text = ""
 id = "boss_void"
 display_name = "The Void Keeper"
 color = Color(0.3, 0.0, 0.5, 1)

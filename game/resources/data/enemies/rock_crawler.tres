@@ -4,6 +4,7 @@
 
 [resource]
 script = ExtResource("1")
+flavor_text = ""
 id = "rock_crawler"
 display_name = "Rock Crawler"
 color = Color(0.55, 0.3, 0.1, 1)

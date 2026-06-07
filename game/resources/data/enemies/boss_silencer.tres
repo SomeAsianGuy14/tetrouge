@@ -5,6 +5,7 @@
 
 [resource]
 script = ExtResource("1")
+flavor_text = ""
 id = "boss_silencer"
 display_name = "The Silencer"
 color = Color(0.25, 0.25, 0.25, 1)

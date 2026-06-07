@@ -4,6 +4,7 @@
 
 [resource]
 script = ExtResource("1")
+flavor_text = ""
 id = "rust_golem"
 display_name = "Rust Golem"
 color = Color(0.7, 0.4, 0.1, 1)

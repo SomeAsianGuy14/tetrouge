@@ -5,6 +5,7 @@
 
 [resource]
 script = ExtResource("1")
+flavor_text = ""
 id = "boss_ancient"
 display_name = "The Ancient"
 color = Color(0.45, 0.3, 0.1, 1)

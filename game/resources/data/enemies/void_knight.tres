@@ -4,6 +4,7 @@
 
 [resource]
 script = ExtResource("1")
+flavor_text = ""
 id = "void_knight"
 display_name = "Void Knight"
 color = Color(0.25, 0.05, 0.4, 1)

@@ -4,6 +4,7 @@
 
 [resource]
 script = ExtResource("1")
+flavor_text = ""
 id = "slimeling"
 display_name = "Slimeling"
 color = Color(0.2, 0.8, 0.2, 1)

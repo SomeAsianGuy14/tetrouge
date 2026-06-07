@@ -4,6 +4,7 @@
 
 [resource]
 script = ExtResource("1")
+flavor_text = ""
 id = "hex_wraith"
 display_name = "Hex Wraith"
 color = Color(0.2, 0.6, 0.6, 1)

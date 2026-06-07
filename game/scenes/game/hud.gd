@@ -12,7 +12,6 @@ extends Control
 @onready var timer_header_label: Label = $InfoPanel/TimerHeaderLabel
 @onready var timer_big_label: Label = $InfoPanel/TimerBigLabel
 @onready var round_big_label: Label = $InfoPanel/RoundBigLabel
-@onready var modifier_big_label: Label = $ModifierBigLabel
 @onready var b2b_label: Label = $InfoPanel/B2BLabel
 @onready var combo_label: Label = $InfoPanel/ComboLabel
 
@@ -22,11 +21,7 @@ extends Control
 	$InventoryPanel/BackpackContainer/BackpackSlot2,
 ]
 
-var _enemy_display: Control = null
 var _run_manager = null  # set by RunManager after instantiation
-
-func set_enemy_display(display: Control) -> void:
-	_enemy_display = display
 
 func set_run_manager(rm) -> void:
 	_run_manager = rm
@@ -57,12 +52,9 @@ func setup(config: RoundConfig) -> void:
 		modifier_label.text = config.boss_modifier.display_name
 		modifier_label.tooltip_text = config.boss_modifier.description
 		modifier_label.visible = true
-		modifier_big_label.text = config.boss_modifier.display_name + "\n" + config.boss_modifier.description
-		modifier_big_label.visible = true
 	else:
 		modifier_label.tooltip_text = ""
 		modifier_label.visible = false
-		modifier_big_label.visible = false
 
 	coin_label.text = "Coins: %d" % Economy.coins
 	_refresh_keystone_icons()
@@ -77,10 +69,6 @@ func update_b2b_combo(is_b2b: bool, b2b_count: int, combo: int) -> void:
 	combo_label.visible = combo >= 0
 	if combo >= 0:
 		combo_label.text = "Combo x%d" % (combo + 1)
-
-func update_quota(accumulated: float, _quota: int) -> void:
-	if _enemy_display:
-		_enemy_display.update_hp(accumulated)
 
 func update_timer(time_remaining: float) -> void:
 	if not timer_label.visible:

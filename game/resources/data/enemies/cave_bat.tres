@@ -4,6 +4,7 @@
 
 [resource]
 script = ExtResource("1")
+flavor_text = ""
 id = "cave_bat"
 display_name = "Cave Bat"
 color = Color(0.35, 0.1, 0.5, 1)

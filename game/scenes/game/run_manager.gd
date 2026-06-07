@@ -204,11 +204,14 @@ func start_round() -> void:
 
 	var enemy_scene: PackedScene = load(SCENE_ENEMY_DISPLAY)
 	_enemy_display = enemy_scene.instantiate()
-	board_container.add_child(_enemy_display)
-	_enemy_display.position = Vector2(TetrisBoard.COLS * TetrisBoard.CELL_SIZE + 16 + 112 + 48, 0)
+	add_child(_enemy_display)
+	# Anchor panel to the right side of the viewport (x≈900 to right edge, full height)
+	_enemy_display.set_anchor_and_offset(SIDE_LEFT,   0.0, 900.0)
+	_enemy_display.set_anchor_and_offset(SIDE_TOP,    0.0,   0.0)
+	_enemy_display.set_anchor_and_offset(SIDE_RIGHT,  1.0,   0.0)
+	_enemy_display.set_anchor_and_offset(SIDE_BOTTOM, 1.0,   0.0)
 	_enemy_display.setup(current_config.enemy, current_config.quota)
 	_enemy_display.set_attack_bar_visible(current_config.reflect_ratio <= 0.0)
-	hud.set_enemy_display(_enemy_display)
 	hud.set_run_manager(self)
 
 	var attack_bar_script := load("res://scenes/game/attack_bar.gd") as GDScript
@@ -322,6 +325,8 @@ func _process(delta: float) -> void:
 
 func _open_pause() -> void:
 	_paused = true
+	if _enemy_display:
+		_enemy_display.stop_animations()
 	_board_was_active = current_board != null and current_board.is_active
 	if _board_was_active:
 		current_board.is_active = false
@@ -407,6 +412,8 @@ func _tick_enemy_garbage(delta: float) -> void:
 				else:
 					var packet_col := randi() % current_config.board_width
 					_garbage_packets.append({lines = n, is_filth = false, col = packet_col})
+				if _enemy_display:
+					_enemy_display.on_attack_fired()
 			_notify_attack_bar()
 			if _technique_round_state:
 				_technique_round_state.after_receive_pending = true
@@ -520,8 +527,8 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 	var to_quota: int = _drain_attack(modified)
 	quota_accumulated += to_quota
 	surplus_attack = maxi(0, int(quota_accumulated) - current_config.quota)
-	if hud:
-		hud.update_quota(quota_accumulated, current_config.quota)
+	if _enemy_display:
+		_enemy_display.update_hp(quota_accumulated)
 	if _run_stats and to_quota > 0:
 		_run_stats.total_damage += to_quota
 		if event_type == "quad":
@@ -785,8 +792,8 @@ func _flush_pending_garbage() -> void:
 			var reflected := floori(to_flush * reflect_ratio)
 			if reflected > 0:
 				quota_accumulated += reflected
-				if hud:
-					hud.update_quota(quota_accumulated, current_config.quota)
+				if _enemy_display:
+					_enemy_display.update_hp(quota_accumulated)
 				if quota_accumulated >= current_config.quota:
 					_notify_attack_bar()
 					_end_round(true)
