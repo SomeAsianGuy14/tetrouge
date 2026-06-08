@@ -445,3 +445,32 @@ func test_burning_board_no_flag_on_no_clear() -> void:
 	var rs := TechniqueRoundState.new()
 	var result: Dictionary = _TechniqueEvaluator.evaluate([t], ctx, rs)
 	assert_does_not_have(result.flags, "burning_board")
+
+# ── every_nth_clear timing ────────────────────────────────────────────────────
+
+func test_every_nth_clear_fires_on_4th_clear() -> void:
+	var t := Technique.new()
+	t.effect_type = "every_nth_clear"
+	t.params = {"n": 4, "bonus": 3}
+	var ctx := _make_ctx(1)
+	var rs := TechniqueRoundState.new()
+	rs.clears_this_round = 3  # this is the 4th clear (counter increments after eval)
+	assert_eq(_TechniqueEvaluator.compute_attack_bonus([t], ctx, rs), 3)
+
+func test_every_nth_clear_does_not_fire_on_3rd_clear() -> void:
+	var t := Technique.new()
+	t.effect_type = "every_nth_clear"
+	t.params = {"n": 4, "bonus": 3}
+	var ctx := _make_ctx(1)
+	var rs := TechniqueRoundState.new()
+	rs.clears_this_round = 2  # this is the 3rd clear
+	assert_eq(_TechniqueEvaluator.compute_attack_bonus([t], ctx, rs), 0)
+
+func test_every_nth_clear_fires_on_8th_clear() -> void:
+	var t := Technique.new()
+	t.effect_type = "every_nth_clear"
+	t.params = {"n": 4, "bonus": 3}
+	var ctx := _make_ctx(1)
+	var rs := TechniqueRoundState.new()
+	rs.clears_this_round = 7  # this is the 8th clear
+	assert_eq(_TechniqueEvaluator.compute_attack_bonus([t], ctx, rs), 3)

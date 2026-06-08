@@ -324,6 +324,48 @@ func test_hybrid_reactor_zero_when_no_qualifying_techniques() -> void:
 		modified += tag_bonus * qualifying
 	assert_eq(modified, 5)
 
+func test_hybrid_reactor_bonus_not_applied_on_b2b_event() -> void:
+	var ks := _make_keystone()
+	ks.per_attack_tag_bonus = 3
+	RunState.keystones = [ks]
+	var t1 := Technique.new()
+	t1.tags = ["risk", "offense"]
+	RunState.techniques = [t1]
+	var modified := 5
+	var is_bonus_event := true  # event_type == "b2b"
+	if modified > 0 and not is_bonus_event:
+		var tag_bonus := 0
+		for k in RunState.keystones:
+			if k.per_attack_tag_bonus > 0:
+				tag_bonus += k.per_attack_tag_bonus
+		var qualifying := 0
+		for t in RunState.techniques:
+			if t.tags.size() >= 2:
+				qualifying += 1
+		modified += tag_bonus * qualifying
+	assert_eq(modified, 5, "b2b event: tag bonus must not apply")
+
+func test_hybrid_reactor_bonus_not_applied_on_combo_event() -> void:
+	var ks := _make_keystone()
+	ks.per_attack_tag_bonus = 3
+	RunState.keystones = [ks]
+	var t1 := Technique.new()
+	t1.tags = ["risk", "offense"]
+	RunState.techniques = [t1]
+	var modified := 3
+	var is_bonus_event := true  # event_type == "combo"
+	if modified > 0 and not is_bonus_event:
+		var tag_bonus := 0
+		for k in RunState.keystones:
+			if k.per_attack_tag_bonus > 0:
+				tag_bonus += k.per_attack_tag_bonus
+		var qualifying := 0
+		for t in RunState.techniques:
+			if t.tags.size() >= 2:
+				qualifying += 1
+		modified += tag_bonus * qualifying
+	assert_eq(modified, 3, "combo event: tag bonus must not apply")
+
 # ── Reflect keystone ─────────────────────────────────────────────────────
 
 func test_reflect_adds_floor_half_lines_to_quota() -> void:

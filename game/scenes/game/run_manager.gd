@@ -512,7 +512,7 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 	if event_type == "perfect_clear":
 		_pc_count_this_round += 1
 
-	if modified > 0:
+	if modified > 0 and not is_bonus_event:
 		var tag_bonus := 0
 		for ks in RunState.keystones:
 			if ks.per_attack_tag_bonus > 0:

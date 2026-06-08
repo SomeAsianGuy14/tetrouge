@@ -69,7 +69,7 @@ static func _eval_attack(t: Resource, ctx: AttackContext, rs: TechniqueRoundStat
 			return 0
 
 		"every_nth_clear":
-			if is_clear and rs.clears_this_round > 0 and rs.clears_this_round % p.get("n", 4) == 0:
+			if is_clear and (rs.clears_this_round + 1) % p.get("n", 4) == 0:
 				return p.get("bonus", 3)
 			return 0
 

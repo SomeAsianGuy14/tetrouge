@@ -1,9 +1,4 @@
-### Requirement: Keystone resource supports per-attack technique-tag bonus
-The Keystone resource SHALL include a `per_attack_tag_bonus: int` field (default `0`). When non-zero, it contributes a flat damage bonus to attack events scaled by the number of active techniques that have two or more tags.
-
-#### Scenario: Field defaults to zero
-- **WHEN** a Keystone resource is created with no explicit `per_attack_tag_bonus`
-- **THEN** `per_attack_tag_bonus` SHALL equal `0`
+## MODIFIED Requirements
 
 ### Requirement: Hybrid Reactor bonus is applied to attacking clears only
 During `RunManager._on_attack_generated()`, after all other keystone and technique bonuses are applied and before `_drain_attack()`, if any active keystone has `per_attack_tag_bonus > 0`, the current `modified` attack value is greater than zero, **and the event is a primary clear event (not a b2b or combo bonus event)**, the system SHALL add `per_attack_tag_bonus × N` to `modified`, where N is the count of active techniques whose `tags` array has size ≥ 2.
