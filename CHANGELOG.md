@@ -3,6 +3,7 @@
 ## Unreleased
 
 ### New Features
+- **Clear type popup** — After every line clear a label briefly appears below the hold piece naming what you just did (Single, Double, Triple, Quad, T-Spin variants, Perfect Clear). Plain clears fade out quietly in white; Quads pop in cyan, T-Spins in purple, and Perfect Clears in gold with a brief scale-up animation.
 - **Enemy panel redesign** — The right side of the screen now shows a full-height enemy panel with the enemy name, a large portrait area (initial-letter placeholder in enemy colour until artwork is added), stage/round label, optional flavor text, and boss modifier description.
 - **Enemy flavor text field** — Enemy data now has an optional flavor text field for lore descriptions (currently blank, to be filled in a future update).
 
@@ -11,7 +12,13 @@
 - **Anticipation pulse** — At 80% or more charge the portrait pulses slightly, signalling the incoming attack.
 - **Damage feedback** — When the player deals damage the portrait flashes red and a floating damage number drifts upward.
 
+### Visual
+- **Line clear delay** — When a piece clears one or more rows, the board briefly pauses (~0.5s) and flashes the cleared rows before removing them and spawning the next piece. Gives a satisfying moment of feedback on every clear. The Full Potential keystone skips the delay entirely to match its instant-play identity.
+- **Technique visual feedback** — Techniques and keystones now announce themselves during play. When a clear fires, each contributing technique and keystone produces a floating popup label that drifts upward (white for attack, gold for economy-only, blue for keystone bonuses). Popups cascade sequentially across the line clear delay window. Technique icons in the HUD pulse when their trigger condition is armed (e.g. Escalation ready). Keystones flash blue when their bonus fires. Every icon also plays a brief scale-pop at the moment it contributes to a clear.
+
 ### Bug Fixes
+- **Hold / rotate / hard drop during line clear** — Pressing hold, rotate, or hard drop during the clear flash no longer corrupts the held piece or skips a piece from the queue.
+- **Directional input during line clear** — Pressing a direction during the clear flash now correctly primes DAS so the new piece responds immediately on spawn.
 - **Enemy portrait stops animating on pause** — Anticipation pulse, lunge, and damage flash now stop immediately when the pause menu opens.
 - **Hybrid Reactor damage spike on B2B combos** — The keystone's tag bonus now fires once per clear instead of once per attack signal (which could triple the bonus on B2B combo quads).
 - **Attack Battery triggers on correct clear** — The "every 4th clear" bonus now fires on clears 4, 8, 12… instead of 5, 9, 13…

@@ -33,6 +33,18 @@ const BOSS_INTERVAL_MAX := 20.0
 const BOSS_LINES_MIN := 2
 const BOSS_LINES_MAX := 4
 
+const CLEAR_TYPE_DISPLAY: Dictionary = {
+	"single":        ["Single",        Color.WHITE],
+	"double":        ["Double",        Color.WHITE],
+	"triple":        ["Triple",        Color.WHITE],
+	"quad":          ["Quad",          Color(0.3, 0.9, 1.0)],
+	"tspin_mini":    ["T-Spin Mini",   Color(0.7, 0.4, 1.0)],
+	"tspin_single":  ["T-Spin Single", Color(0.7, 0.4, 1.0)],
+	"tspin_double":  ["T-Spin Double", Color(0.7, 0.4, 1.0)],
+	"tspin_triple":  ["T-Spin Triple", Color(0.7, 0.4, 1.0)],
+	"perfect_clear": ["Perfect Clear", Color(1.0, 0.85, 0.1)],
+}
+
 @onready var board_container: Node2D = $BoardContainer
 @onready var hud: Control = $HUD
 
@@ -72,6 +84,12 @@ var _flash_step_arr_pending: bool = false
 var _greedy_hands_active: bool = false
 
 var _blessed_stone_spent: bool = false
+
+var _popup_schedule: Array = []
+var _popup_elapsed: float = 0.0
+var _technique_pre_evaluated: bool = false
+var _pre_evaluated_technique_atk: int = 0
+var _clear_popup_shown_this_piece: bool = false
 
 var _run_stats: RunStats = null
 
@@ -183,8 +201,10 @@ func start_round() -> void:
 	current_board.connect("lock_processed", _on_lock_processed)
 	current_board.connect("piece_rotated", _on_piece_rotated)
 	current_board.connect("rows_cleared", _on_rows_cleared)
+	current_board.connect("lines_cleared", _on_lines_cleared)
 	current_board.connect("b2b_broken", _on_b2b_broken)
 	current_board.connect("piece_locked", _on_piece_locked)
+	current_board.connect("line_clear_delay_started", _on_line_clear_delay_started)
 
 	if _debug_overlay:
 		_debug_overlay.set_board(current_board)
@@ -318,6 +338,7 @@ func _process(delta: float) -> void:
 	_tick_timer(delta)
 	_tick_burning_board(delta)
 	_tick_enemy_garbage(delta)
+	_drain_popup_schedule(delta)
 	if _enemy_display and current_config:
 		_enemy_display.update_windup(_enemy_timer, _next_garbage_interval)
 
@@ -421,6 +442,36 @@ func _tick_enemy_garbage(delta: float) -> void:
 		if _enemy_display:
 			_enemy_display.update_windup(0.0, _next_garbage_interval)
 
+func _build_technique_states() -> Dictionary:
+	var states := {}
+	if _technique_round_state == null:
+		return states
+	var rs := _technique_round_state
+	for t in RunState.techniques:
+		var pending := false
+		match t.effect_type:
+			"escalation":        pending = rs.escalation_pending
+			"follow_up":         pending = rs.follow_up_pending
+			"patience":          pending = rs.patience_pending
+			"constant_pressure": pending = rs.constant_pressure_pending
+			"flow_step":         pending = rs.flow_step_pending
+			"good_planning":     pending = rs.good_planning_pending
+		states[t.id] = pending
+	return states
+
+func _drain_popup_schedule(delta: float) -> void:
+	if _popup_schedule.is_empty():
+		return
+	_popup_elapsed += delta
+	var i := 0
+	while i < _popup_schedule.size():
+		var entry = _popup_schedule[i]
+		if _popup_elapsed >= entry.time:
+			_spawn_event_popup(entry, entry.index, entry.total)
+			_popup_schedule.remove_at(i)
+		else:
+			i += 1
+
 func _tick_burning_board(delta: float) -> void:
 	if not _burning_board_active or current_board == null or not current_board.is_active:
 		return
@@ -461,6 +512,31 @@ func _on_piece_locked() -> void:
 			if rs.good_planning_consecutive_no_hold >= 5:
 				rs.good_planning_pending = true
 
+func _on_line_clear_delay_started(clear_type: String) -> void:
+	_spawn_clear_type_popup(clear_type, current_config.line_clear_delay if current_config else 0.5)
+	_clear_popup_shown_this_piece = true
+	if _technique_round_state == null:
+		return
+	_technique_pre_evaluated = false
+	var raw: int = TetrisBoard.BASE_ATTACK.get(clear_type, 0)
+	var ctx := _build_attack_context(raw, clear_type)
+	var eval_result: Dictionary = TechniqueEvaluator.evaluate(
+		RunState.techniques, ctx, _technique_round_state)
+	_pre_evaluated_technique_atk = eval_result.get("attack_delta", 0)
+	Economy.add_coins(eval_result.get("coins_delta", 0))
+	_handle_technique_flags(eval_result.get("flags", []))
+	_update_round_state_after_eval(ctx, eval_result)
+	var technique_events: Array = eval_result.get("events", [])
+	# Pre-compute keystone events using approximate attack (raw + technique bonus)
+	var pre_total := raw + _pre_evaluated_technique_atk
+	var ks_events := _collect_keystone_events(pre_total, clear_type)
+	_fire_keystone_visuals(ks_events)
+
+	var all_events := technique_events + ks_events
+	if all_events.size() > 0:
+		_schedule_popups(all_events, current_config.line_clear_delay if current_config else 0.0)
+	_technique_pre_evaluated = true
+
 func _on_piece_rotated(piece_type: String) -> void:
 	if piece_type == "T":
 		_t_spin_rotations += 1
@@ -470,6 +546,12 @@ func _on_piece_rotated(piece_type: String) -> void:
 
 func _on_rows_cleared(row_indices: Array[int]) -> void:
 	_last_cleared_rows = row_indices
+
+func _on_lines_cleared(_count: int, clear_type: String) -> void:
+	if _clear_popup_shown_this_piece:
+		_clear_popup_shown_this_piece = false
+		return
+	_spawn_clear_type_popup(clear_type, 0.5)
 
 func _on_b2b_broken(streak: int) -> void:
 	for ks in RunState.keystones:
@@ -485,15 +567,21 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 
 	# Technique evaluation (only on primary clear events, not b2b/combo bonus events)
 	var technique_atk: int = 0
-	var technique_coins: int = 0
+	var technique_events: Array = []
 	if not is_bonus_event and _technique_round_state:
-		var eval_result: Dictionary = TechniqueEvaluator.evaluate(
-			RunState.techniques, ctx, _technique_round_state)
-		technique_atk = eval_result.get("attack_delta", 0)
-		technique_coins = eval_result.get("coins_delta", 0)
-		Economy.add_coins(technique_coins)
-		_handle_technique_flags(eval_result.get("flags", []))
-		_update_round_state_after_eval(ctx, eval_result)
+		if _technique_pre_evaluated:
+			# Already evaluated at delay start — just use the stored delta
+			technique_atk = _pre_evaluated_technique_atk
+			_technique_pre_evaluated = false
+			_pre_evaluated_technique_atk = 0
+		else:
+			var eval_result: Dictionary = TechniqueEvaluator.evaluate(
+				RunState.techniques, ctx, _technique_round_state)
+			technique_atk = eval_result.get("attack_delta", 0)
+			technique_events = eval_result.get("events", [])
+			Economy.add_coins(eval_result.get("coins_delta", 0))
+			_handle_technique_flags(eval_result.get("flags", []))
+			_update_round_state_after_eval(ctx, eval_result)
 
 	var modified: int = raw_attack + technique_atk
 	modified = _apply_keystone_suppressions(modified, event_type)
@@ -540,6 +628,14 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 		var reflect_lines := floori(to_quota * current_config.reflect_ratio)
 		if reflect_lines > 0:
 			_deferred_reflect_lines += reflect_lines
+
+	# No-delay path: collect keystone events and schedule everything now
+	if not is_bonus_event and not _technique_pre_evaluated:
+		var ks_events := _collect_keystone_events(modified, event_type)
+		_fire_keystone_visuals(ks_events)
+		var all_events := technique_events + ks_events
+		if all_events.size() > 0:
+			_schedule_popups(all_events, 0.0)
 
 	if quota_accumulated >= current_config.quota:
 		_end_round(true)
@@ -648,6 +744,9 @@ func _update_round_state_after_eval(ctx: AttackContext, _eval: Dictionary) -> vo
 	_used_soft_drop_this_piece = false
 	_rotations_this_piece = 0
 
+	if hud:
+		hud.update_technique_states(_build_technique_states())
+
 # ── Keystone attack modifiers ─────────────────────────────────────────────
 
 func _apply_keystone_suppressions(attack: int, event_type: String) -> int:
@@ -667,86 +766,263 @@ func _apply_keystone_suppressions(attack: int, event_type: String) -> int:
 func _apply_keystone_flat_bonuses(attack: int, event_type: String) -> int:
 	if attack == 0:
 		return 0
-	var bonus := 0
+	var total_bonus := 0
 	for ks in RunState.keystones:
+		var ks_bonus := 0
 		match event_type:
 			"single":
-				bonus += ks.single_bonus
+				ks_bonus += ks.single_bonus
 			"double":
-				bonus += ks.double_bonus
+				ks_bonus += ks.double_bonus
 			"triple":
-				bonus += ks.triple_bonus
+				ks_bonus += ks.triple_bonus
 			"quad":
-				bonus += ks.quad_bonus
+				ks_bonus += ks.quad_bonus
 				if ks.per_technique_quad_bonus > 0:
 					for t in RunState.techniques:
 						if "quad" in t.tags or "general" in t.tags:
-							bonus += ks.per_technique_quad_bonus
+							ks_bonus += ks.per_technique_quad_bonus
 			"tspin_mini":
-				bonus += ks.tspin_mini_bonus + ks.tspin_any_bonus
+				ks_bonus += ks.tspin_mini_bonus + ks.tspin_any_bonus
 			"tspin_single":
-				bonus += ks.tspin_single_bonus + ks.tspin_any_bonus
+				ks_bonus += ks.tspin_single_bonus + ks.tspin_any_bonus
 				if ks.per_technique_tspin_bonus > 0:
 					for t in RunState.techniques:
 						if "tspin" in t.tags:
-							bonus += ks.per_technique_tspin_bonus
+							ks_bonus += ks.per_technique_tspin_bonus
 			"tspin_double":
-				bonus += ks.tspin_double_bonus + ks.tspin_any_bonus
+				ks_bonus += ks.tspin_double_bonus + ks.tspin_any_bonus
 				if ks.per_technique_tspin_bonus > 0:
 					for t in RunState.techniques:
 						if "tspin" in t.tags:
-							bonus += ks.per_technique_tspin_bonus
+							ks_bonus += ks.per_technique_tspin_bonus
 			"tspin_triple":
-				bonus += ks.tspin_triple_bonus + ks.tspin_any_bonus
+				ks_bonus += ks.tspin_triple_bonus + ks.tspin_any_bonus
 				if ks.per_technique_tspin_bonus > 0:
 					for t in RunState.techniques:
 						if "tspin" in t.tags:
-							bonus += ks.per_technique_tspin_bonus
+							ks_bonus += ks.per_technique_tspin_bonus
 			"b2b":
-				bonus += ks.b2b_bonus
+				ks_bonus += ks.b2b_bonus
 		# Dizzy: >4 T rotations adds +4 to the next T-spin
 		if ks.dizzy and "tspin" in event_type and event_type != "tspin_mini" and _t_spin_rotations > 4:
-			bonus += 4
-	return attack + bonus
+			ks_bonus += 4
+		total_bonus += ks_bonus
+	return attack + total_bonus
 
 func _apply_keystone_multipliers(attack: int, event_type: String) -> int:
 	if attack == 0:
 		return 0
+	var pre_mult_attack := attack
 	var mult := 1.0
 	for ks in RunState.keystones:
+		var ks_mult := 1.0
 		match event_type:
 			"single":
 				if ks.single_multiplier > 0.0:
-					mult *= ks.single_multiplier
+					ks_mult *= ks.single_multiplier
 			"quad":
 				if ks.quad_multiplier > 0.0:
-					mult *= ks.quad_multiplier
+					ks_mult *= ks.quad_multiplier
 				if ks.consecutive_quad_multiplier > 0.0 and _last_attack_was_quad:
-					mult *= ks.consecutive_quad_multiplier
+					ks_mult *= ks.consecutive_quad_multiplier
 				if ks.daze_stun_seconds > 0.0:
 					_enemy_timer = maxf(0.0, _enemy_timer - ks.daze_stun_seconds)
 			"tspin_double":
 				if ks.tspin_double_multiplier > 0.0:
-					mult *= ks.tspin_double_multiplier
+					ks_mult *= ks.tspin_double_multiplier
 			"tspin_triple":
 				if ks.tspin_triple_multiplier > 0.0:
-					mult *= ks.tspin_triple_multiplier
+					ks_mult *= ks.tspin_triple_multiplier
 			"combo":
 				if ks.combo_multiplier > 0.0 and current_board and current_board.combo > ks.combo_multiplier_threshold:
-					mult *= ks.combo_multiplier
+					ks_mult *= ks.combo_multiplier
 			"perfect_clear":
 				if ks.pc_first_multiplier > 0.0 and _pc_count_this_round == 0:
-					mult *= ks.pc_first_multiplier
+					ks_mult *= ks.pc_first_multiplier
 				elif ks.pc_after_first_multiplier > 0.0 and _pc_count_this_round > 0:
-					mult *= ks.pc_after_first_multiplier
+					ks_mult *= ks.pc_after_first_multiplier
 		# Risky Business: any cleared row in top 5 visible rows doubles damage
 		if ks.risky_business and event_type not in ["b2b", "combo"]:
 			for row_idx in _last_cleared_rows:
 				if row_idx >= TetrisBoard.HIDDEN_ROWS and row_idx < TetrisBoard.HIDDEN_ROWS + 5:
-					mult *= 2.0
+					ks_mult *= 2.0
 					break
+		mult *= ks_mult
 	return int(float(attack) * mult)
 
+
+# ── Keystone visual helpers ───────────────────────────────────────────────
+
+func _collect_keystone_events(attack: int, event_type: String) -> Array:
+	if attack == 0:
+		return []
+	var events: Array = []
+	# Flat bonuses
+	for ks in RunState.keystones:
+		var b := 0
+		match event_type:
+			"single":   b += ks.single_bonus
+			"double":   b += ks.double_bonus
+			"triple":   b += ks.triple_bonus
+			"quad":
+				b += ks.quad_bonus
+				if ks.per_technique_quad_bonus > 0:
+					for t in RunState.techniques:
+						if "quad" in t.tags or "general" in t.tags:
+							b += ks.per_technique_quad_bonus
+			"tspin_mini":    b += ks.tspin_mini_bonus + ks.tspin_any_bonus
+			"tspin_single":
+				b += ks.tspin_single_bonus + ks.tspin_any_bonus
+				if ks.per_technique_tspin_bonus > 0:
+					for t in RunState.techniques:
+						if "tspin" in t.tags:
+							b += ks.per_technique_tspin_bonus
+			"tspin_double":
+				b += ks.tspin_double_bonus + ks.tspin_any_bonus
+				if ks.per_technique_tspin_bonus > 0:
+					for t in RunState.techniques:
+						if "tspin" in t.tags:
+							b += ks.per_technique_tspin_bonus
+			"tspin_triple":
+				b += ks.tspin_triple_bonus + ks.tspin_any_bonus
+				if ks.per_technique_tspin_bonus > 0:
+					for t in RunState.techniques:
+						if "tspin" in t.tags:
+							b += ks.per_technique_tspin_bonus
+			"b2b":  b += ks.b2b_bonus
+		if ks.dizzy and "tspin" in event_type and event_type != "tspin_mini" and _t_spin_rotations > 4:
+			b += 4
+		if b > 0:
+			events.append({"name": ks.display_name, "id": ks.id, "bonus": b})
+	# Multiplier bonus — compute total and attribute to first contributing keystone
+	var mult := 1.0
+	for ks in RunState.keystones:
+		var km := 1.0
+		match event_type:
+			"single":       if ks.single_multiplier > 0.0: km *= ks.single_multiplier
+			"quad":
+				if ks.quad_multiplier > 0.0: km *= ks.quad_multiplier
+				if ks.consecutive_quad_multiplier > 0.0 and _last_attack_was_quad: km *= ks.consecutive_quad_multiplier
+			"tspin_double": if ks.tspin_double_multiplier > 0.0: km *= ks.tspin_double_multiplier
+			"tspin_triple": if ks.tspin_triple_multiplier > 0.0: km *= ks.tspin_triple_multiplier
+			"combo":
+				if ks.combo_multiplier > 0.0 and current_board and current_board.combo > ks.combo_multiplier_threshold:
+					km *= ks.combo_multiplier
+			"perfect_clear":
+				if ks.pc_first_multiplier > 0.0 and _pc_count_this_round == 0:
+					km *= ks.pc_first_multiplier
+				elif ks.pc_after_first_multiplier > 0.0 and _pc_count_this_round > 0:
+					km *= ks.pc_after_first_multiplier
+		mult *= km
+	var mult_added := int(float(attack) * mult) - attack
+	if mult_added > 0:
+		for ks in RunState.keystones:
+			var contributed := false
+			match event_type:
+				"single":       contributed = ks.single_multiplier > 0.0
+				"quad":         contributed = ks.quad_multiplier > 0.0 or (ks.consecutive_quad_multiplier > 0.0 and _last_attack_was_quad)
+				"tspin_double": contributed = ks.tspin_double_multiplier > 0.0
+				"tspin_triple": contributed = ks.tspin_triple_multiplier > 0.0
+				"combo":        contributed = ks.combo_multiplier > 0.0 and current_board and current_board.combo > ks.combo_multiplier_threshold
+				"perfect_clear": contributed = ks.pc_first_multiplier > 0.0 or ks.pc_after_first_multiplier > 0.0
+			if contributed:
+				events.append({"name": ks.display_name, "id": ks.id, "bonus": mult_added})
+				break
+	return events
+
+func _fire_keystone_visuals(events: Array) -> void:
+	if hud == null:
+		return
+	for ev in events:
+		hud.flash_keystone(ev.get("id", ""))
+
+# ── Popup helpers ─────────────────────────────────────────────────────────
+
+func _spawn_clear_type_popup(clear_type: String, duration: float) -> void:
+	if _hold_display == null:
+		return
+	var entry: Array = CLEAR_TYPE_DISPLAY.get(clear_type, ["", Color.WHITE])
+	var label_text: String = entry[0]
+	var label_color: Color = entry[1]
+	if label_text.is_empty():
+		return
+
+	var hold_screen_pos: Vector2 = _hold_display.get_global_transform_with_canvas().origin
+	var hold_slots: int = 1
+	if current_board and current_board.config:
+		hold_slots = current_board.config.hold_slots
+	var panel_height: float = hold_slots * 96.0 + (hold_slots - 1) * 6.0 + 16.0
+
+	var lbl := Label.new()
+	lbl.text = label_text
+	lbl.modulate = label_color
+	lbl.add_theme_font_size_override("font_size", 16)
+	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lbl.custom_minimum_size = Vector2(112, 0)
+	lbl.position = Vector2(hold_screen_pos.x, hold_screen_pos.y + panel_height + 8.0)
+	lbl.pivot_offset = Vector2(56, 12)
+	add_child(lbl)
+
+	var is_pop_tier: bool = label_color != Color.WHITE
+	var tw := create_tween()
+	if is_pop_tier:
+		lbl.scale = Vector2(0.8, 0.8)
+		tw.tween_property(lbl, "scale", Vector2(1.15, 1.15), 0.12).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tw.parallel().tween_property(lbl, "modulate:a", 0.0, duration)
+	else:
+		tw.tween_property(lbl, "modulate:a", 0.0, duration)
+	tw.tween_callback(lbl.queue_free)
+
+func _spawn_event_popup(event: Dictionary, index: int, total: int) -> void:
+	var lbl := Label.new()
+	lbl.text = event.get("text", "")
+	lbl.add_theme_font_size_override("font_size", 14)
+	lbl.modulate = event.get("color", Color.WHITE)
+
+	var board_screen_pos := Vector2(760, 360)
+	if current_board:
+		board_screen_pos = current_board.get_global_transform_with_canvas().origin
+
+	var board_center_x := board_screen_pos.x + TetrisBoard.COLS * TetrisBoard.CELL_SIZE * 0.5
+	var spread := (index - (total - 1) * 0.5) * 90.0
+	lbl.position = Vector2(board_center_x + spread - 40, board_screen_pos.y - 50)
+	add_child(lbl)
+
+	var tw := create_tween()
+	tw.tween_property(lbl, "position", lbl.position + Vector2(0, -60), 0.6)
+	tw.parallel().tween_property(lbl, "modulate:a", 0.0, 0.6)
+	tw.tween_callback(lbl.queue_free)
+
+	if hud:
+		hud.pop_icon(event.get("id", ""))
+
+func _schedule_popups(events: Array, delay: float, reset_elapsed: bool = true) -> void:
+	if reset_elapsed:
+		_popup_elapsed = 0.0
+	var n := events.size()
+	for i in range(n):
+		var ev: Dictionary = events[i]
+		var text: String
+		var color: Color
+		if ev.has("bonus"):
+			text = "+%d %s" % [ev["bonus"], ev["name"]]
+			color = ev.get("color", Color(0.5, 0.8, 1.0))
+		elif ev.get("attack", 0) != 0:
+			text = "+%d %s" % [ev["attack"], ev["name"]]
+			color = Color.WHITE
+		else:
+			text = "+%d coin %s" % [ev.get("coins", 0), ev["name"]]
+			color = Color(1.0, 0.85, 0.0)
+		var entry := {
+			"time": 0.0 if delay <= 0.0 else (float(i) / float(n)) * delay,
+			"text": text,
+			"color": color,
+			"id": ev.get("id", ""),
+			"index": i,
+			"total": n,
+		}
+		_popup_schedule.append(entry)
 
 # ── Attack buffer helpers ─────────────────────────────────────────────────
 
@@ -837,6 +1113,10 @@ func _end_round(success: bool) -> void:
 		return
 	_round_ended = true
 	_garbage_packets = []
+	_popup_schedule.clear()
+	_popup_elapsed = 0.0
+	_technique_pre_evaluated = false
+	_pre_evaluated_technique_atk = 0
 	_notify_attack_bar()
 	if current_board:
 		current_board.is_active = false
@@ -885,6 +1165,7 @@ func _calculate_surplus_income() -> int:
 func _on_lock_processed() -> void:
 	_t_spin_rotations = 0
 	_rotations_this_piece = 0
+	_clear_popup_shown_this_piece = false
 	var _did_clear := not _last_cleared_rows.is_empty()
 	_last_cleared_rows = []
 	_piece_spawn_time = Time.get_ticks_msec() / 1000.0
