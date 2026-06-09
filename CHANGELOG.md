@@ -8,6 +8,7 @@
 - **Enemy flavor text field** — Enemy data now has an optional flavor text field for lore descriptions (currently blank, to be filled in a future update).
 
 ### Visual
+- **Enemy death animation** — When an enemy's HP hits zero the portrait flashes white, expands, and dissolves before the results screen appears. Boss enemies get a more dramatic version: a larger scale punch, a horizontal shake, and an extended fade.
 - **Lunge animation** — The enemy portrait lunges toward the board when an attack fires, then eases back into place.
 - **Anticipation pulse** — At 80% or more charge the portrait pulses slightly, signalling the incoming attack.
 - **Damage feedback** — When the player deals damage the portrait flashes red and a floating damage number drifts upward.

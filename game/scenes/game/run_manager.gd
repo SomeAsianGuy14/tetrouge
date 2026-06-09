@@ -99,6 +99,7 @@ var _board_was_active: bool = false
 var _active_overlay: Control = null
 var _pending_keystone: bool = false
 var _round_ended: bool = false
+var _pending_round_end: Callable
 
 signal round_ended(success: bool)
 
@@ -1133,11 +1134,21 @@ func _end_round(success: bool) -> void:
 	RunState.advance_round()
 
 	if RunState.is_run_complete():
-		_show_victory()
-		return
+		_pending_round_end = _show_victory
+	else:
+		_pending_keystone = was_boss
+		_pending_round_end = _show_round_success
 
-	_pending_keystone = was_boss
-	_show_round_success()
+	if _enemy_display:
+		_enemy_display.death_animation_finished.connect(_on_death_animation_finished, CONNECT_ONE_SHOT)
+		_enemy_display.play_death_animation()
+	else:
+		_on_death_animation_finished()
+
+func _on_death_animation_finished() -> void:
+	var fn := _pending_round_end
+	_pending_round_end = Callable()
+	fn.call()
 
 func _apply_keystone_economy() -> void:
 	for ks in RunState.keystones:

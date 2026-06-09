@@ -1,6 +1,8 @@
 class_name EnemyDisplay
 extends Control
 
+signal death_animation_finished
+
 var _enemy: Enemy = null
 var _quota: int = 0
 
@@ -25,7 +27,10 @@ var _windup_label: Label = null
 var _lunge_tween: Tween = null
 var _pulse_tween: Tween = null
 var _flash_tween: Tween = null
+var _death_tween: Tween = null
+var _death_shake_tween: Tween = null
 var _pulse_active: bool = false
+var _death_pending_success: bool = false
 var _prev_accumulated: float = 0.0
 
 func setup(enemy: Enemy, quota: int) -> void:
@@ -199,6 +204,47 @@ func update_windup(timer: float, interval: float) -> void:
 	else:
 		_stop_pulse()
 
+# ── Death animation ────────────────────────────────────────────────────────
+
+func play_death_animation() -> void:
+	_stop_pulse()
+	if _lunge_tween and _lunge_tween.is_valid():
+		_lunge_tween.kill()
+		_lunge_tween = null
+	if _flash_tween and _flash_tween.is_valid():
+		_flash_tween.kill()
+		_flash_tween = null
+	_death_pending_success = true
+	var is_boss := _enemy != null and _enemy.ability != null
+	if is_boss:
+		_play_boss_death()
+	else:
+		_play_regular_death()
+
+func _play_regular_death() -> void:
+	_death_tween = create_tween()
+	_death_tween.tween_property(_portrait_anchor, "modulate", Color.WHITE, 0.10)
+	_death_tween.tween_property(_portrait_anchor, "modulate:a", 0.0, 0.50).set_ease(Tween.EASE_IN)
+	_death_tween.parallel().tween_property(_portrait_anchor, "scale", Vector2(1.1, 1.1), 0.50).set_ease(Tween.EASE_OUT)
+	_death_tween.finished.connect(_on_death_tween_finished)
+
+func _play_boss_death() -> void:
+	_death_tween = create_tween()
+	_death_tween.tween_property(_portrait_anchor, "modulate", Color.WHITE, 0.10)
+	_death_tween.tween_property(_portrait_anchor, "modulate:a", 0.0, 0.80).set_ease(Tween.EASE_IN)
+	_death_tween.parallel().tween_property(_portrait_anchor, "scale", Vector2(1.18, 1.18), 0.80).set_ease(Tween.EASE_OUT)
+	_death_tween.finished.connect(_on_death_tween_finished)
+	_death_shake_tween = create_tween()
+	_death_shake_tween.tween_property(_portrait_anchor, "position:x", 8.0, 0.07)
+	_death_shake_tween.tween_property(_portrait_anchor, "position:x", -8.0, 0.07)
+	_death_shake_tween.tween_property(_portrait_anchor, "position:x", 4.0, 0.07)
+	_death_shake_tween.tween_property(_portrait_anchor, "position:x", -4.0, 0.07)
+	_death_shake_tween.tween_property(_portrait_anchor, "position:x", 0.0, 0.07)
+
+func _on_death_tween_finished() -> void:
+	_death_pending_success = false
+	death_animation_finished.emit()
+
 # ── Pause hook ────────────────────────────────────────────────────────────
 
 func stop_animations() -> void:
@@ -209,9 +255,19 @@ func stop_animations() -> void:
 	if _flash_tween and _flash_tween.is_valid():
 		_flash_tween.kill()
 		_flash_tween = null
+	if _death_tween and _death_tween.is_valid():
+		_death_tween.kill()
+		_death_tween = null
+	if _death_shake_tween and _death_shake_tween.is_valid():
+		_death_shake_tween.kill()
+		_death_shake_tween = null
 	if _portrait_anchor:
 		_portrait_anchor.position.x = 0.0
-		_portrait_anchor.modulate = Color.WHITE
+		if not _death_pending_success:
+			_portrait_anchor.modulate = Color.WHITE
+	if _death_pending_success:
+		_death_pending_success = false
+		death_animation_finished.emit()
 
 # ── Lunge animation ────────────────────────────────────────────────────────
 

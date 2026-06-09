@@ -20,6 +20,11 @@ func after_each() -> void:
 
 # ── Helpers ────────────────────────────────────────────────────────────────
 
+func _make_boss_enemy(pname: String = "Boss") -> Enemy:
+	var e := _make_enemy(pname)
+	e.ability = BossModifier.new()
+	return e
+
 func _make_enemy(pname: String = "Test", flavor: String = "", sprite: Texture2D = null) -> Enemy:
 	var e := Enemy.new()
 	e.display_name = pname
@@ -99,3 +104,40 @@ func test_update_hp_same_value_twice_gives_zero_delta() -> void:
 	d.update_hp(50.0)
 	var delta := d._prev_accumulated - prev
 	assert_eq(delta, 0.0, "delta should be zero when accumulated value does not change")
+
+# ── Death animation ────────────────────────────────────────────────────────
+
+func test_play_death_animation_emits_signal_when_stop_animations_called() -> void:
+	var d := _make_display(_make_enemy(), 100)
+	watch_signals(d)
+	d.play_death_animation()
+	assert_true(d._death_pending_success, "death_pending_success should be true after play_death_animation")
+	d.stop_animations()
+	assert_signal_emitted(d, "death_animation_finished", "death_animation_finished should fire when stop_animations interrupts death tween")
+
+func test_play_death_animation_regular_enemy_uses_regular_variant() -> void:
+	var d := _make_display(_make_enemy(), 100)
+	d.play_death_animation()
+	assert_not_null(d._death_tween, "death tween should be created for regular enemy")
+	assert_null(d._death_shake_tween, "shake tween should NOT be created for regular enemy")
+
+func test_play_death_animation_boss_enemy_uses_boss_variant() -> void:
+	var d := _make_display(_make_boss_enemy(), 100)
+	d.play_death_animation()
+	assert_not_null(d._death_tween, "death tween should be created for boss enemy")
+	assert_not_null(d._death_shake_tween, "shake tween should be created for boss enemy")
+
+func test_stop_animations_while_death_pending_does_not_leave_stuck() -> void:
+	var d := _make_display(_make_enemy(), 100)
+	watch_signals(d)
+	d.play_death_animation()
+	d.stop_animations()
+	assert_false(d._death_pending_success, "death_pending_success should be cleared after stop_animations")
+	assert_signal_emitted(d, "death_animation_finished", "signal should fire to unblock any waiting RunManager")
+
+func test_play_death_animation_kills_active_pulse_tween() -> void:
+	var d := _make_display(_make_enemy(), 100)
+	d._pulse_active = true
+	d._pulse_tween = d.create_tween().set_loops()
+	d.play_death_animation()
+	assert_false(d._pulse_active, "pulse should be stopped when death animation starts")
