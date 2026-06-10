@@ -43,17 +43,27 @@ func _make_technique(event: String) -> Technique:
 
 # ── Suppression ────────────────────────────────────────────────────────────
 
-func test_suppress_spins_zeroes_tspin_attack() -> void:
+func test_suppress_spins_suppresses_tspin_attack() -> void:
 	var ks := _make_keystone()
 	ks.suppress_spins = true
 	RunState.keystones.append(ks)
-	assert_eq(_rm._apply_keystone_suppressions(4, "tspin_double"), 0)
+	assert_true(_rm._is_attack_suppressed("tspin_double"))
 
 func test_suppress_spins_does_not_affect_quad() -> void:
 	var ks := _make_keystone()
 	ks.suppress_spins = true
 	RunState.keystones.append(ks)
-	assert_eq(_rm._apply_keystone_suppressions(4, "quad"), 4)
+	assert_false(_rm._is_attack_suppressed("quad"))
+
+func test_suppress_non_singles_suppresses_quad_but_not_single() -> void:
+	var ks := _make_keystone()
+	ks.suppress_non_singles = true
+	RunState.keystones.append(ks)
+	assert_true(_rm._is_attack_suppressed("quad"))
+	assert_false(_rm._is_attack_suppressed("single"))
+
+func test_no_keystones_suppresses_nothing() -> void:
+	assert_false(_rm._is_attack_suppressed("tspin_double"))
 
 # ── Flat bonuses ──────────────────────────────────────────────────────────
 
@@ -71,6 +81,62 @@ func test_per_technique_quad_bonus_counts_applicable_techniques() -> void:
 	RunState.techniques.append(_make_technique("quad"))
 	# 4 base + (2 per technique * 2 techniques) = 8
 	assert_eq(_rm._apply_keystone_flat_bonuses(4, "quad"), 8)
+
+func test_single_bonus_applies_to_zero_attack_single() -> void:
+	# Singles have base attack 0; the keystone bonus must still apply
+	var ks := _make_keystone()
+	ks.single_bonus = 3
+	RunState.keystones.append(ks)
+	assert_eq(_rm._apply_keystone_flat_bonuses(0, "single"), 3)
+
+func test_per_technique_tspin_bonus_counts_general_techniques() -> void:
+	var ks := _make_keystone()
+	ks.per_technique_tspin_bonus = 2
+	RunState.keystones.append(ks)
+	RunState.techniques.append(_make_technique("tspin"))
+	RunState.techniques.append(_make_technique("general"))
+	# 4 base + (2 per technique * 2 techniques) = 8
+	assert_eq(_rm._apply_keystone_flat_bonuses(4, "tspin_double"), 8)
+
+func test_per_technique_tspin_bonus_applies_to_tspin_mini() -> void:
+	var ks := _make_keystone()
+	ks.per_technique_tspin_bonus = 2
+	RunState.keystones.append(ks)
+	RunState.techniques.append(_make_technique("tspin"))
+	assert_eq(_rm._apply_keystone_flat_bonuses(1, "tspin_mini"), 3)
+
+func test_per_technique_quad_bonus_counts_general_techniques() -> void:
+	var ks := _make_keystone()
+	ks.per_technique_quad_bonus = 2
+	RunState.keystones.append(ks)
+	RunState.techniques.append(_make_technique("general"))
+	assert_eq(_rm._apply_keystone_flat_bonuses(4, "quad"), 6)
+
+func test_collect_keystone_events_returns_empty_for_suppressed_event() -> void:
+	var suppressor := _make_keystone()
+	suppressor.suppress_spins = true
+	var bonus_ks := _make_keystone()
+	bonus_ks.tspin_any_bonus = 10
+	RunState.keystones.append(suppressor)
+	RunState.keystones.append(bonus_ks)
+	assert_eq(_rm._collect_keystone_events(4, "tspin_double").size(), 0)
+
+func test_collect_keystone_events_includes_single_bonus_on_zero_attack() -> void:
+	var ks := _make_keystone()
+	ks.single_bonus = 3
+	RunState.keystones.append(ks)
+	var events: Array = _rm._collect_keystone_events(0, "single")
+	assert_eq(events.size(), 1)
+	assert_eq(events[0]["bonus"], 3)
+
+func test_dizzy_adds_bonus_after_five_t_rotations() -> void:
+	var ks := _make_keystone()
+	ks.dizzy = true
+	RunState.keystones.append(ks)
+	_rm._t_spin_rotations = 5
+	assert_eq(_rm._apply_keystone_flat_bonuses(4, "tspin_double"), 8)
+	_rm._t_spin_rotations = 4
+	assert_eq(_rm._apply_keystone_flat_bonuses(4, "tspin_double"), 4)
 
 # ── Multipliers ───────────────────────────────────────────────────────────
 

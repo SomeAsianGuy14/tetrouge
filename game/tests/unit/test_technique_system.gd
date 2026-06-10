@@ -173,6 +173,34 @@ func test_flat_board_below_pct_blocks_when_board_too_high() -> void:
 	assert_eq(_TechniqueEvaluator.compute_attack_bonus([t], ctx_low, rs), 1)
 	assert_eq(_TechniqueEvaluator.compute_attack_bonus([t], ctx_high, rs), 0)
 
+func test_adrenaline_rush_fires_when_stack_reaches_top_rows() -> void:
+	var t := Technique.new()
+	t.effect_type = "adrenaline_rush"
+	t.params = {"top_rows": 4, "bonus": 5}
+	var ctx := _make_ctx(1)
+	ctx.board_height = 17  # stack reaches into the top 4 rows (heights 17-20)
+	var rs := TechniqueRoundState.new()
+	assert_eq(_TechniqueEvaluator.compute_attack_bonus([t], ctx, rs), 5)
+
+func test_adrenaline_rush_does_not_fire_below_top_rows() -> void:
+	var t := Technique.new()
+	t.effect_type = "adrenaline_rush"
+	t.params = {"top_rows": 4, "bonus": 5}
+	var ctx := _make_ctx(1)
+	ctx.board_height = 16  # just outside the top 4 rows
+	var rs := TechniqueRoundState.new()
+	assert_eq(_TechniqueEvaluator.compute_attack_bonus([t], ctx, rs), 0)
+
+func test_adrenaline_rush_does_not_fire_on_low_stack() -> void:
+	# Regression: the old check (board_height >= top_rows) fired on almost any stack
+	var t := Technique.new()
+	t.effect_type = "adrenaline_rush"
+	t.params = {"top_rows": 4, "bonus": 5}
+	var ctx := _make_ctx(1)
+	ctx.board_height = 4
+	var rs := TechniqueRoundState.new()
+	assert_eq(_TechniqueEvaluator.compute_attack_bonus([t], ctx, rs), 0)
+
 func test_empty_effect_type_returns_zero() -> void:
 	var t := Technique.new()
 	t.id = "blank"
@@ -322,6 +350,7 @@ func test_evaluate_result_has_correct_keys() -> void:
 	assert_true(result.has("attack_delta"))
 	assert_true(result.has("coins_delta"))
 	assert_true(result.has("flags"))
+	assert_true(result.has("events"))
 
 func test_evaluate_returns_combined_attack_and_coins() -> void:
 	var t_atk := _make_flat_technique("all_clear", 2)
@@ -368,6 +397,45 @@ func test_evaluate_flags_empty_with_no_lifecycle_techniques() -> void:
 	var rs := TechniqueRoundState.new()
 	var result: Dictionary = _TechniqueEvaluator.evaluate([t], ctx, rs)
 	assert_eq(result.flags.size(), 0)
+
+# ── evaluate() events array ───────────────────────────────────────────────────
+
+func test_evaluate_events_has_one_entry_for_contributing_technique() -> void:
+	var t := _make_flat_technique("all_clear", 2)
+	t.id = "escalation"
+	t.display_name = "Escalation"
+	var ctx := _make_ctx(1)
+	var rs := TechniqueRoundState.new()
+	var result: Dictionary = _TechniqueEvaluator.evaluate([t], ctx, rs)
+	assert_eq(result.events.size(), 1, "One event for one contributing technique")
+	assert_eq(result.events[0].name, "Escalation")
+	assert_eq(result.events[0].attack, 2)
+
+func test_evaluate_events_empty_when_no_techniques_contribute() -> void:
+	var ctx := _make_ctx(0)
+	var rs := TechniqueRoundState.new()
+	var result: Dictionary = _TechniqueEvaluator.evaluate([], ctx, rs)
+	assert_eq(result.events.size(), 0, "Empty events when no techniques")
+
+func test_evaluate_events_excludes_zero_contribution_techniques() -> void:
+	var t_contributing := _make_flat_technique("all_clear", 2)
+	t_contributing.display_name = "Contributing"
+	var t_zero := _make_flat_technique("quad", 1)  # won't fire on single-line clear
+	t_zero.display_name = "Zero"
+	var ctx := _make_ctx(1)  # single clear — quad technique gets 0
+	var rs := TechniqueRoundState.new()
+	var result: Dictionary = _TechniqueEvaluator.evaluate([t_contributing, t_zero], ctx, rs)
+	assert_eq(result.events.size(), 1, "Only the contributing technique appears in events")
+	assert_eq(result.events[0].name, "Contributing")
+
+func test_evaluate_totals_unchanged_by_events_addition() -> void:
+	var t1 := _make_flat_technique("all_clear", 2)
+	var t2 := _make_economy_technique("quad", 3)
+	var ctx := _make_ctx(4)
+	var rs := TechniqueRoundState.new()
+	var result: Dictionary = _TechniqueEvaluator.evaluate([t1, t2], ctx, rs)
+	assert_eq(result.attack_delta, 2, "attack_delta unchanged")
+	assert_eq(result.coins_delta, 3, "coins_delta unchanged")
 
 # ── RunState.technique_capacity ───────────────────────────────────────────────
 

@@ -26,6 +26,7 @@ extends Resource
 @export var instant_arr: bool = false
 @export var instant_soft_drop: bool = false
 @export var garbage_flush_reduction: int = 0
+@export var line_clear_delay: float = 0.5
 
 # Boss modifier: piece generation and garbage behaviour
 var random_pieces: bool = false

@@ -23,6 +23,16 @@
 - **Enemy portrait stops animating on pause** — Anticipation pulse, lunge, and damage flash now stop immediately when the pause menu opens.
 - **Hybrid Reactor damage spike on B2B combos** — The keystone's tag bonus now fires once per clear instead of once per attack signal (which could triple the bonus on B2B combo quads).
 - **Attack Battery triggers on correct clear** — The "every 4th clear" bonus now fires on clears 4, 8, 12… instead of 5, 9, 13…
+- **Board height conditions fixed** — The board height measurement was inverted (a tall stack read as a low one), so every height-based technique triggered backwards: Redzone and Aggressive Positioning fired on near-empty boards, Low Pressure and Compact Setup on tall ones. Height is also now measured on every piece lock instead of only after clears, so these techniques react to the current stack rather than a stale one.
+- **Adrenaline Rush actually requires a tall stack** — Previously it fired on almost any clear; now it correctly requires the stack to reach the top 4 rows.
+- **Full Potential no longer changes technique behaviour** — Skipping the line clear delay used to make techniques evaluate after the clear was processed, so combo techniques shifted by one step, Back-to-Back techniques fired one clear early, and Whirl missed the current clear. All techniques now behave identically with or without the keystone.
+- **Single-clear keystones work** — Simple Flail, Mace and Chain, and Holy Cheese builds now add damage to Singles (which have 0 base attack); previously the bonus was silently dropped. Their popups now show too.
+- **Flash Step ARR restored correctly** — Flash Step's instant auto-repeat used to stay on for the rest of the round; it now lasts exactly one piece, and restoring it no longer cancels Full Potential's instant ARR.
+- **Pausing no longer disables instant ARR** — Closing the pause menu used to reset auto-repeat to your settings value, cancelling Full Potential (and an active Flash Step) until the next round.
+- **Side Strike counts for Sharpen** — Its quad tag had an outdated name so Sharpen ignored it.
+- **Enchant counts all T-Spin-applicable techniques** — General-tagged techniques now count toward its per-technique bonus (matching how Sharpen counts them for Quads), and the bonus now applies to T-Spin Minis.
+- **Final Blow can finish a round** — Its burst damage now updates the enemy HP bar immediately and ends the round if it meets the quota, instead of waiting for your next attack.
+- **Surge consumables no longer waste charges** — A zero-damage Single no longer consumes a surge charge.
 
 ---
 

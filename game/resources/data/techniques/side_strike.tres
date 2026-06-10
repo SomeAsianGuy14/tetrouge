@@ -8,6 +8,6 @@ id = "side_strike"
 display_name = "Side Strike"
 description = "If a Quad clear uses the far-left or far-right column, send +1 extra attack."
 cost = 4
-tags = ["tetris", "precision"]
+tags = ["quad", "precision"]
 effect_type = "side_strike"
 params = {"bonus": 1}

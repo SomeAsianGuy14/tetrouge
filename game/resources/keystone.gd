@@ -68,6 +68,7 @@ extends Resource
 @export var blessed_stone: bool = false
 @export var per_attack_tag_bonus: int = 0
 @export var reflect_on_flush: float = 0.0
+@export var skip_line_clear_delay: bool = false
 
 func apply_to_config(config: RoundConfig) -> void:
 	if hold_slots_bonus > 0:
@@ -84,3 +85,5 @@ func apply_to_config(config: RoundConfig) -> void:
 		config.b2b_shield_count += 1
 	if flexible_b2b:
 		config.flexible_b2b = true
+	if skip_line_clear_delay:
+		config.line_clear_delay = 0.0

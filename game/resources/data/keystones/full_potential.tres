@@ -11,3 +11,4 @@ flavor_text = "I feel the power!!"
 category = "Utility"
 instant_arr = true
 instant_soft_drop = true
+skip_line_clear_delay = true

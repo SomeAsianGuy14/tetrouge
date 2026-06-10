@@ -1,16 +1,25 @@
 class_name TechniqueEvaluator
 
-# Returns { "attack_delta": int, "coins_delta": int, "flags": Array }
+# Returns { "attack_delta": int, "coins_delta": int, "flags": Array, "events": Array }
 # flags: string tokens RunManager handles as side-effects:
 #   "flash_step_arr"    — set board ARR=0 for next piece
 #   "burning_board"     — start/sustain periodic damage timer
 #   "glass_cannon"      — apply +2 incoming garbage modifier
 #   "greedy_hands"      — handled at round-end for +2 coins + enemy buff
+# events: per-technique contributions — [{name, id, attack, coins}] for non-zero results
 static func evaluate(techniques: Array, ctx: AttackContext, rs: TechniqueRoundState) -> Dictionary:
-	var atk: int = compute_attack_bonus(techniques, ctx, rs)
-	var coins: int = compute_economy_bonus(techniques, ctx, rs)
+	var total_atk: int = 0
+	var total_coins: int = 0
+	var events: Array = []
+	for t in techniques:
+		var atk: int = _eval_attack(t, ctx, rs)
+		var eco: int = _eval_economy(t, ctx, rs)
+		total_atk += atk
+		total_coins += eco
+		if atk != 0 or eco != 0:
+			events.append({"name": t.display_name, "id": t.id, "attack": atk, "coins": eco})
 	var flags: Array = _collect_flags(techniques, ctx, rs)
-	return {"attack_delta": atk, "coins_delta": coins, "flags": flags}
+	return {"attack_delta": total_atk, "coins_delta": total_coins, "flags": flags, "events": events}
 
 static func compute_attack_bonus(techniques: Array, ctx: AttackContext, rs: TechniqueRoundState) -> int:
 	var total: int = 0
@@ -146,7 +155,8 @@ static func _eval_attack(t: Resource, ctx: AttackContext, rs: TechniqueRoundStat
 			return 0  # economy/enemy effect only
 
 		"adrenaline_rush":
-			if is_clear and ctx.board_height >= p.get("top_rows", 4):
+			# Stack must reach into the top N rows (board_height is 0=empty..20=full)
+			if is_clear and ctx.board_height > 20 - p.get("top_rows", 4):
 				return p.get("bonus", 5)
 			return 0
 

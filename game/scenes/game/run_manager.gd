@@ -81,6 +81,7 @@ var _burning_board_timer: float = 0.0
 var _burning_board_active: bool = false
 var _deferred_reflect_lines: int = 0
 var _flash_step_arr_pending: bool = false
+var _flash_step_arr_active: bool = false
 var _greedy_hands_active: bool = false
 
 var _blessed_stone_spent: bool = false
@@ -171,6 +172,7 @@ func start_round() -> void:
 	_burning_board_active = RunState.has_technique("burning_board")
 	_burning_board_timer = 0.0
 	_flash_step_arr_pending = false
+	_flash_step_arr_active = false
 	_greedy_hands_active = RunState.has_technique("greedy_hands")
 
 	if current_board:
@@ -363,7 +365,8 @@ func _close_pause() -> void:
 	_paused = false
 	if _board_was_active and current_board != null:
 		current_board.das_delay = Settings.load_das()
-		current_board.arr_rate = Settings.load_arr()
+		if not (_has_instant_arr() or _flash_step_arr_active):
+			current_board.arr_rate = Settings.load_arr()
 		current_board.sdf_multiplier = Settings.load_sdf()
 		current_board.is_active = true
 	_board_was_active = false
@@ -493,6 +496,9 @@ func _on_piece_locked() -> void:
 			rs.escalation_pending = true
 		if rs.patience_cooldown_pieces > 0:
 			rs.patience_cooldown_pieces -= 1
+		# Patience: arm the next clear's bonus when hold is used (any piece, not just clears)
+		if _held_this_piece and rs.patience_cooldown_pieces == 0:
+			rs.patience_pending = true
 		# Constant Pressure: piece locked within 1 second of spawning
 		var elapsed: float = Time.get_ticks_msec() / 1000.0 - _piece_spawn_time
 		if elapsed <= 1.0:
@@ -514,7 +520,8 @@ func _on_piece_locked() -> void:
 				rs.good_planning_pending = true
 
 func _on_line_clear_delay_started(clear_type: String) -> void:
-	_spawn_clear_type_popup(clear_type, current_config.line_clear_delay if current_config else 0.5)
+	# Clamp popup fade time so a zero clear delay (Full Potential) stays readable
+	_spawn_clear_type_popup(clear_type, maxf(0.5, current_config.line_clear_delay) if current_config else 0.5)
 	_clear_popup_shown_this_piece = true
 	if _technique_round_state == null:
 		return
@@ -554,12 +561,22 @@ func _on_lines_cleared(_count: int, clear_type: String) -> void:
 		return
 	_spawn_clear_type_popup(clear_type, 0.5)
 
+func _has_instant_arr() -> bool:
+	return current_config != null and current_config.instant_arr
+
 func _on_b2b_broken(streak: int) -> void:
 	for ks in RunState.keystones:
 		if ks.final_blow:
 			quota_accumulated += streak * 2
 			if current_config:
 				current_config.b2b_disabled = true
+				surplus_attack = maxi(0, int(quota_accumulated) - current_config.quota)
+			if _run_stats:
+				_run_stats.total_damage += streak * 2
+			if _enemy_display:
+				_enemy_display.update_hp(quota_accumulated)
+			if current_config and quota_accumulated >= current_config.quota:
+				_end_round(true)
 			break
 
 func _on_attack_generated(raw_attack: int, event_type: String) -> void:
@@ -585,11 +602,13 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 			_update_round_state_after_eval(ctx, eval_result)
 
 	var modified: int = raw_attack + technique_atk
-	modified = _apply_keystone_suppressions(modified, event_type)
-	modified = _apply_keystone_flat_bonuses(modified, event_type)
-	modified = _apply_consumable_flat_bonuses(modified, event_type)
-	modified = _apply_consumable_surge(modified, event_type)
-	modified = _apply_keystone_multipliers(modified, event_type)
+	if _is_attack_suppressed(event_type):
+		modified = 0
+	else:
+		modified = _apply_keystone_flat_bonuses(modified, event_type)
+		modified = _apply_consumable_flat_bonuses(modified, event_type)
+		modified = _apply_consumable_surge(modified, event_type)
+		modified = _apply_keystone_multipliers(modified, event_type)
 
 	# Apply boss modifier quota filter
 	if not is_bonus_event and current_config.boss_modifier:
@@ -727,14 +746,13 @@ func _update_round_state_after_eval(ctx: AttackContext, _eval: Dictionary) -> vo
 		if rs.good_planning_pending:
 			rs.good_planning_pending = false
 
-		# Flash Step: restore ARR after the piece that triggered it locks
-		if _flash_step_arr_pending and current_board:
-			current_board.arr_rate = 0.0
-			_flash_step_arr_pending = false
-
 		# Combo payout: mark used; coins already credited via TechniqueEvaluator
-		if ctx.combo >= 4 and not rs.combo_payout_used:
-			rs.combo_payout_used = true
+		if not rs.combo_payout_used:
+			for t in RunState.techniques:
+				if t.effect_type == "economy" and t.params.get("trigger", "") == "combo_payout" \
+						and ctx.combo >= t.params.get("combo_threshold", 4):
+					rs.combo_payout_used = true
+					break
 
 		# Patience cooldown
 		if _held_this_piece and rs.patience_cooldown_pieces == 0:
@@ -750,65 +768,59 @@ func _update_round_state_after_eval(ctx: AttackContext, _eval: Dictionary) -> vo
 
 # ── Keystone attack modifiers ─────────────────────────────────────────────
 
-func _apply_keystone_suppressions(attack: int, event_type: String) -> int:
+func _is_attack_suppressed(event_type: String) -> bool:
 	for ks in RunState.keystones:
 		if ks.suppress_spins and event_type in ["tspin_mini", "tspin_single", "tspin_double", "tspin_triple", "tspin_any"]:
-			return 0
+			return true
 		if ks.suppress_tspin_single and event_type == "tspin_single":
-			return 0
+			return true
 		if ks.suppress_tspin_double and event_type == "tspin_double":
-			return 0
+			return true
 		if ks.suppress_tspin_triple and event_type == "tspin_triple":
-			return 0
+			return true
 		if ks.suppress_non_singles and event_type != "single":
-			return 0
-	return attack
+			return true
+	return false
+
+# Flat bonus a single keystone grants for one attack event. Static and shared
+# between damage application and popup collection so the two can't drift.
+static func compute_keystone_flat_bonus(ks: Keystone, event_type: String, techniques: Array, t_rotations: int) -> int:
+	var b := 0
+	match event_type:
+		"single":
+			b += ks.single_bonus
+		"double":
+			b += ks.double_bonus
+		"triple":
+			b += ks.triple_bonus
+		"quad":
+			b += ks.quad_bonus
+			if ks.per_technique_quad_bonus > 0:
+				for t in techniques:
+					if "quad" in t.tags or "general" in t.tags:
+						b += ks.per_technique_quad_bonus
+		"tspin_mini", "tspin_single", "tspin_double", "tspin_triple":
+			match event_type:
+				"tspin_mini":   b += ks.tspin_mini_bonus
+				"tspin_single": b += ks.tspin_single_bonus
+				"tspin_double": b += ks.tspin_double_bonus
+				"tspin_triple": b += ks.tspin_triple_bonus
+			b += ks.tspin_any_bonus
+			if ks.per_technique_tspin_bonus > 0:
+				for t in techniques:
+					if "tspin" in t.tags or "general" in t.tags:
+						b += ks.per_technique_tspin_bonus
+		"b2b":
+			b += ks.b2b_bonus
+	# Dizzy: >4 T rotations adds +4 to the next T-spin
+	if ks.dizzy and event_type.begins_with("tspin") and event_type != "tspin_mini" and t_rotations > 4:
+		b += 4
+	return b
 
 func _apply_keystone_flat_bonuses(attack: int, event_type: String) -> int:
-	if attack == 0:
-		return 0
 	var total_bonus := 0
 	for ks in RunState.keystones:
-		var ks_bonus := 0
-		match event_type:
-			"single":
-				ks_bonus += ks.single_bonus
-			"double":
-				ks_bonus += ks.double_bonus
-			"triple":
-				ks_bonus += ks.triple_bonus
-			"quad":
-				ks_bonus += ks.quad_bonus
-				if ks.per_technique_quad_bonus > 0:
-					for t in RunState.techniques:
-						if "quad" in t.tags or "general" in t.tags:
-							ks_bonus += ks.per_technique_quad_bonus
-			"tspin_mini":
-				ks_bonus += ks.tspin_mini_bonus + ks.tspin_any_bonus
-			"tspin_single":
-				ks_bonus += ks.tspin_single_bonus + ks.tspin_any_bonus
-				if ks.per_technique_tspin_bonus > 0:
-					for t in RunState.techniques:
-						if "tspin" in t.tags:
-							ks_bonus += ks.per_technique_tspin_bonus
-			"tspin_double":
-				ks_bonus += ks.tspin_double_bonus + ks.tspin_any_bonus
-				if ks.per_technique_tspin_bonus > 0:
-					for t in RunState.techniques:
-						if "tspin" in t.tags:
-							ks_bonus += ks.per_technique_tspin_bonus
-			"tspin_triple":
-				ks_bonus += ks.tspin_triple_bonus + ks.tspin_any_bonus
-				if ks.per_technique_tspin_bonus > 0:
-					for t in RunState.techniques:
-						if "tspin" in t.tags:
-							ks_bonus += ks.per_technique_tspin_bonus
-			"b2b":
-				ks_bonus += ks.b2b_bonus
-		# Dizzy: >4 T rotations adds +4 to the next T-spin
-		if ks.dizzy and "tspin" in event_type and event_type != "tspin_mini" and _t_spin_rotations > 4:
-			ks_bonus += 4
-		total_bonus += ks_bonus
+		total_bonus += compute_keystone_flat_bonus(ks, event_type, RunState.techniques, _t_spin_rotations)
 	return attack + total_bonus
 
 func _apply_keystone_multipliers(attack: int, event_type: String) -> int:
@@ -856,44 +868,12 @@ func _apply_keystone_multipliers(attack: int, event_type: String) -> int:
 # ── Keystone visual helpers ───────────────────────────────────────────────
 
 func _collect_keystone_events(attack: int, event_type: String) -> Array:
-	if attack == 0:
+	if _is_attack_suppressed(event_type):
 		return []
 	var events: Array = []
 	# Flat bonuses
 	for ks in RunState.keystones:
-		var b := 0
-		match event_type:
-			"single":   b += ks.single_bonus
-			"double":   b += ks.double_bonus
-			"triple":   b += ks.triple_bonus
-			"quad":
-				b += ks.quad_bonus
-				if ks.per_technique_quad_bonus > 0:
-					for t in RunState.techniques:
-						if "quad" in t.tags or "general" in t.tags:
-							b += ks.per_technique_quad_bonus
-			"tspin_mini":    b += ks.tspin_mini_bonus + ks.tspin_any_bonus
-			"tspin_single":
-				b += ks.tspin_single_bonus + ks.tspin_any_bonus
-				if ks.per_technique_tspin_bonus > 0:
-					for t in RunState.techniques:
-						if "tspin" in t.tags:
-							b += ks.per_technique_tspin_bonus
-			"tspin_double":
-				b += ks.tspin_double_bonus + ks.tspin_any_bonus
-				if ks.per_technique_tspin_bonus > 0:
-					for t in RunState.techniques:
-						if "tspin" in t.tags:
-							b += ks.per_technique_tspin_bonus
-			"tspin_triple":
-				b += ks.tspin_triple_bonus + ks.tspin_any_bonus
-				if ks.per_technique_tspin_bonus > 0:
-					for t in RunState.techniques:
-						if "tspin" in t.tags:
-							b += ks.per_technique_tspin_bonus
-			"b2b":  b += ks.b2b_bonus
-		if ks.dizzy and "tspin" in event_type and event_type != "tspin_mini" and _t_spin_rotations > 4:
-			b += 4
+		var b := compute_keystone_flat_bonus(ks, event_type, RunState.techniques, _t_spin_rotations)
 		if b > 0:
 			events.append({"name": ks.display_name, "id": ks.id, "bonus": b})
 	# Multiplier bonus — compute total and attribute to first contributing keystone
@@ -1184,10 +1164,15 @@ func _on_lock_processed() -> void:
 	if _technique_round_state:
 		_technique_round_state.switch_up_armed = _hard_drop_used_this_piece
 	_hard_drop_used_this_piece = false
-	# Restore ARR after flash_step piece (the next piece after the 2+ clear is now locking)
+	# Restore ARR after the flash-step piece locks, then arm ARR=0 for the next
+	# piece if a flash step triggered on this lock (pending set during evaluation)
+	if _flash_step_arr_active and current_board:
+		current_board.arr_rate = 0.0 if _has_instant_arr() else Settings.load_arr()
+		_flash_step_arr_active = false
 	if _flash_step_arr_pending and current_board:
-		current_board.arr_rate = Settings.load_arr()
+		current_board.arr_rate = 0.0
 		_flash_step_arr_pending = false
+		_flash_step_arr_active = true
 	if hud and current_board:
 		hud.update_b2b_combo(current_board.is_b2b, current_board.b2b_count, current_board.combo)
 	if _run_stats and current_board:
@@ -1296,5 +1281,7 @@ func _apply_consumable_surge(attack: int, event_type: String) -> int:
 		return attack
 	if event_type == "b2b" or event_type == "combo":
 		return attack * 2
+	if attack == 0:
+		return 0  # don't burn a surge charge on a zero-damage clear
 	current_config.consumable_surge_clears_remaining -= 1
 	return attack * 2

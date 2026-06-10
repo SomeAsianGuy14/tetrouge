@@ -87,6 +87,15 @@ var is_active: bool = false
 var is_on_ground: bool = false
 var soft_dropping: bool = false
 
+# ── Line clear delay ──────────────────────────────────────────────────────
+var _in_line_clear_delay: bool = false
+var _line_clear_timer: float = 0.0
+var _pending_clear_rows: Array[int] = []
+var _pending_piece_type: String = ""
+var _pending_pivot: Vector2i = Vector2i.ZERO
+var _pending_rotation: int = 0
+var _pending_was_rotation: bool = false
+
 # ── Telemetry ─────────────────────────────────────────────────────────────
 var summit_height: int = 0  # rows from top to highest filled cell (0=empty, 20=full)
 
@@ -97,6 +106,7 @@ var b2b_count: int = 0
 
 # ── Signals ───────────────────────────────────────────────────────────────
 signal piece_locked
+signal line_clear_delay_started(clear_type: String)
 signal lock_processed
 signal lines_cleared(count: int, clear_type: String)
 signal rows_cleared(row_indices: Array[int])
@@ -159,6 +169,16 @@ func _fill_queue() -> void:
 func tick(delta: float) -> void:
 	if not is_active:
 		return
+	if _in_line_clear_delay:
+		_line_clear_timer += delta
+		queue_redraw()
+		if _line_clear_timer >= config.line_clear_delay:
+			_in_line_clear_delay = false
+			_execute_pending_clears()
+			if not _spawn_next():
+				is_active = false
+				emit_signal("game_over")
+		return
 	_handle_das(delta)
 	_handle_gravity(delta)
 	if is_on_ground:
@@ -205,12 +225,16 @@ func input_move_left_pressed() -> void:
 	das_direction = -1
 	das_timer = 0.0
 	arr_timer = 0.0
+	if _in_line_clear_delay:
+		return
 	_move_horizontal(-1)
 
 func input_move_right_pressed() -> void:
 	das_direction = 1
 	das_timer = 0.0
 	arr_timer = 0.0
+	if _in_line_clear_delay:
+		return
 	_move_horizontal(1)
 
 func input_move_released() -> void:
@@ -219,11 +243,16 @@ func input_move_released() -> void:
 	arr_timer = 0.0
 
 func input_soft_drop(pressed: bool) -> void:
+	if _in_line_clear_delay:
+		soft_dropping = false
+		return
 	if pressed and not soft_dropping:
 		gravity_accumulator = 0.0  # reset only on initial press for immediate response
 	soft_dropping = pressed
 
 func input_hard_drop() -> void:
+	if _in_line_clear_delay:
+		return
 	current_pivot = ghost_pivot
 	gravity_accumulator = 0.0
 	is_on_ground = true
@@ -231,15 +260,23 @@ func input_hard_drop() -> void:
 	_lock_piece()
 
 func input_rotate_cw() -> void:
+	if _in_line_clear_delay:
+		return
 	_try_rotate(SRS.next_rotation_cw(current_rotation))
 
 func input_rotate_ccw() -> void:
+	if _in_line_clear_delay:
+		return
 	_try_rotate(SRS.next_rotation_ccw(current_rotation))
 
 func input_rotate_180() -> void:
+	if _in_line_clear_delay:
+		return
 	_try_rotate(SRS.next_rotation_180(current_rotation))
 
 func input_hold() -> void:
+	if _in_line_clear_delay:
+		return
 	if config.hold_disabled:
 		return
 	if hold_used and config.hold_lockout_enabled and config.hold_slots <= 1:
@@ -343,7 +380,29 @@ func _lock_piece() -> void:
 	var locked_rotation := current_rotation
 	emit_signal("piece_locked")
 	hold_used = false
-	_process_clears(locked_type, locked_pivot, locked_rotation, was_rotation)
+	_update_summit_height()
+	var full_rows := _find_full_rows()
+	if full_rows.size() > 0:
+		# Always announce the clear before processing it, so listeners evaluate
+		# against pre-clear state (combo/B2B/height) regardless of delay config
+		_pending_clear_rows = full_rows
+		var _pre_tspin := _detect_tspin(locked_type, locked_pivot, locked_rotation, was_rotation)
+		var _pre_pc := _would_be_perfect_clear()
+		var _pre_type := _get_clear_type(full_rows.size(), _pre_tspin, _pre_pc)
+		if config.line_clear_delay > 0.0:
+			_pending_piece_type = locked_type
+			_pending_pivot = locked_pivot
+			_pending_rotation = locked_rotation
+			_pending_was_rotation = was_rotation
+			_in_line_clear_delay = true
+			_line_clear_timer = 0.0
+			queue_redraw()
+			emit_signal("line_clear_delay_started", _pre_type)
+			return
+		emit_signal("line_clear_delay_started", _pre_type)
+		_process_clears(locked_type, locked_pivot, locked_rotation, was_rotation)
+	else:
+		_process_clears(locked_type, locked_pivot, locked_rotation, was_rotation)
 	emit_signal("lock_processed")
 	if not _spawn_next():
 		is_active = false
@@ -372,6 +431,17 @@ func spawn_next_piece() -> void:
 	_spawn_next()
 
 # ── Line clear processing ─────────────────────────────────────────────────
+
+func _find_full_rows() -> Array[int]:
+	var full: Array[int] = []
+	for r in range(TOTAL_ROWS - 1, -1, -1):
+		if _is_row_full(r):
+			full.append(r)
+	return full
+
+func _execute_pending_clears() -> void:
+	_process_clears(_pending_piece_type, _pending_pivot, _pending_rotation, _pending_was_rotation)
+	emit_signal("lock_processed")
 
 func _process_clears(piece_type: String, pivot: Vector2i, rotation: int, was_rotation: bool) -> void:
 	var is_tspin := _detect_tspin(piece_type, pivot, rotation, was_rotation)
@@ -485,6 +555,15 @@ func _detect_perfect_clear() -> bool:
 				return false
 	return true
 
+func _would_be_perfect_clear() -> bool:
+	for r in range(TOTAL_ROWS):
+		if r in _pending_clear_rows:
+			continue
+		for c in range(config.board_width):
+			if grid[r][c] != 0:
+				return false
+	return true
+
 # ── Clear type classification ─────────────────────────────────────────────
 
 func _get_clear_type(count: int, is_tspin: bool, is_pc: bool) -> String:
@@ -569,7 +648,7 @@ func _update_summit_height() -> void:
 	for r in range(HIDDEN_ROWS, TOTAL_ROWS):
 		for c in range(COLS):
 			if grid[r][c] != 0:
-				summit_height = r - HIDDEN_ROWS + 1
+				summit_height = TOTAL_ROWS - r
 				return
 
 # ── Board query helpers ───────────────────────────────────────────────────
@@ -603,6 +682,19 @@ func _draw() -> void:
 					_draw_garbage_cell(col, screen_row)
 				else:
 					_draw_cell(col, screen_row, PIECE_COLORS.get(cell_val, Color.WHITE))
+
+	# Line clear flash overlay
+	if _in_line_clear_delay and config.line_clear_delay > 0.0:
+		var flash_t := absf(sin(_line_clear_timer * PI / config.line_clear_delay * 3.0))
+		for grid_row: int in _pending_clear_rows:
+			var screen_row := grid_row - HIDDEN_ROWS
+			if screen_row < 0 or screen_row >= VISIBLE_ROWS:
+				continue
+			for col in range(config.board_width):
+				var cell_val: int = grid[grid_row][col]
+				if cell_val != 0:
+					var base_color: Color = PIECE_COLORS.get(cell_val, Color.WHITE)
+					_draw_cell(col, screen_row, base_color.lerp(Color.WHITE, flash_t))
 
 	# Ghost piece
 	var ghost_cells: Array[Vector2i] = get_ghost_cells()

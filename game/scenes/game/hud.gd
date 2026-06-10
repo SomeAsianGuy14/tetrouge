@@ -22,6 +22,7 @@ extends Control
 ]
 
 var _run_manager = null  # set by RunManager after instantiation
+var _technique_tweens: Dictionary = {}  # technique id → active pulse Tween
 
 func set_run_manager(rm) -> void:
 	_run_manager = rm
@@ -92,9 +93,11 @@ func _refresh_keystone_icons() -> void:
 		lbl.text = keystone.display_name[0]
 		lbl.tooltip_text = keystone.display_name + "\n" + keystone.description
 		lbl.mouse_filter = Control.MOUSE_FILTER_STOP
+		lbl.set_meta("id", keystone.id)
 		keystone_icons.add_child(lbl)
 
 func _refresh_technique_icons() -> void:
+	_technique_tweens.clear()
 	for child in technique_icons.get_children():
 		child.queue_free()
 	for technique in RunState.techniques:
@@ -102,7 +105,45 @@ func _refresh_technique_icons() -> void:
 		lbl.text = technique.display_name[0]
 		lbl.tooltip_text = "%s\n%s" % [technique.display_name, technique.description]
 		lbl.mouse_filter = Control.MOUSE_FILTER_STOP
+		lbl.set_meta("id", technique.id)
 		technique_icons.add_child(lbl)
+
+# ── Animation helpers ─────────────────────────────────────────────────────
+
+func pop_icon(id: String) -> void:
+	for container in [technique_icons, keystone_icons]:
+		for child in container.get_children():
+			if child.has_meta("id") and child.get_meta("id") == id:
+				var tw := create_tween()
+				tw.tween_property(child, "scale", Vector2(1.35, 1.35), 0.08)
+				tw.tween_property(child, "scale", Vector2(1.0, 1.0), 0.18).set_trans(Tween.TRANS_BACK)
+				return
+
+func update_technique_states(states: Dictionary) -> void:
+	for child in technique_icons.get_children():
+		if not child.has_meta("id"):
+			continue
+		var id: String = child.get_meta("id")
+		var pending: bool = states.get(id, false)
+		if pending:
+			if not _technique_tweens.has(id) or not is_instance_valid(_technique_tweens[id]):
+				var tw := create_tween().set_loops()
+				tw.tween_property(child, "modulate", Color(1.0, 1.0, 0.35, 1.0), 0.4)
+				tw.tween_property(child, "modulate", Color.WHITE, 0.4)
+				_technique_tweens[id] = tw
+		else:
+			if _technique_tweens.has(id) and is_instance_valid(_technique_tweens[id]):
+				_technique_tweens[id].kill()
+				_technique_tweens.erase(id)
+			child.modulate = Color.WHITE
+
+func flash_keystone(keystone_id: String) -> void:
+	for child in keystone_icons.get_children():
+		if child.has_meta("id") and child.get_meta("id") == keystone_id:
+			var tw := create_tween()
+			tw.tween_property(child, "modulate", Color(0.5, 0.8, 1.0), 0.08)
+			tw.tween_property(child, "modulate", Color.WHITE, 0.15)
+			return
 
 func _refresh_backpack_slots() -> void:
 	for i in _backpack_slots.size():
