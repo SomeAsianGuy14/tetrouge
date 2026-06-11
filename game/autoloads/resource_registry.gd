@@ -117,13 +117,13 @@ const all_vouchers: Array = [
 
 const all_enemies: Array = [
 	preload("res://resources/data/enemies/boss_ancient.tres"),
-	preload("res://resources/data/enemies/boss_blinder.tres"),
 	preload("res://resources/data/enemies/boss_enforcer.tres"),
+	preload("res://resources/data/enemies/boss_fateless.tres"),
 	preload("res://resources/data/enemies/boss_filth.tres"),
-	preload("res://resources/data/enemies/boss_narrow.tres"),
 	preload("res://resources/data/enemies/boss_purge.tres"),
 	preload("res://resources/data/enemies/boss_reflection.tres"),
 	preload("res://resources/data/enemies/boss_silencer.tres"),
+	preload("res://resources/data/enemies/boss_thin.tres"),
 	preload("res://resources/data/enemies/boss_void.tres"),
 	preload("res://resources/data/enemies/cave_bat.tres"),
 	preload("res://resources/data/enemies/crimson_drake.tres"),

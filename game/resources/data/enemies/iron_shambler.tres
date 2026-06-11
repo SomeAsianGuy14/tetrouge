@@ -1,10 +1,9 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Enemy" format=3 uid="uid://uxmy1s5tdg07"]
 
-[ext_resource type="Script" path="res://resources/enemy.gd" id="1"]
+[ext_resource type="Script" uid="uid://dqm7x3n1vp5fy" path="res://resources/enemy.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
-flavor_text = ""
 id = "iron_shambler"
 display_name = "Iron Shambler"
 color = Color(0.4, 0.6, 0.8, 1)

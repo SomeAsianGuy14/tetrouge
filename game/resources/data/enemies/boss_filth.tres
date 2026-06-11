@@ -1,11 +1,10 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Enemy" format=3 uid="uid://cd7g37rwy5oko"]
 
-[ext_resource type="Script" path="res://resources/enemy.gd" id="1"]
-[ext_resource type="Resource" path="res://resources/data/boss_modifiers/the_filth.tres" id="2"]
+[ext_resource type="Script" uid="uid://dqm7x3n1vp5fy" path="res://resources/enemy.gd" id="1"]
+[ext_resource type="Resource" uid="uid://noqt3cc4hjdi" path="res://resources/data/boss_modifiers/the_filth.tres" id="2"]
 
 [resource]
 script = ExtResource("1")
-flavor_text = ""
 id = "boss_filth"
 display_name = "The Filth"
 color = Color(0.3, 0.25, 0.05, 1)

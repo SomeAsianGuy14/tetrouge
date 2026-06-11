@@ -61,7 +61,17 @@
       "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(d['rules']\\)\")",
       "PowerShell(Move-Item \"c:\\\\School\\\\PP\\\\TR\\\\openspec\\\\changes\\\\timer-overhaul\" \"c:\\\\School\\\\PP\\\\TR\\\\openspec\\\\changes\\\\archive\\\\2026-06-03-timer-overhaul\")",
       "Read(//c/School/PP/TR/dist/**)",
-      "PowerShell(& \"$env:USERPROFILE\\\\bin\\\\butler.exe\" push \"c:\\\\School\\\\PP\\\\TR\\\\builds\\\\web\" \"SomeAsianGuy14/tetrouge:html\" --userversion \"0.2.1\" 2>&1)"
+      "PowerShell(& \"$env:USERPROFILE\\\\bin\\\\butler.exe\" push \"c:\\\\School\\\\PP\\\\TR\\\\builds\\\\web\" \"SomeAsianGuy14/tetrouge:html\" --userversion \"0.2.1\" 2>&1)",
+      "Bash(git -C \"c:\\\\School\\\\PP\\\\TR\" rev-parse HEAD)",
+      "Bash(git -C \"c:\\\\School\\\\PP\\\\TR\" rev-parse --git-dir)",
+      "Bash(git -C \"c:\\\\School\\\\PP\\\\TR\" rev-parse --git-common-dir)",
+      "Bash(mkdir -p \"c:\\\\School\\\\PP\\\\TR\\\\.understand-anything\\\\intermediate\")",
+      "Bash(mkdir -p \"c:\\\\School\\\\PP\\\\TR\\\\.understand-anything\\\\tmp\")",
+      "Bash(node \"C:\\\\Users\\\\user\\\\.claude\\\\plugins\\\\understand-anything\\\\skills\\\\understand\\\\scan-project.mjs\" \"c:\\\\School\\\\PP\\\\TR\" \"c:\\\\School\\\\PP\\\\TR\\\\.understand-anything\\\\tmp\\\\ua-scan-files.json\")",
+      "Bash(node \"C:\\\\Users\\\\user\\\\.claude\\\\plugins\\\\cache\\\\understand-anything\\\\understand-anything\\\\2.7.5\\\\skills\\\\understand\\\\scan-project.mjs\" \"c:\\\\School\\\\PP\\\\TR\" \"c:\\\\School\\\\PP\\\\TR\\\\.understand-anything\\\\tmp\\\\ua-scan-files.json\")",
+      "Bash(node -e \"const d=require\\('fs'\\).readFileSync\\('c:/School/PP/TR/.understand-anything/tmp/ua-scan-files.json','utf8'\\); const j=JSON.parse\\(d\\); console.log\\('totalFiles:',j.totalFiles,'complexity:',j.estimatedComplexity,'filteredByIgnore:',j.filteredByIgnore\\); console.log\\('byCategory:',JSON.stringify\\(j.stats.byCategory\\)\\); console.log\\('byLanguage:',JSON.stringify\\(j.stats.byLanguage\\)\\);\")",
+      "Bash(node -e ' *)",
+      "Bash(node \"C:\\\\Users\\\\user\\\\.claude\\\\plugins\\\\cache\\\\understand-anything\\\\understand-anything\\\\2.7.5\\\\skills\\\\understand\\\\extract-import-map.mjs\" \"c:\\\\School\\\\PP\\\\TR\\\\.understand-anything\\\\tmp\\\\ua-import-map-input.json\" \"c:\\\\School\\\\PP\\\\TR\\\\.understand-anything\\\\tmp\\\\ua-import-map-output.json\")"
     ],
     "additionalDirectories": [
       "c:\\School\\PP\\TR\\builds\\web"

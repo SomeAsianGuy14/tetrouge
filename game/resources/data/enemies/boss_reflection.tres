@@ -1,11 +1,10 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Enemy" format=3 uid="uid://cnvql02u61qq2"]
 
-[ext_resource type="Script" path="res://resources/enemy.gd" id="1"]
+[ext_resource type="Script" uid="uid://dqm7x3n1vp5fy" path="res://resources/enemy.gd" id="1"]
 [ext_resource type="Resource" path="res://resources/data/boss_modifiers/the_reflection.tres" id="2"]
 
 [resource]
 script = ExtResource("1")
-flavor_text = ""
 id = "boss_reflection"
 display_name = "The Reflection"
 color = Color(0.1, 0.35, 0.4, 1)
