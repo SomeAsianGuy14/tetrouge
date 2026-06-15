@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Consumable" format=3 uid="uid://cybm7wvf5xsdm"]
+
+[ext_resource type="Script" uid="uid://dui7h32vq2f7p" path="res://resources/consumable.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "gold_leaf"
+display_name = "Gold Leaf"
+description = "Your next 2 pieces spawn Gilded."
+cost = 5
+use_timing = 1
+enhance_type = "gilded"
+enhance_pieces = 2

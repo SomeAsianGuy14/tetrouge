@@ -1,0 +1,12 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "polished"
+display_name = "Polished"
+description = "Gilded pieces grant an additional coin per cell."
+flavor_text = "Shines brighter than the rest"
+category = "Enhancement"
+gilded_bonus_per_cell = 1

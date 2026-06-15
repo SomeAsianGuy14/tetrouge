@@ -2,12 +2,14 @@
 
 [ext_resource type="Script" uid="uid://dqm7x3n1vp5fy" path="res://resources/enemy.gd" id="1"]
 [ext_resource type="Resource" path="res://resources/data/boss_modifiers/the_reflection.tres" id="2"]
+[ext_resource type="Texture2D" uid="uid://bvyyqne2uwj0y" path="res://assets/bosses/the reflection.jpg" id="3_okdbj"]
 
 [resource]
 script = ExtResource("1")
 id = "boss_reflection"
 display_name = "The Reflection"
 color = Color(0.1, 0.35, 0.4, 1)
+sprite = ExtResource("3_okdbj")
 tier = "Boss"
 garbage_interval = 0.0
 ability = ExtResource("2")

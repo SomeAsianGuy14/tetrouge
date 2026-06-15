@@ -205,9 +205,15 @@ static func _eval_attack(t: Resource, ctx: AttackContext, rs: TechniqueRoundStat
 				return p.get("bonus", 2)
 			return 0
 
+		"golden_blade":
+			if is_clear and ctx.cleared_enh_counts.get("gilded", 0) > 0:
+				return p.get("bonus", 2)
+			return 0
+
 		"economy", "coupon", "specialist_discount", "smooth_haggling", "bounty_list", \
-		"combo_payout", "green_thumb", "piece_enhancer":
-			return 0  # shop/economy effects only — handled outside evaluator
+		"combo_payout", "green_thumb", "piece_enhancer", \
+		"attack_to_shield", "height_shield", "post_quad_enhance", "post_combo_enhance":
+			return 0  # shop/economy/shield/grant effects only — handled outside evaluator
 
 		_:
 			if et != "":
@@ -283,4 +289,11 @@ static func _collect_flags(techniques: Array, ctx: AttackContext, _rs: Technique
 					flags.append("glass_cannon")
 			"greedy_hands":
 				flags.append("greedy_hands")
+			"post_quad_enhance":
+				if ctx.lines_cleared == 4:
+					flags.append("post_quad_enhance:" + str(t.params.get("enhancement", "")))
+			"post_combo_enhance":
+				var threshold: int = t.params.get("combo_threshold", 0)
+				if ctx.combo > threshold:
+					flags.append("post_combo_enhance:" + str(t.params.get("enhancement", "")))
 	return flags

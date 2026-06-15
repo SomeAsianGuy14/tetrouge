@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "preparation"
+display_name = "Preparation"
+description = "After a Quad, your next piece is Honed."
+cost = 4
+tags = ["quad", "enhancement"]
+effect_type = "post_quad_enhance"
+params = {"enhancement": "honed"}

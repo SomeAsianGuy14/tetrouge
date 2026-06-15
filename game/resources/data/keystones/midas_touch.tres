@@ -6,7 +6,8 @@
 script = ExtResource("1")
 id = "midas_touch"
 display_name = "Midas Touch"
-description = "At round end, earn coins equal to your overkill damage."
+description = "Every 7th piece spawns Gilded."
 flavor_text = "Flesh becomes gold"
 category = "Economic"
-overkill_coins = true
+piece_enhance_every_n = 7
+piece_enhance_type = "gilded"

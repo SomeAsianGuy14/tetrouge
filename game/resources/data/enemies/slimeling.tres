@@ -1,11 +1,13 @@
 [gd_resource type="Resource" script_class="Enemy" format=3 uid="uid://cbm5p7eqmslbr"]
 
 [ext_resource type="Script" uid="uid://dqm7x3n1vp5fy" path="res://resources/enemy.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://cy6t1mh28075u" path="res://assets/enemies/Slime.png" id="2_6fuuh"]
 
 [resource]
 script = ExtResource("1")
 id = "slimeling"
-display_name = "Slimeling"
+display_name = "Slime"
 color = Color(0.2, 0.8, 0.2, 1)
+sprite = ExtResource("2_6fuuh")
 tier = "Small"
 garbage_interval = 20.0

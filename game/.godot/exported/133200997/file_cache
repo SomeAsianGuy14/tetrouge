@@ -83,7 +83,7 @@ res://resources/data/keystones/magical_coin.tres::75e01ae246e29027da81a015095aad
 res://resources/data/keystones/midas_touch.tres::9fe458abb3716cae8de538c7badf0613::1780375164::res://.godot/exported/133200997/export-87c5c03cd8116bb5a26f952b08324434-midas_touch.res
 res://scenes/tetris/tetris_board.tscn::790a20090c2a8e3ec192a4b6212259b8::1779081488::res://.godot/exported/133200997/export-3fe88efc97399f7725523d7ede229bc0-tetris_board.scn
 res://scenes/shop/shop.tscn::06d8c58d890dc036dfe28472fbf48d00::1780010686::res://.godot/exported/133200997/export-8ef0b0134092fd9bd6c37413a0c0d2ae-shop.scn
-res://scenes/screens/settings.tscn::6eff8393a9b8ab3d9e3a97efaa671f79::1780086836::res://.godot/exported/133200997/export-a7ab71bdb6ce1723cffc5a895a3a24ba-settings.scn
+res://scenes/screens/settings.tscn::4bf0c89d59e7ccf4765bf2f10963157b::1780706330::res://.godot/exported/133200997/export-a7ab71bdb6ce1723cffc5a895a3a24ba-settings.scn
 res://scenes/screens/run_victory.tscn::7e2ea740bdfad9c7aab7b4cbe1f999f7::1780286887::res://.godot/exported/133200997/export-20779aac746939b54bdef2d8c806f1e9-run_victory.scn
 res://scenes/screens/run_failure.tscn::88b21ae4ba8e6dc4cb9ed3e8afd8753b::1779549294::res://.godot/exported/133200997/export-f1ffb5554df2ddf36709b3f00fecc409-run_failure.scn
 res://scenes/screens/round_success.tscn::390070fc72c2788095fe198c4d8a4749::1779081530::res://.godot/exported/133200997/export-04da71d58ace3a46767da5737947d20f-round_success.scn

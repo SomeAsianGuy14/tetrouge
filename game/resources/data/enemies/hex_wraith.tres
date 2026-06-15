@@ -1,11 +1,13 @@
 [gd_resource type="Resource" script_class="Enemy" format=3 uid="uid://c3xwdwfj5jqp8"]
 
 [ext_resource type="Script" uid="uid://dqm7x3n1vp5fy" path="res://resources/enemy.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://5moxyhb5lgy2" path="res://assets/enemies/hex wraith.webp" id="2_ed8km"]
 
 [resource]
 script = ExtResource("1")
 id = "hex_wraith"
 display_name = "Hex Wraith"
 color = Color(0.2, 0.6, 0.6, 1)
+sprite = ExtResource("2_ed8km")
 tier = "Big"
 garbage_interval = 17.0

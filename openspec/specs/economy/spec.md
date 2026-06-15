@@ -61,17 +61,6 @@ At the end of a won round, `RunManager` SHALL sum `end_round_coins` across all o
 - **WHEN** the player owns no keystones with `end_round_coins > 0` and wins a round
 - **THEN** no additional coins are credited beyond normal payout
 
-### Requirement: Midas Touch — overkill damage converted to coins
-When the player wins a round and owns Midas Touch, `RunManager` SHALL convert `surplus_attack` (accumulated damage beyond the round quota) into coins at a 1:1 rate and add them to the player's balance before the payout screen.
-
-#### Scenario: Overkill converted 1:1 to coins
-- **WHEN** Midas Touch is owned, the quota is 20, and `quota_accumulated` is 27
-- **THEN** 7 coins are added at round end from Midas Touch
-
-#### Scenario: No coins if surplus is zero
-- **WHEN** Midas Touch is owned and the player meets quota exactly (surplus = 0)
-- **THEN** Midas Touch grants 0 coins
-
 ### Requirement: Golden Watch — timer visibility and time-remaining coin bonus
 Golden Watch SHALL set `RoundConfig.show_timer = true` at round build time, making the HUD timer visible. When the player wins a round and owns Golden Watch, `RunManager` SHALL grant `floor(time_remaining / 5)` coins at round end, where `time_remaining` is the seconds left on the round timer at the moment the quota is met. Description: "Gain a 3-minute timer. At round end, earn 1 coin for every 5 seconds remaining on the timer."
 

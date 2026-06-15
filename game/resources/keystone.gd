@@ -24,7 +24,6 @@ extends Resource
 @export var b2b_bonus: int = 0
 
 # ── Per-technique bonuses ─────────────────────────────────────────────────
-@export var per_technique_quad_bonus: int = 0   # Sharpen: +N per quad-relevant technique
 @export var per_technique_tspin_bonus: int = 0  # Enchant: +N per T-spin-relevant technique
 
 # ── Multipliers (0.0 = inactive) ─────────────────────────────────────────
@@ -55,7 +54,6 @@ extends Resource
 
 # ── Economy ───────────────────────────────────────────────────────────────
 @export var end_round_coins: int = 0
-@export var overkill_coins: bool = false
 @export var time_coins: bool = false
 
 # ── Utility ───────────────────────────────────────────────────────────────
@@ -63,12 +61,21 @@ extends Resource
 @export var preview_count_bonus: int = 0
 @export var instant_arr: bool = false
 @export var instant_soft_drop: bool = false
-@export var garbage_flush_reduction: int = 0
 @export var risky_business: bool = false
 @export var blessed_stone: bool = false
 @export var per_attack_tag_bonus: int = 0
 @export var reflect_on_flush: float = 0.0
 @export var skip_line_clear_delay: bool = false
+
+# ── Piece enhancements ──────────────────────────────────────────────────────
+@export var piece_enhance_every_n: int = 0
+@export var piece_enhance_type: String = ""
+@export var start_shield: int = 0
+@export var honed_bonus_per_cell: int = 0
+@export var reinforced_bonus_per_cell: int = 0
+@export var gilded_bonus_per_cell: int = 0
+@export var amplified_bonus_per_cell: float = 0.0
+@export var double_enhancement_benefits: bool = false
 
 func apply_to_config(config: RoundConfig) -> void:
 	if hold_slots_bonus > 0:
@@ -79,8 +86,6 @@ func apply_to_config(config: RoundConfig) -> void:
 		config.instant_arr = true
 	if instant_soft_drop:
 		config.instant_soft_drop = true
-	if garbage_flush_reduction > 0:
-		config.garbage_flush_reduction += garbage_flush_reduction
 	if safety_net:
 		config.b2b_shield_count += 1
 	if flexible_b2b:

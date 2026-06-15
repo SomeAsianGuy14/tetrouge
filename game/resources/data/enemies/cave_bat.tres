@@ -1,11 +1,13 @@
 [gd_resource type="Resource" script_class="Enemy" format=3 uid="uid://dmm8gdxjk8xjn"]
 
 [ext_resource type="Script" uid="uid://dqm7x3n1vp5fy" path="res://resources/enemy.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://bkp88j2bgc58x" path="res://assets/enemies/golbat.jpg" id="2_7chjm"]
 
 [resource]
 script = ExtResource("1")
 id = "cave_bat"
 display_name = "Cave Bat"
 color = Color(0.35, 0.1, 0.5, 1)
+sprite = ExtResource("2_7chjm")
 tier = "Small"
 garbage_interval = 20.0

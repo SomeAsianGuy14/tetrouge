@@ -144,3 +144,116 @@ func test_suppressed_clear_still_pays_gilded_and_reinforced() -> void:
 
 	rm._on_attack_generated(4, "quad")
 	assert_eq(rm.quota_accumulated, 0, "attack itself remains suppressed")
+
+# ── 11.12: Last Stand ──────────────────────────────────────────────────────
+
+func test_last_stand_grants_shield_at_height_threshold() -> void:
+	var t := Technique.new()
+	t.effect_type = "height_shield"
+	t.params = {"threshold_pct": 0.8, "shield": 10}
+	RunState.techniques = [t]
+
+	var rm := _make_manager()
+	var board := _make_board()
+	rm.current_board = board
+	rm._technique_round_state = TechniqueRoundState.new()
+	rm._garbage_shield = 0
+	board.summit_height = 16  # 16/20 = 0.8, meets threshold
+
+	rm._on_piece_locked()
+
+	assert_eq(rm._garbage_shield, 10)
+	assert_true(rm._technique_round_state.last_stand_triggered)
+
+func test_last_stand_does_not_fire_below_threshold() -> void:
+	var t := Technique.new()
+	t.effect_type = "height_shield"
+	t.params = {"threshold_pct": 0.8, "shield": 10}
+	RunState.techniques = [t]
+
+	var rm := _make_manager()
+	var board := _make_board()
+	rm.current_board = board
+	rm._technique_round_state = TechniqueRoundState.new()
+	rm._garbage_shield = 0
+	board.summit_height = 15  # 15/20 = 0.75, below threshold
+
+	rm._on_piece_locked()
+
+	assert_eq(rm._garbage_shield, 0)
+	assert_false(rm._technique_round_state.last_stand_triggered)
+
+func test_last_stand_does_not_fire_twice_in_same_round() -> void:
+	var t := Technique.new()
+	t.effect_type = "height_shield"
+	t.params = {"threshold_pct": 0.8, "shield": 10}
+	RunState.techniques = [t]
+
+	var rm := _make_manager()
+	var board := _make_board()
+	rm.current_board = board
+	rm._technique_round_state = TechniqueRoundState.new()
+	rm._garbage_shield = 0
+	board.summit_height = 16
+
+	rm._on_piece_locked()
+	assert_eq(rm._garbage_shield, 10)
+
+	board.summit_height = 18  # board grows further within the same round
+	rm._on_piece_locked()
+	assert_eq(rm._garbage_shield, 10, "Last Stand only grants once per round")
+
+# ── 11.13: The Best Defense ─────────────────────────────────────────────────
+
+func test_best_defense_adds_shield_without_reducing_attack() -> void:
+	var t := Technique.new()
+	t.effect_type = "attack_to_shield"
+	t.params = {"pct": 0.25}
+	RunState.techniques = [t]
+
+	var rm := _make_manager()
+	rm._garbage_shield = 0
+
+	rm._on_attack_generated(4, "quad")
+
+	assert_eq(rm.quota_accumulated, 4, "dealt damage is unaffected")
+	assert_eq(rm._garbage_shield, 1, "floor(4 * 0.25) = 1 shield gained")
+
+func test_best_defense_no_shield_on_bonus_event() -> void:
+	var t := Technique.new()
+	t.effect_type = "attack_to_shield"
+	t.params = {"pct": 0.25}
+	RunState.techniques = [t]
+
+	var rm := _make_manager()
+	rm._garbage_shield = 0
+
+	rm._on_attack_generated(4, "b2b")
+
+	assert_eq(rm._garbage_shield, 0, "b2b/combo bonus events do not grant Best Defense shield")
+
+# ── Round income breakdown tracking ───────────────────────────────────────
+
+func test_round_enhancement_coins_tracks_gilded_clear_payouts() -> void:
+	var rm := _make_manager()
+	var board := _make_board()
+	rm.current_board = board
+	board.pending_enhancement_counts = {PieceEnhancements.GILDED: 3}
+
+	rm._on_line_clear_delay_started("quad")
+
+	assert_eq(rm._round_enhancement_coins, 3)
+
+func test_round_technique_coins_tracks_economy_technique_payouts() -> void:
+	var t := Technique.new()
+	t.effect_type = "economy"
+	t.params = {"trigger": "quad", "coins": 3}
+	RunState.techniques = [t]
+
+	var rm := _make_manager()
+	rm._technique_round_state = TechniqueRoundState.new()
+
+	rm._on_attack_generated(4, "quad")
+
+	assert_eq(rm._round_technique_coins, 3)
+	assert_eq(Economy.coins, 3)

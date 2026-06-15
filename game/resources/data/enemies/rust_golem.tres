@@ -1,11 +1,13 @@
 [gd_resource type="Resource" script_class="Enemy" format=3 uid="uid://b71qes7ffm5li"]
 
 [ext_resource type="Script" uid="uid://dqm7x3n1vp5fy" path="res://resources/enemy.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://ccqulwx1627n" path="res://assets/enemies/rusty golem.webp" id="2_qmkw6"]
 
 [resource]
 script = ExtResource("1")
 id = "rust_golem"
-display_name = "Rust Golem"
+display_name = "Rusty Golem"
 color = Color(0.7, 0.4, 0.1, 1)
+sprite = ExtResource("2_qmkw6")
 tier = "Big"
 garbage_interval = 17.0

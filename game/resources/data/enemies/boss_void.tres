@@ -2,12 +2,14 @@
 
 [ext_resource type="Script" uid="uid://dqm7x3n1vp5fy" path="res://resources/enemy.gd" id="1"]
 [ext_resource type="Resource" path="res://resources/data/boss_modifiers/the_void.tres" id="2"]
+[ext_resource type="Texture2D" uid="uid://061snichysq4" path="res://assets/bosses/the void.jpg" id="3_082sh"]
 
 [resource]
 script = ExtResource("1")
 id = "boss_void"
 display_name = "The Void"
 color = Color(0.3, 0, 0.5, 1)
+sprite = ExtResource("3_082sh")
 tier = "Boss"
 garbage_interval = 12.0
 ability = ExtResource("2")

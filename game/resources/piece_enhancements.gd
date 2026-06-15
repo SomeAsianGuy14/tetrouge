@@ -36,15 +36,30 @@ static func count_in_rows(enh_grid: Array, rows: Array) -> Dictionary:
 
 # ── Benefit math ─────────────────────────────────────────────────────────
 
-static func honed_bonus(counts: Dictionary) -> int:
-	return counts.get(HONED, 0) * HONED_ATTACK_PER_CELL
+static func honed_bonus(counts: Dictionary, per_cell: int = HONED_ATTACK_PER_CELL) -> int:
+	return counts.get(HONED, 0) * per_cell
 
-static func amplified_multiplier(counts: Dictionary) -> float:
+static func amplified_multiplier(counts: Dictionary, per_cell: float = AMPLIFIED_PER_CELL) -> float:
 	var cells: int = counts.get(AMPLIFIED, 0)
-	return minf(1.0 + cells * AMPLIFIED_PER_CELL, AMPLIFIED_MULTIPLIER_CAP)
+	return minf(1.0 + cells * per_cell, AMPLIFIED_MULTIPLIER_CAP)
 
-static func gilded_coins(counts: Dictionary) -> int:
-	return counts.get(GILDED, 0) * GILDED_COINS_PER_CELL
+static func gilded_coins(counts: Dictionary, per_cell: int = GILDED_COINS_PER_CELL) -> int:
+	return counts.get(GILDED, 0) * per_cell
 
-static func shield_charges(counts: Dictionary) -> int:
-	return counts.get(REINFORCED, 0) * REINFORCED_SHIELD_PER_CELL
+static func shield_charges(counts: Dictionary, per_cell: int = REINFORCED_SHIELD_PER_CELL) -> int:
+	return counts.get(REINFORCED, 0) * per_cell
+
+# ── Random resolution ───────────────────────────────────────────────────
+
+static func resolve_type(enhancement_type: String) -> String:
+	if enhancement_type == "random":
+		return ALL_TYPES.pick_random()
+	return enhancement_type
+
+# ── Benefit doubling ────────────────────────────────────────────────────
+
+static func double_counts(counts: Dictionary) -> Dictionary:
+	var doubled := {}
+	for key in counts:
+		doubled[key] = counts[key] * 2
+	return doubled

@@ -73,15 +73,6 @@ func test_flat_bonus_added_to_matching_event() -> void:
 	RunState.keystones.append(ks)
 	assert_eq(_rm._apply_keystone_flat_bonuses(4, "quad"), 6)
 
-func test_per_technique_quad_bonus_counts_applicable_techniques() -> void:
-	var ks := _make_keystone()
-	ks.per_technique_quad_bonus = 2
-	RunState.keystones.append(ks)
-	RunState.techniques.append(_make_technique("quad"))
-	RunState.techniques.append(_make_technique("quad"))
-	# 4 base + (2 per technique * 2 techniques) = 8
-	assert_eq(_rm._apply_keystone_flat_bonuses(4, "quad"), 8)
-
 func test_single_bonus_applies_to_zero_attack_single() -> void:
 	# Singles have base attack 0; the keystone bonus must still apply
 	var ks := _make_keystone()
@@ -104,13 +95,6 @@ func test_per_technique_tspin_bonus_applies_to_tspin_mini() -> void:
 	RunState.keystones.append(ks)
 	RunState.techniques.append(_make_technique("tspin"))
 	assert_eq(_rm._apply_keystone_flat_bonuses(1, "tspin_mini"), 3)
-
-func test_per_technique_quad_bonus_counts_general_techniques() -> void:
-	var ks := _make_keystone()
-	ks.per_technique_quad_bonus = 2
-	RunState.keystones.append(ks)
-	RunState.techniques.append(_make_technique("general"))
-	assert_eq(_rm._apply_keystone_flat_bonuses(4, "quad"), 6)
 
 func test_collect_keystone_events_returns_empty_for_suppressed_event() -> void:
 	var suppressor := _make_keystone()
@@ -219,30 +203,32 @@ func test_pc_after_first_multiplier_applies_on_subsequent_pcs() -> void:
 	_rm._pc_count_this_round = 1
 	assert_eq(_rm._apply_keystone_multipliers(4, "perfect_clear"), 8)
 
-# ── Garbage flush ─────────────────────────────────────────────────────────
+# ── start_shield (Simple Shield / Legionnaire's Shield) ──────────────────
 
-func test_garbage_flush_reduction_reduces_lines_entering_buffer() -> void:
-	_rm.current_config.garbage_flush_reduction = 2
-	_rm.current_config.garbage_lines_min = 4
-	_rm.current_config.garbage_lines_max = 4
-	_rm.current_config.garbage_interval_min = 1.0
-	_rm.current_config.garbage_interval_max = 1.0
-	_rm._next_garbage_interval = 1.0
-	_rm._tick_enemy_garbage(1.1)
-	# 4 lines - reduction(2) = 2 lines enter buffer
-	assert_eq(_rm._garbage_packets.size(), 1)
-	assert_eq(_rm._garbage_packets[0].lines, 2)
+func test_start_shield_seeds_garbage_shield_at_round_start() -> void:
+	var ks := _make_keystone()
+	ks.start_shield = 5
+	RunState.keystones = [ks]
+	_rm._garbage_shield = 0
+	_rm._reset_enhancement_round_state()
+	assert_eq(_rm._garbage_shield, 5)
 
-func test_garbage_flush_reduction_blocks_full_attack() -> void:
-	_rm.current_config.garbage_flush_reduction = 3
-	_rm.current_config.garbage_lines_min = 2
-	_rm.current_config.garbage_lines_max = 2
-	_rm.current_config.garbage_interval_min = 1.0
-	_rm.current_config.garbage_interval_max = 1.0
-	_rm._next_garbage_interval = 1.0
-	_rm._tick_enemy_garbage(1.1)
-	# 2 lines - reduction(3) = 0 — attack fully blocked, nothing enters buffer
-	assert_true(_rm._garbage_packets.is_empty())
+func test_start_shield_sums_across_keystones() -> void:
+	var simple := _make_keystone()
+	simple.start_shield = 5
+	var legionnaires := _make_keystone()
+	legionnaires.start_shield = 10
+	RunState.keystones = [simple, legionnaires]
+	_rm._garbage_shield = 0
+	_rm._reset_enhancement_round_state()
+	assert_eq(_rm._garbage_shield, 15)
+
+func test_no_start_shield_keeps_garbage_shield_at_zero() -> void:
+	var ks := _make_keystone()
+	RunState.keystones = [ks]
+	_rm._garbage_shield = 0
+	_rm._reset_enhancement_round_state()
+	assert_eq(_rm._garbage_shield, 0)
 
 # ── Economy ───────────────────────────────────────────────────────────────
 
@@ -253,24 +239,18 @@ func test_end_round_coins_from_two_keystones_credits_total() -> void:
 	ks2.end_round_coins = 2
 	RunState.keystones.append(ks1)
 	RunState.keystones.append(ks2)
-	_rm._apply_keystone_economy()
+	var income := _rm._apply_keystone_economy()
 	assert_eq(Economy.coins, 3)
-
-func test_overkill_coins_grants_surplus_attack() -> void:
-	var ks := _make_keystone()
-	ks.overkill_coins = true
-	RunState.keystones.append(ks)
-	_rm.surplus_attack = 5
-	_rm._apply_keystone_economy()
-	assert_eq(Economy.coins, 5)
+	assert_eq(income, 3, "returned total matches coins credited")
 
 func test_time_coins_grants_floor_of_time_divided_by_5() -> void:
 	var ks := _make_keystone()
 	ks.time_coins = true
 	RunState.keystones.append(ks)
 	_rm.round_timer = 17.0
-	_rm._apply_keystone_economy()
+	var income := _rm._apply_keystone_economy()
 	assert_eq(Economy.coins, 3)
+	assert_eq(income, 3, "returned total matches coins credited")
 
 # ── Conditional availability ──────────────────────────────────────────────
 

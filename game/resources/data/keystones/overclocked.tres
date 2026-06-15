@@ -1,0 +1,12 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "overclocked"
+display_name = "Overclocked"
+description = "Amplified pieces are 50% more effective."
+flavor_text = "Running hot, running fast"
+category = "Enhancement"
+amplified_bonus_per_cell = 0.125

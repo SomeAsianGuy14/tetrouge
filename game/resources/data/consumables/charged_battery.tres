@@ -4,10 +4,10 @@
 
 [resource]
 script = ExtResource("1")
-id = "whetstone"
-display_name = "Whetstone"
-description = "Your next 4 pieces spawn Honed."
+id = "charged_battery"
+display_name = "Charged Battery"
+description = "Your next 2 pieces spawn Amplified."
 cost = 5
 use_timing = 1
-enhance_type = "honed"
-enhance_pieces = 4
+enhance_type = "amplified"
+enhance_pieces = 2

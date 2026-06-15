@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "the_best_defense"
+display_name = "The Best Defense"
+description = "25% of your attack is converted to shield."
+cost = 5
+tags = ["general", "garbage"]
+effect_type = "attack_to_shield"
+params = {"pct": 0.25}

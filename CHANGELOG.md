@@ -5,9 +5,13 @@
 ### New Features
 - **Piece enhancements** — Pieces can now spawn with a special enhancement, granted by certain techniques and consumables: Honed (silver) adds bonus attack when cleared, Amplified (yellow marker) multiplies attack when cleared, Gilded (gold) pays coins when cleared, and Reinforced (brown with a silver border) builds up a garbage-shield that blocks incoming attacks. A new shield bar next to the board tracks your current shield charges. Enhancements show on the board, the falling piece, and carry over through hold.
 - **Queue shows upcoming enhancements** — The next pieces shown in the queue now preview which will arrive Honed, Amplified, Gilded, or Reinforced, using the same styling as the hold and board pieces.
-- **Clear type popup** — After every line clear a label briefly appears below the hold piece naming what you just did (Single, Double, Triple, Quad, T-Spin variants, Perfect Clear). Plain clears fade out quietly in white; Quads pop in cyan, T-Spins in purple, and Perfect Clears in gold with a brief scale-up animation.
+- **Clear type popup** — After every line clear a label briefly appears below the hold piece naming what you just did (Single, Double, Triple, Quad, T-Spin variants, Perfect Clear). Plain clears fade out quietly in white; Quads pop in cyan, T-Spins in purple, and Perfect Clears in gold with a brief scale-up animation. The popup fades over 1 second, and a new clear during that fade replaces it instead of stacking another label.
 - **Enemy panel redesign** — The right side of the screen now shows a full-height enemy panel with the enemy name, a large portrait area (initial-letter placeholder in enemy colour until artwork is added), stage/round label, optional flavor text, and boss modifier description.
 - **Enemy flavor text field** — Enemy data now has an optional flavor text field for lore descriptions (currently blank, to be filled in a future update).
+- **New techniques** — Sharpen (replaces Keen Edge; every 6th piece spawns Honed), Barricade (every 6th piece spawns Reinforced), The Best Defense (converts 25% of your attack into shield), Last Stand (the first time your board height exceeds 80% each round, gain 10 shield), Preparation (after a Quad, your next piece is Honed), Backpedaling (after your combo exceeds 5, your next piece is Reinforced), and Golden Blade (deal +2 damage on any clear containing a Gilded cell).
+- **New keystones** — Extraordinary Bag (every 7th piece spawns with a random enhancement), Charging Up (every 10th piece spawns Amplified), Jack of All Trades (doubles all piece-enhancement clear benefits), Refined (+2 damage per Honed cell), Armored (+2 shield per Reinforced cell), Polished (+1 coin per Gilded cell), and Overclocked (Amplified pieces are 50% more effective).
+- **New consumable** — Lottery Ticket: your next 3 pieces spawn with a random enhancement.
+- **Round-end income breakdown** — The round complete screen now shows where your coins came from: Base Payout, Tech/Keystone income (technique economy bonuses, surplus conversion, Greedy Hands, Bounty List, end-of-round keystone payouts, Golden Watch), and Enhancements (Gilded cells cleared during the round), plus a Total. Rows with no income are hidden.
 
 ### Visual
 - **Enemy death animation** — When an enemy's HP hits zero the portrait flashes white, expands, and dissolves before the results screen appears. Boss enemies get a more dramatic version: a larger scale punch, a horizontal shake, and an extended fade.
@@ -17,9 +21,17 @@
 
 ### Visual
 - **Line clear delay** — When a piece clears one or more rows, the board briefly pauses (~0.5s) and flashes the cleared rows before removing them and spawning the next piece. Gives a satisfying moment of feedback on every clear. The Full Potential keystone skips the delay entirely to match its instant-play identity.
-- **Technique visual feedback** — Techniques and keystones now announce themselves during play. When a clear fires, each contributing technique and keystone produces a floating popup label that drifts upward (white for attack, gold for economy-only, blue for keystone bonuses). Popups cascade sequentially across the line clear delay window. Technique icons in the HUD pulse when their trigger condition is armed (e.g. Escalation ready). Keystones flash blue when their bonus fires. Every icon also plays a brief scale-pop at the moment it contributes to a clear.
+- **Technique visual feedback** — Techniques and keystones now announce themselves during play. When a clear fires, each contributing technique and keystone produces a floating popup label that drifts upward (white for attack, gold for economy-only, blue for keystone bonuses) near the keystone list in the bottom-left HUD. Popups cascade sequentially across the line clear delay window. Technique icons in the HUD pulse when their trigger condition is armed (e.g. Escalation ready). Keystones flash blue when their bonus fires. Every icon also plays a brief scale-pop at the moment it contributes to a clear.
+
+### Balance
+- **Midas Touch reworked** — No longer converts overkill damage to coins; every 7th piece now spawns Gilded instead.
+- **Simple Shield / Legionnaire's Shield reworked** — No longer reduce incoming garbage. Instead, grant 5 / 10 shield charges at the start of each round.
+- **Consumables renamed** — Whetstone → Sharpening Stone, Gilding Kit → Gold Leaf, Reinforcing Plate → Steel Plates, Arcane Battery → Charged Battery (now enhances your next 2 pieces instead of 4).
+- **Gold Leaf reined in** — Now enhances your next 2 pieces with Gilded instead of 4, to tone down its coin output.
+- **Enhancement grants now queue** — Using an enhancement consumable while a different one is already active queues it instead of overwriting the current grant, so the active grant finishes first.
 
 ### Bug Fixes
+- **Renamed items no longer vanish from saves** — Continuing a run saved before this update no longer silently drops Sharpen, Sharpening Stone, Gold Leaf, Steel Plates, or Charged Battery from your inventory; old save data now maps to their renamed counterparts.
 - **Hold / rotate / hard drop during line clear** — Pressing hold, rotate, or hard drop during the clear flash no longer corrupts the held piece or skips a piece from the queue.
 - **Directional input during line clear** — Pressing a direction during the clear flash now correctly primes DAS so the new piece responds immediately on spawn.
 - **Enemy portrait stops animating on pause** — Anticipation pulse, lunge, and damage flash now stop immediately when the pause menu opens.

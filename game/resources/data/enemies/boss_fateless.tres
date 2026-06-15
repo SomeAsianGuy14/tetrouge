@@ -2,12 +2,14 @@
 
 [ext_resource type="Resource" uid="uid://d18k5uo55x57x" path="res://resources/data/boss_modifiers/the_fateless.tres" id="1_x3r31"]
 [ext_resource type="Script" uid="uid://dqm7x3n1vp5fy" path="res://resources/enemy.gd" id="2_kx0sy"]
+[ext_resource type="Texture2D" uid="uid://bdeolagypm8b2" path="res://assets/bosses/the fateless.jpeg" id="3_kx0sy"]
 
 [resource]
 script = ExtResource("2_kx0sy")
 id = "boss_fateless"
 display_name = "The Fateless"
 color = Color(0.15, 0.15, 0.4, 1)
+sprite = ExtResource("3_kx0sy")
 tier = "Boss"
 garbage_interval = 12.0
 ability = ExtResource("1_x3r31")

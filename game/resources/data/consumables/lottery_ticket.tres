@@ -4,10 +4,10 @@
 
 [resource]
 script = ExtResource("1")
-id = "gilding_kit"
-display_name = "Gilding Kit"
-description = "Your next 4 pieces spawn Gilded."
+id = "lottery_ticket"
+display_name = "Lottery Ticket"
+description = "Your next 3 pieces spawn with a random enhancement."
 cost = 5
 use_timing = 1
-enhance_type = "gilded"
-enhance_pieces = 4
+enhance_type = "random"
+enhance_pieces = 3

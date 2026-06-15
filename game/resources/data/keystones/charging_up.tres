@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "charging_up"
+display_name = "Charging Up"
+description = "Every 10th piece spawns Amplified."
+flavor_text = "Feel the energy build"
+category = "Enhancement"
+piece_enhance_every_n = 10
+piece_enhance_type = "amplified"

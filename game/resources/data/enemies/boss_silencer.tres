@@ -2,12 +2,14 @@
 
 [ext_resource type="Script" uid="uid://dqm7x3n1vp5fy" path="res://resources/enemy.gd" id="1"]
 [ext_resource type="Resource" uid="uid://cmq76jge48sw3" path="res://resources/data/boss_modifiers/the_silencer.tres" id="2"]
+[ext_resource type="Texture2D" uid="uid://ck8i3x1r0h0bl" path="res://assets/bosses/the silent.webp" id="3_qro1n"]
 
 [resource]
 script = ExtResource("1")
 id = "boss_silencer"
 display_name = "The Silencer"
 color = Color(0.25, 0.25, 0.25, 1)
+sprite = ExtResource("3_qro1n")
 tier = "Boss"
 garbage_interval = 12.0
 ability = ExtResource("2")

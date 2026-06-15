@@ -1,11 +1,13 @@
 [gd_resource type="Resource" script_class="Enemy" format=3 uid="uid://bixqb66ocgyag"]
 
 [ext_resource type="Script" uid="uid://dqm7x3n1vp5fy" path="res://resources/enemy.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://2ornhlsibo1q" path="res://assets/enemies/infernal drake.jpg" id="2_oskjg"]
 
 [resource]
 script = ExtResource("1")
 id = "crimson_drake"
 display_name = "Crimson Drake"
 color = Color(0.8, 0.05, 0.1, 1)
+sprite = ExtResource("2_oskjg")
 tier = "Elite"
 garbage_interval = 15.0

@@ -542,3 +542,72 @@ func test_every_nth_clear_fires_on_8th_clear() -> void:
 	var rs := TechniqueRoundState.new()
 	rs.clears_this_round = 7  # this is the 8th clear
 	assert_eq(_TechniqueEvaluator.compute_attack_bonus([t], ctx, rs), 3)
+
+# ── Golden Blade ──────────────────────────────────────────────────────────
+
+func test_golden_blade_fires_when_gilded_cell_cleared() -> void:
+	var t := Technique.new()
+	t.effect_type = "golden_blade"
+	t.params = {"bonus": 2}
+	var ctx := _make_ctx(1)
+	ctx.cleared_enh_counts = {"gilded": 2}
+	var rs := TechniqueRoundState.new()
+	assert_eq(_TechniqueEvaluator.compute_attack_bonus([t], ctx, rs), 2)
+
+func test_golden_blade_zero_without_gilded_cell() -> void:
+	var t := Technique.new()
+	t.effect_type = "golden_blade"
+	t.params = {"bonus": 2}
+	var ctx := _make_ctx(1)
+	ctx.cleared_enh_counts = {}
+	var rs := TechniqueRoundState.new()
+	assert_eq(_TechniqueEvaluator.compute_attack_bonus([t], ctx, rs), 0)
+
+func test_golden_blade_zero_on_no_clear_even_with_gilded() -> void:
+	var t := Technique.new()
+	t.effect_type = "golden_blade"
+	t.params = {"bonus": 2}
+	var ctx := _make_ctx(0)
+	ctx.cleared_enh_counts = {"gilded": 2}
+	var rs := TechniqueRoundState.new()
+	assert_eq(_TechniqueEvaluator.compute_attack_bonus([t], ctx, rs), 0)
+
+# ── Preparation (post_quad_enhance) ───────────────────────────────────────
+
+func test_preparation_queues_honed_grant_after_quad() -> void:
+	var t := Technique.new()
+	t.effect_type = "post_quad_enhance"
+	t.params = {"enhancement": "honed"}
+	var ctx := _make_ctx(4)
+	var rs := TechniqueRoundState.new()
+	var result: Dictionary = _TechniqueEvaluator.evaluate([t], ctx, rs)
+	assert_has(result.flags, "post_quad_enhance:honed")
+
+func test_preparation_does_not_fire_on_non_quad_clear() -> void:
+	var t := Technique.new()
+	t.effect_type = "post_quad_enhance"
+	t.params = {"enhancement": "honed"}
+	var ctx := _make_ctx(2)
+	var rs := TechniqueRoundState.new()
+	var result: Dictionary = _TechniqueEvaluator.evaluate([t], ctx, rs)
+	assert_does_not_have(result.flags, "post_quad_enhance:honed")
+
+# ── Backpedaling (post_combo_enhance) ─────────────────────────────────────
+
+func test_backpedaling_queues_reinforced_grant_above_combo_threshold() -> void:
+	var t := Technique.new()
+	t.effect_type = "post_combo_enhance"
+	t.params = {"enhancement": "reinforced", "combo_threshold": 5}
+	var ctx := _make_ctx(1, "", false, 6)
+	var rs := TechniqueRoundState.new()
+	var result: Dictionary = _TechniqueEvaluator.evaluate([t], ctx, rs)
+	assert_has(result.flags, "post_combo_enhance:reinforced")
+
+func test_backpedaling_does_not_fire_at_or_below_combo_threshold() -> void:
+	var t := Technique.new()
+	t.effect_type = "post_combo_enhance"
+	t.params = {"enhancement": "reinforced", "combo_threshold": 5}
+	var ctx := _make_ctx(1, "", false, 5)
+	var rs := TechniqueRoundState.new()
+	var result: Dictionary = _TechniqueEvaluator.evaluate([t], ctx, rs)
+	assert_does_not_have(result.flags, "post_combo_enhance:reinforced")

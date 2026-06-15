@@ -24,6 +24,7 @@ var no_rotate_streak: int = 0            # consecutive pieces placed without rot
 var good_planning_pending: bool = false   # Good Planning: 5 pieces without hold
 var good_planning_consecutive_no_hold: int = 0  # consecutive pieces without hold
 var switch_up_armed: bool = false         # Switch-Up: previous piece was hard-dropped
+var last_stand_triggered: bool = false    # Last Stand: shield grant once per round
 
 # Used flags (prevent double-triggering within a round)
 var opening_blow_used: bool = false

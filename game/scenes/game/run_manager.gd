@@ -90,14 +90,22 @@ var _blessed_stone_spent: bool = false
 # Piece enhancement grants: {type: String, remaining: int} or {} if none active
 var _enhancement_grant: Dictionary = {}
 var _enhancement_cadence: Dictionary = {}
+var _enhancement_grant_queue: Array = []
 var _garbage_shield: int = 0
 var _pending_enh_counts: Dictionary = {}
+
+# Coins earned during the round, tallied for the round-end breakdown
+var _round_technique_coins: int = 0
+var _round_enhancement_coins: int = 0
+var _round_income_breakdown: Dictionary = {}
 
 var _popup_schedule: Array = []
 var _popup_elapsed: float = 0.0
 var _technique_pre_evaluated: bool = false
 var _pre_evaluated_technique_atk: int = 0
 var _clear_popup_shown_this_piece: bool = false
+var _active_clear_popup_label: Label = null
+var _active_clear_popup_tween: Tween = null
 
 var _run_stats: RunStats = null
 
@@ -181,6 +189,8 @@ func start_round() -> void:
 	_flash_step_arr_pending = false
 	_flash_step_arr_active = false
 	_greedy_hands_active = RunState.has_technique("greedy_hands")
+	_round_technique_coins = 0
+	_round_enhancement_coins = 0
 	_reset_enhancement_round_state()
 
 	if current_board:
@@ -447,7 +457,6 @@ func _tick_enemy_garbage(delta: float) -> void:
 		_enemy_timer = 0.0
 		if current_config.reflect_ratio <= 0.0:
 			var n := randi_range(current_config.garbage_lines_min, current_config.garbage_lines_max)
-			n = maxi(0, n - current_config.garbage_flush_reduction)
 			if n > 0 and _garbage_shield > 0:
 				var absorbed := mini(n, _garbage_shield)
 				_garbage_shield -= absorbed
@@ -543,32 +552,54 @@ func _on_piece_locked() -> void:
 			rs.good_planning_consecutive_no_hold += 1
 			if rs.good_planning_consecutive_no_hold >= 5:
 				rs.good_planning_pending = true
+		# Last Stand: one-shot shield grant once the board reaches a height threshold
+		if not rs.last_stand_triggered and current_board:
+			var height: int = current_board.summit_height
+			for t in RunState.techniques:
+				if t.effect_type == "height_shield":
+					var threshold: float = t.params.get("threshold_pct", 0.8)
+					if height >= 20 * threshold:
+						_garbage_shield += t.params.get("shield", 10)
+						rs.last_stand_triggered = true
+						if _shield_bar:
+							_shield_bar.update_charges(_garbage_shield)
+						break
 
 func _reset_enhancement_round_state() -> void:
 	_enhancement_grant = {}
 	_enhancement_cadence = {}
+	_enhancement_grant_queue = []
 	for t in RunState.techniques:
 		if t.effect_type == "piece_enhancer":
 			_enhancement_cadence[t.id] = 0
+	for ks in RunState.keystones:
+		if ks.piece_enhance_every_n > 0:
+			_enhancement_cadence[ks.id] = 0
 	_garbage_shield = 0
+	for ks in RunState.keystones:
+		_garbage_shield += ks.start_shield
 	_pending_enh_counts = {}
 
 func _on_piece_spawned(_piece_type: String) -> void:
-	var assigned := _advance_enhancement_state(_enhancement_grant, _enhancement_cadence, RunState.techniques)
+	var assigned := _advance_enhancement_state(_enhancement_grant, _enhancement_cadence, RunState.techniques, RunState.keystones, _enhancement_grant_queue)
 	if current_board:
 		current_board.current_enhancement = assigned
 
-# Advances grant/cadence state in place (mutating the given dictionaries) and
-# returns the enhancement type assigned to this spawn, or "" for none.
-# Shared by _on_piece_spawned and preview_enhancements so the preview stays
-# in lockstep with the real assignment logic.
-static func _advance_enhancement_state(grant: Dictionary, cadence: Dictionary, techniques: Array) -> String:
+# Advances grant/cadence/queue state in place (mutating the given dictionaries
+# and array) and returns the enhancement type assigned to this spawn, or ""
+# for none. Shared by _on_piece_spawned and preview_enhancements so the
+# preview stays in lockstep with the real assignment logic.
+static func _advance_enhancement_state(grant: Dictionary, cadence: Dictionary, techniques: Array, keystones: Array, grant_queue: Array) -> String:
 	var assigned := ""
 	if grant.get("remaining", 0) > 0:
 		assigned = grant.get("type", "")
 		grant["remaining"] -= 1
 		if grant["remaining"] <= 0:
 			grant.clear()
+			if grant_queue.size() > 0:
+				var next_grant: Dictionary = grant_queue.pop_front()
+				grant["type"] = next_grant.get("type", "")
+				grant["remaining"] = next_grant.get("remaining", 0)
 	for t in techniques:
 		if t.effect_type != "piece_enhancer":
 			continue
@@ -580,48 +611,96 @@ static func _advance_enhancement_state(grant: Dictionary, cadence: Dictionary, t
 			cadence[t.id] = 0
 			if assigned == "":
 				assigned = t.params.get("enhancement", "")
-	return assigned
+	for ks in keystones:
+		if ks.piece_enhance_every_n <= 0:
+			continue
+		cadence[ks.id] = cadence.get(ks.id, 0) + 1
+		if cadence[ks.id] >= ks.piece_enhance_every_n:
+			cadence[ks.id] = 0
+			if assigned == "":
+				assigned = ks.piece_enhance_type
+	return PieceEnhancements.resolve_type(assigned)
 
 # Side-effect-free preview of the next `count` enhancement assignments,
-# simulated on copies of the current grant/cadence state.
+# simulated on copies of the current grant/cadence/queue state.
 func preview_enhancements(count: int) -> Array[String]:
 	var grant: Dictionary = _enhancement_grant.duplicate()
 	var cadence: Dictionary = _enhancement_cadence.duplicate()
+	var grant_queue: Array = _enhancement_grant_queue.duplicate(true)
 	var result: Array[String] = []
 	for _i in count:
-		result.append(_advance_enhancement_state(grant, cadence, RunState.techniques))
+		result.append(_advance_enhancement_state(grant, cadence, RunState.techniques, RunState.keystones, grant_queue))
 	return result
+
+# Queues an enhancement grant: extends the active grant if it matches type,
+# activates it immediately if none is active, or appends to the FIFO queue.
+func _queue_enhancement_grant(enh_type: String, pieces: int) -> void:
+	if _enhancement_grant.is_empty():
+		_enhancement_grant = {"type": enh_type, "remaining": pieces}
+	elif _enhancement_grant.get("type", "") == enh_type:
+		_enhancement_grant["remaining"] = _enhancement_grant.get("remaining", 0) + pieces
+	else:
+		_enhancement_grant_queue.append({"type": enh_type, "remaining": pieces})
+
+# Sums PieceEnhancements per-cell constants with keystone *_bonus_per_cell
+# fields to get the effective per-cell magnitudes for clear-time benefits.
+func _effective_enhancement_params() -> Dictionary:
+	var honed_per_cell: int = PieceEnhancements.HONED_ATTACK_PER_CELL
+	var reinforced_per_cell: int = PieceEnhancements.REINFORCED_SHIELD_PER_CELL
+	var gilded_per_cell: int = PieceEnhancements.GILDED_COINS_PER_CELL
+	var amplified_per_cell: float = PieceEnhancements.AMPLIFIED_PER_CELL
+	for ks in RunState.keystones:
+		honed_per_cell += ks.honed_bonus_per_cell
+		reinforced_per_cell += ks.reinforced_bonus_per_cell
+		gilded_per_cell += ks.gilded_bonus_per_cell
+		amplified_per_cell += ks.amplified_bonus_per_cell
+	return {
+		"honed": honed_per_cell,
+		"reinforced": reinforced_per_cell,
+		"gilded": gilded_per_cell,
+		"amplified": amplified_per_cell,
+	}
+
+# Doubles enhancement cell counts if any owned keystone grants
+# double_enhancement_benefits (Jack of All Trades).
+func _effective_enhancement_counts(counts: Dictionary) -> Dictionary:
+	for ks in RunState.keystones:
+		if ks.double_enhancement_benefits:
+			return PieceEnhancements.double_counts(counts)
+	return counts
 
 # Pays Gilded coins and Reinforced shield charges immediately for cleared
 # enhanced cells, returning popup events for every contributing type.
 func _apply_enhancement_clear_benefits(counts: Dictionary) -> Array:
 	var events: Array = []
+	var effective: Dictionary = _effective_enhancement_counts(counts)
+	var params: Dictionary = _effective_enhancement_params()
 
-	var gilded := PieceEnhancements.gilded_coins(counts)
+	var gilded := PieceEnhancements.gilded_coins(effective, params["gilded"])
 	if gilded > 0:
 		Economy.add_coins(gilded)
+		_round_enhancement_coins += gilded
 		events.append({"name": "Gilded", "id": "gilded", "bonus": gilded, "color": PieceEnhancements.GILDED_COLOR})
 
-	var shield := PieceEnhancements.shield_charges(counts)
+	var shield := PieceEnhancements.shield_charges(effective, params["reinforced"])
 	if shield > 0:
 		_garbage_shield += shield
 		if _shield_bar:
 			_shield_bar.update_charges(_garbage_shield)
 		events.append({"name": "Reinforced", "id": "reinforced", "bonus": shield, "color": PieceEnhancements.REINFORCED_FILL_COLOR})
 
-	var honed := PieceEnhancements.honed_bonus(counts)
+	var honed := PieceEnhancements.honed_bonus(effective, params["honed"])
 	if honed > 0:
 		events.append({"name": "Honed", "id": "honed", "bonus": honed, "color": PieceEnhancements.HONED_COLOR})
 
-	var amplified_cells: int = counts.get(PieceEnhancements.AMPLIFIED, 0)
+	var amplified_cells: int = effective.get(PieceEnhancements.AMPLIFIED, 0)
 	if amplified_cells > 0:
 		events.append({"name": "Amplified", "id": "amplified", "bonus": amplified_cells, "color": PieceEnhancements.AMPLIFIED_TRIANGLE_COLOR})
 
 	return events
 
 func _on_line_clear_delay_started(clear_type: String) -> void:
-	# Clamp popup fade time so a zero clear delay (Full Potential) stays readable
-	_spawn_clear_type_popup(clear_type, maxf(0.5, current_config.line_clear_delay) if current_config else 0.5)
+	_spawn_clear_type_popup(clear_type)
 	_clear_popup_shown_this_piece = true
 
 	_pending_enh_counts = current_board.pending_enhancement_counts if current_board else {}
@@ -637,7 +716,9 @@ func _on_line_clear_delay_started(clear_type: String) -> void:
 	var eval_result: Dictionary = TechniqueEvaluator.evaluate(
 		RunState.techniques, ctx, _technique_round_state)
 	_pre_evaluated_technique_atk = eval_result.get("attack_delta", 0)
-	Economy.add_coins(eval_result.get("coins_delta", 0))
+	var coins_delta: int = eval_result.get("coins_delta", 0)
+	Economy.add_coins(coins_delta)
+	_round_technique_coins += coins_delta
 	_handle_technique_flags(eval_result.get("flags", []))
 	_update_round_state_after_eval(ctx, eval_result)
 	var technique_events: Array = eval_result.get("events", [])
@@ -665,7 +746,7 @@ func _on_lines_cleared(_count: int, clear_type: String) -> void:
 	if _clear_popup_shown_this_piece:
 		_clear_popup_shown_this_piece = false
 		return
-	_spawn_clear_type_popup(clear_type, 0.5)
+	_spawn_clear_type_popup(clear_type)
 
 func _has_instant_arr() -> bool:
 	return current_config != null and current_config.instant_arr
@@ -703,13 +784,18 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 				RunState.techniques, ctx, _technique_round_state)
 			technique_atk = eval_result.get("attack_delta", 0)
 			technique_events = eval_result.get("events", [])
-			Economy.add_coins(eval_result.get("coins_delta", 0))
+			var coins_delta: int = eval_result.get("coins_delta", 0)
+			Economy.add_coins(coins_delta)
+			_round_technique_coins += coins_delta
 			_handle_technique_flags(eval_result.get("flags", []))
 			_update_round_state_after_eval(ctx, eval_result)
 
+	var effective_enh_counts: Dictionary = _effective_enhancement_counts(_pending_enh_counts)
+	var effective_enh_params: Dictionary = _effective_enhancement_params()
+
 	var modified: int = raw_attack + technique_atk
 	if not is_bonus_event:
-		modified += PieceEnhancements.honed_bonus(_pending_enh_counts)
+		modified += PieceEnhancements.honed_bonus(effective_enh_counts, effective_enh_params["honed"])
 	if _is_attack_suppressed(event_type):
 		modified = 0
 	else:
@@ -718,7 +804,7 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 		modified = _apply_consumable_surge(modified, event_type)
 		modified = _apply_keystone_multipliers(modified, event_type)
 		if not is_bonus_event:
-			var amp := PieceEnhancements.amplified_multiplier(_pending_enh_counts)
+			var amp := PieceEnhancements.amplified_multiplier(effective_enh_counts, effective_enh_params["amplified"])
 			if amp > 1.0:
 				modified = int(float(modified) * amp)
 
@@ -743,6 +829,16 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 				if t.tags.size() >= 2:
 					qualifying += 1
 			modified += tag_bonus * qualifying
+
+	# The Best Defense: convert a portion of the finalized attack into shield
+	if not is_bonus_event and ctx.lines_cleared > 0:
+		for t in RunState.techniques:
+			if t.effect_type == "attack_to_shield":
+				var shield_gain := floori(modified * t.params.get("pct", 0.25))
+				if shield_gain > 0:
+					_garbage_shield += shield_gain
+					if _shield_bar:
+						_shield_bar.update_charges(_garbage_shield)
 
 	var to_quota: int = _drain_attack(modified)
 	quota_accumulated += to_quota
@@ -784,6 +880,7 @@ func _build_attack_context(raw_attack: int, event_type: String) -> AttackContext
 	ctx.locked_col = _locked_pivot_col
 	ctx.piece_placement_count = _technique_round_state.pieces_placed if _technique_round_state else 0
 	ctx.enemy_hp_pct = maxf(0.0, 1.0 - quota_accumulated / maxf(1.0, float(current_config.quota))) if current_config else 1.0
+	ctx.cleared_enh_counts = _pending_enh_counts
 	match event_type:
 		"single":          ctx.lines_cleared = 1
 		"double":          ctx.lines_cleared = 2
@@ -807,6 +904,11 @@ func _handle_technique_flags(flags: Array) -> void:
 				pass  # +2 incoming handled in _build_round_config via technique check
 			"greedy_hands":
 				_greedy_hands_active = true
+			_:
+				if flag.begins_with("post_quad_enhance:") or flag.begins_with("post_combo_enhance:"):
+					var enh_type: String = flag.split(":")[1]
+					if enh_type != "":
+						_queue_enhancement_grant(enh_type, 1)
 
 func _update_round_state_after_eval(ctx: AttackContext, _eval: Dictionary) -> void:
 	if _technique_round_state == null:
@@ -907,10 +1009,6 @@ static func compute_keystone_flat_bonus(ks: Keystone, event_type: String, techni
 			b += ks.triple_bonus
 		"quad":
 			b += ks.quad_bonus
-			if ks.per_technique_quad_bonus > 0:
-				for t in techniques:
-					if "quad" in t.tags or "general" in t.tags:
-						b += ks.per_technique_quad_bonus
 		"tspin_mini", "tspin_single", "tspin_double", "tspin_triple":
 			match event_type:
 				"tspin_mini":   b += ks.tspin_mini_bonus
@@ -1032,14 +1130,31 @@ func _fire_keystone_visuals(events: Array) -> void:
 
 # ── Popup helpers ─────────────────────────────────────────────────────────
 
-func _spawn_clear_type_popup(clear_type: String, duration: float) -> void:
-	if _hold_display == null:
-		return
+const CLEAR_POPUP_FADE_DURATION: float = 1.0
+
+func _spawn_clear_type_popup(clear_type: String) -> void:
 	var entry: Array = CLEAR_TYPE_DISPLAY.get(clear_type, ["", Color.WHITE])
 	var label_text: String = entry[0]
 	var label_color: Color = entry[1]
 	if label_text.is_empty():
 		return
+
+	var lbl: Label
+	if is_instance_valid(_active_clear_popup_label):
+		# A previous popup is still fading out; override it instead of stacking.
+		if _active_clear_popup_tween:
+			_active_clear_popup_tween.kill()
+		lbl = _active_clear_popup_label
+	else:
+		if _hold_display == null:
+			return
+		lbl = Label.new()
+		lbl.add_theme_font_size_override("font_size", 16)
+		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		lbl.custom_minimum_size = Vector2(112, 0)
+		lbl.pivot_offset = Vector2(56, 12)
+		add_child(lbl)
+		_active_clear_popup_label = lbl
 
 	var hold_screen_pos: Vector2 = _hold_display.get_global_transform_with_canvas().origin
 	var hold_slots: int = 1
@@ -1047,25 +1162,25 @@ func _spawn_clear_type_popup(clear_type: String, duration: float) -> void:
 		hold_slots = current_board.config.hold_slots
 	var panel_height: float = hold_slots * 96.0 + (hold_slots - 1) * 6.0 + 16.0
 
-	var lbl := Label.new()
 	lbl.text = label_text
 	lbl.modulate = label_color
-	lbl.add_theme_font_size_override("font_size", 16)
-	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	lbl.custom_minimum_size = Vector2(112, 0)
+	lbl.scale = Vector2(1.0, 1.0)
 	lbl.position = Vector2(hold_screen_pos.x, hold_screen_pos.y + panel_height + 8.0)
-	lbl.pivot_offset = Vector2(56, 12)
-	add_child(lbl)
 
 	var is_pop_tier: bool = label_color != Color.WHITE
 	var tw := create_tween()
+	_active_clear_popup_tween = tw
 	if is_pop_tier:
 		lbl.scale = Vector2(0.8, 0.8)
 		tw.tween_property(lbl, "scale", Vector2(1.15, 1.15), 0.12).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-		tw.parallel().tween_property(lbl, "modulate:a", 0.0, duration)
+		tw.parallel().tween_property(lbl, "modulate:a", 0.0, CLEAR_POPUP_FADE_DURATION)
 	else:
-		tw.tween_property(lbl, "modulate:a", 0.0, duration)
-	tw.tween_callback(lbl.queue_free)
+		tw.tween_property(lbl, "modulate:a", 0.0, CLEAR_POPUP_FADE_DURATION)
+	tw.tween_callback(func() -> void:
+		if _active_clear_popup_label == lbl:
+			_active_clear_popup_label = null
+			_active_clear_popup_tween = null
+		lbl.queue_free())
 
 func _spawn_event_popup(event: Dictionary, index: int, total: int) -> void:
 	var lbl := Label.new()
@@ -1073,17 +1188,16 @@ func _spawn_event_popup(event: Dictionary, index: int, total: int) -> void:
 	lbl.add_theme_font_size_override("font_size", 14)
 	lbl.modulate = event.get("color", Color.WHITE)
 
-	var board_screen_pos := Vector2(760, 360)
-	if current_board:
-		board_screen_pos = current_board.get_global_transform_with_canvas().origin
+	var anchor_pos := Vector2(16, 360)
+	if hud:
+		anchor_pos = hud.keystone_icons.get_global_transform_with_canvas().origin
 
-	var board_center_x := board_screen_pos.x + TetrisBoard.COLS * TetrisBoard.CELL_SIZE * 0.5
-	var spread := (index - (total - 1) * 0.5) * 90.0
-	lbl.position = Vector2(board_center_x + spread - 40, board_screen_pos.y - 50)
+	var spread := (index - (total - 1) * 0.5) * 20.0
+	lbl.position = Vector2(anchor_pos.x, anchor_pos.y - 40.0 + spread)
 	add_child(lbl)
 
 	var tw := create_tween()
-	tw.tween_property(lbl, "position", lbl.position + Vector2(0, -60), 0.6)
+	tw.tween_property(lbl, "position", lbl.position + Vector2(0, -40), 0.6)
 	tw.parallel().tween_property(lbl, "modulate:a", 0.0, 0.6)
 	tw.tween_callback(lbl.queue_free)
 
@@ -1218,9 +1332,15 @@ func _end_round(success: bool) -> void:
 		return
 
 	var surplus_income := _calculate_surplus_income()
-	_apply_keystone_economy()
+	var keystone_income := _apply_keystone_economy()
 	Economy.add_coins(surplus_income)
 	Economy.pay_round(BASE_PAYOUT)
+
+	_round_income_breakdown = {
+		"base": BASE_PAYOUT,
+		"techniques": _round_technique_coins + surplus_income + keystone_income,
+		"enhancements": _round_enhancement_coins,
+	}
 
 	var was_boss := RunState.is_boss_round()
 	RunState.advance_round()
@@ -1242,14 +1362,15 @@ func _on_death_animation_finished() -> void:
 	_pending_round_end = Callable()
 	fn.call()
 
-func _apply_keystone_economy() -> void:
+func _apply_keystone_economy() -> int:
+	var total := 0
 	for ks in RunState.keystones:
 		if ks.end_round_coins > 0:
-			Economy.coins += ks.end_round_coins
-		if ks.overkill_coins:
-			Economy.coins += surplus_attack
+			total += ks.end_round_coins
 		if ks.time_coins:
-			Economy.coins += int(round_timer / 5.0)
+			total += int(round_timer / 5.0)
+	Economy.coins += total
+	return total
 
 func _calculate_surplus_income() -> int:
 	var income := 0
@@ -1305,7 +1426,7 @@ func _show_round_success() -> void:
 	_active_overlay = screen
 	add_child(screen)
 	screen.connect("proceed", _on_success_proceed)
-	screen.setup(BASE_PAYOUT)
+	screen.setup(_round_income_breakdown.base, _round_income_breakdown.techniques, _round_income_breakdown.enhancements)
 
 func _on_success_proceed() -> void:
 	if _pending_keystone:
@@ -1366,19 +1487,22 @@ func apply_consumable(consumable: Consumable) -> void:
 	if consumable.adds_time > 0.0:
 		round_timer = minf(round_timer + consumable.adds_time, current_config.time_limit + consumable.adds_time)
 	elif consumable.enhance_pieces > 0:
-		if _enhancement_grant.get("type", "") == consumable.enhance_type:
-			_enhancement_grant["remaining"] = _enhancement_grant.get("remaining", 0) + consumable.enhance_pieces
-		else:
-			_enhancement_grant = {"type": consumable.enhance_type, "remaining": consumable.enhance_pieces}
-		# If the piece currently in play has no enhancement yet, apply this
-		# one immediately instead of waiting for the next spawn, consuming
-		# one charge from the grant for it.
-		if current_board and current_board.current_enhancement == "":
-			current_board.current_enhancement = consumable.enhance_type
+		var became_active: bool = _enhancement_grant.is_empty() \
+			or _enhancement_grant.get("type", "") == consumable.enhance_type
+		_queue_enhancement_grant(consumable.enhance_type, consumable.enhance_pieces)
+		# If the piece currently in play has no enhancement yet and this grant
+		# is active, apply it immediately instead of waiting for the next
+		# spawn, consuming one charge from the grant for it.
+		if became_active and current_board and current_board.current_enhancement == "":
+			current_board.current_enhancement = PieceEnhancements.resolve_type(_enhancement_grant.get("type", ""))
 			current_board.queue_redraw()
 			_enhancement_grant["remaining"] -= 1
 			if _enhancement_grant["remaining"] <= 0:
 				_enhancement_grant.clear()
+				if _enhancement_grant_queue.size() > 0:
+					var next_grant: Dictionary = _enhancement_grant_queue.pop_front()
+					_enhancement_grant["type"] = next_grant.get("type", "")
+					_enhancement_grant["remaining"] = next_grant.get("remaining", 0)
 	else:
 		consumable.apply_to_config(current_config)
 	RunState.remove_consumable(consumable)

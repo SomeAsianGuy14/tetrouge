@@ -2,12 +2,14 @@
 
 [ext_resource type="Script" uid="uid://dqm7x3n1vp5fy" path="res://resources/enemy.gd" id="1"]
 [ext_resource type="Resource" uid="uid://2bx3b6uorasm" path="res://resources/data/boss_modifiers/the_ancient.tres" id="2"]
+[ext_resource type="Texture2D" uid="uid://2vnburqnv0sy" path="res://assets/bosses/the ancient.jpg" id="3_6xism"]
 
 [resource]
 script = ExtResource("1")
 id = "boss_ancient"
 display_name = "The Ancient"
 color = Color(0.45, 0.3, 0.1, 1)
+sprite = ExtResource("3_6xism")
 tier = "Boss"
 garbage_interval = 12.0
 ability = ExtResource("2")

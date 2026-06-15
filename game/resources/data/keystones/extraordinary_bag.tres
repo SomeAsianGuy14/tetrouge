@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "extraordinary_bag"
+display_name = "Extraordinary Bag"
+description = "Every 7th piece spawns with a random enhancement."
+flavor_text = "You never know what you'll get"
+category = "Enhancement"
+piece_enhance_every_n = 7
+piece_enhance_type = "random"

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "refined"
+display_name = "Refined"
+description = "Honed pieces deal an additional 2 damage per cell."
+flavor_text = "A keener edge"
+category = "Enhancement"
+honed_bonus_per_cell = 2

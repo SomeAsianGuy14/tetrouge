@@ -32,6 +32,31 @@ func test_find_by_id_returns_null_for_missing() -> void:
 	var result := ResourceRegistry.find_by_id(ResourceRegistry.all_keystones, "does_not_exist")
 	assert_null(result, "unknown id should return null")
 
+# ── Legacy id aliases (renamed resources) ─────────────────────────────────
+
+func test_find_by_id_resolves_legacy_technique_id() -> void:
+	var t := ResourceRegistry.find_by_id(ResourceRegistry.all_techniques, "keen_edge")
+	assert_not_null(t, "legacy id keen_edge should resolve to the renamed technique")
+	assert_eq(t.id, "sharpen")
+
+func test_find_by_id_resolves_legacy_consumable_ids() -> void:
+	var aliases := {
+		"whetstone": "sharpening_stone",
+		"gilding_kit": "gold_leaf",
+		"reinforcing_plate": "steel_plates",
+		"arcane_battery": "charged_battery",
+	}
+	for old_id in aliases:
+		var c := ResourceRegistry.find_by_id(ResourceRegistry.all_consumables, old_id)
+		assert_not_null(c, "legacy id %s should resolve to a consumable" % old_id)
+		assert_eq(c.id, aliases[old_id])
+
+func test_load_by_ids_recovers_inventory_with_legacy_ids() -> void:
+	var loaded := RunSave._load_by_ids(ResourceRegistry.all_consumables, ["gilding_kit", "sharpening_stone"])
+	assert_eq(loaded.size(), 2, "both legacy and current ids should resolve")
+	assert_eq(loaded[0].id, "gold_leaf")
+	assert_eq(loaded[1].id, "sharpening_stone")
+
 func test_no_duplicate_keystone_ids() -> void:
 	var seen := {}
 	for ks in ResourceRegistry.all_keystones:

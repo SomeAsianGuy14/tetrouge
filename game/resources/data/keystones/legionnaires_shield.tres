@@ -6,9 +6,9 @@
 script = ExtResource("1")
 id = "legionnaires_shield"
 display_name = "Legionnaire's Shield"
-description = "Incoming garbage is reduced by 3 lines per flush. Requires: Simple Shield."
+description = "Start each round with 10 shield. Requires: Simple Shield."
 flavor_text = "An impressive defense"
 category = "Starter"
 requires_keystone_id = "simple_shield"
 replaces_keystone_id = "simple_shield"
-garbage_flush_reduction = 3
+start_shield = 10

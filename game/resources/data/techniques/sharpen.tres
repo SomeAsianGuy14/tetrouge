@@ -4,10 +4,10 @@
 
 [resource]
 script = ExtResource("1")
-id = "keen_edge"
-display_name = "Keen Edge"
-description = "Every 5th piece spawns Honed."
+id = "sharpen"
+display_name = "Sharpen"
+description = "Every 6th piece spawns Honed."
 cost = 5
 tags = ["general", "enhancement"]
 effect_type = "piece_enhancer"
-params = {"enhancement": "honed", "every_n": 5}
+params = {"enhancement": "honed", "every_n": 6}

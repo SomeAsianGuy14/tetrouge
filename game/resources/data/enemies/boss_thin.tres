@@ -2,12 +2,14 @@
 
 [ext_resource type="Resource" uid="uid://b5grn7b0622q7" path="res://resources/data/boss_modifiers/the_thin.tres" id="1_5v484"]
 [ext_resource type="Script" uid="uid://dqm7x3n1vp5fy" path="res://resources/enemy.gd" id="2_5hen4"]
+[ext_resource type="Texture2D" uid="uid://cirhdn0b2va4d" path="res://assets/bosses/the thin.jpg" id="3_5hen4"]
 
 [resource]
 script = ExtResource("2_5hen4")
 id = "boss_thin"
 display_name = "The Thin"
 color = Color(0.4, 0, 0.1, 1)
+sprite = ExtResource("3_5hen4")
 tier = "Boss"
 garbage_interval = 12.0
 ability = ExtResource("1_5v484")

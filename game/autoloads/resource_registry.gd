@@ -5,13 +5,16 @@ extends Node
 # works on all platforms, so all runtime resource scanning goes through here.
 
 const all_keystones: Array = [
+	preload("res://resources/data/keystones/armored.tres"),
 	preload("res://resources/data/keystones/beginners_luck.tres"),
+	preload("res://resources/data/keystones/charging_up.tres"),
 	preload("res://resources/data/keystones/consistency.tres"),
 	preload("res://resources/data/keystones/daze.tres"),
 	preload("res://resources/data/keystones/dizzy.tres"),
 	preload("res://resources/data/keystones/double_trouble.tres"),
 	preload("res://resources/data/keystones/dual_wielding.tres"),
 	preload("res://resources/data/keystones/enchant.tres"),
+	preload("res://resources/data/keystones/extraordinary_bag.tres"),
 	preload("res://resources/data/keystones/final_blow.tres"),
 	preload("res://resources/data/keystones/flexible.tres"),
 	preload("res://resources/data/keystones/flurry.tres"),
@@ -20,11 +23,14 @@ const all_keystones: Array = [
 	preload("res://resources/data/keystones/golden_watch.tres"),
 	preload("res://resources/data/keystones/great_sword.tres"),
 	preload("res://resources/data/keystones/holy_cheese.tres"),
+	preload("res://resources/data/keystones/jack_of_all_trades.tres"),
 	preload("res://resources/data/keystones/magical_coin.tres"),
 	preload("res://resources/data/keystones/midas_touch.tres"),
+	preload("res://resources/data/keystones/overclocked.tres"),
+	preload("res://resources/data/keystones/polished.tres"),
+	preload("res://resources/data/keystones/refined.tres"),
 	preload("res://resources/data/keystones/risky_business.tres"),
 	preload("res://resources/data/keystones/safety_net.tres"),
-	preload("res://resources/data/keystones/sharpen.tres"),
 	preload("res://resources/data/keystones/simple_flail.tres"),
 	preload("res://resources/data/keystones/simple_shield.tres"),
 	preload("res://resources/data/keystones/simple_sword.tres"),
@@ -49,6 +55,8 @@ const all_techniques: Array = [
 	preload("res://resources/data/techniques/attack_battery.tres"),
 	preload("res://resources/data/techniques/back_to_back_pressure.tres"),
 	preload("res://resources/data/techniques/back_to_back_spin.tres"),
+	preload("res://resources/data/techniques/backpedaling.tres"),
+	preload("res://resources/data/techniques/barricade.tres"),
 	preload("res://resources/data/techniques/bounty_list.tres"),
 	preload("res://resources/data/techniques/brass_knuckles.tres"),
 	preload("res://resources/data/techniques/burning_board.tres"),
@@ -77,41 +85,46 @@ const all_techniques: Array = [
 	preload("res://resources/data/techniques/gamblers_blade.tres"),
 	preload("res://resources/data/techniques/gilded_touch.tres"),
 	preload("res://resources/data/techniques/glass_cannon.tres"),
+	preload("res://resources/data/techniques/golden_blade.tres"),
 	preload("res://resources/data/techniques/good_planning.tres"),
 	preload("res://resources/data/techniques/greedy_hands.tres"),
 	preload("res://resources/data/techniques/green_thumb.tres"),
-	preload("res://resources/data/techniques/keen_edge.tres"),
+	preload("res://resources/data/techniques/last_stand.tres"),
 	preload("res://resources/data/techniques/low_pressure.tres"),
 	preload("res://resources/data/techniques/mini_spark.tres"),
 	preload("res://resources/data/techniques/opening_blow.tres"),
 	preload("res://resources/data/techniques/patience.tres"),
 	preload("res://resources/data/techniques/perfect_spark.tres"),
+	preload("res://resources/data/techniques/preparation.tres"),
 	preload("res://resources/data/techniques/reckless_assault.tres"),
 	preload("res://resources/data/techniques/recycling.tres"),
 	preload("res://resources/data/techniques/redzone.tres"),
 	preload("res://resources/data/techniques/rotation_training.tres"),
 	preload("res://resources/data/techniques/hone.tres"),
+	preload("res://resources/data/techniques/sharpen.tres"),
 	preload("res://resources/data/techniques/side_strike.tres"),
 	preload("res://resources/data/techniques/smooth_haggling.tres"),
 	preload("res://resources/data/techniques/specialist_discount.tres"),
 	preload("res://resources/data/techniques/spinning_strike.tres"),
 	preload("res://resources/data/techniques/switch_up.tres"),
 	preload("res://resources/data/techniques/tetris_echo.tres"),
+	preload("res://resources/data/techniques/the_best_defense.tres"),
 ]
 
 const all_consumables: Array = [
-	preload("res://resources/data/consumables/arcane_battery.tres"),
 	preload("res://resources/data/consumables/attack_surge.tres"),
 	preload("res://resources/data/consumables/b2b_booster.tres"),
+	preload("res://resources/data/consumables/charged_battery.tres"),
 	preload("res://resources/data/consumables/combo_coil.tres"),
-	preload("res://resources/data/consumables/gilding_kit.tres"),
+	preload("res://resources/data/consumables/gold_leaf.tres"),
+	preload("res://resources/data/consumables/lottery_ticket.tres"),
 	preload("res://resources/data/consumables/perfected_spike.tres"),
 	preload("res://resources/data/consumables/power_fragment.tres"),
 	preload("res://resources/data/consumables/power_shard.tres"),
 	preload("res://resources/data/consumables/quad_stone.tres"),
-	preload("res://resources/data/consumables/reinforcing_plate.tres"),
+	preload("res://resources/data/consumables/sharpening_stone.tres"),
 	preload("res://resources/data/consumables/spin_amplifier.tres"),
-	preload("res://resources/data/consumables/whetstone.tres"),
+	preload("res://resources/data/consumables/steel_plates.tres"),
 ]
 
 const all_vouchers: Array = [
@@ -142,9 +155,20 @@ const all_enemies: Array = [
 	preload("res://resources/data/enemies/void_knight.tres"),
 ]
 
+# Maps ids of renamed/replaced resources to their current id, so that save
+# files written before a rename still resolve to the new resource.
+const LEGACY_ID_ALIASES: Dictionary = {
+	"keen_edge": "sharpen",
+	"whetstone": "sharpening_stone",
+	"gilding_kit": "gold_leaf",
+	"reinforcing_plate": "steel_plates",
+	"arcane_battery": "charged_battery",
+}
+
 static func find_by_id(collection: Array, id: String) -> Resource:
+	var resolved_id: String = LEGACY_ID_ALIASES.get(id, id)
 	for res in collection:
-		if res.id == id:
+		if res.id == resolved_id:
 			return res
 	return null
 

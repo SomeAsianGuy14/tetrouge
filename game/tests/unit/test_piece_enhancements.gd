@@ -59,3 +59,44 @@ func test_count_in_rows_ignores_excluded_rows() -> void:
 
 	var counts := PieceEnhancements.count_in_rows(enh_grid, [0])
 	assert_eq(counts.get(PieceEnhancements.REINFORCED, 0), 0)
+
+# ── per-cell overrides (Refined / Armored / Polished / Overclocked) ────────
+
+func test_honed_bonus_with_refined_per_cell_override() -> void:
+	var per_cell := PieceEnhancements.HONED_ATTACK_PER_CELL + 2
+	assert_eq(PieceEnhancements.honed_bonus({PieceEnhancements.HONED: 3}, per_cell), 9)
+
+func test_shield_charges_with_armored_per_cell_override() -> void:
+	var per_cell := PieceEnhancements.REINFORCED_SHIELD_PER_CELL + 2
+	assert_eq(PieceEnhancements.shield_charges({PieceEnhancements.REINFORCED: 4}, per_cell), 12)
+
+func test_gilded_coins_with_polished_per_cell_override() -> void:
+	var per_cell := PieceEnhancements.GILDED_COINS_PER_CELL + 1
+	assert_eq(PieceEnhancements.gilded_coins({PieceEnhancements.GILDED: 4}, per_cell), 8)
+
+func test_amplified_multiplier_with_overclocked_per_cell_override() -> void:
+	var per_cell := PieceEnhancements.AMPLIFIED_PER_CELL + 0.125
+	assert_eq(PieceEnhancements.amplified_multiplier({PieceEnhancements.AMPLIFIED: 2}, per_cell), 1.75)
+
+func test_amplified_multiplier_with_override_still_clamped() -> void:
+	var per_cell := PieceEnhancements.AMPLIFIED_PER_CELL + 0.125
+	assert_eq(PieceEnhancements.amplified_multiplier({PieceEnhancements.AMPLIFIED: 10}, per_cell), PieceEnhancements.AMPLIFIED_MULTIPLIER_CAP)
+
+# ── double_counts (Jack of All Trades) ─────────────────────────────────────
+
+func test_double_counts_doubles_each_value() -> void:
+	var doubled := PieceEnhancements.double_counts({PieceEnhancements.HONED: 2, PieceEnhancements.GILDED: 3})
+	assert_eq(doubled.get(PieceEnhancements.HONED, 0), 4)
+	assert_eq(doubled.get(PieceEnhancements.GILDED, 0), 6)
+
+func test_double_counts_empty_dict() -> void:
+	assert_eq(PieceEnhancements.double_counts({}), {})
+
+# ── resolve_type ─────────────────────────────────────────────────────────
+
+func test_resolve_type_passes_through_non_random() -> void:
+	assert_eq(PieceEnhancements.resolve_type(PieceEnhancements.HONED), PieceEnhancements.HONED)
+
+func test_resolve_type_random_resolves_to_known_type() -> void:
+	var resolved := PieceEnhancements.resolve_type("random")
+	assert_true(resolved in PieceEnhancements.ALL_TYPES)

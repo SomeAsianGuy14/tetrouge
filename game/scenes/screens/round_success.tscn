@@ -31,11 +31,11 @@ horizontal_alignment = 1
 [node name="BaseLabel" type="Label" parent="Panel/VBox"]
 text = "Base Payout:      +0"
 
-[node name="SpeedLabel" type="Label" parent="Panel/VBox"]
-text = "Speed Bonus:      +0"
-
 [node name="TechniqueLabel" type="Label" parent="Panel/VBox"]
-text = "Technique Income: +0"
+text = "Tech/Keystone:    +0"
+
+[node name="EnhancementLabel" type="Label" parent="Panel/VBox"]
+text = "Enhancements:     +0"
 
 [node name="TotalLabel" type="Label" parent="Panel/VBox"]
 text = "Total:            +0"
