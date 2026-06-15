@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "gilded_touch"
+display_name = "Gilded Touch"
+description = "Every 6th piece spawns Gilded."
+cost = 5
+tags = ["general", "enhancement"]
+effect_type = "piece_enhancer"
+params = {"enhancement": "gilded", "every_n": 6}

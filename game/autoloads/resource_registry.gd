@@ -75,10 +75,12 @@ const all_techniques: Array = [
 	preload("res://resources/data/techniques/follow_up.tres"),
 	preload("res://resources/data/techniques/four_disciplines.tres"),
 	preload("res://resources/data/techniques/gamblers_blade.tres"),
+	preload("res://resources/data/techniques/gilded_touch.tres"),
 	preload("res://resources/data/techniques/glass_cannon.tres"),
 	preload("res://resources/data/techniques/good_planning.tres"),
 	preload("res://resources/data/techniques/greedy_hands.tres"),
 	preload("res://resources/data/techniques/green_thumb.tres"),
+	preload("res://resources/data/techniques/keen_edge.tres"),
 	preload("res://resources/data/techniques/low_pressure.tres"),
 	preload("res://resources/data/techniques/mini_spark.tres"),
 	preload("res://resources/data/techniques/opening_blow.tres"),
@@ -98,14 +100,18 @@ const all_techniques: Array = [
 ]
 
 const all_consumables: Array = [
+	preload("res://resources/data/consumables/arcane_battery.tres"),
 	preload("res://resources/data/consumables/attack_surge.tres"),
 	preload("res://resources/data/consumables/b2b_booster.tres"),
 	preload("res://resources/data/consumables/combo_coil.tres"),
+	preload("res://resources/data/consumables/gilding_kit.tres"),
 	preload("res://resources/data/consumables/perfected_spike.tres"),
 	preload("res://resources/data/consumables/power_fragment.tres"),
 	preload("res://resources/data/consumables/power_shard.tres"),
 	preload("res://resources/data/consumables/quad_stone.tres"),
+	preload("res://resources/data/consumables/reinforcing_plate.tres"),
 	preload("res://resources/data/consumables/spin_amplifier.tres"),
+	preload("res://resources/data/consumables/whetstone.tres"),
 ]
 
 const all_vouchers: Array = [

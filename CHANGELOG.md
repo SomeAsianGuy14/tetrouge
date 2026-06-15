@@ -3,6 +3,8 @@
 ## Unreleased
 
 ### New Features
+- **Piece enhancements** — Pieces can now spawn with a special enhancement, granted by certain techniques and consumables: Honed (silver) adds bonus attack when cleared, Amplified (yellow marker) multiplies attack when cleared, Gilded (gold) pays coins when cleared, and Reinforced (brown with a silver border) builds up a garbage-shield that blocks incoming attacks. A new shield bar next to the board tracks your current shield charges. Enhancements show on the board, the falling piece, and carry over through hold.
+- **Queue shows upcoming enhancements** — The next pieces shown in the queue now preview which will arrive Honed, Amplified, Gilded, or Reinforced, using the same styling as the hold and board pieces.
 - **Clear type popup** — After every line clear a label briefly appears below the hold piece naming what you just did (Single, Double, Triple, Quad, T-Spin variants, Perfect Clear). Plain clears fade out quietly in white; Quads pop in cyan, T-Spins in purple, and Perfect Clears in gold with a brief scale-up animation.
 - **Enemy panel redesign** — The right side of the screen now shows a full-height enemy panel with the enemy name, a large portrait area (initial-letter placeholder in enemy colour until artwork is added), stage/round label, optional flavor text, and boss modifier description.
 - **Enemy flavor text field** — Enemy data now has an optional flavor text field for lore descriptions (currently blank, to be filled in a future update).
@@ -33,6 +35,8 @@
 - **Enchant counts all T-Spin-applicable techniques** — General-tagged techniques now count toward its per-technique bonus (matching how Sharpen counts them for Quads), and the bonus now applies to T-Spin Minis.
 - **Final Blow can finish a round** — Its burst damage now updates the enemy HP bar immediately and ends the round if it meets the quota, instead of waiting for your next attack.
 - **Surge consumables no longer waste charges** — A zero-damage Single no longer consumes a surge charge.
+- **Enhanced cells flash with their own color on clear** — Honed, Gilded, and Reinforced cells now flash silver/gold/brown during the line clear delay instead of flashing their original piece color.
+- **Enhancement consumables apply immediately** — Using a Honed/Amplified/Gilded/Reinforced consumable now enhances the piece currently in play right away, instead of waiting for the next piece to spawn.
 
 ---
 

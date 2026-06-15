@@ -15,6 +15,10 @@ enum UseTiming { ROUND_START, DURING_ROUND, ANYTIME }
 # Attack surge (first N clears deal double attack — applied via RoundConfig)
 @export var attack_surge_clears: int = 0
 
+# Piece enhancement grant (next N spawned pieces carry enhance_type)
+@export var enhance_type: String = ""
+@export var enhance_pieces: int = 0
+
 # Flat attack bonus fields (applied to RoundConfig at round start)
 @export var bonus_all_clears: int = 0
 @export var bonus_quad: int = 0

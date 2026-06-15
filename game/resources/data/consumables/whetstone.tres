@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/consumable.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "whetstone"
+display_name = "Whetstone"
+description = "Your next 4 pieces spawn Honed."
+cost = 5
+use_timing = 1
+enhance_type = "honed"
+enhance_pieces = 4

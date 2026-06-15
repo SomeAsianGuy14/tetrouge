@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/consumable.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "reinforcing_plate"
+display_name = "Reinforcing Plate"
+description = "Your next 4 pieces spawn Reinforced."
+cost = 5
+use_timing = 1
+enhance_type = "reinforced"
+enhance_pieces = 4

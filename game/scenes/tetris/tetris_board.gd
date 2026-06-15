@@ -48,9 +48,11 @@ var _rng: RandomNumberGenerator = null
 
 # ── Grid ──────────────────────────────────────────────────────────────────
 var grid: Array = []  # grid[row][col] = int (0=empty, 1-7=piece, 9=garbage)
+var enh_grid: Array = []  # enh_grid[row][col] = String ("" = none, else enhancement type id)
 
 # ── Current piece ─────────────────────────────────────────────────────────
 var current_type: String = ""
+var current_enhancement: String = ""
 var current_pivot: Vector2i = Vector2i.ZERO
 var current_rotation: int = 0
 var last_move_was_rotation: bool = false
@@ -60,6 +62,7 @@ var ghost_pivot: Vector2i = Vector2i.ZERO
 
 # ── Hold ──────────────────────────────────────────────────────────────────
 var held_pieces: Array = []  # up to hold_slots strings
+var held_enhancements: Array = []  # parallel to held_pieces, "" = none
 var hold_used: bool = false
 
 # ── Queue ─────────────────────────────────────────────────────────────────
@@ -104,6 +107,9 @@ var combo: int = -1
 var is_b2b: bool = false
 var b2b_count: int = 0
 
+# ── Enhancement tracking ───────────────────────────────────────────────────
+var pending_enhancement_counts: Dictionary = {}
+
 # ── Signals ───────────────────────────────────────────────────────────────
 signal piece_locked
 signal line_clear_delay_started(clear_type: String)
@@ -113,6 +119,7 @@ signal rows_cleared(row_indices: Array[int])
 signal attack_generated(raw_attack: int, event_type: String)
 signal b2b_broken(streak: int)
 signal piece_rotated(piece_type: String)
+signal piece_spawned(piece_type: String)
 signal game_over
 signal board_updated
 
@@ -129,6 +136,7 @@ func setup(round_config: RoundConfig) -> void:
 	bag = BagRandomizer.new(config.bag_reset_interval, config.rng)
 	piece_queue.clear()
 	held_pieces.clear()
+	held_enhancements.clear()
 	hold_used = false
 	combo = -1
 	is_b2b = false
@@ -140,6 +148,7 @@ func setup(round_config: RoundConfig) -> void:
 func clear_board() -> void:
 	_init_grid()
 	held_pieces.clear()
+	held_enhancements.clear()
 	hold_used = false
 	combo = -1
 	is_b2b = false
@@ -151,11 +160,16 @@ func clear_board() -> void:
 
 func _init_grid() -> void:
 	grid = []
+	enh_grid = []
 	for _r in range(TOTAL_ROWS):
 		var row := []
 		row.resize(COLS)
 		row.fill(0)
 		grid.append(row)
+		var enh_row := []
+		enh_row.resize(COLS)
+		enh_row.fill("")
+		enh_grid.append(enh_row)
 
 func _fill_queue() -> void:
 	while piece_queue.size() < config.preview_count + 1:
@@ -282,13 +296,18 @@ func input_hold() -> void:
 	if hold_used and config.hold_lockout_enabled and config.hold_slots <= 1:
 		return
 	var held_type := current_type
+	var held_enhancement := current_enhancement
 	if held_pieces.size() < config.hold_slots:
 		held_pieces.append(held_type)
+		held_enhancements.append(held_enhancement)
 		current_type = piece_queue.pop_front()
+		current_enhancement = ""
 		_fill_queue()
 	else:
 		current_type = held_pieces.pop_front()
+		current_enhancement = held_enhancements.pop_front()
 		held_pieces.push_back(held_type)
+		held_enhancements.push_back(held_enhancement)
 	current_rotation = 0
 	current_pivot = Vector2i(PieceData.SPAWN_COL, PieceData.SPAWN_ROW)
 	hold_used = true
@@ -374,6 +393,8 @@ func _lock_piece() -> void:
 	for cell: Vector2i in cells:
 		if cell.y >= 0 and cell.y < TOTAL_ROWS:
 			grid[cell.y][cell.x] = color_id
+			enh_grid[cell.y][cell.x] = current_enhancement
+	current_enhancement = ""
 	var was_rotation := last_move_was_rotation
 	var locked_type := current_type
 	var locked_pivot := current_pivot
@@ -382,6 +403,7 @@ func _lock_piece() -> void:
 	hold_used = false
 	_update_summit_height()
 	var full_rows := _find_full_rows()
+	pending_enhancement_counts = PieceEnhancements.count_in_rows(enh_grid, full_rows)
 	if full_rows.size() > 0:
 		# Always announce the clear before processing it, so listeners evaluate
 		# against pre-clear state (combo/B2B/height) regardless of delay config
@@ -424,6 +446,7 @@ func _spawn_next() -> bool:
 	last_move_was_rotation = false
 	_update_ghost()
 	emit_signal("board_updated")
+	emit_signal("piece_spawned", current_type)
 	# Block-out check
 	return _cells_valid(current_type, current_rotation, current_pivot)
 
@@ -514,11 +537,16 @@ func _find_and_clear_rows() -> Array[int]:
 		return cleared
 	for r in cleared:
 		grid.remove_at(r)
+		enh_grid.remove_at(r)
 	for _i in cleared.size():
 		var empty_row := []
 		empty_row.resize(COLS)
 		empty_row.fill(0)
 		grid.insert(0, empty_row)
+		var empty_enh_row := []
+		empty_enh_row.resize(COLS)
+		empty_enh_row.fill("")
+		enh_grid.insert(0, empty_enh_row)
 	return cleared
 
 func _is_row_full(row: int) -> bool:
@@ -632,11 +660,16 @@ func insert_garbage_row() -> void:
 func insert_garbage_rows(count: int, col: int) -> void:
 	for _i in count:
 		grid.remove_at(0)
+		enh_grid.remove_at(0)
 		var garbage := []
 		garbage.resize(COLS)
 		garbage.fill(PieceData.COLOR_GARBAGE)
 		garbage[col] = 0
 		grid.append(garbage)
+		var empty_enh_row := []
+		empty_enh_row.resize(COLS)
+		empty_enh_row.fill("")
+		enh_grid.append(empty_enh_row)
 	_update_ghost()
 	_update_summit_height()
 	emit_signal("board_updated")
@@ -681,7 +714,11 @@ func _draw() -> void:
 				if cell_val == 9:
 					_draw_garbage_cell(col, screen_row)
 				else:
-					_draw_cell(col, screen_row, PIECE_COLORS.get(cell_val, Color.WHITE))
+					var enh: String = enh_grid[grid_row][col]
+					if enh != "":
+						_draw_enhanced_cell(col, screen_row, PIECE_COLORS.get(cell_val, Color.WHITE), enh)
+					else:
+						_draw_cell(col, screen_row, PIECE_COLORS.get(cell_val, Color.WHITE))
 
 	# Line clear flash overlay
 	if _in_line_clear_delay and config.line_clear_delay > 0.0:
@@ -693,7 +730,7 @@ func _draw() -> void:
 			for col in range(config.board_width):
 				var cell_val: int = grid[grid_row][col]
 				if cell_val != 0:
-					var base_color: Color = PIECE_COLORS.get(cell_val, Color.WHITE)
+					var base_color := _enhancement_fill_color(enh_grid[grid_row][col], PIECE_COLORS.get(cell_val, Color.WHITE))
 					_draw_cell(col, screen_row, base_color.lerp(Color.WHITE, flash_t))
 
 	# Ghost piece
@@ -702,7 +739,7 @@ func _draw() -> void:
 	for cell: Vector2i in ghost_cells:
 		var screen_row := cell.y - HIDDEN_ROWS
 		if screen_row >= 0 and screen_row < VISIBLE_ROWS:
-			_draw_ghost_cell(cell.x, screen_row, ghost_piece_color, soft_dropping)
+			_draw_ghost_cell(cell.x, screen_row, ghost_piece_color, soft_dropping, current_enhancement)
 			if config.deep_sight_enabled:
 				var dist := get_ghost_distance()
 				draw_string(ThemeDB.fallback_font, Vector2(cell.x * CELL_SIZE + 2, screen_row * CELL_SIZE + 22), str(dist), HORIZONTAL_ALIGNMENT_LEFT, -1, 10, Color.WHITE)
@@ -712,7 +749,11 @@ func _draw() -> void:
 	for cell: Vector2i in current_cells:
 		var screen_row := cell.y - HIDDEN_ROWS
 		if screen_row >= 0 and screen_row < VISIBLE_ROWS:
-			_draw_cell(cell.x, screen_row, PIECE_COLORS.get(PieceData.get_color_id(current_type), Color.WHITE))
+			var current_color: Color = PIECE_COLORS.get(PieceData.get_color_id(current_type), Color.WHITE)
+			if current_enhancement != "":
+				_draw_enhanced_cell(cell.x, screen_row, current_color, current_enhancement)
+			else:
+				_draw_cell(cell.x, screen_row, current_color)
 
 	# Grid lines
 	var grid_color := Color(0.2, 0.2, 0.2)
@@ -750,7 +791,7 @@ func _draw_garbage_cell(col: int, screen_row: int) -> void:
 			crack_color, 1.0
 		)
 
-func _draw_ghost_cell(col: int, screen_row: int, piece_color: Color, is_soft_drop: bool) -> void:
+func _draw_ghost_cell(col: int, screen_row: int, piece_color: Color, is_soft_drop: bool, enh_type: String = "") -> void:
 	var x := col * CELL_SIZE + 1
 	var y := screen_row * CELL_SIZE + 1
 	var s := CELL_SIZE - 2
@@ -758,11 +799,73 @@ func _draw_ghost_cell(col: int, screen_row: int, piece_color: Color, is_soft_dro
 	draw_rect(Rect2(x, y, s, s), Color(0.05, 0.04, 0.08))
 	# Rune outline
 	var outline_color: Color
-	if is_soft_drop:
-		outline_color = Color(1.0, 1.0, 1.0, 0.85)
-	else:
-		outline_color = Color(piece_color.r, piece_color.g, piece_color.b, 0.75)
+	match enh_type:
+		PieceEnhancements.HONED:
+			outline_color = PieceEnhancements.HONED_COLOR
+		PieceEnhancements.GILDED:
+			outline_color = PieceEnhancements.GILDED_COLOR
+		PieceEnhancements.REINFORCED:
+			outline_color = PieceEnhancements.REINFORCED_BORDER_COLOR
+		_:
+			if is_soft_drop:
+				outline_color = Color(1.0, 1.0, 1.0, 0.85)
+			else:
+				outline_color = Color(piece_color.r, piece_color.g, piece_color.b, 0.75)
 	draw_rect(Rect2(x, y, s, BEVEL_SIZE), outline_color)
 	draw_rect(Rect2(x, y + s - BEVEL_SIZE, s, BEVEL_SIZE), outline_color)
 	draw_rect(Rect2(x, y, BEVEL_SIZE, s), outline_color)
 	draw_rect(Rect2(x + s - BEVEL_SIZE, y, BEVEL_SIZE, s), outline_color)
+	if enh_type == PieceEnhancements.AMPLIFIED:
+		_draw_amplified_triangle(col, screen_row)
+
+# ── Enhancement cell styling ──────────────────────────────────────────────
+
+func _enhancement_fill_color(enh_type: String, fallback_color: Color) -> Color:
+	match enh_type:
+		PieceEnhancements.HONED:
+			return PieceEnhancements.HONED_COLOR
+		PieceEnhancements.GILDED:
+			return PieceEnhancements.GILDED_COLOR
+		PieceEnhancements.REINFORCED:
+			return PieceEnhancements.REINFORCED_FILL_COLOR
+		_:
+			return fallback_color
+
+func _draw_enhanced_cell(col: int, screen_row: int, base_color: Color, enh_type: String) -> void:
+	match enh_type:
+		PieceEnhancements.HONED:
+			_draw_cell(col, screen_row, PieceEnhancements.HONED_COLOR)
+		PieceEnhancements.GILDED:
+			_draw_cell(col, screen_row, PieceEnhancements.GILDED_COLOR)
+		PieceEnhancements.REINFORCED:
+			_draw_cell(col, screen_row, PieceEnhancements.REINFORCED_FILL_COLOR)
+			_draw_cell_border(col, screen_row, PieceEnhancements.REINFORCED_BORDER_COLOR)
+		PieceEnhancements.AMPLIFIED:
+			_draw_cell(col, screen_row, base_color)
+			_draw_amplified_triangle(col, screen_row)
+		_:
+			_draw_cell(col, screen_row, base_color)
+
+func _draw_cell_border(col: int, screen_row: int, color: Color) -> void:
+	var x := col * CELL_SIZE + 1
+	var y := screen_row * CELL_SIZE + 1
+	var s := CELL_SIZE - 2
+	var w := BEVEL_SIZE
+	draw_rect(Rect2(x, y, s, w), color)
+	draw_rect(Rect2(x, y + s - w, s, w), color)
+	draw_rect(Rect2(x, y, w, s), color)
+	draw_rect(Rect2(x + s - w, y, w, s), color)
+
+func _draw_amplified_triangle(col: int, screen_row: int) -> void:
+	var x := float(col * CELL_SIZE + 1)
+	var y := float(screen_row * CELL_SIZE + 1)
+	var s := float(CELL_SIZE - 2)
+	var cx := x + s * 0.5
+	var cy := y + s * 0.5
+	var r := s * 0.22
+	var points := PackedVector2Array([
+		Vector2(cx, cy - r),
+		Vector2(cx - r * 0.87, cy + r * 0.5),
+		Vector2(cx + r * 0.87, cy + r * 0.5),
+	])
+	draw_colored_polygon(points, PieceEnhancements.AMPLIFIED_TRIANGLE_COLOR)

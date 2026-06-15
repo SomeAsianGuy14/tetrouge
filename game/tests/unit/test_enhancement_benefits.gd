@@ -1,0 +1,146 @@
+extends GutTest
+
+var _saved_keystones: Array
+var _saved_techniques: Array
+var _saved_coins: int
+var _managers: Array = []
+var _boards: Array = []
+
+func before_each() -> void:
+	_saved_keystones = RunState.keystones.duplicate()
+	_saved_techniques = RunState.techniques.duplicate()
+	_saved_coins = Economy.coins
+	RunState.keystones = []
+	RunState.techniques = []
+	Economy.coins = 0
+	_managers = []
+	_boards = []
+
+func after_each() -> void:
+	RunState.keystones = _saved_keystones
+	RunState.techniques = _saved_techniques
+	Economy.coins = _saved_coins
+	for m in _managers:
+		m.free()
+	for b in _boards:
+		b.free()
+
+func _make_manager(interval: float = 5.0) -> RunManager:
+	var rm := RunManager.new()
+	var cfg := RoundConfig.new()
+	cfg.garbage_interval_min = interval
+	cfg.garbage_interval_max = interval
+	cfg.quota = 999
+	rm.current_config = cfg
+	rm._next_garbage_interval = interval
+	_managers.append(rm)
+	return rm
+
+func _make_board() -> TetrisBoard:
+	var board := TetrisBoard.new()
+	board.setup(RoundConfig.new())
+	_boards.append(board)
+	return board
+
+# ── 13.16: shield absorption ──────────────────────────────────────────────
+
+func test_shield_absorbs_wave_fully_no_packet() -> void:
+	var rm := _make_manager(5.0)
+	rm.current_config.garbage_lines_min = 2
+	rm.current_config.garbage_lines_max = 2
+	rm._garbage_shield = 5
+
+	rm._tick_enemy_garbage(5.1)
+
+	assert_true(rm._garbage_packets.is_empty(), "fully absorbed wave creates no packet")
+	assert_eq(rm._garbage_shield, 3)
+
+func test_shield_absorbs_wave_partially_then_hits_zero() -> void:
+	var rm := _make_manager(5.0)
+	rm.current_config.garbage_lines_min = 3
+	rm.current_config.garbage_lines_max = 3
+	rm._garbage_shield = 1
+
+	rm._tick_enemy_garbage(5.1)
+
+	assert_eq(rm._garbage_packets.size(), 1)
+	assert_eq(rm._garbage_packets[0].lines, 2, "smaller packet after partial absorption")
+	assert_eq(rm._garbage_shield, 0)
+
+# ── 13.17: shield resets at round start ───────────────────────────────────
+
+func test_shield_resets_to_zero_at_round_start() -> void:
+	var rm := _make_manager()
+	rm._garbage_shield = 7
+	rm._reset_enhancement_round_state()
+	assert_eq(rm._garbage_shield, 0)
+
+# ── 13.18 / 13.19: enhancement pipeline ordering ──────────────────────────
+
+func test_honed_bonus_applied_before_keystone_multiplier() -> void:
+	var ks := Keystone.new()
+	ks.quad_multiplier = 2.0
+	RunState.keystones = [ks]
+
+	var rm := _make_manager()
+	rm._last_attack_was_quad = false
+	rm._pending_enh_counts = {PieceEnhancements.HONED: 2}
+
+	rm._on_attack_generated(4, "quad")
+
+	# (4 base + 2 honed) * 2 keystone = 12
+	assert_eq(rm.quota_accumulated, 12)
+
+func test_amplified_multiplier_applied_after_keystone_multiplier() -> void:
+	var ks := Keystone.new()
+	ks.quad_multiplier = 2.0
+	RunState.keystones = [ks]
+
+	var rm := _make_manager()
+	rm._last_attack_was_quad = false
+	rm._pending_enh_counts = {PieceEnhancements.AMPLIFIED: 2}
+
+	rm._on_attack_generated(4, "quad")
+
+	# (4 base * 2 keystone) * 1.5 amplified = int(8 * 1.5) = 12
+	assert_eq(rm.quota_accumulated, 12)
+
+# ── 13.20: gilded coins paid once per clear ───────────────────────────────
+
+func test_gilded_coins_paid_once_despite_b2b_and_combo_events() -> void:
+	var rm := _make_manager()
+	var board := _make_board()
+	rm.current_board = board
+	board.pending_enhancement_counts = {PieceEnhancements.GILDED: 3}
+
+	rm._on_line_clear_delay_started("quad")
+	assert_eq(Economy.coins, 3)
+
+	rm._on_attack_generated(4, "quad")
+	rm._on_attack_generated(1, "b2b")
+	rm._on_attack_generated(2, "combo")
+
+	assert_eq(Economy.coins, 3, "gilded coins paid exactly once for the clear")
+
+# ── 13.21: suppressed clear still pays gilded/reinforced ──────────────────
+
+func test_suppressed_clear_still_pays_gilded_and_reinforced() -> void:
+	var ks := Keystone.new()
+	ks.suppress_non_singles = true
+	RunState.keystones = [ks]
+
+	var rm := _make_manager()
+	var board := _make_board()
+	rm.current_board = board
+	board.pending_enhancement_counts = {
+		PieceEnhancements.GILDED: 2,
+		PieceEnhancements.REINFORCED: 3,
+	}
+
+	rm._on_line_clear_delay_started("quad")
+
+	assert_eq(Economy.coins, 2, "gilded coins paid despite suppression")
+	assert_eq(rm._garbage_shield, 3, "reinforced charges granted despite suppression")
+
+	rm._on_attack_generated(4, "quad")
+	assert_eq(rm.quota_accumulated, 0, "attack itself remains suppressed")

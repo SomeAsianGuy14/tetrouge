@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://resources/consumable.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "gilding_kit"
+display_name = "Gilding Kit"
+description = "Your next 4 pieces spawn Gilded."
+cost = 5
+use_timing = 1
+enhance_type = "gilded"
+enhance_pieces = 4

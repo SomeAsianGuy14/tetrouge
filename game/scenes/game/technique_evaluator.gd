@@ -206,7 +206,7 @@ static func _eval_attack(t: Resource, ctx: AttackContext, rs: TechniqueRoundStat
 			return 0
 
 		"economy", "coupon", "specialist_discount", "smooth_haggling", "bounty_list", \
-		"combo_payout", "green_thumb":
+		"combo_payout", "green_thumb", "piece_enhancer":
 			return 0  # shop/economy effects only — handled outside evaluator
 
 		_:

@@ -34,9 +34,10 @@ func _draw() -> void:
 		if i < board.held_pieces.size():
 			var piece_type: String = board.held_pieces[i]
 			var color: Color = TetrisBoard.PIECE_COLORS.get(PieceData.get_color_id(piece_type), Color.WHITE)
-			_draw_mini_piece(piece_type, origin, color)
+			var enh_type: String = board.held_enhancements[i] if i < board.held_enhancements.size() else ""
+			_draw_mini_piece(piece_type, origin, color, enh_type)
 
-func _draw_mini_piece(piece_type: String, origin: Vector2, color: Color) -> void:
+func _draw_mini_piece(piece_type: String, origin: Vector2, color: Color, enh_type: String = "") -> void:
 	var cells: Array[Vector2i] = PieceData.get_cells(piece_type, 0)
 	var min_x: int = cells[0].x
 	var max_x: int = cells[0].x
@@ -53,4 +54,38 @@ func _draw_mini_piece(piece_type: String, origin: Vector2, color: Color) -> void
 	var off_y: float = (4.0 - span_y) / 2.0 - min_y
 	for c: Vector2i in cells:
 		var px := origin + Vector2((c.x + off_x) * MINI_CELL, (c.y + off_y) * MINI_CELL)
-		draw_rect(Rect2(px + Vector2(1, 1), Vector2(MINI_CELL - 2, MINI_CELL - 2)), color)
+		_draw_mini_cell(px, color, enh_type)
+
+func _draw_mini_cell(px: Vector2, base_color: Color, enh_type: String) -> void:
+	var rect := Rect2(px + Vector2(1, 1), Vector2(MINI_CELL - 2, MINI_CELL - 2))
+	match enh_type:
+		PieceEnhancements.HONED:
+			draw_rect(rect, PieceEnhancements.HONED_COLOR)
+		PieceEnhancements.GILDED:
+			draw_rect(rect, PieceEnhancements.GILDED_COLOR)
+		PieceEnhancements.REINFORCED:
+			draw_rect(rect, PieceEnhancements.REINFORCED_FILL_COLOR)
+			_draw_mini_cell_border(rect, PieceEnhancements.REINFORCED_BORDER_COLOR)
+		PieceEnhancements.AMPLIFIED:
+			draw_rect(rect, base_color)
+			_draw_mini_amplified_triangle(rect)
+		_:
+			draw_rect(rect, base_color)
+
+func _draw_mini_cell_border(rect: Rect2, color: Color) -> void:
+	const W := 2.0
+	draw_rect(Rect2(rect.position, Vector2(rect.size.x, W)), color)
+	draw_rect(Rect2(rect.position + Vector2(0, rect.size.y - W), Vector2(rect.size.x, W)), color)
+	draw_rect(Rect2(rect.position, Vector2(W, rect.size.y)), color)
+	draw_rect(Rect2(rect.position + Vector2(rect.size.x - W, 0), Vector2(W, rect.size.y)), color)
+
+func _draw_mini_amplified_triangle(rect: Rect2) -> void:
+	var cx := rect.position.x + rect.size.x * 0.5
+	var cy := rect.position.y + rect.size.y * 0.5
+	var r := rect.size.x * 0.22
+	var points := PackedVector2Array([
+		Vector2(cx, cy - r),
+		Vector2(cx - r * 0.87, cy + r * 0.5),
+		Vector2(cx + r * 0.87, cy + r * 0.5),
+	])
+	draw_colored_polygon(points, PieceEnhancements.AMPLIFIED_TRIANGLE_COLOR)
