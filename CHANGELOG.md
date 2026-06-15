@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## [0.3.0] — 2026-06-15
 
 ### New Features
 - **Piece enhancements** — Pieces can now spawn with a special enhancement, granted by certain techniques and consumables: Honed (silver) adds bonus attack when cleared, Amplified (yellow marker) multiplies attack when cleared, Gilded (gold) pays coins when cleared, and Reinforced (brown with a silver border) builds up a garbage-shield that blocks incoming attacks. A new shield bar next to the board tracks your current shield charges. Enhancements show on the board, the falling piece, and carry over through hold.
@@ -18,8 +18,6 @@
 - **Lunge animation** — The enemy portrait lunges toward the board when an attack fires, then eases back into place.
 - **Anticipation pulse** — At 80% or more charge the portrait pulses slightly, signalling the incoming attack.
 - **Damage feedback** — When the player deals damage the portrait flashes red and a floating damage number drifts upward.
-
-### Visual
 - **Line clear delay** — When a piece clears one or more rows, the board briefly pauses (~0.5s) and flashes the cleared rows before removing them and spawning the next piece. Gives a satisfying moment of feedback on every clear. The Full Potential keystone skips the delay entirely to match its instant-play identity.
 - **Technique visual feedback** — Techniques and keystones now announce themselves during play. When a clear fires, each contributing technique and keystone produces a floating popup label that drifts upward (white for attack, gold for economy-only, blue for keystone bonuses) near the keystone list in the bottom-left HUD. Popups cascade sequentially across the line clear delay window. Technique icons in the HUD pulse when their trigger condition is armed (e.g. Escalation ready). Keystones flash blue when their bonus fires. Every icon also plays a brief scale-pop at the moment it contributes to a clear.
 
