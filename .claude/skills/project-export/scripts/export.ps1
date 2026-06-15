@@ -1,4 +1,4 @@
-# Export Tetrouge and publish to GitHub + itch.io
+﻿# Export Tetrouge and publish to GitHub + itch.io
 # Usage: .\export.ps1 [-Version "0.2.3"] [-GodotPath "C:\path\to\godot.exe"] [-ItchUser "user"] [-ItchGame "slug"]
 # If -Version is omitted, the version is read from game/project.godot automatically.
 
@@ -136,7 +136,16 @@ Write-Host "Zipping Windows build -> $WinZip"
 Compress-Archive -Path "$WinDir\*" -DestinationPath $WinZip -Force
 
 Write-Host "Zipping Web build -> $WebZip"
-Compress-Archive -Path "$WebDir\*" -DestinationPath $WebZip -Force
+for ($attempt = 1; $attempt -le 5; $attempt++) {
+    try {
+        Compress-Archive -Path "$WebDir\*" -DestinationPath $WebZip -Force
+        break
+    } catch {
+        if ($attempt -eq 5) { throw }
+        Write-Host "Web zip locked, retrying in 3s... ($attempt/5)"
+        Start-Sleep -Seconds 3
+    }
+}
 
 # ── Tag and push to all remotes ────────────────────────────────────────────
 Write-Host "Tagging $Tag..."
@@ -159,7 +168,7 @@ try {
 }
 
 # ── Push web build to itch.io ──────────────────────────────────────────────
-Write-Host "Pushing web build to itch.io ($ItchUser/$ItchGame:html)..."
+Write-Host "Pushing web build to itch.io ($ItchUser/$ItchGame`:html)..."
 & $ButlerCmd push $WebDir "$ItchUser/$ItchGame`:html" --userversion $Version 2>&1
 if ($LASTEXITCODE -ne 0) {
     Write-Error "itch.io push failed (exit $LASTEXITCODE)"
