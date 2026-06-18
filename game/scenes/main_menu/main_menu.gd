@@ -23,7 +23,7 @@ func _on_continue() -> void:
 	var run := run_scene.instantiate()
 	get_tree().root.add_child(run)
 	queue_free()
-	run.start_round()
+	run.continue_run()
 
 func _on_new_run() -> void:
 	RunSave.delete()

@@ -2,6 +2,7 @@ class_name RunSave
 extends RefCounted
 
 const SAVE_PATH := "user://save.cfg"
+const SAVE_VERSION := 2
 
 static func exists() -> bool:
 	return FileAccess.file_exists(SAVE_PATH)
@@ -13,8 +14,9 @@ static func delete() -> void:
 static func save() -> void:
 	var cfg := ConfigFile.new()
 
-	cfg.set_value("run", "stage", RunState.stage)
-	cfg.set_value("run", "round_index", RunState.round_index)
+	cfg.set_value("run", "save_version", SAVE_VERSION)
+	cfg.set_value("run", "floor", RunState.floor)
+	cfg.set_value("run", "combat_rooms_cleared", RunState.combat_rooms_cleared_this_floor)
 	cfg.set_value("run", "shop_technique_slots", RunState.shop_technique_slots)
 	cfg.set_value("run", "consumable_capacity", RunState.consumable_capacity)
 
@@ -32,6 +34,22 @@ static func save() -> void:
 	cfg.set_value("rng", "seed", RunState.run_seed)
 	cfg.set_value("rng", "state", RunState.rng.state)
 
+	var rooms_data: Array = []
+	if RunState.current_floor_data != null:
+		for room in RunState.current_floor_data.rooms:
+			var fp_arr: Array = []
+			for tile in room.tile_footprint:
+				fp_arr.append([tile.x, tile.y])
+			rooms_data.append({
+				"type": room.room_type,
+				"encounter_subtype": room.encounter_subtype,
+				"footprint": fp_arr,
+				"visual_size": [room.visual_size.x, room.visual_size.y],
+				"cleared": room.cleared,
+				"adjacency": room.adjacency.duplicate(),
+			})
+	cfg.set_value("run", "floor_rooms", rooms_data)
+
 	cfg.save(SAVE_PATH)
 
 static func load_into_state() -> bool:
@@ -39,8 +57,12 @@ static func load_into_state() -> bool:
 	if cfg.load(SAVE_PATH) != OK:
 		return false
 
-	RunState.stage = cfg.get_value("run", "stage", 1)
-	RunState.round_index = cfg.get_value("run", "round_index", 0)
+	var version: int = cfg.get_value("run", "save_version", 1)
+	if version < SAVE_VERSION:
+		return false  # incompatible old save format
+
+	RunState.floor = cfg.get_value("run", "floor", 1)
+	RunState.combat_rooms_cleared_this_floor = cfg.get_value("run", "combat_rooms_cleared", 0)
 	RunState.shop_technique_slots = cfg.get_value("run", "shop_technique_slots", 3)
 	RunState.consumable_capacity = cfg.get_value("run", "consumable_capacity", 2)
 
@@ -62,6 +84,27 @@ static func load_into_state() -> bool:
 	RunState.run_seed = cfg.get_value("rng", "seed", randi())
 	RunState.rng.seed = RunState.run_seed
 	RunState.rng.state = cfg.get_value("rng", "state", 0)
+
+	var rooms_data: Array = cfg.get_value("run", "floor_rooms", [])
+	if not rooms_data.is_empty():
+		var df := DungeonFloor.new()
+		df.floor_number = RunState.floor
+		for rd in rooms_data:
+			var room := DungeonRoom.new()
+			room.room_type = rd.get("type", "")
+			room.encounter_subtype = rd.get("encounter_subtype", "")
+			var fp: Array[Vector2i] = []
+			for pair in rd.get("footprint", []):
+				fp.append(Vector2i(pair[0], pair[1]))
+			room.tile_footprint = fp
+			var vs: Array = rd.get("visual_size", [1, 1])
+			room.visual_size = Vector2i(vs[0], vs[1])
+			room.cleared = rd.get("cleared", false)
+			room.adjacency = rd.get("adjacency", [])
+			df.rooms.append(room)
+		RunState.current_floor_data = df
+	else:
+		RunState.current_floor_data = DungeonGenerator.generate(RunState.floor, RunState.rng)
 
 	return true
 

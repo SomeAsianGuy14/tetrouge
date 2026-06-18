@@ -9,8 +9,8 @@ const RunEndHelpers = preload("res://scenes/screens/run_end_helpers.gd")
 @onready var restart_button: Button = $Panel/ScrollContainer/VBox/RestartButton
 @onready var menu_button: Button = $Panel/ScrollContainer/VBox/MenuButton
 
-func setup(run_stats: RunStats, pbs: Dictionary, ante: int, round_index: int) -> void:
-	location_label.text = "Stage %d — %s\nFailed to defeat the enemy in time." % [ante, RunState.ROUND_NAMES[round_index]]
+func setup(run_stats: RunStats, pbs: Dictionary, floor: int) -> void:
+	location_label.text = "Floor %d — Failed to defeat the enemy in time." % floor
 
 	RunEndHelpers.add_stats_section(stats_container, run_stats, pbs)
 	RunEndHelpers.add_build_section(build_container)

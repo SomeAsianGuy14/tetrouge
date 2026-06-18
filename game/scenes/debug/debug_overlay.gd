@@ -35,7 +35,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func _refresh_labels() -> void:
 	if not visible:
 		return
-	lbl_round.text = "Stage %d — %s" % [RunState.stage, RunState.get_round_name()]
+	lbl_round.text = "Floor %d" % RunState.floor
 	lbl_coins.text = "Coins: %d" % Economy.coins
 
 	if run_manager:

@@ -1,18 +1,21 @@
 class_name RunManager
 extends Node
 
-const SCENE_TETRIS_BOARD := "res://scenes/tetris/tetris_board.tscn"
-const SCENE_SHOP := "res://scenes/shop/shop.tscn"
+const SCENE_TETRIS_BOARD       := "res://scenes/tetris/tetris_board.tscn"
+const SCENE_SHOP               := "res://scenes/shop/shop.tscn"
 const SCENE_KEYSTONE_SELECTION := "res://scenes/keystone_selection/keystone_selection.tscn"
-const SCENE_ROUND_SUCCESS := "res://scenes/screens/round_success.tscn"
-const SCENE_RUN_FAILURE := "res://scenes/screens/run_failure.tscn"
-const SCENE_RUN_VICTORY := "res://scenes/screens/run_victory.tscn"
-const SCENE_DEBUG_OVERLAY := "res://scenes/debug/debug_overlay.tscn"
-const SCENE_HOLD_DISPLAY := "res://scenes/game/hold_display.tscn"
-const SCENE_QUEUE_DISPLAY := "res://scenes/game/queue_display.tscn"
-const SCENE_ENEMY_DISPLAY := "res://scenes/game/enemy_display.tscn"
-const SCENE_PAUSE_MENU := "res://scenes/game/pause_menu.tscn"
-const SCENE_MAIN_MENU := "res://scenes/main_menu/main_menu.tscn"
+const SCENE_ROUND_SUCCESS      := "res://scenes/screens/round_success.tscn"
+const SCENE_RUN_FAILURE        := "res://scenes/screens/run_failure.tscn"
+const SCENE_RUN_VICTORY        := "res://scenes/screens/run_victory.tscn"
+const SCENE_DEBUG_OVERLAY      := "res://scenes/debug/debug_overlay.tscn"
+const SCENE_HOLD_DISPLAY       := "res://scenes/game/hold_display.tscn"
+const SCENE_QUEUE_DISPLAY      := "res://scenes/game/queue_display.tscn"
+const SCENE_ENEMY_DISPLAY      := "res://scenes/game/enemy_display.tscn"
+const SCENE_PAUSE_MENU         := "res://scenes/game/pause_menu.tscn"
+const SCENE_MAIN_MENU          := "res://scenes/main_menu/main_menu.tscn"
+const SCENE_DUNGEON_MAP        := "res://scenes/dungeon/dungeon_map.tscn"
+const SCENE_ENCOUNTER_ROOM     := "res://scenes/dungeon/encounter_room.tscn"
+
 const BASE_PAYOUT := 4
 const ROUND_TIERS := ["Small", "Big", "Elite", "Boss"]
 
@@ -50,6 +53,8 @@ const CLEAR_TYPE_DISPLAY: Dictionary = {
 
 var current_board: TetrisBoard = null
 var current_config: RoundConfig = null
+var _current_room: DungeonRoom = null
+var _pending_room_clear: DungeonRoom = null  # robbers-fight: original encounter room to mark on combat win
 
 var _debug_overlay: DebugOverlay = null
 var _hold_display: HoldDisplay = null
@@ -87,14 +92,12 @@ var _greedy_hands_active: bool = false
 
 var _blessed_stone_spent: bool = false
 
-# Piece enhancement grants: {type: String, remaining: int} or {} if none active
 var _enhancement_grant: Dictionary = {}
 var _enhancement_cadence: Dictionary = {}
 var _enhancement_grant_queue: Array = []
 var _garbage_shield: int = 0
 var _pending_enh_counts: Dictionary = {}
 
-# Coins earned during the round, tallied for the round-end breakdown
 var _round_technique_coins: int = 0
 var _round_enhancement_coins: int = 0
 var _round_income_breakdown: Dictionary = {}
@@ -113,7 +116,6 @@ var _paused: bool = false
 var _pause_menu: Control = null
 var _board_was_active: bool = false
 var _active_overlay: Control = null
-var _pending_keystone: bool = false
 var _round_ended: bool = false
 var _pending_round_end: Callable
 
@@ -132,7 +134,6 @@ func _setup_debug_tools() -> void:
 	var overlay_scene: PackedScene = load(SCENE_DEBUG_OVERLAY)
 	_debug_overlay = overlay_scene.instantiate()
 	add_child(_debug_overlay)
-
 	DevConsole.set_run_manager(self)
 
 func start_run() -> void:
@@ -145,7 +146,7 @@ func start_run() -> void:
 	RunState.technique_capacity = maxi(1, RunState.technique_capacity + _asc.get("technique_capacity_delta", 0))
 	RunState.emit_signal("run_started")
 	if _asc.get("skip_starter_keystone", false):
-		start_round()
+		_show_dungeon_map()
 	else:
 		_show_starter_keystone_selection()
 
@@ -159,15 +160,67 @@ func _show_starter_keystone_selection() -> void:
 
 func _on_starter_keystone_chosen(_keystone: Keystone) -> void:
 	hud.visible = true
-	start_round()
+	_show_dungeon_map()
 
-# ── Round start ───────────────────────────────────────────────────────────
+func continue_run() -> void:
+	_run_stats = RunStats.new()
+	_show_dungeon_map()
 
-func start_round() -> void:
+# ── Dungeon map ────────────────────────────────────────────────────────────
+
+func _show_dungeon_map() -> void:
+	_hide_board_ui()
+	var scene: PackedScene = load(SCENE_DUNGEON_MAP)
+	var map = scene.instantiate()
+	_active_overlay = map
+	add_child(map)
+	map.setup(RunState.current_floor_data)
+	map.connect("room_selected", _on_room_selected)
+
+func _on_room_selected(room: DungeonRoom) -> void:
+	if _active_overlay:
+		_active_overlay.queue_free()
+		_active_overlay = null
+	enter_room(room)
+
+func enter_room(room: DungeonRoom) -> void:
+	_current_room = room
+	match room.room_type:
+		DungeonRoom.TYPE_COMBAT_SMALL, DungeonRoom.TYPE_COMBAT_BIG, DungeonRoom.TYPE_COMBAT_ELITE, DungeonRoom.TYPE_BOSS:
+			_start_combat_room(room)
+		DungeonRoom.TYPE_SHOP:
+			_open_shop_room(room)
+		DungeonRoom.TYPE_ENCOUNTER:
+			_start_encounter_room(room)
+
+func _hide_board_ui() -> void:
+	board_container.visible = false
+	hud.visible = false
+	if _enemy_display:
+		_enemy_display.queue_free()
+		_enemy_display = null
+	if _attack_bar:
+		_attack_bar.queue_free()
+		_attack_bar = null
+	if _shield_bar:
+		_shield_bar.queue_free()
+		_shield_bar = null
+
+func _show_board_ui() -> void:
+	board_container.visible = true
+	hud.visible = true
+
+# ── Combat room ────────────────────────────────────────────────────────────
+
+func _start_combat_room(room: DungeonRoom) -> void:
+	_show_board_ui()
+	start_round(room)
+
+func start_round(room: DungeonRoom) -> void:
 	_round_ended = false
 	_garbage_packets = []
 	_deferred_reflect_lines = 0
-	current_config = _build_round_config()
+	current_config = _build_round_config(room)
 	hud.setup(current_config)
 	quota_accumulated = 0.0
 	surplus_attack = 0
@@ -215,7 +268,6 @@ func start_round() -> void:
 	current_board.das_delay = Settings.load_das()
 	current_board.arr_rate = Settings.load_arr()
 	current_board.sdf_multiplier = Settings.load_sdf()
-	# Apply Persistence technique: doubles don't break B2B
 	if RunState.has_technique("persistence"):
 		current_config.b2b_persists_on_doubles = true
 	current_board.setup(current_config)
@@ -250,7 +302,6 @@ func start_round() -> void:
 	var enemy_scene: PackedScene = load(SCENE_ENEMY_DISPLAY)
 	_enemy_display = enemy_scene.instantiate()
 	add_child(_enemy_display)
-	# Anchor panel to the right side of the viewport (x≈900 to right edge, full height)
 	_enemy_display.set_anchor_and_offset(SIDE_LEFT,   0.0, 900.0)
 	_enemy_display.set_anchor_and_offset(SIDE_TOP,    0.0,   0.0)
 	_enemy_display.set_anchor_and_offset(SIDE_RIGHT,  1.0,   0.0)
@@ -273,23 +324,30 @@ func start_round() -> void:
 
 	hud._refresh_backpack_slots()
 
-func _build_round_config() -> RoundConfig:
+func _build_round_config(room: DungeonRoom) -> RoundConfig:
 	var cfg := RoundConfig.new()
 	cfg.rng = RunState.rng
-	cfg.quota = RunState.calculate_quota(RunState.stage, RunState.round_index)
+	var tier := room.get_combat_tier()
+	var base_quota := RunState.calculate_quota(RunState.floor, tier)
 	var _asc_quota: float = AscensionManager.get_modifiers(AscensionManager.current_level).get("quota_mult", 1.0)
 	if _asc_quota != 1.0:
-		cfg.quota = ceili(cfg.quota * _asc_quota)
+		base_quota = ceili(base_quota * _asc_quota)
+
+	# Within-floor scaling for non-boss rooms
+	if not RunState.is_boss_room(room):
+		cfg.quota = ceili(base_quota * (1.0 + RunState.combat_rooms_cleared_this_floor * 0.08))
+	else:
+		cfg.quota = base_quota
 
 	for keystone in RunState.keystones:
 		keystone.apply_to_config(cfg)
 
-	var enemy := _draw_enemy()
+	var enemy := _draw_enemy(tier)
 	cfg.enemy = enemy
-	var _stage_scalar := maxf(0.5, 1.0 - (RunState.stage - 1) * 0.1)
-	var _lines_bonus := (RunState.stage - 1) / 2
+	var _stage_scalar := maxf(0.5, 1.0 - (RunState.floor - 1) * 0.1)
+	var _lines_bonus := (RunState.floor - 1) / 2
 	var _imin: float; var _imax: float; var _lmin: int; var _lmax: int
-	match enemy.tier:
+	match tier:
 		"Small":
 			_imin = SMALL_INTERVAL_MIN; _imax = SMALL_INTERVAL_MAX
 			_lmin = SMALL_LINES_MIN;    _lmax = SMALL_LINES_MAX
@@ -309,7 +367,7 @@ func _build_round_config() -> RoundConfig:
 	cfg.garbage_lines_min = _lmin + _lines_bonus + _asc.get("extra_lines", 0)
 	cfg.garbage_lines_max = _lmax + _lines_bonus + _asc.get("extra_lines", 0)
 
-	cfg.time_limit = RunState.calculate_time_limit(RunState.stage)
+	cfg.time_limit = RunState.calculate_time_limit(RunState.floor)
 
 	if enemy.ability:
 		cfg.boss_modifier = enemy.ability
@@ -318,11 +376,9 @@ func _build_round_config() -> RoundConfig:
 	cfg.show_timer = RunState.has_keystone("golden_watch") or \
 		(cfg.boss_modifier != null and cfg.boss_modifier.id == "the_blitz")
 
-	# Glass Cannon: +2 incoming garbage lines per wave
 	if RunState.has_technique("glass_cannon"):
 		cfg.garbage_lines_min += 2
 		cfg.garbage_lines_max += 2
-	# Greedy Hands: enemy gains +1 attack per wave (reduce interval to simulate)
 	if RunState.has_technique("greedy_hands"):
 		cfg.garbage_lines_min += 1
 		cfg.garbage_lines_max += 1
@@ -336,8 +392,7 @@ func _load_enemy_pool(tier: String) -> Array:
 			result.append(res)
 	return result
 
-func _draw_enemy() -> Enemy:
-	var tier: String = ROUND_TIERS[RunState.round_index]
+func _draw_enemy(tier: String) -> Enemy:
 	var pool := _load_enemy_pool(tier)
 	var available: Array
 	if tier == "Boss":
@@ -351,6 +406,54 @@ func _draw_enemy() -> Enemy:
 	if tier == "Boss":
 		RunState.used_boss_enemy_ids.append(chosen.id)
 	return chosen
+
+# ── Shop room ──────────────────────────────────────────────────────────────
+
+func _open_shop_room(room: DungeonRoom) -> void:
+	_hide_board_ui()
+	var scene: PackedScene = load(SCENE_SHOP)
+	var shop = scene.instantiate()
+	_active_overlay = shop
+	add_child(shop)
+	shop.connect("shop_closed", _on_shop_room_closed.bind(room))
+
+func _on_shop_room_closed(room: DungeonRoom) -> void:
+	if _active_overlay:
+		_active_overlay = null
+	room.cleared = true
+	RunSave.save()
+	_show_dungeon_map()
+
+# ── Encounter room ─────────────────────────────────────────────────────────
+
+func _start_encounter_room(room: DungeonRoom) -> void:
+	_hide_board_ui()
+	var scene: PackedScene = load(SCENE_ENCOUNTER_ROOM)
+	var encounter = scene.instantiate()
+	_active_overlay = encounter
+	add_child(encounter)
+	encounter.setup(room.encounter_subtype, self)
+	encounter.connect("encounter_completed", _on_encounter_completed.bind(room))
+
+func _on_encounter_completed(room: DungeonRoom) -> void:
+	if _active_overlay:
+		_active_overlay.queue_free()
+		_active_overlay = null
+	room.cleared = true
+	RunSave.save()
+	_show_dungeon_map()
+
+# Special case: Robbers "fight" choice triggers an Elite combat
+func start_robbers_combat() -> void:
+	if _active_overlay:
+		_active_overlay.queue_free()
+		_active_overlay = null
+	_pending_room_clear = _current_room
+	var elite_room := DungeonRoom.new()
+	elite_room.room_type = DungeonRoom.TYPE_COMBAT_ELITE
+	_current_room = elite_room
+	_show_board_ui()
+	start_round(elite_room)
 
 # ── Per-frame update ──────────────────────────────────────────────────────
 
@@ -523,47 +626,43 @@ func _tick_burning_board(delta: float) -> void:
 
 func _on_piece_locked() -> void:
 	_locked_pivot_col = current_board.current_pivot.x if current_board else -1
-	if _technique_round_state:
-		var rs := _technique_round_state
-		rs.pieces_placed += 1
-		if rs.pieces_placed % 10 == 0:
-			rs.escalation_pending = true
-		if rs.patience_cooldown_pieces > 0:
-			rs.patience_cooldown_pieces -= 1
-		# Patience: arm the next clear's bonus when hold is used (any piece, not just clears)
-		if _held_this_piece and rs.patience_cooldown_pieces == 0:
-			rs.patience_pending = true
-		# Constant Pressure: piece locked within 1 second of spawning
-		var elapsed: float = Time.get_ticks_msec() / 1000.0 - _piece_spawn_time
-		if elapsed <= 1.0:
-			rs.constant_pressure_pending = true
-		# Flow Step: 4 consecutive pieces without rotating
-		if _rotations_this_piece == 0:
-			rs.no_rotate_streak += 1
-			if rs.no_rotate_streak >= 4:
-				rs.flow_step_pending = true
-		else:
-			rs.no_rotate_streak = 0
-		# Good Planning: 5 consecutive pieces without using hold
-		if _held_this_piece:
-			rs.good_planning_consecutive_no_hold = 0
-			rs.good_planning_pending = false
-		else:
-			rs.good_planning_consecutive_no_hold += 1
-			if rs.good_planning_consecutive_no_hold >= 5:
-				rs.good_planning_pending = true
-		# Last Stand: one-shot shield grant once the board reaches a height threshold
-		if not rs.last_stand_triggered and current_board:
-			var height: int = current_board.summit_height
-			for t in RunState.techniques:
-				if t.effect_type == "height_shield":
-					var threshold: float = t.params.get("threshold_pct", 0.8)
-					if height >= 20 * threshold:
-						_garbage_shield += t.params.get("shield", 10)
-						rs.last_stand_triggered = true
-						if _shield_bar:
-							_shield_bar.update_charges(_garbage_shield)
-						break
+	if _technique_round_state == null:
+		return
+	var rs := _technique_round_state
+	rs.pieces_placed += 1
+	if rs.pieces_placed % 10 == 0:
+		rs.escalation_pending = true
+	if rs.patience_cooldown_pieces > 0:
+		rs.patience_cooldown_pieces -= 1
+	if _held_this_piece and rs.patience_cooldown_pieces == 0:
+		rs.patience_pending = true
+	var elapsed: float = Time.get_ticks_msec() / 1000.0 - _piece_spawn_time
+	if elapsed <= 1.0:
+		rs.constant_pressure_pending = true
+	if _rotations_this_piece == 0:
+		rs.no_rotate_streak += 1
+		if rs.no_rotate_streak >= 4:
+			rs.flow_step_pending = true
+	else:
+		rs.no_rotate_streak = 0
+	if _held_this_piece:
+		rs.good_planning_consecutive_no_hold = 0
+		rs.good_planning_pending = false
+	else:
+		rs.good_planning_consecutive_no_hold += 1
+		if rs.good_planning_consecutive_no_hold >= 5:
+			rs.good_planning_pending = true
+	if not rs.last_stand_triggered and current_board:
+		var height: int = current_board.summit_height
+		for t in RunState.techniques:
+			if t.effect_type == "height_shield":
+				var threshold: float = t.params.get("threshold_pct", 0.8)
+				if height >= 20 * threshold:
+					_garbage_shield += t.params.get("shield", 10)
+					rs.last_stand_triggered = true
+					if _shield_bar:
+						_shield_bar.update_charges(_garbage_shield)
+					break
 
 func _reset_enhancement_round_state() -> void:
 	_enhancement_grant = {}
@@ -585,10 +684,6 @@ func _on_piece_spawned(_piece_type: String) -> void:
 	if current_board:
 		current_board.current_enhancement = assigned
 
-# Advances grant/cadence/queue state in place (mutating the given dictionaries
-# and array) and returns the enhancement type assigned to this spawn, or ""
-# for none. Shared by _on_piece_spawned and preview_enhancements so the
-# preview stays in lockstep with the real assignment logic.
 static func _advance_enhancement_state(grant: Dictionary, cadence: Dictionary, techniques: Array, keystones: Array, grant_queue: Array) -> String:
 	var assigned := ""
 	if grant.get("remaining", 0) > 0:
@@ -621,8 +716,6 @@ static func _advance_enhancement_state(grant: Dictionary, cadence: Dictionary, t
 				assigned = ks.piece_enhance_type
 	return PieceEnhancements.resolve_type(assigned)
 
-# Side-effect-free preview of the next `count` enhancement assignments,
-# simulated on copies of the current grant/cadence/queue state.
 func preview_enhancements(count: int) -> Array[String]:
 	var grant: Dictionary = _enhancement_grant.duplicate()
 	var cadence: Dictionary = _enhancement_cadence.duplicate()
@@ -632,8 +725,6 @@ func preview_enhancements(count: int) -> Array[String]:
 		result.append(_advance_enhancement_state(grant, cadence, RunState.techniques, RunState.keystones, grant_queue))
 	return result
 
-# Queues an enhancement grant: extends the active grant if it matches type,
-# activates it immediately if none is active, or appends to the FIFO queue.
 func _queue_enhancement_grant(enh_type: String, pieces: int) -> void:
 	if _enhancement_grant.is_empty():
 		_enhancement_grant = {"type": enh_type, "remaining": pieces}
@@ -642,8 +733,6 @@ func _queue_enhancement_grant(enh_type: String, pieces: int) -> void:
 	else:
 		_enhancement_grant_queue.append({"type": enh_type, "remaining": pieces})
 
-# Sums PieceEnhancements per-cell constants with keystone *_bonus_per_cell
-# fields to get the effective per-cell magnitudes for clear-time benefits.
 func _effective_enhancement_params() -> Dictionary:
 	var honed_per_cell: int = PieceEnhancements.HONED_ATTACK_PER_CELL
 	var reinforced_per_cell: int = PieceEnhancements.REINFORCED_SHIELD_PER_CELL
@@ -661,16 +750,12 @@ func _effective_enhancement_params() -> Dictionary:
 		"amplified": amplified_per_cell,
 	}
 
-# Doubles enhancement cell counts if any owned keystone grants
-# double_enhancement_benefits (Jack of All Trades).
 func _effective_enhancement_counts(counts: Dictionary) -> Dictionary:
 	for ks in RunState.keystones:
 		if ks.double_enhancement_benefits:
 			return PieceEnhancements.double_counts(counts)
 	return counts
 
-# Pays Gilded coins and Reinforced shield charges immediately for cleared
-# enhanced cells, returning popup events for every contributing type.
 func _apply_enhancement_clear_benefits(counts: Dictionary) -> Array:
 	var events: Array = []
 	var effective: Dictionary = _effective_enhancement_counts(counts)
@@ -722,7 +807,6 @@ func _on_line_clear_delay_started(clear_type: String) -> void:
 	_handle_technique_flags(eval_result.get("flags", []))
 	_update_round_state_after_eval(ctx, eval_result)
 	var technique_events: Array = eval_result.get("events", [])
-	# Pre-compute keystone events using approximate attack (raw + technique bonus)
 	var pre_total := raw + _pre_evaluated_technique_atk
 	var ks_events := _collect_keystone_events(pre_total, clear_type)
 	_fire_keystone_visuals(ks_events)
@@ -770,12 +854,10 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 	var is_bonus_event: bool = event_type == "b2b" or event_type == "combo"
 	var ctx := _build_attack_context(raw_attack, event_type)
 
-	# Technique evaluation (only on primary clear events, not b2b/combo bonus events)
 	var technique_atk: int = 0
 	var technique_events: Array = []
 	if not is_bonus_event and _technique_round_state:
 		if _technique_pre_evaluated:
-			# Already evaluated at delay start — just use the stored delta
 			technique_atk = _pre_evaluated_technique_atk
 			_technique_pre_evaluated = false
 			_pre_evaluated_technique_atk = 0
@@ -808,7 +890,6 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 			if amp > 1.0:
 				modified = int(float(modified) * amp)
 
-	# Apply boss modifier quota filter
 	if not is_bonus_event and current_config.boss_modifier:
 		if not current_config.boss_modifier.attack_counts_toward_quota(event_type):
 			return
@@ -839,7 +920,6 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 					qualifying += 1
 			modified += tag_bonus * qualifying
 
-	# The Best Defense: convert a portion of the finalized attack into shield
 	if not is_bonus_event and ctx.lines_cleared > 0:
 		for ks in RunState.keystones:
 			if ks.attack_to_shield_pct > 0.0:
@@ -866,7 +946,6 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 		if reflect_lines > 0:
 			_deferred_reflect_lines += reflect_lines
 
-	# No-delay path: collect keystone events and schedule everything now
 	if not is_bonus_event and not _technique_pre_evaluated:
 		var ks_events := _collect_keystone_events(modified, event_type)
 		_fire_keystone_visuals(ks_events)
@@ -910,7 +989,7 @@ func _handle_technique_flags(flags: Array) -> void:
 			"burning_board":
 				_burning_board_active = true
 			"glass_cannon":
-				pass  # +2 incoming handled in _build_round_config via technique check
+				pass
 			"greedy_hands":
 				_greedy_hands_active = true
 			_:
@@ -928,9 +1007,8 @@ func _update_round_state_after_eval(ctx: AttackContext, _eval: Dictionary) -> vo
 		rs.attack_events_this_round += 1
 		rs.total_garbage_sent += ctx.garbage_sent
 
-		# Apply Whirl keystone: T-spins count as 2 combo steps
 		if ctx.tspin != "" and RunState.has_keystone("whirl") and current_board:
-			current_board.combo += 1  # already incremented once in board; add 1 more
+			current_board.combo += 1
 
 		if ctx.tspin != "":
 			rs.tspin_count += 1
@@ -946,13 +1024,12 @@ func _update_round_state_after_eval(ctx: AttackContext, _eval: Dictionary) -> vo
 			rs.last_clear_was_tetris = false
 			rs.tetris_echo_pending = false
 
-		# Consume one-shot pending flags
 		if rs.opening_blow_used == false:
 			rs.opening_blow_used = true
 		if rs.follow_up_pending:
 			rs.follow_up_pending = false
 		else:
-			rs.follow_up_pending = true  # arm for next clear
+			rs.follow_up_pending = true
 		if rs.tetris_echo_pending and ctx.lines_cleared != 4:
 			rs.tetris_echo_pending = false
 		if rs.escalation_pending:
@@ -969,7 +1046,6 @@ func _update_round_state_after_eval(ctx: AttackContext, _eval: Dictionary) -> vo
 		if rs.good_planning_pending:
 			rs.good_planning_pending = false
 
-		# Combo payout: mark used; coins already credited via TechniqueEvaluator
 		if not rs.combo_payout_used:
 			for t in RunState.techniques:
 				if t.effect_type == "economy" and t.params.get("trigger", "") == "combo_payout" \
@@ -977,11 +1053,9 @@ func _update_round_state_after_eval(ctx: AttackContext, _eval: Dictionary) -> vo
 					rs.combo_payout_used = true
 					break
 
-		# Patience cooldown
 		if _held_this_piece and rs.patience_cooldown_pieces == 0:
 			rs.patience_pending = true
 
-	# Reset per-piece flags
 	_held_this_piece = false
 	_used_soft_drop_this_piece = false
 	_rotations_this_piece = 0
@@ -1005,8 +1079,6 @@ func _is_attack_suppressed(event_type: String) -> bool:
 			return true
 	return false
 
-# Flat bonus a single keystone grants for one attack event. Static and shared
-# between damage application and popup collection so the two can't drift.
 static func compute_keystone_flat_bonus(ks: Keystone, event_type: String, techniques: Array, t_rotations: int) -> int:
 	var b := 0
 	match event_type:
@@ -1031,7 +1103,6 @@ static func compute_keystone_flat_bonus(ks: Keystone, event_type: String, techni
 						b += ks.per_technique_tspin_bonus
 		"b2b":
 			b += ks.b2b_bonus
-	# Dizzy: >4 T rotations adds +4 to the next T-spin
 	if ks.dizzy and event_type.begins_with("tspin") and event_type != "tspin_mini" and t_rotations > 4:
 		b += 4
 	return b
@@ -1045,7 +1116,6 @@ func _apply_keystone_flat_bonuses(attack: int, event_type: String) -> int:
 func _apply_keystone_multipliers(attack: int, event_type: String) -> int:
 	if attack == 0:
 		return 0
-	var pre_mult_attack := attack
 	var mult := 1.0
 	for ks in RunState.keystones:
 		var ks_mult := 1.0
@@ -1074,7 +1144,6 @@ func _apply_keystone_multipliers(attack: int, event_type: String) -> int:
 					ks_mult *= ks.pc_first_multiplier
 				elif ks.pc_after_first_multiplier > 0.0 and _pc_count_this_round > 0:
 					ks_mult *= ks.pc_after_first_multiplier
-		# Risky Business: any cleared row in top 5 visible rows doubles damage
 		if ks.risky_business and event_type not in ["b2b", "combo"]:
 			for row_idx in _last_cleared_rows:
 				if row_idx >= TetrisBoard.HIDDEN_ROWS and row_idx < TetrisBoard.HIDDEN_ROWS + 5:
@@ -1083,19 +1152,14 @@ func _apply_keystone_multipliers(attack: int, event_type: String) -> int:
 		mult *= ks_mult
 	return int(float(attack) * mult)
 
-
-# ── Keystone visual helpers ───────────────────────────────────────────────
-
 func _collect_keystone_events(attack: int, event_type: String) -> Array:
 	if _is_attack_suppressed(event_type):
 		return []
 	var events: Array = []
-	# Flat bonuses
 	for ks in RunState.keystones:
 		var b := compute_keystone_flat_bonus(ks, event_type, RunState.techniques, _t_spin_rotations)
 		if b > 0:
 			events.append({"name": ks.display_name, "id": ks.id, "bonus": b})
-	# Multiplier bonus — compute total and attribute to first contributing keystone
 	var mult := 1.0
 	for ks in RunState.keystones:
 		var km := 1.0
@@ -1150,7 +1214,6 @@ func _spawn_clear_type_popup(clear_type: String) -> void:
 
 	var lbl: Label
 	if is_instance_valid(_active_clear_popup_label):
-		# A previous popup is still fading out; override it instead of stacking.
 		if _active_clear_popup_tween:
 			_active_clear_popup_tween.kill()
 		lbl = _active_clear_popup_label
@@ -1353,25 +1416,36 @@ func _end_round(success: bool) -> void:
 		"enhancements": _round_enhancement_coins,
 	}
 
-	var was_boss := RunState.is_boss_round()
-	RunState.advance_round()
+	var was_boss := RunState.is_boss_room(_current_room)
 
-	if RunState.is_run_complete():
-		_pending_round_end = _show_victory
+	if was_boss:
+		# Increment counter before advancing (for stats), then advance floor
+		if _enemy_display:
+			_enemy_display.death_animation_finished.connect(_on_boss_death_animation_finished, CONNECT_ONE_SHOT)
+			_enemy_display.play_death_animation()
+		else:
+			_on_boss_death_animation_finished()
 	else:
-		_pending_keystone = was_boss
-		_pending_round_end = _show_round_success
-
-	if _enemy_display:
-		_enemy_display.death_animation_finished.connect(_on_death_animation_finished, CONNECT_ONE_SHOT)
-		_enemy_display.play_death_animation()
-	else:
-		_on_death_animation_finished()
+		# Non-boss combat: increment counter, show income, then return to map
+		RunState.combat_rooms_cleared_this_floor += 1
+		_current_room.cleared = true
+		if _pending_room_clear != null:
+			_pending_room_clear.cleared = true
+			_pending_room_clear = null
+		_pending_round_end = _show_round_success_then_map
+		if _enemy_display:
+			_enemy_display.death_animation_finished.connect(_on_death_animation_finished, CONNECT_ONE_SHOT)
+			_enemy_display.play_death_animation()
+		else:
+			_on_death_animation_finished()
 
 func _on_death_animation_finished() -> void:
 	var fn := _pending_round_end
 	_pending_round_end = Callable()
 	fn.call()
+
+func _on_boss_death_animation_finished() -> void:
+	_show_round_success_then_boss_cleared()
 
 func _apply_keystone_economy() -> int:
 	var total := 0
@@ -1389,11 +1463,9 @@ func _calculate_surplus_income() -> int:
 		if technique.effect_type == "economy" and technique.params.get("trigger", "") == "surplus":
 			var divisor: int = technique.params.get("divisor", 3)
 			income += surplus_attack / divisor
-	# Greedy Hands: +2 coins per round
 	if _greedy_hands_active:
 		income += 2
-	# Bounty List: +10 coins on boss kill
-	if RunState.is_boss_round() and RunState.has_technique("bounty_list"):
+	if RunState.is_boss_room(_current_room) and RunState.has_technique("bounty_list"):
 		income += 10
 	return income
 
@@ -1404,12 +1476,9 @@ func _on_lock_processed() -> void:
 	var _did_clear := not _last_cleared_rows.is_empty()
 	_last_cleared_rows = []
 	_piece_spawn_time = Time.get_ticks_msec() / 1000.0
-	# Switch-Up: arm for next piece based on whether THIS piece was hard-dropped
 	if _technique_round_state:
 		_technique_round_state.switch_up_armed = _hard_drop_used_this_piece
 	_hard_drop_used_this_piece = false
-	# Restore ARR after the flash-step piece locks, then arm ARR=0 for the next
-	# piece if a flash step triggered on this lock (pending set during evaluation)
 	if _flash_step_arr_active and current_board:
 		current_board.arr_rate = 0.0 if _has_instant_arr() else Settings.load_arr()
 		_flash_step_arr_active = false
@@ -1431,45 +1500,47 @@ func _on_board_updated() -> void:
 
 # ── Scene transitions ─────────────────────────────────────────────────────
 
-func _show_round_success() -> void:
+func _show_round_success_then_map() -> void:
 	var scene: PackedScene = load(SCENE_ROUND_SUCCESS)
 	var screen = scene.instantiate()
 	_active_overlay = screen
 	add_child(screen)
-	screen.connect("proceed", _on_success_proceed)
+	screen.connect("proceed", _on_round_success_proceed_to_map)
 	screen.setup(_round_income_breakdown.base, _round_income_breakdown.techniques, _round_income_breakdown.enhancements)
 
-func _on_success_proceed() -> void:
-	if _pending_keystone:
-		_pending_keystone = false
-		_show_keystone_selection()
-	else:
-		_show_shop()
-
-func _show_shop() -> void:
-	for child in get_children():
-		if child is CanvasItem:
-			child.visible = false
-	var scene: PackedScene = load(SCENE_SHOP)
-	var shop = scene.instantiate()
-	add_child(shop)
-	shop.connect("shop_closed", _on_shop_closed)
-
-func _on_shop_closed() -> void:
-	board_container.visible = true
-	hud.visible = true
+func _on_round_success_proceed_to_map() -> void:
+	_active_overlay = null
 	RunSave.save()
-	start_round()
+	_show_dungeon_map()
 
-func _show_keystone_selection() -> void:
+func _show_round_success_then_boss_cleared() -> void:
+	var scene: PackedScene = load(SCENE_ROUND_SUCCESS)
+	var screen = scene.instantiate()
+	_active_overlay = screen
+	add_child(screen)
+	screen.connect("proceed", _on_boss_cleared)
+	screen.setup(_round_income_breakdown.base, _round_income_breakdown.techniques, _round_income_breakdown.enhancements)
+
+func _on_boss_cleared() -> void:
+	_active_overlay = null
+	_current_room.cleared = true
+
+	if RunState.floor >= RunState.TOTAL_FLOORS:
+		_show_victory()
+		return
+
+	RunState.advance_floor()
+	_show_keystone_selection_then_map()
+
+func _show_keystone_selection_then_map() -> void:
 	var scene: PackedScene = load(SCENE_KEYSTONE_SELECTION)
 	var screen = scene.instantiate()
 	get_tree().root.add_child(screen)
 	screen.setup(false)
-	screen.connect("keystone_chosen", _on_keystone_chosen)
+	screen.connect("keystone_chosen", _on_floor_keystone_chosen)
 
-func _on_keystone_chosen(_keystone: Keystone) -> void:
-	_show_shop()
+func _on_floor_keystone_chosen(_keystone: Keystone) -> void:
+	_show_dungeon_map()
 
 func _compute_pbs(run_stats: RunStats) -> Dictionary:
 	var pbs: Dictionary = {}
@@ -1483,11 +1554,13 @@ func _compute_pbs(run_stats: RunStats) -> Dictionary:
 
 func _show_failure() -> void:
 	RunSave.delete()
+	if not is_inside_tree():
+		return
 	var pbs: Dictionary = _compute_pbs(_run_stats) if _run_stats else {}
 	var scene: PackedScene = load(SCENE_RUN_FAILURE)
 	var screen = scene.instantiate()
 	add_child(screen)
-	screen.setup(_run_stats, pbs, RunState.stage, RunState.round_index)
+	screen.setup(_run_stats, pbs, RunState.floor)
 
 func _show_victory() -> void:
 	RunSave.delete()
@@ -1513,9 +1586,6 @@ func apply_consumable(consumable: Consumable) -> void:
 		var became_active: bool = _enhancement_grant.is_empty() \
 			or _enhancement_grant.get("type", "") == consumable.enhance_type
 		_queue_enhancement_grant(consumable.enhance_type, consumable.enhance_pieces)
-		# If the piece currently in play has no enhancement yet and this grant
-		# is active, apply it immediately instead of waiting for the next
-		# spawn, consuming one charge from the grant for it.
 		if became_active and current_board and current_board.current_enhancement == "":
 			current_board.current_enhancement = PieceEnhancements.resolve_type(_enhancement_grant.get("type", ""))
 			current_board.queue_redraw()
@@ -1555,6 +1625,6 @@ func _apply_consumable_surge(attack: int, event_type: String) -> int:
 	if event_type == "b2b" or event_type == "combo":
 		return attack * 2
 	if attack == 0:
-		return 0  # don't burn a surge charge on a zero-damage clear
+		return 0
 	current_config.consumable_surge_clears_remaining -= 1
 	return attack * 2

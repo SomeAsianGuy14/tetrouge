@@ -1,11 +1,13 @@
 [gd_resource type="Resource" script_class="Enemy" format=3 uid="uid://88tuwfs3lyy"]
 
 [ext_resource type="Script" uid="uid://dqm7x3n1vp5fy" path="res://resources/enemy.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://upqy7bqaxoea" path="res://assets/enemies/krug.png" id="2_peuah"]
 
 [resource]
 script = ExtResource("1")
 id = "rock_crawler"
 display_name = "Rock Crawler"
 color = Color(0.55, 0.3, 0.1, 1)
+sprite = ExtResource("2_peuah")
 tier = "Small"
 garbage_interval = 20.0

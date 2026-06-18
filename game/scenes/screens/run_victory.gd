@@ -12,7 +12,7 @@ const RunEndHelpers = preload("res://scenes/screens/run_end_helpers.gd")
 @onready var menu_button: Button = $Panel/ScrollContainer/VBox/MenuButton
 
 func setup(run_stats: RunStats, pbs: Dictionary, final_coins: int, beaten_level: int) -> void:
-	header_label.text = "Victory!\nAll 5 stages cleared."
+	header_label.text = "Victory!\nAll 4 floors cleared."
 	coins_label.text = "Final coins: %d" % final_coins
 	var next_level := beaten_level + 1
 	if next_level <= 6:

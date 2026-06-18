@@ -100,9 +100,8 @@ func _build_ui() -> void:
 	info_vbox.add_theme_constant_override("separation", 6)
 	vbox.add_child(info_vbox)
 
-	# Compact stage/round label (e.g. "2-3" or "2-BOSS")
 	_round_label = Label.new()
-	_round_label.text = format_round_label(RunState.stage, RunState.round_index)
+	_round_label.text = format_round_label(RunState.floor, _enemy != null and _enemy.ability != null)
 	_round_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_round_label.add_theme_font_size_override("font_size", 14)
 	info_vbox.add_child(_round_label)
@@ -336,7 +335,7 @@ func _spawn_damage_number(amount: int) -> void:
 
 # ── Helpers ────────────────────────────────────────────────────────────────
 
-static func format_round_label(stage: int, round_index: int) -> String:
-	if round_index == 3:
-		return "%d-BOSS" % stage
-	return "%d-%d" % [stage, round_index + 1]
+static func format_round_label(floor: int, is_boss: bool) -> String:
+	if is_boss:
+		return "Floor %d — BOSS" % floor
+	return "Floor %d" % floor

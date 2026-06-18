@@ -3,14 +3,31 @@
 ## Unreleased
 
 ### New Features
+- **Dungeon floor exploration** — Runs are now structured as 4 floors, each represented by a 6×6 dungeon map you navigate room by room. You start at the bottom-left corner and work toward the top-right Boss room, which is always visible from the start.
+- **Dungeon map** — Each floor has 8–12 rooms of varying sizes. Fog of war hides rooms you can't reach yet; cleared-room neighbors are revealed and show their type. You choose your own path.
+- **Room variety** — Eight new encounter rooms alongside the standard combat rooms and shops: Wishing Well (gamble coins for a payout), Altar of Techniques (sacrifice a technique for a random one), Altar of Keystones (sacrifice a keystone for a random one), Library (pick a free technique from a pool of 10), Robbers (surrender gold or fight an Elite), Unfortunate Head Trauma (lose a random technique), Pickpocket (lose half your coins), and Museum (claim a free keystone on display).
+- **Within-floor scaling** — The more combat rooms you clear before fighting the boss, the tougher (and more rewarding) later encounters become. Boss difficulty is fixed per floor, giving you a meaningful choice between a riskier longer path and a quicker beeline.
+- **Shop as optional room** — The shop is now a map room you discover and opt into rather than appearing automatically after every fight.
 - **Run stats screen** — After every run (win or loss) a stats summary shows Total Damage, Best Combo, Best B2B, Quads, T-Spins, Perfect Clears, Run Time, and Most Common Clear. Personal-best values are marked with a gold ★ PB badge. A build summary lists the keystones and techniques you were running.
 - **Stats menu** — A new Stats button on the main menu opens a persistent stats screen with three sections: Career (runs played, victories, best ascension), Personal Bests (best single-run damage, longest combo, longest B2B), and Lifetime Totals (total damage, quads, T-spins, total play time).
 - **The Best Defense (keystone)** — Converts 25% of each attack into garbage shield charges. Moved from the technique pool to the keystone pool to better reflect its power level.
 
 ### Balance
+- **4 floors replace 5 stages** — Run length is unchanged overall; enemy quota now scales exponentially per floor (same formula, retuned for 4 tiers). Technique capacity grows from 4 at floor 1 to 7 at floor 4.
+
+### Balance
 - **Enemy HP scales exponentially** — Enemy HP now doubles each stage (base × 2ⁿ⁻¹) with a growing per-round offset, replacing the previous flat +15/stage formula. Stage 1 is unchanged (20–44 HP). Stage 2 rises to 40–82, stage 3 to 80–140, stage 4 to 160–238, and stage 5 to 320–416. Builds that came online early no longer trivialise mid-game enemies.
 
 ### Bug Fixes
+- **All dungeon rooms are now reachable** — Rooms that were placed with no adjacency path from the start room are now automatically removed before the floor is finalised, so you can never encounter a room on the map that is permanently inaccessible.
+- **Defeating the Robbers now clears the encounter room** — Choosing to fight and winning the Elite combat now correctly marks the Robbers encounter room as cleared so it no longer shows as incomplete on the dungeon map.
+- **Library shows its technique list** — The scroll area in the Library encounter now constrains button widths correctly so all available techniques are visible and selectable.
+- **Wishing Well probability now accumulates correctly** — Each failed throw reliably increases the success chance by 1%; the display now reflects the true running probability.
+- **Enemy health bar no longer persists into the shop or encounter rooms** — The enemy display, attack bar, and shield bar are now properly freed when leaving a combat room.
+- **Boss room tile is now clickable** — The Boss tile on the dungeon map was enabled when adjacent but had no press handler wired; it now correctly navigates into the boss fight.
+- **Continue now returns to the dungeon map** — Pressing Continue from the main menu no longer crashes; the game resumes at the floor map so you can choose your next room.
+- **Combat now works correctly after leaving an encounter room** — The encounter room overlay was not being freed when leaving via the Leave/Dismiss button, causing it to cover the combat board on the next fight. The overlay is now properly removed.
+- **Dungeon floors are now uniquely shaped every run** — Floor generation previously fell back to a fixed L-shaped template on almost every seed because random room placement rarely produced a connected path between the start and boss corners. Floors now use a spine-first approach: a seeded random path from start to boss is always placed first, then 1–3 branch rooms grow outward from it, producing a varied branching map that is always fully connected.
 - **Stats and ascension records now persist when debugging** — Profile data is loaded at startup (in the autoload) instead of only when the main menu scene initialises, so records are available regardless of which scene you enter from.
 - **Build summary shows correct names** — The keystone and technique names on the run-end screen now display the item's display name instead of showing a blank (the internal `name` property of a bare Resource).
 

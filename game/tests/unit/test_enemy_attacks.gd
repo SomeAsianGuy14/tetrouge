@@ -1,12 +1,12 @@
 extends GutTest
 
-var _saved_stage: int
+var _saved_floor: int
 
 func before_each() -> void:
-	_saved_stage = RunState.stage
+	_saved_floor = RunState.floor
 
 func after_each() -> void:
-	RunState.stage = _saved_stage
+	RunState.floor = _saved_floor
 
 # ── Helpers ───────────────────────────────────────────────────────────────
 

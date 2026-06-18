@@ -4,13 +4,19 @@ func _ready() -> void:
 	Settings.apply_saved_display()
 	Settings.apply_saved_bindings()
 
-const TOTAL_STAGES := 5
-const ROUNDS_PER_STAGE := 4
-const ROUND_NAMES := ["Small Round", "Big Round", "Elite Round", "Boss Round"]
+const TOTAL_FLOORS := 4
 const STARTING_COINS := 8
 
-var stage: int = 1
-var round_index: int = 0  # 0-3 within each stage
+const TIER_BONUS := {
+	"Small": 0,
+	"Big":   12,
+	"Elite": 24,
+	"Boss":  36,
+}
+
+var floor: int = 1
+var current_floor_data: DungeonFloor = null
+var combat_rooms_cleared_this_floor: int = 0
 
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var run_seed: int = 0
@@ -20,20 +26,20 @@ var techniques: Array = []      # Array[Technique]
 var consumables: Array = []     # Array[Consumable]
 var vouchers: Array = []        # Array[Voucher]
 
-var used_boss_modifiers: Array = []   # ids already seen this run
-var used_boss_enemy_ids: Array = []   # boss enemy ids already seen this run
-var used_keystone_ids: Array = []     # ids already owned this run
+var used_boss_modifiers: Array = []
+var used_boss_enemy_ids: Array = []
+var used_keystone_ids: Array = []
 
 var shop_technique_slots: int = 3
 var consumable_capacity: int = 3
 var technique_capacity: int = 4
 
 signal run_started
-signal round_changed(stage: int, round_index: int)
+signal floor_changed(floor_number: int)
 
 func reset() -> void:
-	stage = 1
-	round_index = 0
+	floor = 1
+	combat_rooms_cleared_this_floor = 0
 	keystones.clear()
 	techniques.clear()
 	consumables.clear()
@@ -46,23 +52,29 @@ func reset() -> void:
 	technique_capacity = 4
 	run_seed = randi()
 	rng.seed = run_seed
+	current_floor_data = DungeonGenerator.generate(floor, rng)
 
-func is_boss_round() -> bool:
-	return round_index == 3
+func is_boss_room(room: DungeonRoom) -> bool:
+	return room != null and room.room_type == DungeonRoom.TYPE_BOSS
 
-func advance_round() -> void:
-	round_index += 1
-	if round_index >= ROUNDS_PER_STAGE:
-		round_index = 0
-		stage += 1
-	technique_capacity = 4 + (stage - 1)
-	emit_signal("round_changed", stage, round_index)
+func advance_floor() -> void:
+	floor += 1
+	combat_rooms_cleared_this_floor = 0
+	technique_capacity = 4 + (floor - 1)
+	if floor <= TOTAL_FLOORS:
+		current_floor_data = DungeonGenerator.generate(floor, rng)
+	emit_signal("floor_changed", floor)
 
 func is_run_complete() -> bool:
-	return stage > TOTAL_STAGES
+	return floor > TOTAL_FLOORS
 
-func get_round_name() -> String:
-	return ROUND_NAMES[round_index]
+func calculate_quota(current_floor: int, room_tier: String) -> int:
+	var stage_base := roundi(20.0 * pow(2.0, current_floor - 1))
+	var tier_bonus: int = TIER_BONUS.get(room_tier, 0)
+	return stage_base + tier_bonus
+
+func calculate_time_limit(_current_floor: int) -> float:
+	return 180.0
 
 func has_technique(id: String) -> bool:
 	for t in techniques:
@@ -112,7 +124,7 @@ func add_voucher(voucher) -> void:
 	_apply_voucher_effects(voucher)
 
 func _apply_keystone_effects(_keystone) -> void:
-	pass  # Keystones modify RoundConfig at round start; no immediate run-state effect
+	pass
 
 func _apply_voucher_effects(voucher) -> void:
 	match voucher.id:
@@ -123,15 +135,7 @@ func _apply_voucher_effects(voucher) -> void:
 		"consumable_expert":
 			consumable_capacity = 3
 		"bonus_round":
-			pass  # speed bonus removed; voucher kept for potential future effect
-
-func calculate_quota(current_stage: int, current_round: int) -> int:
-	var stage_base := roundi(20.0 * pow(2.0, current_stage - 1))
-	var round_bonus := current_round * (8 + (current_stage - 1) * 6)
-	return stage_base + round_bonus
-
-func calculate_time_limit(_current_stage: int) -> float:
-	return 180.0
+			pass
 
 func seeded_shuffle(arr: Array) -> void:
 	var i := arr.size() - 1

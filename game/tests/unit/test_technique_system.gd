@@ -4,21 +4,18 @@ var _TechniqueEvaluator = preload("res://scenes/game/technique_evaluator.gd")
 
 # ── State save/restore ────────────────────────────────────────────────────────
 
-var _saved_stage: int
-var _saved_round_index: int
+var _saved_floor: int
 var _saved_techniques: Array
 var _saved_technique_capacity: int
 
 func before_each() -> void:
-	_saved_stage = RunState.stage
-	_saved_round_index = RunState.round_index
+	_saved_floor = RunState.floor
 	_saved_techniques = RunState.techniques.duplicate()
 	_saved_technique_capacity = RunState.technique_capacity
 	RunState.techniques = []
 
 func after_each() -> void:
-	RunState.stage = _saved_stage
-	RunState.round_index = _saved_round_index
+	RunState.floor = _saved_floor
 	RunState.techniques = _saved_techniques
 	RunState.technique_capacity = _saved_technique_capacity
 
@@ -443,35 +440,30 @@ func test_technique_capacity_is_4_at_run_start() -> void:
 	RunState.reset()
 	assert_eq(RunState.technique_capacity, 4)
 
-func test_technique_capacity_unchanged_mid_stage() -> void:
+func test_technique_capacity_increases_to_5_at_floor_2() -> void:
 	RunState.reset()
-	RunState.advance_round()  # stage 1, round 1
-	assert_eq(RunState.technique_capacity, 4)
-	RunState.advance_round()  # stage 1, round 2
-	assert_eq(RunState.technique_capacity, 4)
-	RunState.advance_round()  # stage 1, round 3
-	assert_eq(RunState.technique_capacity, 4)
-
-func test_technique_capacity_increases_to_5_at_stage_2() -> void:
-	RunState.reset()
-	RunState.advance_round()
-	RunState.advance_round()
-	RunState.advance_round()
-	RunState.advance_round()  # completes stage 1, enters stage 2
-	assert_eq(RunState.stage, 2)
+	RunState.advance_floor()
+	assert_eq(RunState.floor, 2)
 	assert_eq(RunState.technique_capacity, 5)
 
-func test_technique_capacity_increases_to_6_at_stage_3() -> void:
+func test_technique_capacity_increases_to_6_at_floor_3() -> void:
 	RunState.reset()
-	for _i in range(8):  # 4 rounds stage 1 + 4 rounds stage 2
-		RunState.advance_round()
-	assert_eq(RunState.stage, 3)
+	RunState.advance_floor()
+	RunState.advance_floor()
+	assert_eq(RunState.floor, 3)
 	assert_eq(RunState.technique_capacity, 6)
+
+func test_technique_capacity_increases_to_7_at_floor_4() -> void:
+	RunState.reset()
+	RunState.advance_floor()
+	RunState.advance_floor()
+	RunState.advance_floor()
+	assert_eq(RunState.floor, 4)
+	assert_eq(RunState.technique_capacity, 7)
 
 func test_technique_capacity_reset_on_run_reset() -> void:
 	RunState.reset()
-	for _i in range(4):
-		RunState.advance_round()
+	RunState.advance_floor()
 	assert_eq(RunState.technique_capacity, 5)
 	RunState.reset()
 	assert_eq(RunState.technique_capacity, 4)

@@ -1,19 +1,15 @@
 extends GutTest
 
 # ── State ──────────────────────────────────────────────────────────────────
-var _saved_stage: int
-var _saved_round_index: int
+var _saved_floor: int
 var _d: EnemyDisplay = null
 
 func before_each() -> void:
-	_saved_stage = RunState.stage
-	_saved_round_index = RunState.round_index
-	RunState.stage = 1
-	RunState.round_index = 0
+	_saved_floor = RunState.floor
+	RunState.floor = 1
 
 func after_each() -> void:
-	RunState.stage = _saved_stage
-	RunState.round_index = _saved_round_index
+	RunState.floor = _saved_floor
 	if is_instance_valid(_d):
 		_d.queue_free()
 		_d = null

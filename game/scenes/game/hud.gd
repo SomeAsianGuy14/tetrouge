@@ -36,10 +36,10 @@ func _ready() -> void:
 	timer_big_label.visible = false
 
 func setup(config: RoundConfig) -> void:
-	var round_text := "Stage %d — %s" % [RunState.stage, RunState.get_round_name()]
-	round_info_label.text = RunState.get_round_name()
-	round_label.text = round_text
-	round_big_label.text = round_text
+	var floor_text := "Floor %d" % RunState.floor
+	round_info_label.text = floor_text
+	round_label.text = floor_text
+	round_big_label.text = floor_text
 
 	var total_secs := int(config.time_limit)
 	timer_big_label.text = "%d:%02d" % [total_secs / 60, total_secs % 60]

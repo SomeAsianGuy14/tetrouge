@@ -69,7 +69,7 @@ func _populate_technique_slots() -> void:
 			_technique_slot_nodes.append(slot)
 	
 func _populate_voucher_slot() -> void:
-	var stage_chance := RunState.stage * 0.15  # 15% per stage
+	var stage_chance := RunState.floor * 0.15
 	if RunState.seeded_randf() > stage_chance:
 		_populate_slot(voucher_slot, null)
 		return
