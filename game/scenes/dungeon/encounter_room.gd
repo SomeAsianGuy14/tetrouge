@@ -80,9 +80,10 @@ func _build_wishing_well(vbox: VBoxContainer) -> void:
 	var result_label := Label.new()
 	result_label.text = ""
 	result_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	result_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	vbox.add_child(result_label)
 
-	var prob := [0.01]  # Array wrapper so the lambda can mutate it across calls
+	var state := [0.01, 0]  # [probability, rewards_given]
 	var throw_btn := Button.new()
 	throw_btn.text = "Throw a coin (1)"
 	vbox.add_child(throw_btn)
@@ -91,18 +92,79 @@ func _build_wishing_well(vbox: VBoxContainer) -> void:
 		if not Economy.spend_coins(1):
 			result_label.text = "Not enough coins!"
 			return
-		if RunState.seeded_randf() < prob[0]:
-			prob[0] = 0.01
-			var gained := 15
-			Economy.add_coins(gained)
-			result_label.text = "The well shimmers! You receive %d coins." % gained
+		if RunState.seeded_randf() < state[0]:
+			state[0] = 0.01
+			var item_name := _wishing_well_award()
+			if item_name.is_empty():
+				result_label.text = "The well shimmers, but has nothing left to offer."
+			else:
+				state[1] += 1
+				result_label.text = "The well shimmers! You receive: %s" % item_name
 		else:
-			prob[0] = minf(prob[0] + 0.01, 1.0)
+			state[0] = minf(state[0] + 0.01, 1.0)
 			result_label.text = "Nothing happens."
-		throw_btn.text = "Throw another coin (1)"
+		if state[1] >= 3:
+			throw_btn.disabled = true
+			throw_btn.text = "The well has run dry"
+		else:
+			throw_btn.text = "Throw another coin (1)"
 	)
 
 	_leave_button(vbox)
+
+func _wishing_well_award() -> String:
+	var categories: Array = []
+	var tech_pool := ResourceRegistry.get_available_techniques().filter(
+		func(t): return not RunState.has_technique(t.id))
+	var tech_available := not tech_pool.is_empty() and RunState.techniques.size() < RunState.technique_capacity
+	var cons_available := RunState.consumables.size() < RunState.consumable_capacity
+	var ks_pool := ResourceRegistry.all_keystones.filter(
+		func(k): return k.id not in RunState.used_keystone_ids)
+	var ks_available := not ks_pool.is_empty()
+
+	if cons_available:
+		categories.append({"type": "consumable", "weight": 60})
+	if tech_available:
+		categories.append({"type": "technique", "weight": 30})
+	if ks_available:
+		categories.append({"type": "keystone", "weight": 10})
+
+	if categories.is_empty():
+		return ""
+
+	var total_weight := 0
+	for c in categories:
+		total_weight += c.weight
+	var roll := RunState.seeded_randf() * total_weight
+	var cumulative := 0.0
+	var chosen: String = categories[0].type
+	for c in categories:
+		cumulative += c.weight
+		if roll < cumulative:
+			chosen = c.type
+			break
+
+	match chosen:
+		"consumable":
+			var pool := ResourceRegistry.all_consumables.duplicate()
+			RunState.seeded_shuffle(pool)
+			if not pool.is_empty():
+				var item: Consumable = pool[0]
+				RunState.add_consumable(item)
+				return "%s (Consumable)" % item.display_name
+		"technique":
+			RunState.seeded_shuffle(tech_pool)
+			if not tech_pool.is_empty():
+				var item: Technique = tech_pool[0]
+				RunState.add_technique(item)
+				return "%s (Technique)" % item.display_name
+		"keystone":
+			RunState.seeded_shuffle(ks_pool)
+			if not ks_pool.is_empty():
+				var item: Keystone = ks_pool[0]
+				RunState.add_keystone(item)
+				return "%s (Keystone)" % item.display_name
+	return ""
 
 # ── Altar (Technique) ─────────────────────────────────────────────────────
 

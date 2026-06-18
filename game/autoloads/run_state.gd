@@ -5,7 +5,7 @@ func _ready() -> void:
 	Settings.apply_saved_bindings()
 
 const TOTAL_FLOORS := 4
-const STARTING_COINS := 8
+const STARTING_COINS := 30
 
 const TIER_BONUS := {
 	"Small": 0,
@@ -24,13 +24,11 @@ var run_seed: int = 0
 var keystones: Array = []       # Array[Keystone]
 var techniques: Array = []      # Array[Technique]
 var consumables: Array = []     # Array[Consumable]
-var vouchers: Array = []        # Array[Voucher]
-
 var used_boss_modifiers: Array = []
 var used_boss_enemy_ids: Array = []
 var used_keystone_ids: Array = []
 
-var shop_technique_slots: int = 3
+var shop_technique_slots: int = 5
 var consumable_capacity: int = 3
 var technique_capacity: int = 4
 
@@ -43,11 +41,10 @@ func reset() -> void:
 	keystones.clear()
 	techniques.clear()
 	consumables.clear()
-	vouchers.clear()
 	used_boss_modifiers.clear()
 	used_boss_enemy_ids.clear()
 	used_keystone_ids.clear()
-	shop_technique_slots = 3
+	shop_technique_slots = 5
 	consumable_capacity = 3
 	technique_capacity = 4
 	run_seed = randi()
@@ -88,12 +85,6 @@ func has_keystone(id: String) -> bool:
 			return true
 	return false
 
-func has_voucher(id: String) -> bool:
-	for v in vouchers:
-		if v.id == id:
-			return true
-	return false
-
 func add_keystone(keystone) -> void:
 	if keystone.replaces_keystone_id != "":
 		for i in range(keystones.size() - 1, -1, -1):
@@ -119,23 +110,8 @@ func remove_consumable(consumable) -> void:
 func remove_technique(technique) -> void:
 	techniques.erase(technique)
 
-func add_voucher(voucher) -> void:
-	vouchers.append(voucher)
-	_apply_voucher_effects(voucher)
-
 func _apply_keystone_effects(_keystone) -> void:
 	pass
-
-func _apply_voucher_effects(voucher) -> void:
-	match voucher.id:
-		"interest_cap_up":
-			Economy.interest_cap = 8
-		"expanded_shop":
-			shop_technique_slots = 4
-		"consumable_expert":
-			consumable_capacity = 3
-		"bonus_round":
-			pass
 
 func seeded_shuffle(arr: Array) -> void:
 	var i := arr.size() - 1

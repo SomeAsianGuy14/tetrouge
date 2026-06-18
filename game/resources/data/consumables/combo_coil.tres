@@ -7,6 +7,6 @@ script = ExtResource("1")
 id = "combo_coil"
 display_name = "Combo Coil"
 description = "Combo attacks send +3 attack this round."
-cost = 5
+cost = 35
 use_timing = 0
 bonus_combo = 3

@@ -8,7 +8,7 @@ The following keystones SHALL have `is_starter = true` and be available from the
 | `simple_sword` | Simple Sword | `quad_bonus = 2` |
 | `simple_wand` | Simple Wand | `tspin_single_bonus = 2`, `tspin_double_bonus = 2`, `tspin_triple_bonus = 2` |
 | `simple_bag` | Simple Bag | `hold_slots_bonus = 1` |
-| `slightly_magical_coin` | Slightly Magical Coin | `end_round_coins = 1` |
+| `slightly_magical_coin` | Slightly Magical Coin | `end_round_coins = 5` |
 
 #### Scenario: Simple Flail adds 1 to singles and doubles only
 - **WHEN** a single-clear attack fires and the player owns Simple Flail
@@ -51,12 +51,12 @@ Triple Threat SHALL grant `tspin_triple_multiplier = 3.0` with no suppression fl
 - **WHEN** the player holds Triple Threat and performs a T-Spin Double
 - **THEN** `suppress_tspin_double` SHALL be false and the T-Spin Double SHALL deal damage normally
 
-### Requirement: Magical Coin requires and replaces Slightly Magical Coin and grants 4 end-round coins
-Magical Coin SHALL require `slightly_magical_coin`, replace it on pick, and grant `end_round_coins = 4` (previously 2, previously additive).
+### Requirement: Magical Coin requires and replaces Slightly Magical Coin and grants 15 end-round coins
+Magical Coin SHALL require `slightly_magical_coin`, replace it on pick, and grant `end_round_coins = 15` (previously 4).
 
-#### Scenario: Magical Coin grants 4 coins per round
+#### Scenario: Magical Coin grants 15 coins per round
 - **WHEN** the player holds Magical Coin and completes a round
-- **THEN** 4 coins SHALL be added via `end_round_coins`
+- **THEN** 15 coins SHALL be added via `end_round_coins`
 - **THEN** Slightly Magical Coin SHALL no longer be active (removed on pick)
 
 ### Requirement: Run-start starter keystone selection

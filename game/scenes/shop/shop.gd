@@ -6,9 +6,8 @@ signal shop_closed
 @onready var technique_slots: HBoxContainer = $Panel/VBox/TechniqueSlots
 @onready var consumable_slot: Control = $Panel/VBox/BottomRow/ConsumableSlot
 @onready var consumable_slot_2: Control = $Panel/VBox/BottomRow/ConsumableSlot2
-@onready var voucher_slot: Control = $Panel/VBox/BottomRow/VoucherSlot
+@onready var consumable_slot_3: Control = $Panel/VBox/BottomRow/ConsumableSlot3
 @onready var coin_label: Label = $Panel/VBox/Header/CoinLabel
-@onready var interest_label: Label = $Panel/VBox/Header/InterestLabel
 @onready var exit_button: Button = $Panel/VBox/Footer/ExitButton
 @onready var keystone_icons: HBoxContainer = $Panel/VBox/CollectionPanel/KeystonesRow/KeystoneIcons
 @onready var technique_icons: HBoxContainer = $Panel/VBox/CollectionPanel/TechniquesRow/TechniqueIcons
@@ -20,7 +19,6 @@ signal shop_closed
 
 var _all_techniques: Array = []
 var _all_consumables: Array = []
-var _all_vouchers: Array = []
 var _buy_buttons: Dictionary = {}  # slot node → buy Button (or null if owned)
 var _technique_slot_nodes: Array = []  # tracks which slots show techniques
 var _slot_item_map: Dictionary = {}  # slot node → resource item
@@ -30,8 +28,6 @@ func _ready() -> void:
 	exit_button.connect("pressed", _on_exit_pressed)
 	for i in _collection_slots.size():
 		_collection_slots[i].connect("pressed", _on_sell_consumable.bind(i))
-	var interest := Economy.apply_interest()
-	interest_label.text = "+%d interest" % interest if interest > 0 else ""
 	_load_item_pools()
 	_populate_shop()
 	_update_coin_display(Economy.coins)
@@ -44,15 +40,17 @@ func _is_at_technique_capacity() -> bool:
 func _load_item_pools() -> void:
 	_all_techniques = ResourceRegistry.get_available_techniques()
 	_all_consumables = ResourceRegistry.all_consumables.duplicate()
-	_all_vouchers = ResourceRegistry.all_vouchers.duplicate()
 
 func _populate_shop() -> void:
 	_populate_technique_slots()
-	var first_consumable := _pick_one(_all_consumables, [])
-	var first_id: String = first_consumable.id if first_consumable else ""
-	_populate_slot(consumable_slot, first_consumable)
-	_populate_slot(consumable_slot_2, _pick_one(_all_consumables, [first_id]))
-	_populate_voucher_slot()
+	var exclude_ids: Array = []
+	var c1 := _pick_one(_all_consumables, exclude_ids)
+	if c1: exclude_ids.append(c1.id)
+	_populate_slot(consumable_slot, c1)
+	var c2 := _pick_one(_all_consumables, exclude_ids)
+	if c2: exclude_ids.append(c2.id)
+	_populate_slot(consumable_slot_2, c2)
+	_populate_slot(consumable_slot_3, _pick_one(_all_consumables, exclude_ids))
 	
 func _populate_technique_slots() -> void:
 	_technique_slot_nodes.clear()
@@ -68,15 +66,6 @@ func _populate_technique_slots() -> void:
 		if item != null:
 			_technique_slot_nodes.append(slot)
 	
-func _populate_voucher_slot() -> void:
-	var stage_chance := RunState.floor * 0.15
-	if RunState.seeded_randf() > stage_chance:
-		_populate_slot(voucher_slot, null)
-		return
-	var available := _all_vouchers.filter(func(v): return not RunState.has_voucher(v.id))
-	RunState.seeded_shuffle(available)
-	_populate_slot(voucher_slot, available[0] if not available.is_empty() else null)
-
 func _pick_one(pool: Array, exclude_ids: Array) -> Resource:
 	var available := pool.filter(func(x): return x.id not in exclude_ids)
 	if available.is_empty():
@@ -167,8 +156,6 @@ func _on_purchase(item: Resource, slot: Control) -> void:
 			Economy.add_coins(item.cost)  # refund if full
 			return
 		_refresh_collection_backpack()
-	elif item is Voucher:
-		RunState.add_voucher(item)
 	_mark_slot_purchased(slot, item)
 	_refresh_button_states()
 

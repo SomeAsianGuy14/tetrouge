@@ -7,6 +7,6 @@ script = ExtResource("1")
 id = "attack_surge"
 display_name = "Attack Surge"
 description = "Your first 3 clears this round send double attack."
-cost = 6
+cost = 40
 use_timing = 0
 attack_surge_clears = 3

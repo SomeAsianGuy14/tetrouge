@@ -6,8 +6,8 @@
 script = ExtResource("1")
 id = "combo_payout"
 display_name = "Combo Payout"
-description = "Gain 5 coins the first time you reach 5+ combo each round."
-cost = 5
+description = "Gain 20 coins the first time you reach 5+ combo each round."
+cost = 48
 tags = ["economy", "combo"]
 effect_type = "economy"
-params = {"trigger": "combo_payout", "combo_threshold": 4, "coins": 5}
+params = {"trigger": "combo_payout", "combo_threshold": 4, "coins": 20}

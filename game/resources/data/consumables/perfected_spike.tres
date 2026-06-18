@@ -7,6 +7,6 @@ script = ExtResource("1")
 id = "perfected_spike"
 display_name = "Perfected Spike"
 description = "Perfect clears send +8 attack this round."
-cost = 6
+cost = 40
 use_timing = 0
 bonus_pc = 8

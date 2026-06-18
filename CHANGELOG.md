@@ -3,6 +3,17 @@
 ## Unreleased
 
 ### New Features
+- **Wishing Well rework** — The Wishing Well no longer awards gold. Instead, each successful throw drops a random item: 60% consumable, 30% technique, 10% keystone. Rewards are capped at 3 per visit. The well handles full backpacks, technique caps, and exhausted pools gracefully.
+
+### Balance
+- **Economy rebalance** — All income sources buffed to match gilded-tier levels. Base payout increased from 4 to 15. Starting coins increased from 8 to 30. Keystone income buffed (Slightly Magical Coin 1→5, Magical Coin 4→15, Golden Watch 1→3 coins per 5 seconds). Economy technique rewards buffed (Combo Payout 5→20, Greedy Hands 2→8, Green Thumb 1→4 per trigger, Bounty List 10→40). Surplus attack conversion improved (÷3 → ÷2).
+- **Price rescaling** — Technique costs raised from 3–8 to 40–60 range. Consumable costs raised from 4–6 to 30–40 range. Prices scale proportionally so relative ordering is preserved.
+- **Bigger shops** — Shops now display 5 technique slots and 3 consumable slots (up from 3 and 2). Each rare shop visit feels like a bigger event with more choices.
+- **Guaranteed shops** — Each dungeon floor now guarantees at least 2 shops (one per spine path). You'll always have somewhere to spend.
+- **Interest removed** — The interest-on-unspent-coins mechanic has been removed. It was designed for frequent shop visits and no longer serves a purpose with rarer shops.
+- **Vouchers removed** — The voucher system (Interest Cap Up, Expanded Shop, Consumable Expert, Bonus Round) has been removed. Their beneficial effects are now baked into the default shop and backpack sizes.
+
+### New Features
 - **Dungeon floor exploration** — Runs are now structured as 4 floors, each represented by a 6×6 dungeon map you navigate room by room. You start at the bottom-left corner and work toward the top-right Boss room, which is always visible from the start.
 - **Dungeon map** — Each floor has 8–12 rooms of varying sizes. Fog of war hides rooms you can't reach yet; cleared-room neighbors are revealed and show their type. You choose your own path.
 - **Room variety** — Eight new encounter rooms alongside the standard combat rooms and shops: Wishing Well (gamble coins for a payout), Altar of Techniques (sacrifice a technique for a random one), Altar of Keystones (sacrifice a keystone for a random one), Library (pick a free technique from a pool of 10), Robbers (surrender gold or fight an Elite), Unfortunate Head Trauma (lose a random technique), Pickpocket (lose half your coins), and Museum (claim a free keystone on display).

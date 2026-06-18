@@ -126,13 +126,6 @@ const all_consumables: Array = [
 	preload("res://resources/data/consumables/steel_plates.tres"),
 ]
 
-const all_vouchers: Array = [
-	preload("res://resources/data/vouchers/bonus_round.tres"),
-	preload("res://resources/data/vouchers/consumable_expert.tres"),
-	preload("res://resources/data/vouchers/expanded_shop.tres"),
-	preload("res://resources/data/vouchers/interest_cap_up.tres"),
-]
-
 const all_enemies: Array = [
 	preload("res://resources/data/enemies/boss_ancient.tres"),
 	preload("res://resources/data/enemies/boss_enforcer.tres"),

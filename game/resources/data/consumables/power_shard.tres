@@ -7,6 +7,6 @@ script = ExtResource("1")
 id = "power_shard"
 display_name = "Power Shard"
 description = "All clears send +2 attack this round."
-cost = 4
+cost = 30
 use_timing = 0
 bonus_all_clears = 2

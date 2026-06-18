@@ -7,6 +7,6 @@ script = ExtResource("1")
 id = "power_fragment"
 display_name = "Power Fragment"
 description = "All clears send +3 attack this round."
-cost = 5
+cost = 35
 use_timing = 0
 bonus_all_clears = 3

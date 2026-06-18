@@ -14,7 +14,7 @@ const ROOM_SIZES := [
 	Vector2i(2, 2),
 ]
 
-# Room type pool for interior rooms (shop guaranteed separately)
+# Room type pool for interior rooms (shops placed separately to guarantee 2 per floor)
 const INTERIOR_TYPES := [
 	DungeonRoom.TYPE_COMBAT_SMALL,
 	DungeonRoom.TYPE_COMBAT_BIG,
@@ -22,7 +22,6 @@ const INTERIOR_TYPES := [
 	DungeonRoom.TYPE_ENCOUNTER,
 	DungeonRoom.TYPE_ENCOUNTER,
 	DungeonRoom.TYPE_ENCOUNTER,
-	DungeonRoom.TYPE_SHOP,
 ]
 
 # Fallback template: a minimal connected layout used when generation retries exceed limit.
@@ -125,6 +124,7 @@ static func _attempt_generate(floor_number: int, rng: RandomNumberGenerator) -> 
 	var boss_entries: Array[Vector2i] = [Vector2i(3, 0), Vector2i(3, 1), Vector2i(4, 2)]
 	_seeded_shuffle(boss_entries, rng)
 	var spine_targets: Array[Vector2i] = [boss_entries[0], boss_entries[1]]
+	var spine_room_indices: Array[Array] = [[], []]
 
 	for spine_idx in range(2):
 		var target: Vector2i = spine_targets[spine_idx]
@@ -149,14 +149,27 @@ static func _attempt_generate(floor_number: int, rng: RandomNumberGenerator) -> 
 					room.room_type = DungeonRoom.TYPE_COMBAT_SMALL
 				else:
 					room.room_type = type_pool[type_idx % type_pool.size()]
+					type_idx += 1
 				room.tile_footprint = [pos]
 				room.visual_size = Vector2i(1, 1)
 				if room.room_type == DungeonRoom.TYPE_ENCOUNTER:
 					room.encounter_subtype = encounter_pool[encounter_idx % encounter_pool.size()]
 					encounter_idx += 1
 				occupied[pos] = df.rooms.size()
+				spine_room_indices[spine_idx].append(df.rooms.size())
 				df.rooms.append(room)
-				type_idx += 1
+
+	# ── Guarantee one shop per spine ──────────────────────────────────────────
+	for spine_idx in range(2):
+		var candidates: Array = []
+		for idx in spine_room_indices[spine_idx]:
+			var r: DungeonRoom = df.rooms[idx]
+			if r.room_type != DungeonRoom.TYPE_START and r.room_type != DungeonRoom.TYPE_COMBAT_SMALL:
+				candidates.append(idx)
+		if not candidates.is_empty():
+			var pick: int = candidates[rng.randi_range(0, candidates.size() - 1)]
+			df.rooms[pick].room_type = DungeonRoom.TYPE_SHOP
+			df.rooms[pick].encounter_subtype = ""
 
 	# ── Branch rooms: grown from existing rooms for extra variety ─────────────
 	var branch_target := rng.randi_range(1, 2)

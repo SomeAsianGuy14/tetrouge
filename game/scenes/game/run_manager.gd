@@ -16,7 +16,7 @@ const SCENE_MAIN_MENU          := "res://scenes/main_menu/main_menu.tscn"
 const SCENE_DUNGEON_MAP        := "res://scenes/dungeon/dungeon_map.tscn"
 const SCENE_ENCOUNTER_ROOM     := "res://scenes/dungeon/encounter_room.tscn"
 
-const BASE_PAYOUT := 4
+const BASE_PAYOUT := 15
 const ROUND_TIERS := ["Small", "Big", "Elite", "Boss"]
 
 const SMALL_INTERVAL_MIN := 22.5
@@ -1462,7 +1462,7 @@ func _apply_keystone_economy() -> int:
 		if ks.end_round_coins > 0:
 			total += ks.end_round_coins
 		if ks.time_coins:
-			total += int(round_timer / 5.0)
+			total += int(round_timer / 5.0) * 3
 	Economy.coins += total
 	return total
 
@@ -1470,12 +1470,12 @@ func _calculate_surplus_income() -> int:
 	var income := 0
 	for technique in RunState.techniques:
 		if technique.effect_type == "economy" and technique.params.get("trigger", "") == "surplus":
-			var divisor: int = technique.params.get("divisor", 3)
+			var divisor: int = technique.params.get("divisor", 2)
 			income += surplus_attack / divisor
 	if _greedy_hands_active:
-		income += 2
+		income += 8
 	if _flow and RunState.is_boss_room(_flow.current_room) and RunState.has_technique("bounty_list"):
-		income += 10
+		income += 40
 	return income
 
 func _on_lock_processed() -> void:

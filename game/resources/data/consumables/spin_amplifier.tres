@@ -7,6 +7,6 @@ script = ExtResource("1")
 id = "spin_amplifier"
 display_name = "Spin Amplifier"
 description = "T-spins send +5 attack this round."
-cost = 5
+cost = 35
 use_timing = 0
 bonus_tspin = 5

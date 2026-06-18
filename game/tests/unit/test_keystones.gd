@@ -249,8 +249,8 @@ func test_time_coins_grants_floor_of_time_divided_by_5() -> void:
 	RunState.keystones.append(ks)
 	_rm.round_timer = 17.0
 	var income := _rm._apply_keystone_economy()
-	assert_eq(Economy.coins, 3)
-	assert_eq(income, 3, "returned total matches coins credited")
+	assert_eq(Economy.coins, 9)
+	assert_eq(income, 9, "returned total matches coins credited")
 
 # ── Conditional availability ──────────────────────────────────────────────
 

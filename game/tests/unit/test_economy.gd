@@ -3,31 +3,15 @@ extends GutTest
 func before_each() -> void:
 	Economy.reset()
 
-# ── Interest ──────────────────────────────────────────────────────────────
+# ── Base values ──────────────────────────────────────────────────────────
 
-func test_interest_on_12_coins_is_2() -> void:
-	Economy.coins = 12
-	var interest := Economy.apply_interest()
-	assert_eq(interest, 2)
-	assert_eq(Economy.coins, 14)
+func test_starting_coins_is_30() -> void:
+	assert_eq(RunState.STARTING_COINS, 30)
 
-func test_interest_on_50_coins_capped_at_5() -> void:
-	Economy.coins = 50
-	var interest := Economy.apply_interest()
-	assert_eq(interest, 5)
-	assert_eq(Economy.coins, 55)
-
-func test_interest_on_4_coins_is_0() -> void:
-	Economy.coins = 4
-	var interest := Economy.apply_interest()
-	assert_eq(interest, 0)
-	assert_eq(Economy.coins, 4)
-
-func test_interest_cap_up_voucher_raises_cap() -> void:
-	Economy.interest_cap = 8
-	Economy.coins = 50
-	var interest := Economy.apply_interest()
-	assert_eq(interest, 8)
+func test_base_payout_is_15() -> void:
+	Economy.coins = 0
+	Economy.pay_round(15)
+	assert_eq(Economy.coins, 15)
 
 # ── Spending ──────────────────────────────────────────────────────────────
 

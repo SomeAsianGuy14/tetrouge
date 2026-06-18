@@ -6,8 +6,8 @@
 script = ExtResource("1")
 id = "bounty_list"
 display_name = "Bounty List"
-description = "Gain 10 coins after defeating bosses."
-cost = 5
+description = "Gain 40 coins after defeating bosses."
+cost = 48
 tags = ["economy"]
 effect_type = "bounty_list"
 params = {}

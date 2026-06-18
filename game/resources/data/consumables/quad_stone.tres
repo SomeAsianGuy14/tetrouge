@@ -7,6 +7,6 @@ script = ExtResource("1")
 id = "quad_stone"
 display_name = "Quad Stone"
 description = "Quads send +5 attack this round."
-cost = 5
+cost = 35
 use_timing = 0
 bonus_quad = 5

@@ -7,6 +7,6 @@ script = ExtResource("1")
 id = "b2b_booster"
 display_name = "B2B Booster"
 description = "B2B attacks send +4 attack this round."
-cost = 5
+cost = 35
 use_timing = 0
 bonus_b2b = 4

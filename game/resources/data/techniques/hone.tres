@@ -7,6 +7,7 @@ script = ExtResource("1_lreus")
 id = "hone"
 display_name = "Hone"
 description = "Quads send +2 attack."
+cost = 48
 tags = ["general", "quad"]
 effect_type = "flat"
 params = {

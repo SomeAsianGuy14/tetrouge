@@ -13,13 +13,14 @@ A shop SHALL be presented to the player after the Small Blind, Big Blind, and El
 
 ### Requirement: Shop inventory is generated fresh each visit
 Each shop visit SHALL generate a new inventory drawn randomly from the available pools. The inventory SHALL contain:
-- 3 Technique slots
-- 2 Consumable slots
-- 1 Voucher slot (with a chance of being empty for early antes)
+- 5 Technique slots
+- 3 Consumable slots
+
+No voucher slot SHALL be present.
 
 #### Scenario: Shop generates inventory on open
 - **WHEN** the shop opens
-- **THEN** each slot is filled by randomly drawing from the appropriate pool (Techniques, Consumables, Vouchers)
+- **THEN** 5 technique slots and 3 consumable slots are filled by randomly drawing from the appropriate pool (Techniques, Consumables)
 
 #### Scenario: Purchased items show a PURCHASED state
 - **WHEN** the player buys an item
@@ -81,11 +82,18 @@ The game board, hold display, queue display, and HUD SHALL be hidden when the sh
 - **THEN** the board container and HUD become visible again before the next round initialises
 
 ### Requirement: Shop rows are labelled with section headers
-The shop SHALL display a section header label above the Technique row ("Techniques") and above the bottom row containing Consumables and Vouchers ("Items"), so the player can orient themselves at a glance.
+The shop SHALL display a section header label above the Technique row ("Techniques") and above the bottom row containing Consumables ("Items"), so the player can orient themselves at a glance.
 
 #### Scenario: Section headers visible
 - **WHEN** the shop opens
-- **THEN** a "Techniques" label appears above the technique slots and an "Items" label appears above the consumable and voucher slots
+- **THEN** a "Techniques" label appears above the technique slots and an "Items" label appears above the consumable slots
+
+### Requirement: Shop does not display interest
+The shop SHALL NOT calculate or display interest on entry. No interest label or calculation SHALL be present.
+
+#### Scenario: No interest on shop open
+- **WHEN** the shop opens
+- **THEN** no interest is calculated, no interest coins are added, and no interest label is displayed
 
 ### Requirement: Shop displays player's owned collection
 The shop SHALL include a "Your Collection" section below the for-sale items showing the player's currently owned keystones, techniques, and backpack consumables. This section SHALL be built when the shop opens and reflects the state of `RunState` at that moment.
@@ -137,17 +145,17 @@ The 3 backpack slots in the "Your Collection" section SHALL each render as a But
 
 #### Scenario: For-sale slots unchanged after sell
 - **WHEN** the player sells a consumable from the backpack
-- **THEN** the technique, consumable, and voucher slots available for purchase are not modified
+- **THEN** the technique and consumable slots available for purchase are not modified
 
 ### Requirement: Shop inventory is deterministic per seed
-All random draws used to populate shop inventory (technique slots, consumable slots, voucher slots) SHALL use the run-seeded PRNG. Reloading the game before visiting the shop SHALL produce the same inventory.
+All random draws used to populate shop inventory (technique slots, consumable slots) SHALL use the run-seeded PRNG. Reloading the game before visiting the shop SHALL produce the same inventory.
 
 #### Scenario: Same shop inventory after reload
 - **WHEN** a round is completed and the save is present, the game is closed and reopened, and the player visits the shop
 - **THEN** the shop displays the same items in the same slots as would have appeared without the reload
 
 ### Requirement: Technique slots use the same card layout as item slots
-Technique slots in the shop SHALL use the same visual card layout as consumable and voucher item slots: a card showing the technique's name, description, and cost as distinct labelled elements, with a dedicated Buy button. The existing separate "Techniques" section header and row layout SHALL be retained, but each slot SHALL render as a full card matching the item slot appearance.
+Technique slots in the shop SHALL use the same visual card layout as consumable item slots: a card showing the technique's name, description, and cost as distinct labelled elements, with a dedicated Buy button. The existing separate "Techniques" section header and row layout SHALL be retained, but each slot SHALL render as a full card matching the item slot appearance.
 
 #### Scenario: Technique slot shows name, description, cost separately
 - **WHEN** the shop opens and a technique slot contains a technique
@@ -155,7 +163,7 @@ Technique slots in the shop SHALL use the same visual card layout as consumable 
 
 #### Scenario: Technique slot visual matches item slot
 - **WHEN** the shop is open
-- **THEN** the technique card layout is visually consistent with the consumable and voucher card layout
+- **THEN** the technique card layout is visually consistent with the consumable card layout
 
 ### Requirement: Shop enforces technique capacity at purchase
 The shop SHALL check `RunState.techniques.size() < RunState.technique_capacity` before allowing a Technique purchase. When the player is at capacity, all technique Buy buttons SHALL be disabled and a visible message SHALL indicate the player is at their technique limit.
@@ -171,3 +179,9 @@ The shop SHALL check `RunState.techniques.size() < RunState.technique_capacity` 
 #### Scenario: Selling from collection re-enables purchase at capacity
 - **WHEN** the player is at capacity, sells a technique from the collection panel, and now has one free slot
 - **THEN** technique Buy buttons are re-evaluated (capacity check now passes)
+
+## REMOVED Requirements
+
+### Requirement: Voucher slot in shop
+**Reason**: The voucher system is removed entirely. Voucher effects (expanded shop, consumable capacity) are baked into the new default slot counts.
+**Migration**: Remove the voucher slot from the shop scene (shop.tscn) and shop.gd. Remove `_populate_voucher_slot()`, `_all_vouchers`, and voucher purchase handling from shop.gd.

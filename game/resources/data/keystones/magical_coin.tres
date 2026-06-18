@@ -6,9 +6,9 @@
 script = ExtResource("1")
 id = "magical_coin"
 display_name = "Magical Coin"
-description = "Earn 4 extra coins at the end of each round. Requires: Slightly Magical Coin."
+description = "Earn 15 extra coins at the end of each round. Requires: Slightly Magical Coin."
 flavor_text = "It seems more golden than before"
 category = "Economic"
 requires_keystone_id = "slightly_magical_coin"
 replaces_keystone_id = "slightly_magical_coin"
-end_round_coins = 4
+end_round_coins = 15

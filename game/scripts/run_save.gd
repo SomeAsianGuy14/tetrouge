@@ -21,12 +21,10 @@ static func save() -> void:
 	cfg.set_value("run", "consumable_capacity", RunState.consumable_capacity)
 
 	cfg.set_value("economy", "coins", Economy.coins)
-	cfg.set_value("economy", "interest_cap", Economy.interest_cap)
 
 	cfg.set_value("inventory", "keystone_ids", _ids_from(RunState.keystones))
 	cfg.set_value("inventory", "technique_ids", _ids_from(RunState.techniques))
 	cfg.set_value("inventory", "consumable_ids", _ids_from(RunState.consumables))
-	cfg.set_value("inventory", "voucher_ids", _ids_from(RunState.vouchers))
 	cfg.set_value("inventory", "used_boss_modifier_ids", RunState.used_boss_modifiers)
 	cfg.set_value("inventory", "used_boss_enemy_ids", RunState.used_boss_enemy_ids)
 	cfg.set_value("inventory", "used_keystone_ids", RunState.used_keystone_ids)
@@ -63,11 +61,10 @@ static func load_into_state() -> bool:
 
 	RunState.floor = cfg.get_value("run", "floor", 1)
 	RunState.combat_rooms_cleared_this_floor = cfg.get_value("run", "combat_rooms_cleared", 0)
-	RunState.shop_technique_slots = cfg.get_value("run", "shop_technique_slots", 3)
-	RunState.consumable_capacity = cfg.get_value("run", "consumable_capacity", 2)
+	RunState.shop_technique_slots = cfg.get_value("run", "shop_technique_slots", 5)
+	RunState.consumable_capacity = cfg.get_value("run", "consumable_capacity", 3)
 
 	Economy.coins = cfg.get_value("economy", "coins", 0)
-	Economy.interest_cap = cfg.get_value("economy", "interest_cap", 5)
 
 	RunState.keystones = _load_by_ids(ResourceRegistry.all_keystones,
 			cfg.get_value("inventory", "keystone_ids", []))
@@ -75,8 +72,6 @@ static func load_into_state() -> bool:
 			cfg.get_value("inventory", "technique_ids", []))
 	RunState.consumables = _load_by_ids(ResourceRegistry.all_consumables,
 			cfg.get_value("inventory", "consumable_ids", []))
-	RunState.vouchers = _load_by_ids(ResourceRegistry.all_vouchers,
-			cfg.get_value("inventory", "voucher_ids", []))
 	RunState.used_boss_modifiers = cfg.get_value("inventory", "used_boss_modifier_ids", [])
 	RunState.used_boss_enemy_ids = cfg.get_value("inventory", "used_boss_enemy_ids", [])
 	RunState.used_keystone_ids = cfg.get_value("inventory", "used_keystone_ids", [])

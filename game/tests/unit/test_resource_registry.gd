@@ -11,15 +11,12 @@ func test_all_techniques_non_empty() -> void:
 func test_all_consumables_non_empty() -> void:
 	assert_true(ResourceRegistry.all_consumables.size() > 0, "consumables should be populated")
 
-func test_all_vouchers_non_empty() -> void:
-	assert_true(ResourceRegistry.all_vouchers.size() > 0, "vouchers should be populated")
-
 func test_all_enemies_non_empty() -> void:
 	assert_true(ResourceRegistry.all_enemies.size() > 0, "enemies should be populated")
 
 func test_all_resources_have_ids() -> void:
 	var all := ResourceRegistry.all_keystones + ResourceRegistry.all_techniques \
-		+ ResourceRegistry.all_consumables + ResourceRegistry.all_vouchers
+		+ ResourceRegistry.all_consumables
 	for res in all:
 		assert_true("id" in res and res.id != "", "resource missing id: %s" % str(res))
 

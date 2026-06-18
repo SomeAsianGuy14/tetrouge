@@ -451,3 +451,18 @@ func test_first_room_adjacent_to_start_is_combat_over_20_seeds() -> void:
 				break
 		assert_true(found_combat,
 			"At least one room adjacent to start must be combat for seed %d" % seed_val)
+
+# ── Guaranteed shops ────────────────────────────────────────────────────────
+
+func test_at_least_two_shops_per_floor_over_20_seeds() -> void:
+	var rng := RandomNumberGenerator.new()
+	for seed_val in range(1, 21):
+		rng.seed = seed_val
+		var df := DungeonGenerator.generate(1, rng)
+		assert_not_null(df, "Floor generated for seed %d" % seed_val)
+		var shop_count := 0
+		for room in df.rooms:
+			if room.room_type == DungeonRoom.TYPE_SHOP:
+				shop_count += 1
+		assert_gte(shop_count, 2,
+			"Expected at least 2 shops for seed %d, got %d" % [seed_val, shop_count])
