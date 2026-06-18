@@ -53,8 +53,7 @@ const CLEAR_TYPE_DISPLAY: Dictionary = {
 
 var current_board: TetrisBoard = null
 var current_config: RoundConfig = null
-var _current_room: DungeonRoom = null
-var _pending_room_clear: DungeonRoom = null  # robbers-fight: original encounter room to mark on combat win
+var _flow: RunFlow = null
 
 var _debug_overlay: DebugOverlay = null
 var _hold_display: HoldDisplay = null
@@ -125,6 +124,15 @@ signal round_ended(success: bool)
 
 func _ready() -> void:
 	add_to_group("run_manager")
+	_flow = RunFlow.new()
+	_flow.combat_entered.connect(_on_flow_combat_entered)
+	_flow.shop_entered.connect(_on_flow_shop_entered)
+	_flow.encounter_entered.connect(_on_flow_encounter_entered)
+	_flow.dungeon_map_requested.connect(_on_flow_dungeon_map_requested)
+	_flow.round_success_requested.connect(_on_flow_round_success_requested)
+	_flow.keystone_selection_requested.connect(_on_flow_keystone_selection_requested)
+	_flow.victory_requested.connect(_on_flow_victory_requested)
+	_flow.failure_requested.connect(_on_flow_failure_requested)
 	_setup_debug_tools()
 
 func _exit_tree() -> void:
@@ -184,14 +192,7 @@ func _on_room_selected(room: DungeonRoom) -> void:
 	enter_room(room)
 
 func enter_room(room: DungeonRoom) -> void:
-	_current_room = room
-	match room.room_type:
-		DungeonRoom.TYPE_COMBAT_SMALL, DungeonRoom.TYPE_COMBAT_BIG, DungeonRoom.TYPE_COMBAT_ELITE, DungeonRoom.TYPE_BOSS:
-			_start_combat_room(room)
-		DungeonRoom.TYPE_SHOP:
-			_open_shop_room(room)
-		DungeonRoom.TYPE_ENCOUNTER:
-			_start_encounter_room(room)
+	_flow.enter_room(room)
 
 func _hide_board_ui() -> void:
 	board_container.visible = false
@@ -420,9 +421,7 @@ func _open_shop_room(room: DungeonRoom) -> void:
 func _on_shop_room_closed(room: DungeonRoom) -> void:
 	if _active_overlay:
 		_active_overlay = null
-	room.cleared = true
-	RunSave.save()
-	_show_dungeon_map()
+	_flow.resolve_shop(room)
 
 # ── Encounter room ─────────────────────────────────────────────────────────
 
@@ -439,21 +438,51 @@ func _on_encounter_completed(room: DungeonRoom) -> void:
 	if _active_overlay:
 		_active_overlay.queue_free()
 		_active_overlay = null
-	room.cleared = true
+	_flow.resolve_encounter(room)
+
+# ── RunFlow signal handlers ───────────────────────────────────────────────
+
+func _on_flow_combat_entered(room: DungeonRoom) -> void:
+	_start_combat_room(room)
+
+func _on_flow_shop_entered(room: DungeonRoom) -> void:
+	_open_shop_room(room)
+
+func _on_flow_encounter_entered(room: DungeonRoom) -> void:
+	_start_encounter_room(room)
+
+func _on_flow_dungeon_map_requested() -> void:
 	RunSave.save()
 	_show_dungeon_map()
+
+func _on_flow_round_success_requested(is_boss: bool) -> void:
+	if is_boss:
+		_pending_round_end = _show_round_success_then_boss_cleared
+	else:
+		_pending_round_end = _show_round_success_then_map
+	if _enemy_display:
+		_enemy_display.death_animation_finished.connect(_on_death_animation_finished, CONNECT_ONE_SHOT)
+		_enemy_display.play_death_animation()
+	else:
+		_on_death_animation_finished()
+
+func _on_flow_keystone_selection_requested() -> void:
+	_show_keystone_selection_then_map()
+
+func _on_flow_victory_requested() -> void:
+	_show_victory()
+
+func _on_flow_failure_requested() -> void:
+	_show_failure()
 
 # Special case: Robbers "fight" choice triggers an Elite combat
 func start_robbers_combat() -> void:
 	if _active_overlay:
 		_active_overlay.queue_free()
 		_active_overlay = null
-	_pending_room_clear = _current_room
-	var elite_room := DungeonRoom.new()
-	elite_room.room_type = DungeonRoom.TYPE_COMBAT_ELITE
-	_current_room = elite_room
+	var synthetic_room: DungeonRoom = _flow.begin_robbers_combat()
 	_show_board_ui()
-	start_round(elite_room)
+	start_round(synthetic_room)
 
 # ── Per-frame update ──────────────────────────────────────────────────────
 
@@ -1402,7 +1431,7 @@ func _end_round(success: bool) -> void:
 	if current_board:
 		current_board.is_active = false
 	if not success:
-		_show_failure()
+		_flow.resolve_combat(false)
 		return
 
 	var surplus_income := _calculate_surplus_income()
@@ -1416,28 +1445,7 @@ func _end_round(success: bool) -> void:
 		"enhancements": _round_enhancement_coins,
 	}
 
-	var was_boss := RunState.is_boss_room(_current_room)
-
-	if was_boss:
-		# Increment counter before advancing (for stats), then advance floor
-		if _enemy_display:
-			_enemy_display.death_animation_finished.connect(_on_boss_death_animation_finished, CONNECT_ONE_SHOT)
-			_enemy_display.play_death_animation()
-		else:
-			_on_boss_death_animation_finished()
-	else:
-		# Non-boss combat: increment counter, show income, then return to map
-		RunState.combat_rooms_cleared_this_floor += 1
-		_current_room.cleared = true
-		if _pending_room_clear != null:
-			_pending_room_clear.cleared = true
-			_pending_room_clear = null
-		_pending_round_end = _show_round_success_then_map
-		if _enemy_display:
-			_enemy_display.death_animation_finished.connect(_on_death_animation_finished, CONNECT_ONE_SHOT)
-			_enemy_display.play_death_animation()
-		else:
-			_on_death_animation_finished()
+	_flow.resolve_combat(true)
 
 func _on_death_animation_finished() -> void:
 	var fn := _pending_round_end
@@ -1446,6 +1454,7 @@ func _on_death_animation_finished() -> void:
 
 func _on_boss_death_animation_finished() -> void:
 	_show_round_success_then_boss_cleared()
+
 
 func _apply_keystone_economy() -> int:
 	var total := 0
@@ -1465,7 +1474,7 @@ func _calculate_surplus_income() -> int:
 			income += surplus_attack / divisor
 	if _greedy_hands_active:
 		income += 2
-	if RunState.is_boss_room(_current_room) and RunState.has_technique("bounty_list"):
+	if _flow and RunState.is_boss_room(_flow.current_room) and RunState.has_technique("bounty_list"):
 		income += 10
 	return income
 
@@ -1523,14 +1532,7 @@ func _show_round_success_then_boss_cleared() -> void:
 
 func _on_boss_cleared() -> void:
 	_active_overlay = null
-	_current_room.cleared = true
-
-	if RunState.floor >= RunState.TOTAL_FLOORS:
-		_show_victory()
-		return
-
-	RunState.advance_floor()
-	_show_keystone_selection_then_map()
+	_flow.confirm_boss_cleared()
 
 func _show_keystone_selection_then_map() -> void:
 	var scene: PackedScene = load(SCENE_KEYSTONE_SELECTION)
