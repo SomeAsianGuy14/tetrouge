@@ -1,0 +1,79 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 9,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "game/autoloads/resource_registry.gd",
+      "language": "gdscript",
+      "fileCategory": "code",
+      "totalLines": 151,
+      "nonEmptyLines": 142,
+      "metrics": {}
+    },
+    {
+      "path": "game/resources/keystone.gd",
+      "language": "gdscript",
+      "fileCategory": "code",
+      "totalLines": 89,
+      "nonEmptyLines": 80,
+      "metrics": {}
+    },
+    {
+      "path": "game/resources/round_config.gd",
+      "language": "gdscript",
+      "fileCategory": "code",
+      "totalLines": 50,
+      "nonEmptyLines": 44,
+      "metrics": {}
+    },
+    {
+      "path": "game/scenes/game/hud.gd",
+      "language": "gdscript",
+      "fileCategory": "code",
+      "totalLines": 166,
+      "nonEmptyLines": 145,
+      "metrics": {}
+    },
+    {
+      "path": "game/scenes/game/run_manager.gd",
+      "language": "gdscript",
+      "fileCategory": "code",
+      "totalLines": 1287,
+      "nonEmptyLines": 1149,
+      "metrics": {}
+    },
+    {
+      "path": "game/scenes/game/technique_evaluator.gd",
+      "language": "gdscript",
+      "fileCategory": "code",
+      "totalLines": 286,
+      "nonEmptyLines": 240,
+      "metrics": {}
+    },
+    {
+      "path": "game/scenes/tetris/tetris_board.gd",
+      "language": "gdscript",
+      "fileCategory": "code",
+      "totalLines": 768,
+      "nonEmptyLines": 668,
+      "metrics": {}
+    },
+    {
+      "path": "game/resources/data/enemies/boss_fateless.tres",
+      "language": "godot-resource",
+      "fileCategory": "data",
+      "totalLines": 13,
+      "nonEmptyLines": 11,
+      "metrics": {}
+    },
+    {
+      "path": "game/resources/data/enemies/boss_thin.tres",
+      "language": "godot-resource",
+      "fileCategory": "data",
+      "totalLines": 13,
+      "nonEmptyLines": 11,
+      "metrics": {}
+    }
+  ]
+}

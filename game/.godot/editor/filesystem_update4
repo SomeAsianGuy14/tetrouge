@@ -38,3 +38,8 @@ res://resources/data/enemies/cave_bat.tres
 res://resources/data/enemies/crimson_drake.tres
 res://resources/data/enemies/hex_wraith.tres
 res://scenes/screens/round_success.gd
+res://scenes/main_menu/main_menu.gd
+res://scripts/profile_save.gd
+res://scripts/run_stats.gd
+res://scenes/screens/run_end_helpers.gd
+res://autoloads/run_state.gd

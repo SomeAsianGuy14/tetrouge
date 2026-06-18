@@ -1,5 +1,22 @@
 # Changelog
 
+## Unreleased
+
+### New Features
+- **Run stats screen** — After every run (win or loss) a stats summary shows Total Damage, Best Combo, Best B2B, Quads, T-Spins, Perfect Clears, Run Time, and Most Common Clear. Personal-best values are marked with a gold ★ PB badge. A build summary lists the keystones and techniques you were running.
+- **Stats menu** — A new Stats button on the main menu opens a persistent stats screen with three sections: Career (runs played, victories, best ascension), Personal Bests (best single-run damage, longest combo, longest B2B), and Lifetime Totals (total damage, quads, T-spins, total play time).
+- **The Best Defense (keystone)** — Converts 25% of each attack into garbage shield charges. Moved from the technique pool to the keystone pool to better reflect its power level.
+
+### Balance
+- **Enemy HP scales exponentially** — Enemy HP now doubles each stage (base × 2ⁿ⁻¹) with a growing per-round offset, replacing the previous flat +15/stage formula. Stage 1 is unchanged (20–44 HP). Stage 2 rises to 40–82, stage 3 to 80–140, stage 4 to 160–238, and stage 5 to 320–416. Builds that came online early no longer trivialise mid-game enemies.
+
+### Bug Fixes
+- **Stats and ascension records now persist when debugging** — Profile data is loaded at startup (in the autoload) instead of only when the main menu scene initialises, so records are available regardless of which scene you enter from.
+- **Build summary shows correct names** — The keystone and technique names on the run-end screen now display the item's display name instead of showing a blank (the internal `name` property of a bare Resource).
+
+### Removed
+- **Gilded Touch (technique)** — Removed from the technique pool.
+
 ## [0.3.0] — 2026-06-15
 
 ### New Features

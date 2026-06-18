@@ -1,0 +1,2221 @@
+{
+  "name": "tetrouge",
+  "description": "A Tetris-based roguelite game built with Godot 4, where players clear lines to attack enemies, earn coins between rounds to buy keystones and techniques, and face escalating boss encounters across a structured run. Note: this project has over 100 source files; consider scoping analysis to a subdirectory for faster results.",
+  "languages": [
+    "config",
+    "docx",
+    "gd",
+    "godot",
+    "javascript",
+    "json",
+    "markdown",
+    "powershell",
+    "tres",
+    "tscn",
+    "txt",
+    "uid",
+    "unknown",
+    "yaml"
+  ],
+  "frameworks": [
+    "GUT"
+  ],
+  "files": [
+    {
+      "path": ".agents/skills/openspec-apply-change/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 156,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".agents/skills/openspec-archive-change/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 114,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".agents/skills/openspec-explore/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 288,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".agents/skills/openspec-propose/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 110,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".agents/skills/source-command-opsx-apply/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 156,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".agents/skills/source-command-opsx-archive/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 161,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".agents/skills/source-command-opsx-explore/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 177,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".agents/skills/source-command-opsx-propose/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 110,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".claude/commands/opsx/apply.md",
+      "language": "markdown",
+      "sizeLines": 152,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".claude/commands/opsx/archive.md",
+      "language": "markdown",
+      "sizeLines": 157,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".claude/commands/opsx/explore.md",
+      "language": "markdown",
+      "sizeLines": 173,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".claude/commands/opsx/propose.md",
+      "language": "markdown",
+      "sizeLines": 106,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".claude/settings.local.json",
+      "language": "json",
+      "sizeLines": 80,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".claude/skills/openspec-apply-change/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 156,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".claude/skills/openspec-archive-change/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 114,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".claude/skills/openspec-explore/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 288,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".claude/skills/openspec-propose/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 110,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".codex/skills/openspec-apply-change/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 156,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".codex/skills/openspec-archive-change/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 114,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".codex/skills/openspec-explore/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 288,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".codex/skills/openspec-propose/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 110,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".opencode/commands/opsx-apply.md",
+      "language": "markdown",
+      "sizeLines": 149,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".opencode/commands/opsx-archive.md",
+      "language": "markdown",
+      "sizeLines": 154,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".opencode/commands/opsx-explore.md",
+      "language": "markdown",
+      "sizeLines": 170,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".opencode/commands/opsx-propose.md",
+      "language": "markdown",
+      "sizeLines": 103,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".opencode/skills/openspec-apply-change/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 156,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".opencode/skills/openspec-archive-change/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 114,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".opencode/skills/openspec-explore/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 288,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".opencode/skills/openspec-propose/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 110,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".understand-anything/.understandignore",
+      "language": "unknown",
+      "sizeLines": 18,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".understand-anything/intermediate/scan-result.json",
+      "language": "json",
+      "sizeLines": 2220,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/assemble.cjs",
+      "language": "javascript",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-import-map-input.json",
+      "language": "json",
+      "sizeLines": 1569,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-import-map-output.json",
+      "language": "json",
+      "sizeLines": 322,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-scan-files.json",
+      "language": "json",
+      "sizeLines": 1910,
+      "fileCategory": "config"
+    },
+    {
+      "path": "AGENTS.md",
+      "language": "markdown",
+      "sizeLines": 34,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "language": "markdown",
+      "sizeLines": 59,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "CLAUDE.md",
+      "language": "markdown",
+      "sizeLines": 35,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "export.ps1",
+      "language": "powershell",
+      "sizeLines": 91,
+      "fileCategory": "script"
+    },
+    {
+      "path": "game/.gutconfig.json",
+      "language": "json",
+      "sizeLines": 10,
+      "fileCategory": "config"
+    },
+    {
+      "path": "game/autoloads/ascension_manager.gd",
+      "language": "gd",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/autoloads/ascension_manager.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/autoloads/economy.gd",
+      "language": "gd",
+      "sizeLines": 35,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/autoloads/economy.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/autoloads/resource_registry.gd",
+      "language": "gd",
+      "sizeLines": 151,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/autoloads/resource_registry.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/autoloads/run_state.gd",
+      "language": "gd",
+      "sizeLines": 143,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/autoloads/run_state.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/export_presets.cfg",
+      "language": "config",
+      "sizeLines": 121,
+      "fileCategory": "config"
+    },
+    {
+      "path": "game/project.godot",
+      "language": "godot",
+      "sizeLines": 91,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/attack_context.gd",
+      "language": "gd",
+      "sizeLines": 16,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/attack_context.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/boss_modifier.gd",
+      "language": "gd",
+      "sizeLines": 46,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/boss_modifier.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/consumable.gd",
+      "language": "gd",
+      "sizeLines": 40,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/consumable.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/boss_modifiers/the_ancient.tres",
+      "language": "tres",
+      "sizeLines": 10,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/boss_modifiers/the_blitz.tres",
+      "language": "tres",
+      "sizeLines": 10,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/boss_modifiers/the_fateless.tres",
+      "language": "tres",
+      "sizeLines": 10,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/boss_modifiers/the_filth.tres",
+      "language": "tres",
+      "sizeLines": 10,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/boss_modifiers/the_purge.tres",
+      "language": "tres",
+      "sizeLines": 10,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/boss_modifiers/the_reflection.tres",
+      "language": "tres",
+      "sizeLines": 10,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/boss_modifiers/the_silencer.tres",
+      "language": "tres",
+      "sizeLines": 10,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/boss_modifiers/the_thin.tres",
+      "language": "tres",
+      "sizeLines": 10,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/boss_modifiers/the_void.tres",
+      "language": "tres",
+      "sizeLines": 10,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/consumables/attack_surge.tres",
+      "language": "tres",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/consumables/b2b_booster.tres",
+      "language": "tres",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/consumables/combo_coil.tres",
+      "language": "tres",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/consumables/perfected_spike.tres",
+      "language": "tres",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/consumables/power_fragment.tres",
+      "language": "tres",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/consumables/power_shard.tres",
+      "language": "tres",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/consumables/quad_stone.tres",
+      "language": "tres",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/consumables/spin_amplifier.tres",
+      "language": "tres",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/enemies/boss_ancient.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/enemies/boss_blinder.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/enemies/boss_enforcer.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/enemies/boss_filth.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/enemies/boss_narrow.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/enemies/boss_purge.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/enemies/boss_reflection.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/enemies/boss_silencer.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/enemies/boss_void.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/enemies/cave_bat.tres",
+      "language": "tres",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/enemies/crimson_drake.tres",
+      "language": "tres",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/enemies/hex_wraith.tres",
+      "language": "tres",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/enemies/iron_shambler.tres",
+      "language": "tres",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/enemies/rock_crawler.tres",
+      "language": "tres",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/enemies/rust_golem.tres",
+      "language": "tres",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/enemies/slimeling.tres",
+      "language": "tres",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/enemies/the_warden.tres",
+      "language": "tres",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/enemies/void_knight.tres",
+      "language": "tres",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/beginners_luck.tres",
+      "language": "tres",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/blessed_stone.tres",
+      "language": "tres",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/consistency.tres",
+      "language": "tres",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/crystal_staff.tres",
+      "language": "tres",
+      "sizeLines": 14,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/daze.tres",
+      "language": "tres",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/dizzy.tres",
+      "language": "tres",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/double_trouble.tres",
+      "language": "tres",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/dual_wielding.tres",
+      "language": "tres",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/enchant.tres",
+      "language": "tres",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/final_blow.tres",
+      "language": "tres",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/flexible.tres",
+      "language": "tres",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/flurry.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/foresight.tres",
+      "language": "tres",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/full_potential.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/golden_watch.tres",
+      "language": "tres",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/great_sword.tres",
+      "language": "tres",
+      "sizeLines": 14,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/holy_cheese.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/hybrid_reactor.tres",
+      "language": "tres",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/legionnaires_shield.tres",
+      "language": "tres",
+      "sizeLines": 14,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/mace_and_chain.tres",
+      "language": "tres",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/magical_coin.tres",
+      "language": "tres",
+      "sizeLines": 14,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/midas_touch.tres",
+      "language": "tres",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/reflect.tres",
+      "language": "tres",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/risky_business.tres",
+      "language": "tres",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/safety_net.tres",
+      "language": "tres",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/sharpen.tres",
+      "language": "tres",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/simple_flail.tres",
+      "language": "tres",
+      "sizeLines": 14,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/simple_shield.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/simple_sword.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/simple_wand.tres",
+      "language": "tres",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/simplicity.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/slightly_magical_bag.tres",
+      "language": "tres",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/slightly_magical_coin.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/triple_threat.tres",
+      "language": "tres",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/veterans_luck.tres",
+      "language": "tres",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/keystones/whirl.tres",
+      "language": "tres",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/adrenaline_rush.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/aggressive_positioning.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/attack_battery.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/back_to_back_pressure.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/back_to_back_spin.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/bounty_list.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/brass_knuckles.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/burning_board.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/chain_battery.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/chain_starter.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/clean_strike.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/combo_payout.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/combo_spark.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/combo_spike.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/compact_setup.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/constant_pressure.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/controlled_drop.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/counter_strike.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/coupon.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/delayed_cannon.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/discipline.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/dualcasting.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/escalation.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/finisher.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/flash_step.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/flatline.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/flow_step.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/flurry.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/follow_up.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/four_disciplines.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/gamblers_blade.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/glass_cannon.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/good_planning.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/greedy_hands.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/green_thumb.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/hone.tres",
+      "language": "tres",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/low_pressure.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/mini_spark.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/opening_blow.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/patience.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/perfect_spark.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/reckless_assault.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/recycling.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/redzone.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/rotation_training.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/side_strike.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/smooth_haggling.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/specialist_discount.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/spinning_strike.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/switch_up.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/techniques/tetris_echo.tres",
+      "language": "tres",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/vouchers/bonus_round.tres",
+      "language": "tres",
+      "sizeLines": 10,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/vouchers/consumable_expert.tres",
+      "language": "tres",
+      "sizeLines": 10,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/vouchers/expanded_shop.tres",
+      "language": "tres",
+      "sizeLines": 10,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/data/vouchers/interest_cap_up.tres",
+      "language": "tres",
+      "sizeLines": 10,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/enemy.gd",
+      "language": "gd",
+      "sizeLines": 10,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/enemy.gd.uid",
+      "language": "uid",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/keystone.gd",
+      "language": "gd",
+      "sizeLines": 86,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/keystone.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/round_config.gd",
+      "language": "gd",
+      "sizeLines": 49,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/round_config.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/technique_round_state.gd",
+      "language": "gd",
+      "sizeLines": 30,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/technique_round_state.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/technique.gd",
+      "language": "gd",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/technique.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/unlock_condition.gd",
+      "language": "gd",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/unlock_condition.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/voucher.gd",
+      "language": "gd",
+      "sizeLines": 14,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/resources/voucher.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/debug/debug_overlay.gd",
+      "language": "gd",
+      "sizeLines": 53,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/debug/debug_overlay.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/debug/debug_overlay.tscn",
+      "language": "tscn",
+      "sizeLines": 45,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/debug/dev_console.gd",
+      "language": "gd",
+      "sizeLines": 191,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/debug/dev_console.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/debug/dev_console.tscn",
+      "language": "tscn",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/game/attack_bar.gd",
+      "language": "gd",
+      "sizeLines": 51,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/game/attack_bar.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/game/enemy_display.gd",
+      "language": "gd",
+      "sizeLines": 107,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/game/enemy_display.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/game/enemy_display.tscn",
+      "language": "tscn",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/game/hold_display.gd",
+      "language": "gd",
+      "sizeLines": 56,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/game/hold_display.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/game/hold_display.tscn",
+      "language": "tscn",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/game/hud.gd",
+      "language": "gd",
+      "sizeLines": 137,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/game/hud.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/game/pause_menu.gd",
+      "language": "gd",
+      "sizeLines": 23,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/game/pause_menu.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/game/pause_menu.tscn",
+      "language": "tscn",
+      "sizeLines": 43,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/game/queue_display.gd",
+      "language": "gd",
+      "sizeLines": 53,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/game/queue_display.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/game/queue_display.tscn",
+      "language": "tscn",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/game/run_manager.gd",
+      "language": "gd",
+      "sizeLines": 1000,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/game/run_manager.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/game/run_manager.tscn",
+      "language": "tscn",
+      "sizeLines": 130,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/game/technique_evaluator.gd",
+      "language": "gd",
+      "sizeLines": 276,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/game/technique_evaluator.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/keystone_selection/keystone_selection.gd",
+      "language": "gd",
+      "sizeLines": 81,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/keystone_selection/keystone_selection.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/keystone_selection/keystone_selection.tscn",
+      "language": "tscn",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/main_menu/main_menu.gd",
+      "language": "gd",
+      "sizeLines": 53,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/main_menu/main_menu.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/main_menu/main_menu.tscn",
+      "language": "tscn",
+      "sizeLines": 51,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/screens/ascension_selector.gd",
+      "language": "gd",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/screens/ascension_selector.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/screens/ascension_selector.tscn",
+      "language": "tscn",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/screens/round_success.gd",
+      "language": "gd",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/screens/round_success.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/screens/round_success.tscn",
+      "language": "tscn",
+      "sizeLines": 45,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/screens/run_failure.gd",
+      "language": "gd",
+      "sizeLines": 26,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/screens/run_failure.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/screens/run_failure.tscn",
+      "language": "tscn",
+      "sizeLines": 48,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/screens/run_victory.gd",
+      "language": "gd",
+      "sizeLines": 33,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/screens/run_victory.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/screens/run_victory.tscn",
+      "language": "tscn",
+      "sizeLines": 42,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/screens/settings.gd",
+      "language": "gd",
+      "sizeLines": 278,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/screens/settings.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/screens/settings.tscn",
+      "language": "tscn",
+      "sizeLines": 93,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/shop/shop.gd",
+      "language": "gd",
+      "sizeLines": 281,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/shop/shop.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/shop/shop.tscn",
+      "language": "tscn",
+      "sizeLines": 125,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/tetris/tetris_board.gd",
+      "language": "gd",
+      "sizeLines": 613,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/tetris/tetris_board.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scenes/tetris/tetris_board.tscn",
+      "language": "tscn",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scripts/bag_randomizer.gd",
+      "language": "gd",
+      "sizeLines": 45,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scripts/bag_randomizer.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scripts/piece_data.gd",
+      "language": "gd",
+      "sizeLines": 89,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scripts/piece_data.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scripts/profile_save.gd",
+      "language": "gd",
+      "sizeLines": 54,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scripts/profile_save.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scripts/run_save.gd",
+      "language": "gd",
+      "sizeLines": 82,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scripts/run_save.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scripts/run_stats.gd",
+      "language": "gd",
+      "sizeLines": 8,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scripts/run_stats.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scripts/srs.gd",
+      "language": "gd",
+      "sizeLines": 59,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scripts/srs.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scripts/unlock_checker.gd",
+      "language": "gd",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "game/scripts/unlock_checker.gd.uid",
+      "language": "uid",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "gut_err.txt",
+      "language": "txt",
+      "sizeLines": 168,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "gut_out.txt",
+      "language": "txt",
+      "sizeLines": 181,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "Keystones.docx",
+      "language": "docx",
+      "sizeLines": 46,
+      "fileCategory": "code"
+    },
+    {
+      "path": "openspec/config.yaml",
+      "language": "yaml",
+      "sizeLines": 15,
+      "fileCategory": "config"
+    },
+    {
+      "path": "openspec/specs/ascension-modifiers/spec.md",
+      "language": "markdown",
+      "sizeLines": 61,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/ascension-progression/spec.md",
+      "language": "markdown",
+      "sizeLines": 51,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/attack-buffer/spec.md",
+      "language": "markdown",
+      "sizeLines": 72,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/attack-system/spec.md",
+      "language": "markdown",
+      "sizeLines": 24,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/augments/spec.md",
+      "language": "markdown",
+      "sizeLines": 70,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/b2b-combo-display/spec.md",
+      "language": "markdown",
+      "sizeLines": 42,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/blessed-stone/spec.md",
+      "language": "markdown",
+      "sizeLines": 36,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/board-telemetry/spec.md",
+      "language": "markdown",
+      "sizeLines": 12,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/boss-modifiers/spec.md",
+      "language": "markdown",
+      "sizeLines": 99,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/consumables/spec.md",
+      "language": "markdown",
+      "sizeLines": 59,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/das-arr-setting/spec.md",
+      "language": "markdown",
+      "sizeLines": 44,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/debug-overlay/spec.md",
+      "language": "markdown",
+      "sizeLines": 34,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/dev-console/spec.md",
+      "language": "markdown",
+      "sizeLines": 72,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/economy/spec.md",
+      "language": "markdown",
+      "sizeLines": 94,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/enemy-display/spec.md",
+      "language": "markdown",
+      "sizeLines": 53,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/enemy-encounters/spec.md",
+      "language": "markdown",
+      "sizeLines": 111,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/gut-integration/spec.md",
+      "language": "markdown",
+      "sizeLines": 33,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/hold-display/spec.md",
+      "language": "markdown",
+      "sizeLines": 37,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/hybrid-reactor/spec.md",
+      "language": "markdown",
+      "sizeLines": 26,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/keybind-settings/spec.md",
+      "language": "markdown",
+      "sizeLines": 45,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/keystone-upgrades/spec.md",
+      "language": "markdown",
+      "sizeLines": 50,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/keystones/spec.md",
+      "language": "markdown",
+      "sizeLines": 162,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/pause-menu/spec.md",
+      "language": "markdown",
+      "sizeLines": 61,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/profile-save/spec.md",
+      "language": "markdown",
+      "sizeLines": 62,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/queue-display/spec.md",
+      "language": "markdown",
+      "sizeLines": 41,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/reflect-keystone/spec.md",
+      "language": "markdown",
+      "sizeLines": 33,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/round-hud-display/spec.md",
+      "language": "markdown",
+      "sizeLines": 128,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/run-persistence/spec.md",
+      "language": "markdown",
+      "sizeLines": 50,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/run-structure/spec.md",
+      "language": "markdown",
+      "sizeLines": 167,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/sdf-setting/spec.md",
+      "language": "markdown",
+      "sizeLines": 32,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/seeded-rng/spec.md",
+      "language": "markdown",
+      "sizeLines": 26,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/shop-system/spec.md",
+      "language": "markdown",
+      "sizeLines": 173,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/soft-drop-feedback/spec.md",
+      "language": "markdown",
+      "sizeLines": 12,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/technique-capacity/spec.md",
+      "language": "markdown",
+      "sizeLines": 37,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/technique-evaluator/spec.md",
+      "language": "markdown",
+      "sizeLines": 51,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/technique-pool/spec.md",
+      "language": "markdown",
+      "sizeLines": 124,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/techniques/spec.md",
+      "language": "markdown",
+      "sizeLines": 19,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/tetris-core/spec.md",
+      "language": "markdown",
+      "sizeLines": 37,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/timer-visibility/spec.md",
+      "language": "markdown",
+      "sizeLines": 27,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/unit-tests/spec.md",
+      "language": "markdown",
+      "sizeLines": 16,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/unlock-framework/spec.md",
+      "language": "markdown",
+      "sizeLines": 51,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/vouchers/spec.md",
+      "language": "markdown",
+      "sizeLines": 25,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "openspec/specs/whirl-keystone/spec.md",
+      "language": "markdown",
+      "sizeLines": 25,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "sizeLines": 1,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "technique list.txt",
+      "language": "txt",
+      "sizeLines": 68,
+      "fileCategory": "docs"
+    }
+  ],
+  "totalFiles": 313,
+  "filteredByIgnore": 962,
+  "estimatedComplexity": "large",
+  "importMap": {
+    ".agents/skills/openspec-apply-change/SKILL.md": [],
+    ".agents/skills/openspec-archive-change/SKILL.md": [],
+    ".agents/skills/openspec-explore/SKILL.md": [],
+    ".agents/skills/openspec-propose/SKILL.md": [],
+    ".agents/skills/source-command-opsx-apply/SKILL.md": [],
+    ".agents/skills/source-command-opsx-archive/SKILL.md": [],
+    ".agents/skills/source-command-opsx-explore/SKILL.md": [],
+    ".agents/skills/source-command-opsx-propose/SKILL.md": [],
+    ".claude/commands/opsx/apply.md": [],
+    ".claude/commands/opsx/archive.md": [],
+    ".claude/commands/opsx/explore.md": [],
+    ".claude/commands/opsx/propose.md": [],
+    ".claude/settings.local.json": [],
+    ".claude/skills/openspec-apply-change/SKILL.md": [],
+    ".claude/skills/openspec-archive-change/SKILL.md": [],
+    ".claude/skills/openspec-explore/SKILL.md": [],
+    ".claude/skills/openspec-propose/SKILL.md": [],
+    ".codex/skills/openspec-apply-change/SKILL.md": [],
+    ".codex/skills/openspec-archive-change/SKILL.md": [],
+    ".codex/skills/openspec-explore/SKILL.md": [],
+    ".codex/skills/openspec-propose/SKILL.md": [],
+    ".opencode/commands/opsx-apply.md": [],
+    ".opencode/commands/opsx-archive.md": [],
+    ".opencode/commands/opsx-explore.md": [],
+    ".opencode/commands/opsx-propose.md": [],
+    ".opencode/skills/openspec-apply-change/SKILL.md": [],
+    ".opencode/skills/openspec-archive-change/SKILL.md": [],
+    ".opencode/skills/openspec-explore/SKILL.md": [],
+    ".opencode/skills/openspec-propose/SKILL.md": [],
+    ".understand-anything/.understandignore": [],
+    ".understand-anything/intermediate/scan-result.json": [],
+    ".understand-anything/tmp/assemble.cjs": [],
+    ".understand-anything/tmp/ua-import-map-input.json": [],
+    ".understand-anything/tmp/ua-import-map-output.json": [],
+    ".understand-anything/tmp/ua-scan-files.json": [],
+    "AGENTS.md": [],
+    "CHANGELOG.md": [],
+    "CLAUDE.md": [],
+    "export.ps1": [],
+    "game/.gutconfig.json": [],
+    "game/autoloads/ascension_manager.gd": [],
+    "game/autoloads/ascension_manager.gd.uid": [],
+    "game/autoloads/economy.gd": [],
+    "game/autoloads/economy.gd.uid": [],
+    "game/autoloads/resource_registry.gd": [],
+    "game/autoloads/resource_registry.gd.uid": [],
+    "game/autoloads/run_state.gd": [],
+    "game/autoloads/run_state.gd.uid": [],
+    "game/export_presets.cfg": [],
+    "game/project.godot": [],
+    "game/resources/attack_context.gd": [],
+    "game/resources/attack_context.gd.uid": [],
+    "game/resources/boss_modifier.gd": [],
+    "game/resources/boss_modifier.gd.uid": [],
+    "game/resources/consumable.gd": [],
+    "game/resources/consumable.gd.uid": [],
+    "game/resources/data/boss_modifiers/the_ancient.tres": [],
+    "game/resources/data/boss_modifiers/the_blitz.tres": [],
+    "game/resources/data/boss_modifiers/the_fateless.tres": [],
+    "game/resources/data/boss_modifiers/the_filth.tres": [],
+    "game/resources/data/boss_modifiers/the_purge.tres": [],
+    "game/resources/data/boss_modifiers/the_reflection.tres": [],
+    "game/resources/data/boss_modifiers/the_silencer.tres": [],
+    "game/resources/data/boss_modifiers/the_thin.tres": [],
+    "game/resources/data/boss_modifiers/the_void.tres": [],
+    "game/resources/data/consumables/attack_surge.tres": [],
+    "game/resources/data/consumables/b2b_booster.tres": [],
+    "game/resources/data/consumables/combo_coil.tres": [],
+    "game/resources/data/consumables/perfected_spike.tres": [],
+    "game/resources/data/consumables/power_fragment.tres": [],
+    "game/resources/data/consumables/power_shard.tres": [],
+    "game/resources/data/consumables/quad_stone.tres": [],
+    "game/resources/data/consumables/spin_amplifier.tres": [],
+    "game/resources/data/enemies/boss_ancient.tres": [],
+    "game/resources/data/enemies/boss_blinder.tres": [],
+    "game/resources/data/enemies/boss_enforcer.tres": [],
+    "game/resources/data/enemies/boss_filth.tres": [],
+    "game/resources/data/enemies/boss_narrow.tres": [],
+    "game/resources/data/enemies/boss_purge.tres": [],
+    "game/resources/data/enemies/boss_reflection.tres": [],
+    "game/resources/data/enemies/boss_silencer.tres": [],
+    "game/resources/data/enemies/boss_void.tres": [],
+    "game/resources/data/enemies/cave_bat.tres": [],
+    "game/resources/data/enemies/crimson_drake.tres": [],
+    "game/resources/data/enemies/hex_wraith.tres": [],
+    "game/resources/data/enemies/iron_shambler.tres": [],
+    "game/resources/data/enemies/rock_crawler.tres": [],
+    "game/resources/data/enemies/rust_golem.tres": [],
+    "game/resources/data/enemies/slimeling.tres": [],
+    "game/resources/data/enemies/the_warden.tres": [],
+    "game/resources/data/enemies/void_knight.tres": [],
+    "game/resources/data/keystones/beginners_luck.tres": [],
+    "game/resources/data/keystones/blessed_stone.tres": [],
+    "game/resources/data/keystones/consistency.tres": [],
+    "game/resources/data/keystones/crystal_staff.tres": [],
+    "game/resources/data/keystones/daze.tres": [],
+    "game/resources/data/keystones/dizzy.tres": [],
+    "game/resources/data/keystones/double_trouble.tres": [],
+    "game/resources/data/keystones/dual_wielding.tres": [],
+    "game/resources/data/keystones/enchant.tres": [],
+    "game/resources/data/keystones/final_blow.tres": [],
+    "game/resources/data/keystones/flexible.tres": [],
+    "game/resources/data/keystones/flurry.tres": [],
+    "game/resources/data/keystones/foresight.tres": [],
+    "game/resources/data/keystones/full_potential.tres": [],
+    "game/resources/data/keystones/golden_watch.tres": [],
+    "game/resources/data/keystones/great_sword.tres": [],
+    "game/resources/data/keystones/holy_cheese.tres": [],
+    "game/resources/data/keystones/hybrid_reactor.tres": [],
+    "game/resources/data/keystones/legionnaires_shield.tres": [],
+    "game/resources/data/keystones/mace_and_chain.tres": [],
+    "game/resources/data/keystones/magical_coin.tres": [],
+    "game/resources/data/keystones/midas_touch.tres": [],
+    "game/resources/data/keystones/reflect.tres": [],
+    "game/resources/data/keystones/risky_business.tres": [],
+    "game/resources/data/keystones/safety_net.tres": [],
+    "game/resources/data/keystones/sharpen.tres": [],
+    "game/resources/data/keystones/simple_flail.tres": [],
+    "game/resources/data/keystones/simple_shield.tres": [],
+    "game/resources/data/keystones/simple_sword.tres": [],
+    "game/resources/data/keystones/simple_wand.tres": [],
+    "game/resources/data/keystones/simplicity.tres": [],
+    "game/resources/data/keystones/slightly_magical_bag.tres": [],
+    "game/resources/data/keystones/slightly_magical_coin.tres": [],
+    "game/resources/data/keystones/triple_threat.tres": [],
+    "game/resources/data/keystones/veterans_luck.tres": [],
+    "game/resources/data/keystones/whirl.tres": [],
+    "game/resources/data/techniques/adrenaline_rush.tres": [],
+    "game/resources/data/techniques/aggressive_positioning.tres": [],
+    "game/resources/data/techniques/attack_battery.tres": [],
+    "game/resources/data/techniques/back_to_back_pressure.tres": [],
+    "game/resources/data/techniques/back_to_back_spin.tres": [],
+    "game/resources/data/techniques/bounty_list.tres": [],
+    "game/resources/data/techniques/brass_knuckles.tres": [],
+    "game/resources/data/techniques/burning_board.tres": [],
+    "game/resources/data/techniques/chain_battery.tres": [],
+    "game/resources/data/techniques/chain_starter.tres": [],
+    "game/resources/data/techniques/clean_strike.tres": [],
+    "game/resources/data/techniques/combo_payout.tres": [],
+    "game/resources/data/techniques/combo_spark.tres": [],
+    "game/resources/data/techniques/combo_spike.tres": [],
+    "game/resources/data/techniques/compact_setup.tres": [],
+    "game/resources/data/techniques/constant_pressure.tres": [],
+    "game/resources/data/techniques/controlled_drop.tres": [],
+    "game/resources/data/techniques/counter_strike.tres": [],
+    "game/resources/data/techniques/coupon.tres": [],
+    "game/resources/data/techniques/delayed_cannon.tres": [],
+    "game/resources/data/techniques/discipline.tres": [],
+    "game/resources/data/techniques/dualcasting.tres": [],
+    "game/resources/data/techniques/escalation.tres": [],
+    "game/resources/data/techniques/finisher.tres": [],
+    "game/resources/data/techniques/flash_step.tres": [],
+    "game/resources/data/techniques/flatline.tres": [],
+    "game/resources/data/techniques/flow_step.tres": [],
+    "game/resources/data/techniques/flurry.tres": [],
+    "game/resources/data/techniques/follow_up.tres": [],
+    "game/resources/data/techniques/four_disciplines.tres": [],
+    "game/resources/data/techniques/gamblers_blade.tres": [],
+    "game/resources/data/techniques/glass_cannon.tres": [],
+    "game/resources/data/techniques/good_planning.tres": [],
+    "game/resources/data/techniques/greedy_hands.tres": [],
+    "game/resources/data/techniques/green_thumb.tres": [],
+    "game/resources/data/techniques/hone.tres": [],
+    "game/resources/data/techniques/low_pressure.tres": [],
+    "game/resources/data/techniques/mini_spark.tres": [],
+    "game/resources/data/techniques/opening_blow.tres": [],
+    "game/resources/data/techniques/patience.tres": [],
+    "game/resources/data/techniques/perfect_spark.tres": [],
+    "game/resources/data/techniques/reckless_assault.tres": [],
+    "game/resources/data/techniques/recycling.tres": [],
+    "game/resources/data/techniques/redzone.tres": [],
+    "game/resources/data/techniques/rotation_training.tres": [],
+    "game/resources/data/techniques/side_strike.tres": [],
+    "game/resources/data/techniques/smooth_haggling.tres": [],
+    "game/resources/data/techniques/specialist_discount.tres": [],
+    "game/resources/data/techniques/spinning_strike.tres": [],
+    "game/resources/data/techniques/switch_up.tres": [],
+    "game/resources/data/techniques/tetris_echo.tres": [],
+    "game/resources/data/vouchers/bonus_round.tres": [],
+    "game/resources/data/vouchers/consumable_expert.tres": [],
+    "game/resources/data/vouchers/expanded_shop.tres": [],
+    "game/resources/data/vouchers/interest_cap_up.tres": [],
+    "game/resources/enemy.gd": [],
+    "game/resources/enemy.gd.uid": [],
+    "game/resources/keystone.gd": [],
+    "game/resources/keystone.gd.uid": [],
+    "game/resources/round_config.gd": [],
+    "game/resources/round_config.gd.uid": [],
+    "game/resources/technique_round_state.gd": [],
+    "game/resources/technique_round_state.gd.uid": [],
+    "game/resources/technique.gd": [],
+    "game/resources/technique.gd.uid": [],
+    "game/resources/unlock_condition.gd": [],
+    "game/resources/unlock_condition.gd.uid": [],
+    "game/resources/voucher.gd": [],
+    "game/resources/voucher.gd.uid": [],
+    "game/scenes/debug/debug_overlay.gd": [],
+    "game/scenes/debug/debug_overlay.gd.uid": [],
+    "game/scenes/debug/debug_overlay.tscn": [],
+    "game/scenes/debug/dev_console.gd": [],
+    "game/scenes/debug/dev_console.gd.uid": [],
+    "game/scenes/debug/dev_console.tscn": [],
+    "game/scenes/game/attack_bar.gd": [],
+    "game/scenes/game/attack_bar.gd.uid": [],
+    "game/scenes/game/enemy_display.gd": [],
+    "game/scenes/game/enemy_display.gd.uid": [],
+    "game/scenes/game/enemy_display.tscn": [],
+    "game/scenes/game/hold_display.gd": [],
+    "game/scenes/game/hold_display.gd.uid": [],
+    "game/scenes/game/hold_display.tscn": [],
+    "game/scenes/game/hud.gd": [],
+    "game/scenes/game/hud.gd.uid": [],
+    "game/scenes/game/pause_menu.gd": [],
+    "game/scenes/game/pause_menu.gd.uid": [],
+    "game/scenes/game/pause_menu.tscn": [],
+    "game/scenes/game/queue_display.gd": [],
+    "game/scenes/game/queue_display.gd.uid": [],
+    "game/scenes/game/queue_display.tscn": [],
+    "game/scenes/game/run_manager.gd": [],
+    "game/scenes/game/run_manager.gd.uid": [],
+    "game/scenes/game/run_manager.tscn": [],
+    "game/scenes/game/technique_evaluator.gd": [],
+    "game/scenes/game/technique_evaluator.gd.uid": [],
+    "game/scenes/keystone_selection/keystone_selection.gd": [],
+    "game/scenes/keystone_selection/keystone_selection.gd.uid": [],
+    "game/scenes/keystone_selection/keystone_selection.tscn": [],
+    "game/scenes/main_menu/main_menu.gd": [],
+    "game/scenes/main_menu/main_menu.gd.uid": [],
+    "game/scenes/main_menu/main_menu.tscn": [],
+    "game/scenes/screens/ascension_selector.gd": [],
+    "game/scenes/screens/ascension_selector.gd.uid": [],
+    "game/scenes/screens/ascension_selector.tscn": [],
+    "game/scenes/screens/round_success.gd": [],
+    "game/scenes/screens/round_success.gd.uid": [],
+    "game/scenes/screens/round_success.tscn": [],
+    "game/scenes/screens/run_failure.gd": [],
+    "game/scenes/screens/run_failure.gd.uid": [],
+    "game/scenes/screens/run_failure.tscn": [],
+    "game/scenes/screens/run_victory.gd": [],
+    "game/scenes/screens/run_victory.gd.uid": [],
+    "game/scenes/screens/run_victory.tscn": [],
+    "game/scenes/screens/settings.gd": [],
+    "game/scenes/screens/settings.gd.uid": [],
+    "game/scenes/screens/settings.tscn": [],
+    "game/scenes/shop/shop.gd": [],
+    "game/scenes/shop/shop.gd.uid": [],
+    "game/scenes/shop/shop.tscn": [],
+    "game/scenes/tetris/tetris_board.gd": [],
+    "game/scenes/tetris/tetris_board.gd.uid": [],
+    "game/scenes/tetris/tetris_board.tscn": [],
+    "game/scripts/bag_randomizer.gd": [],
+    "game/scripts/bag_randomizer.gd.uid": [],
+    "game/scripts/piece_data.gd": [],
+    "game/scripts/piece_data.gd.uid": [],
+    "game/scripts/profile_save.gd": [],
+    "game/scripts/profile_save.gd.uid": [],
+    "game/scripts/run_save.gd": [],
+    "game/scripts/run_save.gd.uid": [],
+    "game/scripts/run_stats.gd": [],
+    "game/scripts/run_stats.gd.uid": [],
+    "game/scripts/srs.gd": [],
+    "game/scripts/srs.gd.uid": [],
+    "game/scripts/unlock_checker.gd": [],
+    "game/scripts/unlock_checker.gd.uid": [],
+    "gut_err.txt": [],
+    "gut_out.txt": [],
+    "Keystones.docx": [],
+    "openspec/config.yaml": [],
+    "openspec/specs/ascension-modifiers/spec.md": [],
+    "openspec/specs/ascension-progression/spec.md": [],
+    "openspec/specs/attack-buffer/spec.md": [],
+    "openspec/specs/attack-system/spec.md": [],
+    "openspec/specs/augments/spec.md": [],
+    "openspec/specs/b2b-combo-display/spec.md": [],
+    "openspec/specs/blessed-stone/spec.md": [],
+    "openspec/specs/board-telemetry/spec.md": [],
+    "openspec/specs/boss-modifiers/spec.md": [],
+    "openspec/specs/consumables/spec.md": [],
+    "openspec/specs/das-arr-setting/spec.md": [],
+    "openspec/specs/debug-overlay/spec.md": [],
+    "openspec/specs/dev-console/spec.md": [],
+    "openspec/specs/economy/spec.md": [],
+    "openspec/specs/enemy-display/spec.md": [],
+    "openspec/specs/enemy-encounters/spec.md": [],
+    "openspec/specs/gut-integration/spec.md": [],
+    "openspec/specs/hold-display/spec.md": [],
+    "openspec/specs/hybrid-reactor/spec.md": [],
+    "openspec/specs/keybind-settings/spec.md": [],
+    "openspec/specs/keystone-upgrades/spec.md": [],
+    "openspec/specs/keystones/spec.md": [],
+    "openspec/specs/pause-menu/spec.md": [],
+    "openspec/specs/profile-save/spec.md": [],
+    "openspec/specs/queue-display/spec.md": [],
+    "openspec/specs/reflect-keystone/spec.md": [],
+    "openspec/specs/round-hud-display/spec.md": [],
+    "openspec/specs/run-persistence/spec.md": [],
+    "openspec/specs/run-structure/spec.md": [],
+    "openspec/specs/sdf-setting/spec.md": [],
+    "openspec/specs/seeded-rng/spec.md": [],
+    "openspec/specs/shop-system/spec.md": [],
+    "openspec/specs/soft-drop-feedback/spec.md": [],
+    "openspec/specs/technique-capacity/spec.md": [],
+    "openspec/specs/technique-evaluator/spec.md": [],
+    "openspec/specs/technique-pool/spec.md": [],
+    "openspec/specs/techniques/spec.md": [],
+    "openspec/specs/tetris-core/spec.md": [],
+    "openspec/specs/timer-visibility/spec.md": [],
+    "openspec/specs/unit-tests/spec.md": [],
+    "openspec/specs/unlock-framework/spec.md": [],
+    "openspec/specs/vouchers/spec.md": [],
+    "openspec/specs/whirl-keystone/spec.md": [],
+    "README.md": [],
+    "technique list.txt": []
+  }
+}

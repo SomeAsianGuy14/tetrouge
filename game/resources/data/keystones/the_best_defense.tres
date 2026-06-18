@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Keystone" format=3 uid="uid://the_best_defense"]
+
+[ext_resource type="Script" uid="uid://cbdxscbm7yog0" path="res://resources/keystone.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "the_best_defense"
+display_name = "The Best Defense"
+description = "25% of your attack is converted to shield."
+category = "Defense"
+attack_to_shield_pct = 0.25

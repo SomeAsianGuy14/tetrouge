@@ -47,6 +47,7 @@ const all_keystones: Array = [
 	preload("res://resources/data/keystones/blessed_stone.tres"),
 	preload("res://resources/data/keystones/hybrid_reactor.tres"),
 	preload("res://resources/data/keystones/reflect.tres"),
+	preload("res://resources/data/keystones/the_best_defense.tres"),
 ]
 
 const all_techniques: Array = [
@@ -83,7 +84,6 @@ const all_techniques: Array = [
 	preload("res://resources/data/techniques/follow_up.tres"),
 	preload("res://resources/data/techniques/four_disciplines.tres"),
 	preload("res://resources/data/techniques/gamblers_blade.tres"),
-	preload("res://resources/data/techniques/gilded_touch.tres"),
 	preload("res://resources/data/techniques/glass_cannon.tres"),
 	preload("res://resources/data/techniques/golden_blade.tres"),
 	preload("res://resources/data/techniques/good_planning.tres"),
@@ -108,7 +108,6 @@ const all_techniques: Array = [
 	preload("res://resources/data/techniques/spinning_strike.tres"),
 	preload("res://resources/data/techniques/switch_up.tres"),
 	preload("res://resources/data/techniques/tetris_echo.tres"),
-	preload("res://resources/data/techniques/the_best_defense.tres"),
 ]
 
 const all_consumables: Array = [

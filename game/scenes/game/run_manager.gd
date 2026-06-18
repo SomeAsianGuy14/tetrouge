@@ -818,6 +818,15 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 	if event_type == "perfect_clear":
 		_pc_count_this_round += 1
 
+	if _run_stats and not is_bonus_event and event_type in CLEAR_TYPE_DISPLAY:
+		_run_stats.clear_counts[event_type] = _run_stats.clear_counts.get(event_type, 0) + 1
+		if event_type == "quad":
+			_run_stats.quads += 1
+		elif event_type.begins_with("tspin"):
+			_run_stats.tspins += 1
+		elif event_type == "perfect_clear":
+			_run_stats.perfect_clears += 1
+
 	if modified > 0 and not is_bonus_event:
 		var tag_bonus := 0
 		for ks in RunState.keystones:
@@ -832,9 +841,9 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 
 	# The Best Defense: convert a portion of the finalized attack into shield
 	if not is_bonus_event and ctx.lines_cleared > 0:
-		for t in RunState.techniques:
-			if t.effect_type == "attack_to_shield":
-				var shield_gain := floori(modified * t.params.get("pct", 0.25))
+		for ks in RunState.keystones:
+			if ks.attack_to_shield_pct > 0.0:
+				var shield_gain := floori(modified * ks.attack_to_shield_pct)
 				if shield_gain > 0:
 					_garbage_shield += shield_gain
 					if _shield_bar:
@@ -1319,6 +1328,8 @@ func _end_round(success: bool) -> void:
 	if _round_ended:
 		return
 	_round_ended = true
+	if _run_stats:
+		_run_stats.run_time += round_timer
 	_garbage_packets = []
 	_popup_schedule.clear()
 	_popup_elapsed = 0.0
@@ -1460,26 +1471,38 @@ func _show_keystone_selection() -> void:
 func _on_keystone_chosen(_keystone: Keystone) -> void:
 	_show_shop()
 
+func _compute_pbs(run_stats: RunStats) -> Dictionary:
+	var pbs: Dictionary = {}
+	if run_stats.total_damage > ProfileSave.best_single_run_damage:
+		pbs["total_damage"] = true
+	if run_stats.highest_combo_chain > ProfileSave.highest_combo_chain:
+		pbs["highest_combo_chain"] = true
+	if run_stats.highest_b2b > ProfileSave.highest_b2b:
+		pbs["highest_b2b"] = true
+	return pbs
+
 func _show_failure() -> void:
 	RunSave.delete()
+	var pbs: Dictionary = _compute_pbs(_run_stats) if _run_stats else {}
 	var scene: PackedScene = load(SCENE_RUN_FAILURE)
 	var screen = scene.instantiate()
 	add_child(screen)
-	screen.setup(RunState.stage, RunState.round_index)
+	screen.setup(_run_stats, pbs, RunState.stage, RunState.round_index)
 
 func _show_victory() -> void:
 	RunSave.delete()
 	if _run_stats:
 		_run_stats.total_damage = int(quota_accumulated)
 	var beaten_level := AscensionManager.current_level
+	var pbs: Dictionary = _compute_pbs(_run_stats) if _run_stats else {}
+	var scene: PackedScene = load(SCENE_RUN_VICTORY)
+	var screen = scene.instantiate()
+	add_child(screen)
+	screen.setup(_run_stats, pbs, Economy.coins, beaten_level)
 	ProfileSave.record_victory(beaten_level)
 	if _run_stats:
 		ProfileSave.accumulate_stats(_run_stats)
 		UnlockChecker.check_all(_run_stats, ProfileSave)
-	var scene: PackedScene = load(SCENE_RUN_VICTORY)
-	var screen = scene.instantiate()
-	add_child(screen)
-	screen.setup(Economy.coins, beaten_level)
 
 # ── Consumable integration ────────────────────────────────────────────────
 

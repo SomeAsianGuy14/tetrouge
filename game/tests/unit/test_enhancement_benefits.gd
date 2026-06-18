@@ -206,10 +206,9 @@ func test_last_stand_does_not_fire_twice_in_same_round() -> void:
 # ── 11.13: The Best Defense ─────────────────────────────────────────────────
 
 func test_best_defense_adds_shield_without_reducing_attack() -> void:
-	var t := Technique.new()
-	t.effect_type = "attack_to_shield"
-	t.params = {"pct": 0.25}
-	RunState.techniques = [t]
+	var ks := Keystone.new()
+	ks.attack_to_shield_pct = 0.25
+	RunState.keystones = [ks]
 
 	var rm := _make_manager()
 	rm._garbage_shield = 0
@@ -220,10 +219,9 @@ func test_best_defense_adds_shield_without_reducing_attack() -> void:
 	assert_eq(rm._garbage_shield, 1, "floor(4 * 0.25) = 1 shield gained")
 
 func test_best_defense_no_shield_on_bonus_event() -> void:
-	var t := Technique.new()
-	t.effect_type = "attack_to_shield"
-	t.params = {"pct": 0.25}
-	RunState.techniques = [t]
+	var ks := Keystone.new()
+	ks.attack_to_shield_pct = 0.25
+	RunState.keystones = [ks]
 
 	var rm := _make_manager()
 	rm._garbage_shield = 0

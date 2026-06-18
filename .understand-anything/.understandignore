@@ -1,0 +1,18 @@
+# .understandignore — patterns for files/dirs to exclude from analysis
+# Syntax: same as .gitignore (globs, # comments, ! negation, trailing / for dirs)
+#
+# Built-in defaults (always excluded unless negated):
+#   node_modules/, .git/, dist/, build/, obj/, *.lock, *.min.js, etc.
+#
+# --- From .gitignore (uncomment to exclude) ---
+
+builds/
+
+# --- Godot editor cache (recommended to exclude) ---
+
+game/.godot/
+game/addons/gut/
+openspec/changes/archive/
+
+# --- Test file patterns (uncomment to exclude) ---
+game/tests/

@@ -126,7 +126,9 @@ func _apply_voucher_effects(voucher) -> void:
 			pass  # speed bonus removed; voucher kept for potential future effect
 
 func calculate_quota(current_stage: int, current_round: int) -> int:
-	return 20 + (current_stage - 1) * 15 + current_round * 8
+	var stage_base := roundi(20.0 * pow(2.0, current_stage - 1))
+	var round_bonus := current_round * (8 + (current_stage - 1) * 6)
+	return stage_base + round_bonus
 
 func calculate_time_limit(_current_stage: int) -> float:
 	return 180.0

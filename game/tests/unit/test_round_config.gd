@@ -15,11 +15,11 @@ func test_ante1_elite_blind_quota_is_36() -> void:
 func test_ante1_boss_blind_quota_is_44() -> void:
 	assert_eq(RunState.calculate_quota(1, 3), 44)
 
-func test_ante3_small_blind_quota_is_50() -> void:
-	assert_eq(RunState.calculate_quota(3, 0), 50)
+func test_ante3_small_blind_quota_is_80() -> void:
+	assert_eq(RunState.calculate_quota(3, 0), 80)
 
-func test_ante5_boss_blind_quota_is_104() -> void:
-	assert_eq(RunState.calculate_quota(5, 3), 104)
+func test_ante5_boss_blind_quota_is_416() -> void:
+	assert_eq(RunState.calculate_quota(5, 3), 416)
 
 func test_quota_increases_with_ante() -> void:
 	var a1 := RunState.calculate_quota(1, 0)

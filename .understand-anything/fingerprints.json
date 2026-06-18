@@ -1,0 +1,3067 @@
+{
+  "version": "1.0.0",
+  "gitCommitHash": "c01f1f4ffe487774f59ee4940432cdf2fd99b04c",
+  "generatedAt": "2026-06-09T05:53:30.856Z",
+  "files": {
+    ".agents/skills/openspec-apply-change/SKILL.md": {
+      "filePath": ".agents/skills/openspec-apply-change/SKILL.md",
+      "contentHash": "679533b52454c3ee7a105a542243f232ec9bc0c041814b67cc4c874f0776899a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 157,
+      "hasStructuralAnalysis": true
+    },
+    ".agents/skills/openspec-archive-change/SKILL.md": {
+      "filePath": ".agents/skills/openspec-archive-change/SKILL.md",
+      "contentHash": "e111d71216167eea10cec26abe8f6e15d925efeef2fd9925ffa219f55145acce",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 115,
+      "hasStructuralAnalysis": true
+    },
+    ".agents/skills/openspec-explore/SKILL.md": {
+      "filePath": ".agents/skills/openspec-explore/SKILL.md",
+      "contentHash": "2185e88065c00f69fab63e8e9680a97be51c1e7bcfc260b0631c5418666fcba8",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 289,
+      "hasStructuralAnalysis": true
+    },
+    ".agents/skills/openspec-propose/SKILL.md": {
+      "filePath": ".agents/skills/openspec-propose/SKILL.md",
+      "contentHash": "88ad070e30256107d8989c2bf4b0ff9e4ee1c8976dd32829675c88f00618dad6",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 111,
+      "hasStructuralAnalysis": true
+    },
+    ".agents/skills/source-command-opsx-apply/SKILL.md": {
+      "filePath": ".agents/skills/source-command-opsx-apply/SKILL.md",
+      "contentHash": "b21e4faafe9825a8699cd37599ef37defe8d94746b8b488005c65e6057bb90be",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 157,
+      "hasStructuralAnalysis": true
+    },
+    ".agents/skills/source-command-opsx-archive/SKILL.md": {
+      "filePath": ".agents/skills/source-command-opsx-archive/SKILL.md",
+      "contentHash": "d79648dacb469f5566828863990d22feea62b44eb5051721a28d925c96426298",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 162,
+      "hasStructuralAnalysis": true
+    },
+    ".agents/skills/source-command-opsx-explore/SKILL.md": {
+      "filePath": ".agents/skills/source-command-opsx-explore/SKILL.md",
+      "contentHash": "95a82101e6ea49c9a39fe70ad1984b9a4697488cffb5cf5fa85e3feb105a03fe",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 178,
+      "hasStructuralAnalysis": true
+    },
+    ".agents/skills/source-command-opsx-propose/SKILL.md": {
+      "filePath": ".agents/skills/source-command-opsx-propose/SKILL.md",
+      "contentHash": "c8497ebbe952ada365e9ad3ca7ed0544ea3cbbf03d1fa660603e3a42bcec8342",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 111,
+      "hasStructuralAnalysis": true
+    },
+    ".claude/commands/opsx/apply.md": {
+      "filePath": ".claude/commands/opsx/apply.md",
+      "contentHash": "7d1a89282052990e323a53241d952bb8d3060bb7aa28e005e67d44398e9c0925",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 153,
+      "hasStructuralAnalysis": true
+    },
+    ".claude/commands/opsx/archive.md": {
+      "filePath": ".claude/commands/opsx/archive.md",
+      "contentHash": "2c68a09dc62d3ca1291ed0c048283ed0ebd5b7ccea2c46a279ea60cffb74d353",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 158,
+      "hasStructuralAnalysis": true
+    },
+    ".claude/commands/opsx/explore.md": {
+      "filePath": ".claude/commands/opsx/explore.md",
+      "contentHash": "6acd42bb8483bb89d943b6de9c859cbb97f0023c6b4704e71224fba6132a2609",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 174,
+      "hasStructuralAnalysis": true
+    },
+    ".claude/commands/opsx/propose.md": {
+      "filePath": ".claude/commands/opsx/propose.md",
+      "contentHash": "e73e74dfe7ecaf33f88881083a8180e2feb53452796237b64687390119515d6b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 107,
+      "hasStructuralAnalysis": true
+    },
+    ".claude/settings.local.json": {
+      "filePath": ".claude/settings.local.json",
+      "contentHash": "a6896f7257288c59975871c213670a1b69b735b41d0bdafd65bf02ab7b922126",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 81,
+      "hasStructuralAnalysis": true
+    },
+    ".claude/skills/openspec-apply-change/SKILL.md": {
+      "filePath": ".claude/skills/openspec-apply-change/SKILL.md",
+      "contentHash": "679533b52454c3ee7a105a542243f232ec9bc0c041814b67cc4c874f0776899a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 157,
+      "hasStructuralAnalysis": true
+    },
+    ".claude/skills/openspec-archive-change/SKILL.md": {
+      "filePath": ".claude/skills/openspec-archive-change/SKILL.md",
+      "contentHash": "e111d71216167eea10cec26abe8f6e15d925efeef2fd9925ffa219f55145acce",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 115,
+      "hasStructuralAnalysis": true
+    },
+    ".claude/skills/openspec-explore/SKILL.md": {
+      "filePath": ".claude/skills/openspec-explore/SKILL.md",
+      "contentHash": "2185e88065c00f69fab63e8e9680a97be51c1e7bcfc260b0631c5418666fcba8",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 289,
+      "hasStructuralAnalysis": true
+    },
+    ".claude/skills/openspec-propose/SKILL.md": {
+      "filePath": ".claude/skills/openspec-propose/SKILL.md",
+      "contentHash": "88ad070e30256107d8989c2bf4b0ff9e4ee1c8976dd32829675c88f00618dad6",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 111,
+      "hasStructuralAnalysis": true
+    },
+    ".codex/skills/openspec-apply-change/SKILL.md": {
+      "filePath": ".codex/skills/openspec-apply-change/SKILL.md",
+      "contentHash": "679533b52454c3ee7a105a542243f232ec9bc0c041814b67cc4c874f0776899a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 157,
+      "hasStructuralAnalysis": true
+    },
+    ".codex/skills/openspec-archive-change/SKILL.md": {
+      "filePath": ".codex/skills/openspec-archive-change/SKILL.md",
+      "contentHash": "e111d71216167eea10cec26abe8f6e15d925efeef2fd9925ffa219f55145acce",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 115,
+      "hasStructuralAnalysis": true
+    },
+    ".codex/skills/openspec-explore/SKILL.md": {
+      "filePath": ".codex/skills/openspec-explore/SKILL.md",
+      "contentHash": "2185e88065c00f69fab63e8e9680a97be51c1e7bcfc260b0631c5418666fcba8",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 289,
+      "hasStructuralAnalysis": true
+    },
+    ".codex/skills/openspec-propose/SKILL.md": {
+      "filePath": ".codex/skills/openspec-propose/SKILL.md",
+      "contentHash": "88ad070e30256107d8989c2bf4b0ff9e4ee1c8976dd32829675c88f00618dad6",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 111,
+      "hasStructuralAnalysis": true
+    },
+    ".opencode/commands/opsx-apply.md": {
+      "filePath": ".opencode/commands/opsx-apply.md",
+      "contentHash": "627c77d61c9cfa84c2fa1b791eeeb95a064edd3354c596c567cd332a634ce8a0",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 150,
+      "hasStructuralAnalysis": true
+    },
+    ".opencode/commands/opsx-archive.md": {
+      "filePath": ".opencode/commands/opsx-archive.md",
+      "contentHash": "712934f32d4ed4f0082c8e294fbb637308df0bab025737d18e14d64cf8b356cc",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 155,
+      "hasStructuralAnalysis": true
+    },
+    ".opencode/commands/opsx-explore.md": {
+      "filePath": ".opencode/commands/opsx-explore.md",
+      "contentHash": "7cb8e85bb238f1b6a7321c63e92c6181970bdd2ecc9089053d6a2ab8084c21f9",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 171,
+      "hasStructuralAnalysis": true
+    },
+    ".opencode/commands/opsx-propose.md": {
+      "filePath": ".opencode/commands/opsx-propose.md",
+      "contentHash": "38c79d395a4e3d3e748ca7cbd4229f47a9279d53dcc9d8a87665ceca4322222f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 104,
+      "hasStructuralAnalysis": true
+    },
+    ".opencode/skills/openspec-apply-change/SKILL.md": {
+      "filePath": ".opencode/skills/openspec-apply-change/SKILL.md",
+      "contentHash": "932d083c75cb893c013685811f646a59374d0e5d226d01b9e9e425e0762a5476",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 157,
+      "hasStructuralAnalysis": true
+    },
+    ".opencode/skills/openspec-archive-change/SKILL.md": {
+      "filePath": ".opencode/skills/openspec-archive-change/SKILL.md",
+      "contentHash": "e111d71216167eea10cec26abe8f6e15d925efeef2fd9925ffa219f55145acce",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 115,
+      "hasStructuralAnalysis": true
+    },
+    ".opencode/skills/openspec-explore/SKILL.md": {
+      "filePath": ".opencode/skills/openspec-explore/SKILL.md",
+      "contentHash": "d377459327732a5466f6ae7e48ceaeaf3ad33c46be75a088495aa66a791fde32",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 289,
+      "hasStructuralAnalysis": true
+    },
+    ".opencode/skills/openspec-propose/SKILL.md": {
+      "filePath": ".opencode/skills/openspec-propose/SKILL.md",
+      "contentHash": "7cb1ff97265c8fb21441a36457a206b7d0f78eaf7467c986eac41439ce98dfbd",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 111,
+      "hasStructuralAnalysis": true
+    },
+    ".understand-anything/.understandignore": {
+      "filePath": ".understand-anything/.understandignore",
+      "contentHash": "26e908032a4c3d0fc0843c0ef37f10aa575ca0dff8dfa8d851471b371c751332",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 19,
+      "hasStructuralAnalysis": false
+    },
+    ".understand-anything/intermediate/scan-result.json": {
+      "filePath": ".understand-anything/intermediate/scan-result.json",
+      "contentHash": "ac72dc7fdebcb51c997787d92fc85fbd88cd62b4785bd548ee1dc36d2d65d2d9",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2221,
+      "hasStructuralAnalysis": true
+    },
+    "AGENTS.md": {
+      "filePath": "AGENTS.md",
+      "contentHash": "72a6559a765d243c5e3e3159b260693b80a5bd5f2db828e835b27e4be1473cdc",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 35,
+      "hasStructuralAnalysis": true
+    },
+    "CHANGELOG.md": {
+      "filePath": "CHANGELOG.md",
+      "contentHash": "588e5a3d7dae132350851fe51aa3cd68e3aeddb0cf47d8a402b9bf675393f38b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 99,
+      "hasStructuralAnalysis": true
+    },
+    "CLAUDE.md": {
+      "filePath": "CLAUDE.md",
+      "contentHash": "bce95535b3fab4c1e512dac16187f1a2957a40225db8c2cb53b58fb9b4fdfb7f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 36,
+      "hasStructuralAnalysis": true
+    },
+    "game/.gutconfig.json": {
+      "filePath": "game/.gutconfig.json",
+      "contentHash": "1ba02c05658e529b3501ad741eeb0f70ad7b7a12393eea1b07c5d31f274a12d7",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 11,
+      "hasStructuralAnalysis": true
+    },
+    "game/autoloads/ascension_manager.gd": {
+      "filePath": "game/autoloads/ascension_manager.gd",
+      "contentHash": "1f854da61160b133a1fe154fb1d929c03a54acde121fd90193c0c32f12344d6f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 20,
+      "hasStructuralAnalysis": false
+    },
+    "game/autoloads/ascension_manager.gd.uid": {
+      "filePath": "game/autoloads/ascension_manager.gd.uid",
+      "contentHash": "cc83c76a883d9e1367f9381f4f92969162280d1bc4c9c28c07e1f57fb11168c3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/autoloads/economy.gd": {
+      "filePath": "game/autoloads/economy.gd",
+      "contentHash": "6d7eee8aa1bf018db5e2e01332b593e76c8326086197b9d89d4bb6ad6f17a83e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 36,
+      "hasStructuralAnalysis": false
+    },
+    "game/autoloads/economy.gd.uid": {
+      "filePath": "game/autoloads/economy.gd.uid",
+      "contentHash": "932cb8180a6bb1eb20b3188484cf604ce28e7b38ca3c773c08450e3ed30330e9",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/autoloads/resource_registry.gd": {
+      "filePath": "game/autoloads/resource_registry.gd",
+      "contentHash": "e090072e9be8e055abb16ea5f154ab12f0e3c71fea92f1280494f958ff51010b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 152,
+      "hasStructuralAnalysis": false
+    },
+    "game/autoloads/resource_registry.gd.uid": {
+      "filePath": "game/autoloads/resource_registry.gd.uid",
+      "contentHash": "af2b180fefacf1a07a9958f608dc5a8b4ef5975142d526be2ce55e2a6894c4ea",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/autoloads/run_state.gd": {
+      "filePath": "game/autoloads/run_state.gd",
+      "contentHash": "15ca25e0bf1fd50c0c0dc95c450426fb8e070ed9d894bf0fa47bd4b00423ff5c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 145,
+      "hasStructuralAnalysis": false
+    },
+    "game/autoloads/run_state.gd.uid": {
+      "filePath": "game/autoloads/run_state.gd.uid",
+      "contentHash": "b1e3681ca88d133a1057871efa1224aa7ca153fd45e37f237822ad32bb3fce04",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/export_presets.cfg": {
+      "filePath": "game/export_presets.cfg",
+      "contentHash": "39d72d8e3d9848a4d13c5581bf85c432f1821735d8b109389f128b45c9eb56d7",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 122,
+      "hasStructuralAnalysis": false
+    },
+    "game/project.godot": {
+      "filePath": "game/project.godot",
+      "contentHash": "8cbb08593066396372daf1e2e6c7e7d010cdc035176405a889426b1f54963e3c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 92,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/attack_context.gd": {
+      "filePath": "game/resources/attack_context.gd",
+      "contentHash": "6c6a49b0c085b6d45be6712fe3fd7322b88687d1025172c80193a57641d92a9b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 17,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/attack_context.gd.uid": {
+      "filePath": "game/resources/attack_context.gd.uid",
+      "contentHash": "9685d0ebffa58815596355e522bb31425e23e453b311a3abbeacf9779fcdbba1",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/boss_modifier.gd": {
+      "filePath": "game/resources/boss_modifier.gd",
+      "contentHash": "2429e40310e0d3fc5efe6742e98b3d713efbfac649f39a98f4570fa18f3e7e4b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 47,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/boss_modifier.gd.uid": {
+      "filePath": "game/resources/boss_modifier.gd.uid",
+      "contentHash": "dec110fd661fddaa2ad8cc4758818fdc96df94245d42b277a4317d2005e8bae3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/consumable.gd": {
+      "filePath": "game/resources/consumable.gd",
+      "contentHash": "1c728f5f8cf5751c93fec8e908d072c34b8f3761981cc3aa77d87b79baa2f74e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 41,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/consumable.gd.uid": {
+      "filePath": "game/resources/consumable.gd.uid",
+      "contentHash": "670b8c1ddc7b5fed7b6d4051f1f24a2b57d49e0627e25f7fabefb351053df989",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/boss_modifiers/the_ancient.tres": {
+      "filePath": "game/resources/data/boss_modifiers/the_ancient.tres",
+      "contentHash": "fce51c5cb2210440de7def0c02ebb407bcc27022ebd2db7564211c784e73133b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 11,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/boss_modifiers/the_blitz.tres": {
+      "filePath": "game/resources/data/boss_modifiers/the_blitz.tres",
+      "contentHash": "473f3b70142b5a4c22bab509ea421f439ae5e84a7aa553a56139866c1e5d7c0c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 11,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/boss_modifiers/the_fateless.tres": {
+      "filePath": "game/resources/data/boss_modifiers/the_fateless.tres",
+      "contentHash": "4538204e37a2e85ef83d31e36f1682bc6e420574184f433635508d69ee76bec3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 11,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/boss_modifiers/the_filth.tres": {
+      "filePath": "game/resources/data/boss_modifiers/the_filth.tres",
+      "contentHash": "493b890f6a0c8f7a258e5ce40185e16b455efc5889b5b4c31a821b5855dbf15f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 11,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/boss_modifiers/the_purge.tres": {
+      "filePath": "game/resources/data/boss_modifiers/the_purge.tres",
+      "contentHash": "4f209b195ebb359bcecda3a762016caafb934f4262064d7b87b8a556d085d7a9",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 11,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/boss_modifiers/the_reflection.tres": {
+      "filePath": "game/resources/data/boss_modifiers/the_reflection.tres",
+      "contentHash": "8c210fb24d50a511accbcc98359c8560e7300223bad099088df801c8688c0f48",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 11,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/boss_modifiers/the_silencer.tres": {
+      "filePath": "game/resources/data/boss_modifiers/the_silencer.tres",
+      "contentHash": "8f2cac1881fd70db3de25435f472c7d8771fde6dd86c4e94a0af97affacf8a03",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 11,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/boss_modifiers/the_thin.tres": {
+      "filePath": "game/resources/data/boss_modifiers/the_thin.tres",
+      "contentHash": "3b590be3c32a9e5472591d95c2417a9e68ce57950958c32621f987795d3c6e57",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 11,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/boss_modifiers/the_void.tres": {
+      "filePath": "game/resources/data/boss_modifiers/the_void.tres",
+      "contentHash": "fca9fc608b9ef111487b0e5729f5af8d2bad969c74c0bddddfcd9b804162e81a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 11,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/consumables/attack_surge.tres": {
+      "filePath": "game/resources/data/consumables/attack_surge.tres",
+      "contentHash": "e7935f7ba66f5543804b5c8ab0ad12187bd45892051eada6560b3eae744a702b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/consumables/b2b_booster.tres": {
+      "filePath": "game/resources/data/consumables/b2b_booster.tres",
+      "contentHash": "7b2f166dd165e3269201f5e1f03f517149d00bcb5197accf398037748d31bf39",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/consumables/combo_coil.tres": {
+      "filePath": "game/resources/data/consumables/combo_coil.tres",
+      "contentHash": "621c3653ebcb3fa29ee6e8de4dea3581482cf7d52eca82cc6355f2b91553ba68",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/consumables/perfected_spike.tres": {
+      "filePath": "game/resources/data/consumables/perfected_spike.tres",
+      "contentHash": "7862e1d8ae455f63a1d029cbc0a1fab44005c0dd3b712adb9ecc298f99b4ca74",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/consumables/power_fragment.tres": {
+      "filePath": "game/resources/data/consumables/power_fragment.tres",
+      "contentHash": "fd6e34546cbb7c16978dbdfa48a36583ee2b7e30f19bfac7c4ab886fb6b045e3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/consumables/power_shard.tres": {
+      "filePath": "game/resources/data/consumables/power_shard.tres",
+      "contentHash": "99daa2c2ef270da6601029372b39a6b3586db2b875fe6433bd17b2ba3d699a91",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/consumables/quad_stone.tres": {
+      "filePath": "game/resources/data/consumables/quad_stone.tres",
+      "contentHash": "40780e67f4dccb8a03f6f7aeb661da3f648e723e4a0dfadee838a29624ae7ff2",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/consumables/spin_amplifier.tres": {
+      "filePath": "game/resources/data/consumables/spin_amplifier.tres",
+      "contentHash": "d7050baf09a3cf0f88bdd9efa5d09df1d4914d5bf5a1ac62808ed638c9cc4ef0",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/enemies/boss_ancient.tres": {
+      "filePath": "game/resources/data/enemies/boss_ancient.tres",
+      "contentHash": "610be0e746d78a91750c336a09bf35ff095e8aea2ce61b47c5b8eddf329519f6",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/enemies/boss_enforcer.tres": {
+      "filePath": "game/resources/data/enemies/boss_enforcer.tres",
+      "contentHash": "9146606fe6bdcdc51446ac6355f9ecce8d5f04138c570fa70a35e4bbdbcca3c3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/enemies/boss_filth.tres": {
+      "filePath": "game/resources/data/enemies/boss_filth.tres",
+      "contentHash": "0f3b6f61f5ff8770e2d5226c4f663dc11cf6e4ea550d69816d97fd2c680e6d1d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/enemies/boss_purge.tres": {
+      "filePath": "game/resources/data/enemies/boss_purge.tres",
+      "contentHash": "de918f97c7d8c95da3bfb43b40da564fd5d708b7b5d747456b15aad1da04c8b9",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/enemies/boss_reflection.tres": {
+      "filePath": "game/resources/data/enemies/boss_reflection.tres",
+      "contentHash": "e444582116fe435714e353a202ea9abf2895eb9d24ae33c52d5376e154c35cde",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/enemies/boss_silencer.tres": {
+      "filePath": "game/resources/data/enemies/boss_silencer.tres",
+      "contentHash": "b28959178ae4dc3cc61ced06d54d4fe4910dcdd357655e362f17398841b850eb",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/enemies/boss_void.tres": {
+      "filePath": "game/resources/data/enemies/boss_void.tres",
+      "contentHash": "c046d21c1a9008e0b9564dc38c33d14a3e88eb927d975eea2453ad3342b13fd8",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/enemies/cave_bat.tres": {
+      "filePath": "game/resources/data/enemies/cave_bat.tres",
+      "contentHash": "220f4ac35f9087954917b6a0847bee98fba35ff7d3600c9b84b068adc0168ad0",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 12,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/enemies/crimson_drake.tres": {
+      "filePath": "game/resources/data/enemies/crimson_drake.tres",
+      "contentHash": "34c6afd46034f3407e5b9d4d70bd1ee85ce6f9cc8a5b0f38f697cd9040a99973",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 12,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/enemies/hex_wraith.tres": {
+      "filePath": "game/resources/data/enemies/hex_wraith.tres",
+      "contentHash": "b3ba35247ca2eb93c83c2d06b3eba6d64257aa6fdebe877f93d90a1ec6f2110b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 12,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/enemies/iron_shambler.tres": {
+      "filePath": "game/resources/data/enemies/iron_shambler.tres",
+      "contentHash": "79eeddd98465ec715acf400c71698b5f6289d390941ae2442665ad1f845c6799",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 12,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/enemies/rock_crawler.tres": {
+      "filePath": "game/resources/data/enemies/rock_crawler.tres",
+      "contentHash": "873bdc955d252d330f6576a693c177cdc98809ef00019e5dda0b6c63bd45d9cd",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 12,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/enemies/rust_golem.tres": {
+      "filePath": "game/resources/data/enemies/rust_golem.tres",
+      "contentHash": "9cb6119976661e211c01592226d6188d8f019579b32fc466a89508082a7fd4ba",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 12,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/enemies/slimeling.tres": {
+      "filePath": "game/resources/data/enemies/slimeling.tres",
+      "contentHash": "103556d2ca906bc1ddbe4d630ef4bf5939c3290a217bf131703ad64277f0f387",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 12,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/enemies/the_warden.tres": {
+      "filePath": "game/resources/data/enemies/the_warden.tres",
+      "contentHash": "e0ec01af113f9839cc123ee5c23333e0ef5b02d52ad4609bbac83e8998193f42",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 12,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/enemies/void_knight.tres": {
+      "filePath": "game/resources/data/enemies/void_knight.tres",
+      "contentHash": "88304c2918636a0161c7760fdf5c7a90866b3a60737df28896a5b534a09a0bec",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 12,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/beginners_luck.tres": {
+      "filePath": "game/resources/data/keystones/beginners_luck.tres",
+      "contentHash": "4c8aca873cc806b345c595047818606dc835689349cdf0d9cd44e3ab37a884bd",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/blessed_stone.tres": {
+      "filePath": "game/resources/data/keystones/blessed_stone.tres",
+      "contentHash": "a1152341303984c4909adc253b03a4bc783b53e73a6b9da9083bd517a8cac21f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/consistency.tres": {
+      "filePath": "game/resources/data/keystones/consistency.tres",
+      "contentHash": "07716f93fb3908757c91af723f5a42ce9c234200eb9872cecf624983f6065f6b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/crystal_staff.tres": {
+      "filePath": "game/resources/data/keystones/crystal_staff.tres",
+      "contentHash": "906a9144352348333ba91a2ee752280d5e008c037632dc4cb06cd292536cd788",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 15,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/daze.tres": {
+      "filePath": "game/resources/data/keystones/daze.tres",
+      "contentHash": "0fff67d235c30f8d00e22f66846d29d5a089706f3ecd35b20cec9f3cd68c15f9",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/dizzy.tres": {
+      "filePath": "game/resources/data/keystones/dizzy.tres",
+      "contentHash": "e4477244d751873dee2e2bb315121d602ebde5f62cabce03aeef7425fe3595ac",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/double_trouble.tres": {
+      "filePath": "game/resources/data/keystones/double_trouble.tres",
+      "contentHash": "f7b9b4e9aa963fbe5cd429b32108359a088034c80560aaab381468d125205aa2",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/dual_wielding.tres": {
+      "filePath": "game/resources/data/keystones/dual_wielding.tres",
+      "contentHash": "5be6ac8a1a34d5ab31ccca5bc2ee1c2ff484ef64e8f9cc34df78ab1ad6fadf28",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/enchant.tres": {
+      "filePath": "game/resources/data/keystones/enchant.tres",
+      "contentHash": "f9b5e89db8c60ac6e9c564b810c7470922380fc9864cd318d0542165bcc55e95",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/final_blow.tres": {
+      "filePath": "game/resources/data/keystones/final_blow.tres",
+      "contentHash": "874297cb212f50b6ac5fb955e86b189da0af5e643f282ec916cdfa425eeb238a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/flexible.tres": {
+      "filePath": "game/resources/data/keystones/flexible.tres",
+      "contentHash": "2258fc4100715167b9d649df33a0cc9680504737e84258f3b2113678b10cdfc6",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/flurry.tres": {
+      "filePath": "game/resources/data/keystones/flurry.tres",
+      "contentHash": "4ed79016894f5a20267f358fb5eb6daec4c52bf882cd0fa69aa14718c6ec28df",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/foresight.tres": {
+      "filePath": "game/resources/data/keystones/foresight.tres",
+      "contentHash": "6066172d9af248e8c349810a219202af697b79b61c8047a420eaf64d6b8a578b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/full_potential.tres": {
+      "filePath": "game/resources/data/keystones/full_potential.tres",
+      "contentHash": "40e3a56374ed1670b5b6c3c5460c4964be044c56fa17cb7293c700f0c973ea81",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 15,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/golden_watch.tres": {
+      "filePath": "game/resources/data/keystones/golden_watch.tres",
+      "contentHash": "32ce553a83b7848bcad69d47b53486b22fd3dd255895d0762a9058476e190ff2",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/great_sword.tres": {
+      "filePath": "game/resources/data/keystones/great_sword.tres",
+      "contentHash": "33fb98968f065a9eb861d151804ab0ce1776c2415f68a4e53220a05948d4258e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 15,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/holy_cheese.tres": {
+      "filePath": "game/resources/data/keystones/holy_cheese.tres",
+      "contentHash": "46a0deadbcf2165e28832beedfe5bd99738bae5afd9449d7ac57e617249e2bd5",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/hybrid_reactor.tres": {
+      "filePath": "game/resources/data/keystones/hybrid_reactor.tres",
+      "contentHash": "eed28757ae904bb891db01d4c5e97e3d1c14a81b1b9721d31c194ccec8af6bc5",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 12,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/legionnaires_shield.tres": {
+      "filePath": "game/resources/data/keystones/legionnaires_shield.tres",
+      "contentHash": "8654a092935a381bb1aec859ec3d1a915bd25d69f3d65fa33e384be0af96af30",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 15,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/mace_and_chain.tres": {
+      "filePath": "game/resources/data/keystones/mace_and_chain.tres",
+      "contentHash": "73da4efcfe61233a572a5c01c19125a9d09fe44cc38c9b02d558a1f2841af9ce",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 16,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/magical_coin.tres": {
+      "filePath": "game/resources/data/keystones/magical_coin.tres",
+      "contentHash": "151454f44e2000c39a3a769888aca5ace7051cbb905997561e79e9a48ab8376d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 15,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/midas_touch.tres": {
+      "filePath": "game/resources/data/keystones/midas_touch.tres",
+      "contentHash": "d3fd2e478d3fa9884b9477bc5bd44c30ac0641c4d4de7b879fddc25a5f01220e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/reflect.tres": {
+      "filePath": "game/resources/data/keystones/reflect.tres",
+      "contentHash": "0c4013a79637c5c5ab4447f41a6a71ead045a3e76e72676143cb65771216c6ee",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/risky_business.tres": {
+      "filePath": "game/resources/data/keystones/risky_business.tres",
+      "contentHash": "c48e772df8351931102ceed33091fb13ce169953855bf4987264424b62603a47",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/safety_net.tres": {
+      "filePath": "game/resources/data/keystones/safety_net.tres",
+      "contentHash": "05ad519ac06c59e48ae33d47face7949a6014aa0c79f90fbd8d52eae0d591141",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/sharpen.tres": {
+      "filePath": "game/resources/data/keystones/sharpen.tres",
+      "contentHash": "bf44c613b57a91dc5c34118a74256fe90d68645b39f0e121d00552c0294a8b64",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/simple_flail.tres": {
+      "filePath": "game/resources/data/keystones/simple_flail.tres",
+      "contentHash": "58a1cd9aa8ea9eed40c78464508bb9e4021c1ac40025378b77e9fa557d881fa2",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 15,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/simple_shield.tres": {
+      "filePath": "game/resources/data/keystones/simple_shield.tres",
+      "contentHash": "522bdf5e2fda6597f76f72c6e7b3e6555475f339bc9c5e9fdee1ce24260806fc",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/simple_sword.tres": {
+      "filePath": "game/resources/data/keystones/simple_sword.tres",
+      "contentHash": "b0acf6e1661d2ddb531d73860402d550bf6a07f9671888623d423de446f10277",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/simple_wand.tres": {
+      "filePath": "game/resources/data/keystones/simple_wand.tres",
+      "contentHash": "fed6dbee901d4abc02959a6736bbd90072f4fbbdc081210bc580c83d5726a007",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 16,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/simplicity.tres": {
+      "filePath": "game/resources/data/keystones/simplicity.tres",
+      "contentHash": "285572156982a95592c0864cf3b3ba189c575caa7660e0ed2aac4d875995ec7c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/slightly_magical_bag.tres": {
+      "filePath": "game/resources/data/keystones/slightly_magical_bag.tres",
+      "contentHash": "ede1399842b6b8092830c826a888423fc3d0750a0c824027ac23a1cc8976d2c2",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/slightly_magical_coin.tres": {
+      "filePath": "game/resources/data/keystones/slightly_magical_coin.tres",
+      "contentHash": "7b24770a979bac6e58174a79e5f149985a8e2dcb15a3e94fe1c5c142ce28fc09",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/triple_threat.tres": {
+      "filePath": "game/resources/data/keystones/triple_threat.tres",
+      "contentHash": "34aa79c65b88ad86046a5240f54d4ff6c5bee3f0e155df30cca52d3d34858548",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/veterans_luck.tres": {
+      "filePath": "game/resources/data/keystones/veterans_luck.tres",
+      "contentHash": "0cc0552b63bf8229b3fbb09bc3c66fb68ea624a9b25c7a45dc723112e9aa59d8",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/keystones/whirl.tres": {
+      "filePath": "game/resources/data/keystones/whirl.tres",
+      "contentHash": "4a014d01b9286379489faf221b7a6002172b4883cbcc7b36ef5f0d29bc8e6ccd",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/adrenaline_rush.tres": {
+      "filePath": "game/resources/data/techniques/adrenaline_rush.tres",
+      "contentHash": "ec09c5a365133ae4caf59612c503798cca82f9b0b8fa599bc87dcee8a8780797",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/aggressive_positioning.tres": {
+      "filePath": "game/resources/data/techniques/aggressive_positioning.tres",
+      "contentHash": "c1c4ae096e0ffa890f507f71fa7fd59ed6d27e81d3ae4e5d164831fd02b5239c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/attack_battery.tres": {
+      "filePath": "game/resources/data/techniques/attack_battery.tres",
+      "contentHash": "c2d1cac43f0870da9f7d7f95b25b8fa2841b0553aa2ce15433f918809c36a63e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/back_to_back_pressure.tres": {
+      "filePath": "game/resources/data/techniques/back_to_back_pressure.tres",
+      "contentHash": "2566fbc6f467297c65968b1cfc1e51024f057c4a556b37673c0e50c8f8ae2307",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/back_to_back_spin.tres": {
+      "filePath": "game/resources/data/techniques/back_to_back_spin.tres",
+      "contentHash": "9106e8186c3ee2ec28aeb4e26453856d7b9ab3f652f53bff691ac6ad60d4b2a3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/bounty_list.tres": {
+      "filePath": "game/resources/data/techniques/bounty_list.tres",
+      "contentHash": "d0ddf09cafbd290cfb08ba6b193591108d8edf3e49abb0816d0568cc143a1cbf",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/brass_knuckles.tres": {
+      "filePath": "game/resources/data/techniques/brass_knuckles.tres",
+      "contentHash": "aed50a610136db385326e8b1ad3c335a609a6050f61607d252df8a6b8dc584e4",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/burning_board.tres": {
+      "filePath": "game/resources/data/techniques/burning_board.tres",
+      "contentHash": "1e45c8d090b8467095f31cfb224a3364dedbbf854807c96ddc6a0275b675c801",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/chain_battery.tres": {
+      "filePath": "game/resources/data/techniques/chain_battery.tres",
+      "contentHash": "bf534d324c2e15ba985489f9828aed0ac23f26ea4ae4577ee62c7d7b0403e12d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/chain_starter.tres": {
+      "filePath": "game/resources/data/techniques/chain_starter.tres",
+      "contentHash": "0baa29f46cdda9223cdf8f5ef869c2fd7a5031f0b022e9055e9ac09619dd50fd",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/clean_strike.tres": {
+      "filePath": "game/resources/data/techniques/clean_strike.tres",
+      "contentHash": "a6a7422c9aa213d5d16c6c2abef0956bea31bd58ee1d679537f35e92f88db63f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/combo_payout.tres": {
+      "filePath": "game/resources/data/techniques/combo_payout.tres",
+      "contentHash": "be9397db885bd89afc1bc419c6f04a7668086090115f734dd406f48686ec4880",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/combo_spark.tres": {
+      "filePath": "game/resources/data/techniques/combo_spark.tres",
+      "contentHash": "709f04a1d7c5e70a1d647d12586d984b5a534383e378e690bd7d0681dacb8e10",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/combo_spike.tres": {
+      "filePath": "game/resources/data/techniques/combo_spike.tres",
+      "contentHash": "f53ce79ed932a388cdf18957a0665a9e2cf462d70979d23001c8d529f1be67f9",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/compact_setup.tres": {
+      "filePath": "game/resources/data/techniques/compact_setup.tres",
+      "contentHash": "3fd9593aa54717429d94af49d6e1b14f039eadd98a7330ea879fc3114ce15807",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/constant_pressure.tres": {
+      "filePath": "game/resources/data/techniques/constant_pressure.tres",
+      "contentHash": "3482a96813de0fb6bcc9deded98ff14e21e209439c39b2d9a046695cbb7d2633",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/controlled_drop.tres": {
+      "filePath": "game/resources/data/techniques/controlled_drop.tres",
+      "contentHash": "b310a81cbd43a5f5a2ecf8c4dc0ef36beb80267fa6824aeeb37a195b6fadf6b1",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/counter_strike.tres": {
+      "filePath": "game/resources/data/techniques/counter_strike.tres",
+      "contentHash": "ac3b420449d269d520b075dd94818ec410eb52c9717ce2669ecc6e873c29356e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/coupon.tres": {
+      "filePath": "game/resources/data/techniques/coupon.tres",
+      "contentHash": "6e9271950d2e6217d6fe0fc4c583a3993d5223682f6042212dc03ff44da0fd1d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/delayed_cannon.tres": {
+      "filePath": "game/resources/data/techniques/delayed_cannon.tres",
+      "contentHash": "473d63a76f1e226940a076cea29736ed9363d47ec186725382f92269e53147de",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/discipline.tres": {
+      "filePath": "game/resources/data/techniques/discipline.tres",
+      "contentHash": "7eb10837fac71922460a588f1f226fd1c3089c70fe93160fe3378649659d1722",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/dualcasting.tres": {
+      "filePath": "game/resources/data/techniques/dualcasting.tres",
+      "contentHash": "e389d4a62d2aacc9b30fdc47c8a6b55ecee98b6dd931dd1e63e380bc88523f30",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/escalation.tres": {
+      "filePath": "game/resources/data/techniques/escalation.tres",
+      "contentHash": "8f2561413e556215150be1b347efe1fb857ee6d5585dfead7dfa9810e81341d9",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/finisher.tres": {
+      "filePath": "game/resources/data/techniques/finisher.tres",
+      "contentHash": "edf590da6b074d715b3b1a46bff050c51babfe6946ef5328ce6a5decb2b3a885",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/flash_step.tres": {
+      "filePath": "game/resources/data/techniques/flash_step.tres",
+      "contentHash": "078e88700840e332016678b1f7964737ba803952c0574a5db46de926e71cfc11",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/flatline.tres": {
+      "filePath": "game/resources/data/techniques/flatline.tres",
+      "contentHash": "0614b10ce844a5be766332a1c8bef37daac82499794d0daa3d7192af83147093",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/flow_step.tres": {
+      "filePath": "game/resources/data/techniques/flow_step.tres",
+      "contentHash": "e87376a18ec50144dd7f06c58f38e51113e3958241e5d0011e0cf534312299ac",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/flurry.tres": {
+      "filePath": "game/resources/data/techniques/flurry.tres",
+      "contentHash": "1296c0e6c6e9fc50a2d22c3043b9431ed1591dfccdf28fa1ffc1b0c201718a49",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/follow_up.tres": {
+      "filePath": "game/resources/data/techniques/follow_up.tres",
+      "contentHash": "05cb2fd68930cf9811e2d7ca7a39ec4a7a0ed51d60590c1d2b72e24b3517aa9b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/four_disciplines.tres": {
+      "filePath": "game/resources/data/techniques/four_disciplines.tres",
+      "contentHash": "56b1d7dfb0a2b1031d763998c054a8a42c410fd9a28970af0f61050dadc0faeb",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/gamblers_blade.tres": {
+      "filePath": "game/resources/data/techniques/gamblers_blade.tres",
+      "contentHash": "d828ef789b99f48d2c094a5ce0a78816d80e40e838b8add92aa2d0d54745af53",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/glass_cannon.tres": {
+      "filePath": "game/resources/data/techniques/glass_cannon.tres",
+      "contentHash": "14eea26ef5983ae3f5ffae4e5b89aaa88a0544efbc3274bcd3ba42ce0b00f6d6",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/good_planning.tres": {
+      "filePath": "game/resources/data/techniques/good_planning.tres",
+      "contentHash": "25e42f295043f9152d8aab9cf6f61ed3c0cdb88d8d163a992cd7915bec6ead86",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/greedy_hands.tres": {
+      "filePath": "game/resources/data/techniques/greedy_hands.tres",
+      "contentHash": "5bcbf5835628e195daec3b42d0e16f2fb3416ccbcf515067c5a287bb58f77b8f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/green_thumb.tres": {
+      "filePath": "game/resources/data/techniques/green_thumb.tres",
+      "contentHash": "0eab8da2513786b5f5569b1c0d1e58aae604f6e610e4152325bc5fff36708c76",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/hone.tres": {
+      "filePath": "game/resources/data/techniques/hone.tres",
+      "contentHash": "684a72775d08f4e5550254479cf15112801c7e6c7d0b81c5573c287c8c1e4b7e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 16,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/low_pressure.tres": {
+      "filePath": "game/resources/data/techniques/low_pressure.tres",
+      "contentHash": "10e57c36ce5fd5c674c3191ac4d79e496456f50a2dc098e0e44d3044ae2addc7",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/mini_spark.tres": {
+      "filePath": "game/resources/data/techniques/mini_spark.tres",
+      "contentHash": "dcdc052839d73e27d9ac0b96dfc7b26eb6c562a03cdc57d09ed7308ec7261f83",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/opening_blow.tres": {
+      "filePath": "game/resources/data/techniques/opening_blow.tres",
+      "contentHash": "6d7f5d59d537f89f1b5e06a14360f99fa5d5eb9c1e9a5bdb8cd3350025deea64",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/patience.tres": {
+      "filePath": "game/resources/data/techniques/patience.tres",
+      "contentHash": "a6fad4a01e4a823f579e12cdbf85211bfd4fcd783be8bd204cfbc8ff1c650994",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/perfect_spark.tres": {
+      "filePath": "game/resources/data/techniques/perfect_spark.tres",
+      "contentHash": "277f1a88798c764cd7ef0e9e0876302a8bc6a210450da2e8b31857da18affc7f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/reckless_assault.tres": {
+      "filePath": "game/resources/data/techniques/reckless_assault.tres",
+      "contentHash": "1b065211dfa00488ce368b6fc10bd907817735d018d91ac37ea8d3a523800659",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/recycling.tres": {
+      "filePath": "game/resources/data/techniques/recycling.tres",
+      "contentHash": "122959e7f8d629ab72d5a4a08c8d90fa2a33de5f065b10bce807134801ac1e68",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/redzone.tres": {
+      "filePath": "game/resources/data/techniques/redzone.tres",
+      "contentHash": "d76cd502c26e8c33c00f3df737c4bbccf5069516415e7c6a3fad8fabe2814287",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/rotation_training.tres": {
+      "filePath": "game/resources/data/techniques/rotation_training.tres",
+      "contentHash": "138f65c9c205d1f0c2b3d1ae2b1dd9db2ba0f53a397e92be848ef8f987f5053c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/side_strike.tres": {
+      "filePath": "game/resources/data/techniques/side_strike.tres",
+      "contentHash": "a386df9238c74dadc39667f783457aebaaf07f1f50bfe2975096967f54327723",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/smooth_haggling.tres": {
+      "filePath": "game/resources/data/techniques/smooth_haggling.tres",
+      "contentHash": "fa3673ee0a574ee9a93f3483197876d7173e2b08b76380989799d94928c3791d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/specialist_discount.tres": {
+      "filePath": "game/resources/data/techniques/specialist_discount.tres",
+      "contentHash": "30c9ec9d9127a5fd100dd9db1de3282c883515de6a4adf22da4d70777189c20d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/spinning_strike.tres": {
+      "filePath": "game/resources/data/techniques/spinning_strike.tres",
+      "contentHash": "26679d64e4eb9b14f54823a6f3ec3d9f297f5503717b9f5c83654fd05ba1dbf3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/switch_up.tres": {
+      "filePath": "game/resources/data/techniques/switch_up.tres",
+      "contentHash": "9ec3f845fff2ba02ea5419c60c892fccc86a29578a2a0ca8057cf5ecf3fb8ed4",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/techniques/tetris_echo.tres": {
+      "filePath": "game/resources/data/techniques/tetris_echo.tres",
+      "contentHash": "5b0a75c87d46a7c87edc05ad1be257db624aade4b850d6f1d60221ab2b721b43",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/vouchers/bonus_round.tres": {
+      "filePath": "game/resources/data/vouchers/bonus_round.tres",
+      "contentHash": "f07b22ad812a04eabb37f2a0d4aeee90661e1f229bf011460bf9fe101b46ea42",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 11,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/vouchers/consumable_expert.tres": {
+      "filePath": "game/resources/data/vouchers/consumable_expert.tres",
+      "contentHash": "b4d90812e7083f744002ff0ab7683141a9cb4c952887937cb86940a7a5eb62fa",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 11,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/vouchers/expanded_shop.tres": {
+      "filePath": "game/resources/data/vouchers/expanded_shop.tres",
+      "contentHash": "1a497b93f13c6d095f59e70ae4ffbbc562fd39071ae3e21540b80bc38056eced",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 11,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/data/vouchers/interest_cap_up.tres": {
+      "filePath": "game/resources/data/vouchers/interest_cap_up.tres",
+      "contentHash": "fe8b63611c865a44e9e1e40f6a42954542cdd60386328af89f3c6e6d0e899d0c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 11,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/enemy.gd": {
+      "filePath": "game/resources/enemy.gd",
+      "contentHash": "28dd211d02840ed6a59cef7333798018631771f6d09720738cc5adedb67fbc99",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 12,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/enemy.gd.uid": {
+      "filePath": "game/resources/enemy.gd.uid",
+      "contentHash": "6e42c944d6041b25cee613c8045d6758570c5d032b86b5bf312e8e198bd10591",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/keystone.gd": {
+      "filePath": "game/resources/keystone.gd",
+      "contentHash": "06bef00e9cdbc93ac65de378fa29516defee518a59d64442b8e8863e5aad954b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 90,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/keystone.gd.uid": {
+      "filePath": "game/resources/keystone.gd.uid",
+      "contentHash": "9795dd75314ca5db34c8e18929231ec3c3416da01b0465d1d104866438ad5378",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/round_config.gd": {
+      "filePath": "game/resources/round_config.gd",
+      "contentHash": "8bd6751233fcb9abaf86f0eac3ef258a64d7c86298a16e50b022b36fa344b3c4",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 51,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/round_config.gd.uid": {
+      "filePath": "game/resources/round_config.gd.uid",
+      "contentHash": "77fad905eeb590868ea9e9015094075d6464bcfa0bbd189725bd1a3477b2bc74",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/technique_round_state.gd": {
+      "filePath": "game/resources/technique_round_state.gd",
+      "contentHash": "f41bc86a623cd78c17167922778fbbb48582615a69a5e68890719eadb4b509b6",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 31,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/technique_round_state.gd.uid": {
+      "filePath": "game/resources/technique_round_state.gd.uid",
+      "contentHash": "a9c5916c90b232fd5dc4347f5cf3a27377e10ecefd5a09320c911295493b9b43",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/technique.gd": {
+      "filePath": "game/resources/technique.gd",
+      "contentHash": "b2f955543cb98b35ea8aecfd35e071197ae34701c000d0f62a9afffed5355ff7",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/technique.gd.uid": {
+      "filePath": "game/resources/technique.gd.uid",
+      "contentHash": "b9b365c70550bc99ec4326a3819d33b99ecc1531cbdee0b186f147f503954be0",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/unlock_condition.gd": {
+      "filePath": "game/resources/unlock_condition.gd",
+      "contentHash": "67bee76e06b0dc107197c63adb9533f2ccc736a15eb6164c342e081ac4384a99",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 7,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/unlock_condition.gd.uid": {
+      "filePath": "game/resources/unlock_condition.gd.uid",
+      "contentHash": "a60b1cb3afce8f208dc1e57bdd7cb75fd0027c1a3b8516860b3ccf841110725d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/voucher.gd": {
+      "filePath": "game/resources/voucher.gd",
+      "contentHash": "2b53242d5f50b896f9a64e3e0ca5766ccbb685efcd27cafa33ca7037d0697dd7",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 15,
+      "hasStructuralAnalysis": false
+    },
+    "game/resources/voucher.gd.uid": {
+      "filePath": "game/resources/voucher.gd.uid",
+      "contentHash": "45f9011531b715caf09fb6f4b3887ab736f9106dbd4902c42279ff7ab823f766",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/debug/debug_overlay.gd": {
+      "filePath": "game/scenes/debug/debug_overlay.gd",
+      "contentHash": "912f6152ec8f6161532cbb1246859d985969d64eca90d3f51bbfb95e08053f5e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 54,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/debug/debug_overlay.gd.uid": {
+      "filePath": "game/scenes/debug/debug_overlay.gd.uid",
+      "contentHash": "bb2fe29e512384c8cd921d6728893a3ee6e47530edb232266c0f8540dd075516",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/debug/debug_overlay.tscn": {
+      "filePath": "game/scenes/debug/debug_overlay.tscn",
+      "contentHash": "3bba30bb096b28154e4338c80f3bbb7e1dfc4d146965130f207e9ee0226ac985",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 46,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/debug/dev_console.gd": {
+      "filePath": "game/scenes/debug/dev_console.gd",
+      "contentHash": "d929d7ce2d8d62544dbaafd563a023c1a8a66a79b08447ba52062d453bcdbd1a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 192,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/debug/dev_console.gd.uid": {
+      "filePath": "game/scenes/debug/dev_console.gd.uid",
+      "contentHash": "637ecf48ec02388b0d7ee95e7f84b25494884a599b1fe5fba718f4cd33640033",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/debug/dev_console.tscn": {
+      "filePath": "game/scenes/debug/dev_console.tscn",
+      "contentHash": "a8df1ab33ed476afd9f77228f7a401c2cd4955899c6d471c79ec68b57ca752f8",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 30,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/game/attack_bar.gd": {
+      "filePath": "game/scenes/game/attack_bar.gd",
+      "contentHash": "fd81a94e59891ae938810e9b676126dd25f2b2c9244e379157c5573e1fa0d9e1",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 52,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/game/attack_bar.gd.uid": {
+      "filePath": "game/scenes/game/attack_bar.gd.uid",
+      "contentHash": "e6b37ec2030686c483d0fa69cfa72999cc7a9d6e73ad9b696f28ede41da7fbdd",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/game/enemy_display.gd": {
+      "filePath": "game/scenes/game/enemy_display.gd",
+      "contentHash": "7d60af3e6fc809ca29430e8e314d679b4b06327fd0ef10e8bb2d293f11e0176a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 343,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/game/enemy_display.gd.uid": {
+      "filePath": "game/scenes/game/enemy_display.gd.uid",
+      "contentHash": "2207d95f5ba42500aed5458bf6b6a5c1a9bcc6cee880a50dd1998a1d9c8976ee",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/game/enemy_display.tscn": {
+      "filePath": "game/scenes/game/enemy_display.tscn",
+      "contentHash": "cef6a0844ad590a2c237f085462de85d1d81fba7b26181e223ffe97ab2ce9cb8",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 7,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/game/hold_display.gd": {
+      "filePath": "game/scenes/game/hold_display.gd",
+      "contentHash": "011549d5e617222fb071be44048fd7bb0138d1c12aed27e028fc8e3ffb334e9f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 57,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/game/hold_display.gd.uid": {
+      "filePath": "game/scenes/game/hold_display.gd.uid",
+      "contentHash": "53dc1d6e8bb32c470d8d49d8a551b5b67a0af0e717f124a61ed0a3eb91f99c3e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/game/hold_display.tscn": {
+      "filePath": "game/scenes/game/hold_display.tscn",
+      "contentHash": "f6a7f7459bfe77d1356409c307e75662688f94161aec335014aa7fa2eb8ce94c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 7,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/game/hud.gd": {
+      "filePath": "game/scenes/game/hud.gd",
+      "contentHash": "2a442ad426df8cd5aeb7562a906a35417d260c6b780b724eb9a7c493a24a7382",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 167,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/game/hud.gd.uid": {
+      "filePath": "game/scenes/game/hud.gd.uid",
+      "contentHash": "09707939513abafa17354533ca48b665592cd5f98d0c3b969470f891f98e4b31",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/game/pause_menu.gd": {
+      "filePath": "game/scenes/game/pause_menu.gd",
+      "contentHash": "db8e7d118c1e8c243a1e0e7f66a31eb96d7b8f6bf402c2147d8845e9a27d7ee2",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 24,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/game/pause_menu.gd.uid": {
+      "filePath": "game/scenes/game/pause_menu.gd.uid",
+      "contentHash": "5b615abd9f3a84efc635446f8f7ad1bb24aef84c7870d140099e0c7d505e066f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/game/pause_menu.tscn": {
+      "filePath": "game/scenes/game/pause_menu.tscn",
+      "contentHash": "1620d9ccbbd6b5b72a0686e9dc0e665ee850be4efdb31b10685022538c65b0e7",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 44,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/game/queue_display.gd": {
+      "filePath": "game/scenes/game/queue_display.gd",
+      "contentHash": "217d6ce7fe0d3f11d7b0b73b96d6e5354eb6ee62fb56df8d0e9a35afc92bf3a4",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 54,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/game/queue_display.gd.uid": {
+      "filePath": "game/scenes/game/queue_display.gd.uid",
+      "contentHash": "c8f82056f5521a3cc330e604902ed3eb37a8235569ed907f6a6223b5b6efb027",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/game/queue_display.tscn": {
+      "filePath": "game/scenes/game/queue_display.tscn",
+      "contentHash": "a7edcb67616dfe66f00daf2b7b70e9cd0962267faa4f4963134351296826565c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 7,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/game/run_manager.gd": {
+      "filePath": "game/scenes/game/run_manager.gd",
+      "contentHash": "9e054bb2688fa82aec2f494b47329bd320236346f7a50398f0e19ad6f22e1d73",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1301,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/game/run_manager.gd.uid": {
+      "filePath": "game/scenes/game/run_manager.gd.uid",
+      "contentHash": "0055bdc00d2c7428b7b454c039be4facdea710b5d83fee390d7caee413df5d53",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/game/run_manager.tscn": {
+      "filePath": "game/scenes/game/run_manager.tscn",
+      "contentHash": "b6f2253d45ef261dc31ea20072dcd33fe14c7ac43ae89d7b4722ed7b88d91c18",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 120,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/game/technique_evaluator.gd": {
+      "filePath": "game/scenes/game/technique_evaluator.gd",
+      "contentHash": "26e258886938291d8dfd968316b5f03738148b14a829e689127a0001ec8271e6",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 286,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/game/technique_evaluator.gd.uid": {
+      "filePath": "game/scenes/game/technique_evaluator.gd.uid",
+      "contentHash": "01adffc2e1a5dc7d8e1ee07f84837c2cbc7e743138c8902e3ca52fdb4fddef38",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/keystone_selection/keystone_selection.gd": {
+      "filePath": "game/scenes/keystone_selection/keystone_selection.gd",
+      "contentHash": "31b13dff1dc34cfc32ed62fe1e4985f581ab62ecd884769ef7502ced2b6b8260",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 85,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/keystone_selection/keystone_selection.gd.uid": {
+      "filePath": "game/scenes/keystone_selection/keystone_selection.gd.uid",
+      "contentHash": "482092a722abc8ddbdee6555931fc1f5dc25452fd6c7c3ff916483bd27557c73",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/keystone_selection/keystone_selection.tscn": {
+      "filePath": "game/scenes/keystone_selection/keystone_selection.tscn",
+      "contentHash": "4d5ba4eb3b355abcfc79360087e27533b6fb9678a6fbc0990d1d341416b60cbc",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 30,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/main_menu/main_menu.gd": {
+      "filePath": "game/scenes/main_menu/main_menu.gd",
+      "contentHash": "48f7e876dc8f3fb6b13b81703ad71b486207580b4262683583615b3933886bc3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 54,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/main_menu/main_menu.gd.uid": {
+      "filePath": "game/scenes/main_menu/main_menu.gd.uid",
+      "contentHash": "c79e579b8a82d83bcc54259e64088dd05e4fea27ce1c1148dcf109e62a4edfe9",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/main_menu/main_menu.tscn": {
+      "filePath": "game/scenes/main_menu/main_menu.tscn",
+      "contentHash": "87677b00e1062a5dfeed1efedbf1bf09376b4102abc72a0809079c90807a329f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 52,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/screens/ascension_selector.gd": {
+      "filePath": "game/scenes/screens/ascension_selector.gd",
+      "contentHash": "9117388b1980b016d44209b10234d2f1a5c023511589d8445d39adac47e8e715",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 32,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/screens/ascension_selector.gd.uid": {
+      "filePath": "game/scenes/screens/ascension_selector.gd.uid",
+      "contentHash": "534636e394eace4f77833fa37809301d065d95a6dcf833d85748d3c897025e07",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/screens/ascension_selector.tscn": {
+      "filePath": "game/scenes/screens/ascension_selector.tscn",
+      "contentHash": "57fedc9e5ea96d2991fff02116fd2effeea3eeae5672f2171bc3417ec63ae5b5",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 39,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/screens/round_success.gd": {
+      "filePath": "game/scenes/screens/round_success.gd",
+      "contentHash": "6232817bb64714b7effc4c4c326c174c2f7d3342f77e57a9edd3cbdc74e22988",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 22,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/screens/round_success.gd.uid": {
+      "filePath": "game/scenes/screens/round_success.gd.uid",
+      "contentHash": "2a02cad309781cf0406a7a3a4c7f2eff07772853976946d5145b81fd035637e9",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/screens/round_success.tscn": {
+      "filePath": "game/scenes/screens/round_success.tscn",
+      "contentHash": "82c71141483e64129208671a71fd33ca11fc679a21c9c51dc9fd9a13ef432edd",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 46,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/screens/run_failure.gd": {
+      "filePath": "game/scenes/screens/run_failure.gd",
+      "contentHash": "5c2a561ae5401208c5eeb619de544f15b6015af27707253bad5b33f4da98deea",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 27,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/screens/run_failure.gd.uid": {
+      "filePath": "game/scenes/screens/run_failure.gd.uid",
+      "contentHash": "b053fb3ead278c41559d342ce6cd9f1de9168de74e5eb74db41b8e4510f8bdc3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/screens/run_failure.tscn": {
+      "filePath": "game/scenes/screens/run_failure.tscn",
+      "contentHash": "09da02027f96726cbaf34a5edaddfbdc45dca342499f04035028ec64ef49bb03",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 49,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/screens/run_victory.gd": {
+      "filePath": "game/scenes/screens/run_victory.gd",
+      "contentHash": "f59ae13204cf8961ad701f8b1a4145cd4c381bc38f094df63df76fd4a7a1cd1e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 34,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/screens/run_victory.gd.uid": {
+      "filePath": "game/scenes/screens/run_victory.gd.uid",
+      "contentHash": "beec4da343fd51ebb1e9d765b0e43b22b837f71566aec24e4896241eaeed0d44",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/screens/run_victory.tscn": {
+      "filePath": "game/scenes/screens/run_victory.tscn",
+      "contentHash": "179cdb0fb710f684b62fda6bde822eef58445c7559d808dd04f1d1751ed76b7a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 43,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/screens/settings.gd": {
+      "filePath": "game/scenes/screens/settings.gd",
+      "contentHash": "78a8605b01863ad47a3a71bad0429bb5dbdb6302ff57d4dd1e29fb01ef689614",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 368,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/screens/settings.gd.uid": {
+      "filePath": "game/scenes/screens/settings.gd.uid",
+      "contentHash": "881ae29f5a139fd1eca063b4115741b43a3ffa6ae814cc92e07e5380c8ad0f2f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/screens/settings.tscn": {
+      "filePath": "game/scenes/screens/settings.tscn",
+      "contentHash": "22e2ca002f6e911875523cb09e7678aad83ced4c2fecc192a9d3b66be6f62d04",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 118,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/shop/shop.gd": {
+      "filePath": "game/scenes/shop/shop.gd",
+      "contentHash": "792aa7b4bd0c4e91bcc2cd566b0bc33f264341aa3e7abb8b5606f869e2d683ae",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 282,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/shop/shop.gd.uid": {
+      "filePath": "game/scenes/shop/shop.gd.uid",
+      "contentHash": "a25ff2ee9191d24532216cdc84d0b1e9c4f51c381f3c71c3934b53bb001b526e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/shop/shop.tscn": {
+      "filePath": "game/scenes/shop/shop.tscn",
+      "contentHash": "44ff0a102da148403483989f1df4a963eade0bb4aa546e6ec095d9ca42d17357",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 126,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/tetris/tetris_board.gd": {
+      "filePath": "game/scenes/tetris/tetris_board.gd",
+      "contentHash": "d6e1e59176d02dcd0d4c55ea5a3086157af2194dac8f652dff943a4ab6796f9d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 762,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/tetris/tetris_board.gd.uid": {
+      "filePath": "game/scenes/tetris/tetris_board.gd.uid",
+      "contentHash": "452dc5af86a6b8aa2d972729a014b05d4fb5c8a40264c44193317f84c9e04115",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/scenes/tetris/tetris_board.tscn": {
+      "filePath": "game/scenes/tetris/tetris_board.tscn",
+      "contentHash": "dfb5bbe0ea2db7ffccae678504cc1b6105acf7bf8e280bb9d02e69ce24d829c3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 7,
+      "hasStructuralAnalysis": false
+    },
+    "game/scripts/bag_randomizer.gd": {
+      "filePath": "game/scripts/bag_randomizer.gd",
+      "contentHash": "8ae9e16a5bb518f854cfb00449fb39134254d0eeb2ee3d8c900fd94c47b24f35",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 46,
+      "hasStructuralAnalysis": false
+    },
+    "game/scripts/bag_randomizer.gd.uid": {
+      "filePath": "game/scripts/bag_randomizer.gd.uid",
+      "contentHash": "2191fbeaa45c1ea069ec8aef164b0fc255f7bffa5d9b9c7ac44403ab022be869",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/scripts/piece_data.gd": {
+      "filePath": "game/scripts/piece_data.gd",
+      "contentHash": "da6fe9422636722737ca32e0c4021018fdfffd75bbc1909f6e7c3271d5c8ae2d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 90,
+      "hasStructuralAnalysis": false
+    },
+    "game/scripts/piece_data.gd.uid": {
+      "filePath": "game/scripts/piece_data.gd.uid",
+      "contentHash": "721385951d8e030f3ce05e6cf5125cefd202b66fb687235fa99f172f2f6b498c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/scripts/profile_save.gd": {
+      "filePath": "game/scripts/profile_save.gd",
+      "contentHash": "034ea0caea63e6b2648dbe7ec68bcbbabd53523c3a587a5a88fb7be5f6ecba12",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 55,
+      "hasStructuralAnalysis": false
+    },
+    "game/scripts/profile_save.gd.uid": {
+      "filePath": "game/scripts/profile_save.gd.uid",
+      "contentHash": "6364d619839ea8f618704539dabdf8341137fee8eeeb7da9b650268420b827f7",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/scripts/run_save.gd": {
+      "filePath": "game/scripts/run_save.gd",
+      "contentHash": "784c0e9da95c2787eba288aae9db4fc73079cfbfc40297a4ea62d66d2f3fde09",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 83,
+      "hasStructuralAnalysis": false
+    },
+    "game/scripts/run_save.gd.uid": {
+      "filePath": "game/scripts/run_save.gd.uid",
+      "contentHash": "533b76fac35996dd5393d23ef7d66b04d3a0b4ecdff5c705ad873da3b9900d62",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/scripts/run_stats.gd": {
+      "filePath": "game/scripts/run_stats.gd",
+      "contentHash": "86de2e00d381682f7ddb0f6737d4dac17b8ad215a9a80800b6aa90d73f4090da",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 9,
+      "hasStructuralAnalysis": false
+    },
+    "game/scripts/run_stats.gd.uid": {
+      "filePath": "game/scripts/run_stats.gd.uid",
+      "contentHash": "d5bd7b809c904459b51879bc1bd5a208730504f02077b626badfd7dcad01cf36",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/scripts/srs.gd": {
+      "filePath": "game/scripts/srs.gd",
+      "contentHash": "97c650d7baa53eb9b3468b6824cd21f97e88e09ecd4252d3228a9eb4f394eb31",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 60,
+      "hasStructuralAnalysis": false
+    },
+    "game/scripts/srs.gd.uid": {
+      "filePath": "game/scripts/srs.gd.uid",
+      "contentHash": "ad30bf4e8dcf2709dde59aa2ad3b3717bb2b320727f09ca87cea4f5861d3d8b2",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "game/scripts/unlock_checker.gd": {
+      "filePath": "game/scripts/unlock_checker.gd",
+      "contentHash": "56a34f4dbcc1a98c9fd3c18c47b58d0babff6b8f8a90383639ab7784b8b29db7",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 39,
+      "hasStructuralAnalysis": false
+    },
+    "game/scripts/unlock_checker.gd.uid": {
+      "filePath": "game/scripts/unlock_checker.gd.uid",
+      "contentHash": "ad0d5678b350a8dee268e903fff5efbd9c3ba08c37e394c550f0d91fb2856403",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "gut_err.txt": {
+      "filePath": "gut_err.txt",
+      "contentHash": "f417932edfbc6383699d972ad210ced04022190e0a8d04434a1dfb03e0e0edc6",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 169,
+      "hasStructuralAnalysis": false
+    },
+    "gut_out.txt": {
+      "filePath": "gut_out.txt",
+      "contentHash": "d07ed9fd99158d1c0cf0939fb2d0806b951096fbb4a4b23375a0401e842428a0",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 182,
+      "hasStructuralAnalysis": false
+    },
+    "Keystones.docx": {
+      "filePath": "Keystones.docx",
+      "contentHash": "4d98a58efbfb566a84b3366c6002693739b9390bc04ce1ca785d3098b1850b8f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 47,
+      "hasStructuralAnalysis": false
+    },
+    "openspec/config.yaml": {
+      "filePath": "openspec/config.yaml",
+      "contentHash": "ad277486842d421e210b6800516602683f62435cc141ee84a8b74518656148b3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 16,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/ascension-modifiers/spec.md": {
+      "filePath": "openspec/specs/ascension-modifiers/spec.md",
+      "contentHash": "5af9baf9db17e64646a52a2ded98f9cfbce94cbf71a975e48197d37723afe2da",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 62,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/ascension-progression/spec.md": {
+      "filePath": "openspec/specs/ascension-progression/spec.md",
+      "contentHash": "a7bd2d6026f61f2370170e6fb1ce3387621fa0dde1174018e37da4a750b6aeb2",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 52,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/attack-buffer/spec.md": {
+      "filePath": "openspec/specs/attack-buffer/spec.md",
+      "contentHash": "7e574a52142251093b7876c2f67c5cbe7f616bb1b623b93a54cc42b831904c2c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 73,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/attack-system/spec.md": {
+      "filePath": "openspec/specs/attack-system/spec.md",
+      "contentHash": "c4dda16ead175736058c8b982a5807d7548a1a7cc2167a4851fce5c6e716a2ab",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 25,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/augments/spec.md": {
+      "filePath": "openspec/specs/augments/spec.md",
+      "contentHash": "79de4c7d31012924ecbdc6f112af6adffa0c7c3f7a8d2900d29343776c445c3f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 71,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/b2b-combo-display/spec.md": {
+      "filePath": "openspec/specs/b2b-combo-display/spec.md",
+      "contentHash": "3054f68fb465f989a7002fdfc3015d68f9f060bc2718d5d4ba5b42376e24cbad",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 43,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/blessed-stone/spec.md": {
+      "filePath": "openspec/specs/blessed-stone/spec.md",
+      "contentHash": "4113dbf81ba9184b22daef5c85f8d2f68d90aac159a0c0f31ddafc4e6e3c0ab3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 37,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/board-telemetry/spec.md": {
+      "filePath": "openspec/specs/board-telemetry/spec.md",
+      "contentHash": "f605326563d098ab9bbae2c53cb5ab49146603a7cd583cdf49ba73524444be08",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/boss-modifiers/spec.md": {
+      "filePath": "openspec/specs/boss-modifiers/spec.md",
+      "contentHash": "4b8148dba892e2314a30e452b45a682330d1da38af882f384d920247d3b16d9f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 100,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/consumables/spec.md": {
+      "filePath": "openspec/specs/consumables/spec.md",
+      "contentHash": "0a943b027690f25f94f332ab1d53c47f2b234b1e342ea88620a4ffb00d440de2",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 60,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/das-arr-setting/spec.md": {
+      "filePath": "openspec/specs/das-arr-setting/spec.md",
+      "contentHash": "826461941c3a9c9122d639d42dace2d6b6dc39c877139748573dfa64844b22a7",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 45,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/debug-overlay/spec.md": {
+      "filePath": "openspec/specs/debug-overlay/spec.md",
+      "contentHash": "d6b01aab9143bcdd906c31931fd406202dafb611bc8e1ed2e7fc2524c7515c14",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 35,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/dev-console/spec.md": {
+      "filePath": "openspec/specs/dev-console/spec.md",
+      "contentHash": "a858264907222afdf6b30670122cf122e59ab25206dd06549c2d83cff436e39a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 73,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/economy/spec.md": {
+      "filePath": "openspec/specs/economy/spec.md",
+      "contentHash": "c58df2f96dd656189bd2b361bcd8bf077f5c526df46c74fe35a45ca7f2449d26",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 95,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/enemy-display/spec.md": {
+      "filePath": "openspec/specs/enemy-display/spec.md",
+      "contentHash": "46974cccee0bb7b2cda4f6ecc0e829eec100b435430dbf2fdd2f8516f3953f29",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 54,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/enemy-encounters/spec.md": {
+      "filePath": "openspec/specs/enemy-encounters/spec.md",
+      "contentHash": "6db426cb50e24ef9d89bf6c23c070b83f0f966561d51dd6c63c25c58573f8f41",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 112,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/gut-integration/spec.md": {
+      "filePath": "openspec/specs/gut-integration/spec.md",
+      "contentHash": "fcc540af7dc6be7404838cc1017ea21a0a7485d0a05e9b327cf65c5061c9323e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 34,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/hold-display/spec.md": {
+      "filePath": "openspec/specs/hold-display/spec.md",
+      "contentHash": "05c1d21e9b7bd70b75f2daf3bc72302a757d10adc584cbd6a5208c2f2d353cfc",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 38,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/hybrid-reactor/spec.md": {
+      "filePath": "openspec/specs/hybrid-reactor/spec.md",
+      "contentHash": "277ca48a7d1a0e0988ef4bd3fd25e48d935efc222b7bd17e10f697484ab97eee",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 40,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/keybind-settings/spec.md": {
+      "filePath": "openspec/specs/keybind-settings/spec.md",
+      "contentHash": "a89452a7546c2773cd9d7e741259957ae0a1417d96f2efa722af2345f6cc82bb",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 46,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/keystone-upgrades/spec.md": {
+      "filePath": "openspec/specs/keystone-upgrades/spec.md",
+      "contentHash": "9f0f0f0c8565d783cb7bb1a86ebc85884fe934aacfce111869a5607486b5fb50",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 51,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/keystones/spec.md": {
+      "filePath": "openspec/specs/keystones/spec.md",
+      "contentHash": "177e0d529103efa5ebe2dececf6ef0300cab54335326c673bb44bfc10bd3f352",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 163,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/pause-menu/spec.md": {
+      "filePath": "openspec/specs/pause-menu/spec.md",
+      "contentHash": "ba6db30478f0020c426e69cd29c04116c6d6d98877c84b948042114b92956db3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 62,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/profile-save/spec.md": {
+      "filePath": "openspec/specs/profile-save/spec.md",
+      "contentHash": "70c7f1c2dcd2706070697acacca6e7db96d0992f05358910b61e9625efc8e914",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 63,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/queue-display/spec.md": {
+      "filePath": "openspec/specs/queue-display/spec.md",
+      "contentHash": "88841c80b83b3b0ae26669663785488d7b842a0be54287a585cdadf3fc34a7c9",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 42,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/reflect-keystone/spec.md": {
+      "filePath": "openspec/specs/reflect-keystone/spec.md",
+      "contentHash": "4fe7a9e67112e0f0fa0c521d25752edf3e629761cd8b9db997c01eb8397737e6",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 34,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/round-hud-display/spec.md": {
+      "filePath": "openspec/specs/round-hud-display/spec.md",
+      "contentHash": "187d3d3e3141c70644ee3dd985427b9458f42e5f5599adc80c17428022d63c85",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 129,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/run-persistence/spec.md": {
+      "filePath": "openspec/specs/run-persistence/spec.md",
+      "contentHash": "8b7a972219a8fad08456573b7d83bd777bed417ac4341e868452e5a9ceaa288b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 51,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/run-structure/spec.md": {
+      "filePath": "openspec/specs/run-structure/spec.md",
+      "contentHash": "c51fffb94ebbe1023108d6b393d8cc5b2a3d9fd7dff77ad8df94fa0c5f5d259a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 168,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/sdf-setting/spec.md": {
+      "filePath": "openspec/specs/sdf-setting/spec.md",
+      "contentHash": "8f535a9cc303c1bf538c1ae112839f0ed371f753340bdd9639a609d70a6870d7",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 33,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/seeded-rng/spec.md": {
+      "filePath": "openspec/specs/seeded-rng/spec.md",
+      "contentHash": "af83625000cfd48a83d743faff5e75d363f9f323e97cc9746ff16b214cbd1a0e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 27,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/shop-system/spec.md": {
+      "filePath": "openspec/specs/shop-system/spec.md",
+      "contentHash": "19dc82bca1f70056ad9111be105095ffb156ec111a2836475cbd911776abffe1",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 174,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/soft-drop-feedback/spec.md": {
+      "filePath": "openspec/specs/soft-drop-feedback/spec.md",
+      "contentHash": "27a3287a03bd8d60b65f027e3beef73d5a52385586dd49423ee5a659ec21acc8",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/technique-capacity/spec.md": {
+      "filePath": "openspec/specs/technique-capacity/spec.md",
+      "contentHash": "9802935789884be1a70c0b381eca8a4ba38c5d3f60f90af14275676e3a67f0d6",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 38,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/technique-evaluator/spec.md": {
+      "filePath": "openspec/specs/technique-evaluator/spec.md",
+      "contentHash": "d84661d4cf474f23ca9cc58dd2bf4184a3d7c046ad7a6b889e55931b3df07080",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 89,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/technique-pool/spec.md": {
+      "filePath": "openspec/specs/technique-pool/spec.md",
+      "contentHash": "714a581341a9a846564a37b8fc5bc36202a989494a97fe29f9fcd33e008c0c84",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 125,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/techniques/spec.md": {
+      "filePath": "openspec/specs/techniques/spec.md",
+      "contentHash": "5486a8f0189dcb5f31d160d4187781d889394af23e73af569f63551f21e8a7ad",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 20,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/tetris-core/spec.md": {
+      "filePath": "openspec/specs/tetris-core/spec.md",
+      "contentHash": "110bfed2233895ec11ae7110481891fdad1779dd11022206f51b2153da565f8c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 38,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/timer-visibility/spec.md": {
+      "filePath": "openspec/specs/timer-visibility/spec.md",
+      "contentHash": "1e92991b730917b89aec4ea71462054f81c1f81c14052299176839a8e847b299",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 28,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/unit-tests/spec.md": {
+      "filePath": "openspec/specs/unit-tests/spec.md",
+      "contentHash": "fb8443849543812c37e0950a56f61e0f766c5dd8fbde3d717083e0d5d5d7dac6",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 17,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/unlock-framework/spec.md": {
+      "filePath": "openspec/specs/unlock-framework/spec.md",
+      "contentHash": "2016973c5d8f901b1c400bb70564f92634d12902ca537856bbd1017b54384f2b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 52,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/vouchers/spec.md": {
+      "filePath": "openspec/specs/vouchers/spec.md",
+      "contentHash": "a3fd6dc79e7d6031c6745278d8d5c460409de63632902eb92fc538570c9174b1",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 26,
+      "hasStructuralAnalysis": true
+    },
+    "openspec/specs/whirl-keystone/spec.md": {
+      "filePath": "openspec/specs/whirl-keystone/spec.md",
+      "contentHash": "085d58383bd4be26b9f66232870277edf4fa4890ff8bbb071f3957c8320cfd0e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 26,
+      "hasStructuralAnalysis": true
+    },
+    "README.md": {
+      "filePath": "README.md",
+      "contentHash": "c2bb37eb12c4c77653ab52122d2bef3a5e7c7630abe35dd867357eac27a33780",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": true
+    },
+    "technique list.txt": {
+      "filePath": "technique list.txt",
+      "contentHash": "76479a2ec466f5b6e0fe41b562d8402819cf1041657f1d9acdcad67f058448ef",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 69,
+      "hasStructuralAnalysis": false
+    }
+  }
+}

@@ -1,5 +1,5 @@
 63f7b34db8d8cdea90c76aacccf841ec
-::res://::1781462649
+::res://::1781554128
 .gutconfig.json::JSON::-1::1779148340::0::1::::<><><>0<>0<><>::
 export_presets.cfg::TextFile::-1::1780551335::0::1::::<><><>0<>0<><>::
 ::res://addons/::1779154962
@@ -150,7 +150,7 @@ VSplitContainer.svg::CompressedTexture2D::2887385407422649463::1779154955::17793
 yellow.png::CompressedTexture2D::1043265824178416429::1779154955::1779337799::1::::<><><>0<>0<>e1c5049147dc1aeb62405fc086032860<>res://.godot/imported/yellow.png-b3cf3d463958a169d909273d3d742052.ctex::
 ::res://assets/::1781510776
 ::res://assets/audio/::1779080914
-::res://assets/bosses/::1781511163
+::res://assets/bosses/::1781511165
 the ancient.jpg::CompressedTexture2D::1939242895235870616::1781511163::1781511165::1::::<><><>0<>0<>636b567907987368e4d27cdb28ba1b46<>res://.godot/imported/the ancient.jpg-504c4632c271b46b08770885da7aa9ff.ctex::
 the aristocrat.jpg::CompressedTexture2D::8443379350165466842::1781511043::1781511044::1::::<><><>0<>0<>705b3ad4dc9559b09d9115decd8701b5<>res://.godot/imported/the aristocrat.jpg-3187d52dcadb7f09a602b6b3d3f70f0d.ctex::
 the blitz.webp::CompressedTexture2D::3681328359948166170::1781511122::1781511124::1::::<><><>0<>0<>50df17259915f5ba39906694497b125a<>res://.godot/imported/the blitz.webp-7969dcfc5c1826b75aea387eaaf652ff.ctex::
@@ -160,11 +160,12 @@ the reflection.jpg::CompressedTexture2D::3911417936955217886::1781510884::178151
 the silent.webp::CompressedTexture2D::5543391256830050169::1781510866::1781510867::1::::<><><>0<>0<>e3da368ac2311d18ba477d11a10444cf<>res://.godot/imported/the silent.webp-b4826da13966962c2ef2007a9c5d316a.ctex::
 the thin.jpg::CompressedTexture2D::5369877636146562453::1781510802::1781510803::1::::<><><>0<>0<>603cfff346351ff6ee3be440e68dc890<>res://.godot/imported/the thin.jpg-154a768efabaf3c8623ebc44a11d7b56.ctex::
 the void.jpg::CompressedTexture2D::1820328282692055925::1781510779::1781510783::1::::<><><>0<>0<>e4f36e955dcef56494dcbeea36925715<>res://.godot/imported/the void.jpg-530bd0a3d732a1d7b0b726cf4bfc46a9.ctex::
-::res://assets/enemies/::1781510753
+::res://assets/enemies/::1781662177
 golbat.jpg::CompressedTexture2D::3121337892817914817::1781510663::1781510666::1::::<><><>0<>0<>0dd97289e62fabdd77621e5bf2246751<>res://.godot/imported/golbat.jpg-cb0d478c2bdaba9f8a53f6bb6cfac42e.ctex::
 hex wraith.webp::CompressedTexture2D::2131330224808231931::1781510749::1781510753::1::::<><><>0<>0<>d98d1e4737fcbcc03f437d343267b0af<>res://.godot/imported/hex wraith.webp-36c774ae854c25ac537dd455b1234bb9.ctex::
 infernal drake.jpg::CompressedTexture2D::1925055856466389060::1781510640::1781510644::1::::<><><>0<>0<>4f13f1b73651f014515b4681030cab21<>res://.godot/imported/infernal drake.jpg-81a600d4f752e7fa8583ef5723a034c2.ctex::
 Iron Revenant.webp::CompressedTexture2D::8641612997256442006::1781510490::1781510492::1::::<><><>0<>0<>38c18a0e91ea7113e14c9b45700609e7<>res://.godot/imported/Iron Revenant.webp-862fa7fdbf3a58e4b75162db5681bc47.ctex::
+krug.png::CompressedTexture2D::1435758553029421368::1781662177::1781662180::1::::<><><>0<>0<>36f4e5d5bcc2d60cc7ed8cd5a5b13de4<>res://.godot/imported/krug.png-206429f32985b79eff665e0622aa6be6.ctex::
 rusty golem.webp::CompressedTexture2D::145514243370104625::1781510423::1781510424::1::::<><><>0<>0<>bd14d59301a2108b0e65a177b08c3973<>res://.godot/imported/rusty golem.webp-eba61dd7d16f78d153920722c4c9b972.ctex::
 Slime.png::CompressedTexture2D::6522570020944631304::1781510283::1781510284::1::::<><><>0<>0<>80df685c94ca7faeb48a7e9ded88f973<>res://.godot/imported/Slime.png-929b4ef8a311a7bf47d0afd797ebda5b.ctex::
 Void Knight.webp::CompressedTexture2D::5881879951592305721::1781510354::1781510356::1::::<><><>0<>0<>2fb4d411f220714756070b2affd3cd58<>res://.godot/imported/Void Knight.webp-c429f808d07510fd5fe049c6cad405d6.ctex::
@@ -172,11 +173,11 @@ Warden.webp::CompressedTexture2D::3082820611924853247::1781510319::1781510320::1
 ::res://assets/enhancements/::1781462651
 hone.png::CompressedTexture2D::6453695802911360112::1781461548::1781462651::1::::<><><>0<>0<>4c64076f308f541a9c6c5ba11a6bd76d<>res://.godot/imported/hone.png-a7ce977e774d4115a2b51fe1f37433b2.ctex::
 ::res://assets/fonts/::1779080914
-::res://autoloads/::1781494622
+::res://autoloads/::1781662128
 ascension_manager.gd::GDScript::7728452554043803499::1780286734::0::1::::<>Node<><>0<>0<><>::
 economy.gd::GDScript::403072901272620762::1780450547::0::1::::<>Node<><>0<>0<><>::
-resource_registry.gd::GDScript::6829943502022377217::1781494622::0::1::::<>Node<><>0<>0<><>::
-run_state.gd::GDScript::8638141102156223635::1780706312::0::1::::<>Node<><>0<>0<><>::
+resource_registry.gd::GDScript::6829943502022377217::1781546305::0::1::::<>Node<><>0<>0<><>::
+run_state.gd::GDScript::8638141102156223635::1781662128::0::1::::<>Node<><>0<>0<><>::
 ::res://resources/::1781492661
 attack_context.gd::GDScript::4339859687530866167::1781492638::0::1::::AttackContext<>Resource<><>0<>0<><>::
 boss_modifier.gd::GDScript::4895874494352653297::1780077470::0::1::::BossModifier<>Resource<><>0<>0<><>::
@@ -214,19 +215,19 @@ quad_stone.tres::Resource::-1::1779925794::0::1::::<><><>0<>0<><>::res://resourc
 sharpening_stone.tres::Resource::-1::1781494505::0::1::::<><><>0<>0<><>::
 spin_amplifier.tres::Resource::-1::1779925796::0::1::::<><><>0<>0<><>::res://resources/consumable.gd
 steel_plates.tres::Resource::-1::1781494508::0::1::::<><><>0<>0<><>::
-::res://resources/data/enemies/::1781510510
-boss_ancient.tres::Resource/Enemy::156979421561274361::1780941651::0::1::::<><><>0<>0<><>::uid://dqm7x3n1vp5fy::::res://resources/enemy.gd<>uid://2bx3b6uorasm::::res://resources/data/boss_modifiers/the_ancient.tres
-boss_enforcer.tres::Resource/Enemy::5765725215699757422::1780941651::0::1::::<><><>0<>0<><>::uid://dqm7x3n1vp5fy::::res://resources/enemy.gd<>uid://c5pftyx38m7bt::::res://resources/data/boss_modifiers/the_blitz.tres
-boss_fateless.tres::Resource/Enemy::138329857918608254::1780941652::0::1::::<><><>0<>0<><>::uid://d18k5uo55x57x::::res://resources/data/boss_modifiers/the_fateless.tres<>uid://dqm7x3n1vp5fy::::res://resources/enemy.gd
-boss_filth.tres::Resource/Enemy::5049883998657874698::1780941651::0::1::::<><><>0<>0<><>::uid://dqm7x3n1vp5fy::::res://resources/enemy.gd<>uid://noqt3cc4hjdi::::res://resources/data/boss_modifiers/the_filth.tres
-boss_purge.tres::Resource/Enemy::8599145304735427882::1780941651::0::1::::<><><>0<>0<><>::uid://dqm7x3n1vp5fy::::res://resources/enemy.gd<>uid://dgya7o33rjngo::::res://resources/data/boss_modifiers/the_purge.tres
-boss_reflection.tres::Resource/Enemy::5729640738877744379::1780941651::0::1::::<><><>0<>0<><>::uid://dqm7x3n1vp5fy::::res://resources/enemy.gd<>res://resources/data/boss_modifiers/the_reflection.tres
-boss_silencer.tres::Resource/Enemy::56598327390967952::1780941651::0::1::::<><><>0<>0<><>::uid://dqm7x3n1vp5fy::::res://resources/enemy.gd<>uid://cmq76jge48sw3::::res://resources/data/boss_modifiers/the_silencer.tres
-boss_thin.tres::Resource/Enemy::5387440420408461079::1780941652::0::1::::<><><>0<>0<><>::uid://b5grn7b0622q7::::res://resources/data/boss_modifiers/the_thin.tres<>uid://dqm7x3n1vp5fy::::res://resources/enemy.gd
-boss_void.tres::Resource/Enemy::4153351231526921178::1780941651::0::1::::<><><>0<>0<><>::uid://dqm7x3n1vp5fy::::res://resources/enemy.gd<>res://resources/data/boss_modifiers/the_void.tres
-cave_bat.tres::Resource/Enemy::8028315276833289891::1780941651::0::1::::<><><>0<>0<><>::uid://dqm7x3n1vp5fy::::res://resources/enemy.gd
-crimson_drake.tres::Resource/Enemy::2996387055570726838::1780941651::0::1::::<><><>0<>0<><>::uid://dqm7x3n1vp5fy::::res://resources/enemy.gd
-hex_wraith.tres::Resource/Enemy::6786951972504167527::1780941651::0::1::::<><><>0<>0<><>::uid://dqm7x3n1vp5fy::::res://resources/enemy.gd
+::res://resources/data/enemies/::1781511170
+boss_ancient.tres::Resource/Enemy::156979421561274361::1781511170::0::1::::<><><>0<>0<><>::uid://dqm7x3n1vp5fy::::res://resources/enemy.gd<>uid://2bx3b6uorasm::::res://resources/data/boss_modifiers/the_ancient.tres<>uid://2vnburqnv0sy::::res://assets/bosses/the ancient.jpg
+boss_enforcer.tres::Resource/Enemy::5765725215699757422::1781511170::0::1::::<><><>0<>0<><>::uid://dqm7x3n1vp5fy::::res://resources/enemy.gd<>uid://c5pftyx38m7bt::::res://resources/data/boss_modifiers/the_blitz.tres<>uid://bspi676f7ifok::::res://assets/bosses/the blitz.webp
+boss_fateless.tres::Resource/Enemy::138329857918608254::1781511170::0::1::::<><><>0<>0<><>::uid://d18k5uo55x57x::::res://resources/data/boss_modifiers/the_fateless.tres<>uid://dqm7x3n1vp5fy::::res://resources/enemy.gd<>uid://bdeolagypm8b2::::res://assets/bosses/the fateless.jpeg
+boss_filth.tres::Resource/Enemy::5049883998657874698::1781511170::0::1::::<><><>0<>0<><>::uid://dqm7x3n1vp5fy::::res://resources/enemy.gd<>uid://noqt3cc4hjdi::::res://resources/data/boss_modifiers/the_filth.tres<>uid://ct6tbofiaag1w::::res://assets/bosses/the filth.webp
+boss_purge.tres::Resource/Enemy::8599145304735427882::1781511170::0::1::::<><><>0<>0<><>::uid://dqm7x3n1vp5fy::::res://resources/enemy.gd<>uid://dgya7o33rjngo::::res://resources/data/boss_modifiers/the_purge.tres<>uid://dskbhvkbuihmg::::res://assets/bosses/the aristocrat.jpg
+boss_reflection.tres::Resource/Enemy::5729640738877744379::1781511170::0::1::::<><><>0<>0<><>::uid://dqm7x3n1vp5fy::::res://resources/enemy.gd<>res://resources/data/boss_modifiers/the_reflection.tres<>uid://bvyyqne2uwj0y::::res://assets/bosses/the reflection.jpg
+boss_silencer.tres::Resource/Enemy::56598327390967952::1781511170::0::1::::<><><>0<>0<><>::uid://dqm7x3n1vp5fy::::res://resources/enemy.gd<>uid://cmq76jge48sw3::::res://resources/data/boss_modifiers/the_silencer.tres<>uid://ck8i3x1r0h0bl::::res://assets/bosses/the silent.webp
+boss_thin.tres::Resource/Enemy::5387440420408461079::1781511170::0::1::::<><><>0<>0<><>::uid://b5grn7b0622q7::::res://resources/data/boss_modifiers/the_thin.tres<>uid://dqm7x3n1vp5fy::::res://resources/enemy.gd<>uid://cirhdn0b2va4d::::res://assets/bosses/the thin.jpg
+boss_void.tres::Resource/Enemy::4153351231526921178::1781511170::0::1::::<><><>0<>0<><>::uid://dqm7x3n1vp5fy::::res://resources/enemy.gd<>res://resources/data/boss_modifiers/the_void.tres<>uid://061snichysq4::::res://assets/bosses/the void.jpg
+cave_bat.tres::Resource/Enemy::8028315276833289891::1781511170::0::1::::<><><>0<>0<><>::uid://dqm7x3n1vp5fy::::res://resources/enemy.gd<>uid://bkp88j2bgc58x::::res://assets/enemies/golbat.jpg
+crimson_drake.tres::Resource/Enemy::2996387055570726838::1781511170::0::1::::<><><>0<>0<><>::uid://dqm7x3n1vp5fy::::res://resources/enemy.gd<>uid://2ornhlsibo1q::::res://assets/enemies/infernal drake.jpg
+hex_wraith.tres::Resource/Enemy::6786951972504167527::1781511170::0::1::::<><><>0<>0<><>::uid://dqm7x3n1vp5fy::::res://resources/enemy.gd<>uid://5moxyhb5lgy2::::res://assets/enemies/hex wraith.webp
 iron_shambler.tres::Resource/Enemy::1452030418873099666::1781510510::0::1::::<><><>0<>0<><>::uid://dqm7x3n1vp5fy::::res://resources/enemy.gd<>uid://dvecdrwljm4rq::::res://assets/enemies/Iron Revenant.webp
 rock_crawler.tres::Resource/Enemy::70163141434504212::1780941651::0::1::::<><><>0<>0<><>::uid://dqm7x3n1vp5fy::::res://resources/enemy.gd
 rust_golem.tres::Resource/Enemy::4687117111863983942::1781510510::0::1::::<><><>0<>0<><>::uid://dqm7x3n1vp5fy::::res://resources/enemy.gd<>uid://ccqulwx1627n::::res://assets/enemies/rusty golem.webp
@@ -347,7 +348,7 @@ debug_overlay.gd::GDScript::2152743896851875747::1779172377::0::1::::DebugOverla
 debug_overlay.tscn::PackedScene::-1::1779148447::0::1::::<><><>0<>0<><>::res://scenes/debug/debug_overlay.gd
 dev_console.gd::GDScript::5177998102128788174::1780355839::0::1::::<>CanvasLayer<><>0<>0<><>::
 dev_console.tscn::PackedScene::-1::1779148478::0::1::::<><><>0<>0<><>::res://scenes/debug/dev_console.gd
-::res://scenes/game/::1781493284
+::res://scenes/game/::1781658694
 attack_bar.gd::GDScript::3845171964760520187::1780549680::0::1::::AttackBar<>Control<><>0<>0<><>::
 enemy_display.gd::GDScript::4946671023903263549::1780980677::0::1::::EnemyDisplay<>Control<><>0<>0<><>::
 enemy_display.tscn::PackedScene::-1::1779559544::0::1::::<><><>0<>0<><>::res://scenes/game/enemy_display.gd
@@ -358,39 +359,42 @@ pause_menu.gd::GDScript::3048856124872062004::1779253671::0::1::::PauseMenu<>Con
 pause_menu.tscn::PackedScene::-1::1779253680::0::1::::<><><>0<>0<><>::res://scenes/game/pause_menu.gd
 queue_display.gd::GDScript::8490887208373711032::1781486005::0::1::::QueueDisplay<>Node2D<><>0<>0<><>::
 queue_display.tscn::PackedScene::-1::1779162929::0::1::::<><><>0<>0<><>::res://scenes/game/queue_display.gd
-run_manager.gd::GDScript::2480146744871978934::1781493284::0::1::::RunManager<>Node<><>0<>0<><>::
+run_manager.gd::GDScript::2480146744871978934::1781658694::0::1::::RunManager<>Node<><>0<>0<><>::
 run_manager.tscn::PackedScene::-1::1780783852::0::1::::<><><>0<>0<><>::res://scenes/game/run_manager.gd<>res://scenes/game/hud.gd
 shield_bar.gd::GDScript::-1::1781483743::0::1::::ShieldBar<>Control<><>0<>0<><>::
 technique_evaluator.gd::GDScript::5659245087068926095::1781493273::0::1::::TechniqueEvaluator<>RefCounted<><>0<>0<><>::
 ::res://scenes/keystone_selection/::1780710290
 keystone_selection.gd::GDScript::5086491121720126048::1780710290::0::1::::KeystoneSelection<>Control<><>0<>0<><>::
 keystone_selection.tscn::PackedScene::-1::1779549252::0::1::::<><><>0<>0<><>::res://scenes/keystone_selection/keystone_selection.gd
-::res://scenes/main_menu/::1781510510
-main_menu.gd::GDScript::1654840501150202472::1780355330::0::1::::MainMenu<>Control<><>0<>0<><>::
-main_menu.tscn::PackedScene::4485185212715773202::1781510510::0::1::::<><><>0<>0<><>::uid://xtu8mmgc0hmm::::res://scenes/main_menu/main_menu.gd
-::res://scenes/screens/::1780713048
+::res://scenes/main_menu/::1781660023
+main_menu.gd::GDScript::1654840501150202472::1781660023::0::1::::MainMenu<>Control<><>0<>0<><>::
+main_menu.tscn::PackedScene::4485185212715773202::1781658813::0::1::::<><><>0<>0<><>::uid://xtu8mmgc0hmm::::res://scenes/main_menu/main_menu.gd
+::res://scenes/screens/::1781659464
 ascension_selector.gd::GDScript::6731940317454808231::1780356031::0::1::::<>CanvasLayer<><>0<>0<><>::
 ascension_selector.tscn::PackedScene::-1::1780286905::0::1::::<><><>0<>0<><>::res://scenes/screens/ascension_selector.gd
-round_success.gd::GDScript::6310273063250864408::1780450593::0::1::::RoundSuccess<>Control<><>0<>0<><>::
-round_success.tscn::PackedScene::-1::1779081530::0::1::::<><><>0<>0<><>::res://scenes/screens/round_success.gd
-run_failure.gd::GDScript::4600888674263317235::1780202896::0::1::::RunFailure<>Control<><>0<>0<><>::
-run_failure.tscn::PackedScene::-1::1779549294::0::1::::<><><>0<>0<><>::res://scenes/screens/run_failure.gd
-run_victory.gd::GDScript::6018707251526871386::1780551078::0::1::::RunVictory<>Control<><>0<>0<><>::
-run_victory.tscn::PackedScene::-1::1780286887::0::1::::<><><>0<>0<><>::res://scenes/screens/run_victory.gd
+round_success.gd::GDScript::6310273063250864408::1781511489::0::1::::RoundSuccess<>Control<><>0<>0<><>::
+round_success.tscn::PackedScene::-1::1781511494::0::1::::<><><>0<>0<><>::res://scenes/screens/round_success.gd
+run_end_helpers.gd::GDScript::5044957449992696614::1781659464::0::1::::RunEndHelpers<>RefCounted<><>0<>0<><>::
+run_failure.gd::GDScript::4600888674263317235::1781659045::0::1::::RunFailure<>Control<><>0<>0<><>::
+run_failure.tscn::PackedScene::-1::1781658772::0::1::::<><><>0<>0<><>::res://scenes/screens/run_failure.gd
+run_victory.gd::GDScript::6018707251526871386::1781659041::0::1::::RunVictory<>Control<><>0<>0<><>::
+run_victory.tscn::PackedScene::-1::1781658751::0::1::::<><><>0<>0<><>::res://scenes/screens/run_victory.gd
 settings.gd::GDScript::1806875330746791744::1780713048::0::1::::Settings<>Control<><>0<>0<><>::
 settings.tscn::PackedScene::-1::1780706330::0::1::::<><><>0<>0<><>::res://scenes/screens/settings.gd
+stats_screen.gd::GDScript::920879269051354896::1781658850::0::1::::StatsScreen<>Control<><>0<>0<><>::
+stats_screen.tscn::PackedScene::-1::1781658835::0::1::::<><><>0<>0<><>::
 ::res://scenes/shop/::1780701711
 shop.gd::GDScript::644539293769240862::1780701711::0::1::::Shop<>Control<><>0<>0<><>::
 shop.tscn::PackedScene::-1::1780010686::0::1::::<><><>0<>0<><>::res://scenes/shop/shop.gd
 ::res://scenes/tetris/::1781485346
 tetris_board.gd::GDScript::5464651229928112486::1781485346::0::1::::TetrisBoard<>Node2D<><>0<>0<><>::
 tetris_board.tscn::PackedScene::-1::1779081488::0::1::::<><><>0<>0<><>::res://scenes/tetris/tetris_board.gd
-::res://scripts/::1780549800
+::res://scripts/::1781660019
 bag_randomizer.gd::GDScript::2549216948057569527::1779553624::0::1::::BagRandomizer<>RefCounted<><>0<>0<><>::
 piece_data.gd::GDScript::8006952121046765599::1779141495::0::1::::PieceData<>RefCounted<><>0<>0<><>::
-profile_save.gd::GDScript::5645366349703597411::1780355426::0::1::::<>Node<><>0<>0<><>::
+profile_save.gd::GDScript::5645366349703597411::1781660019::0::1::::<>Node<><>0<>0<><>::
 run_save.gd::GDScript::871372071396688978::1780549800::0::1::::RunSave<>RefCounted<><>0<>0<><>::
-run_stats.gd::GDScript::6643214817635616679::1780286658::0::1::::RunStats<>RefCounted<><>0<>0<><>::
+run_stats.gd::GDScript::6643214817635616679::1781658639::0::1::::RunStats<>RefCounted<><>0<>0<><>::
 srs.gd::GDScript::2122571595521130975::1779155848::0::1::::SRS<>RefCounted<><>0<>0<><>::
 unlock_checker.gd::GDScript::8431432874654116742::1780355435::0::1::::UnlockChecker<>RefCounted<><>0<>0<><>::
 ::res://tests/::1780907274
@@ -398,7 +402,7 @@ run_tests.gd::GDScript::8267933396425514313::1780906983::0::1::::<>SceneTree<><>
 run_tests.tscn::PackedScene::-1::1779148348::0::1::::<><><>0<>0<><>::res://addons/gut/gut.gd
 run_tests_headless.gd::GDScript::7303527300497524605::1780906974::0::1::::<>Node<><>0<>0<><>::
 run_tests_headless.tscn::PackedScene::-1::1780906771::0::1::::<><><>0<>0<><>::res://tests/run_tests_headless.gd
-::res://tests/unit/::1781501195
+::res://tests/unit/::1781662138
 test_ascension_system.gd::GDScript::3146798869029033151::1780355373::0::1::::<>GutTest<><>0<>0<><>::
 test_attack_buffer.gd::GDScript::1021717765476035255::1780077986::0::1::::<>GutTest<><>0<>0<><>::
 test_attack_system.gd::GDScript::4118919654931886582::1779930101::0::1::::<>GutTest<><>0<>0<><>::
@@ -411,17 +415,18 @@ test_economy.gd::GDScript::8350384794894373640::1780450933::0::1::::<>GutTest<><
 test_enemy_attacks.gd::GDScript::4165163475855892::1779720047::0::1::::<>GutTest<><>0<>0<><>::
 test_enemy_display.gd::GDScript::7549414056718958413::1780980731::0::1::::<>GutTest<><>0<>0<><>::
 test_enemy_encounters.gd::GDScript::633573186810803861::1780078008::0::1::::<>GutTest<><>0<>0<><>::
-test_enhancement_benefits.gd::GDScript::2193783576440827293::1781500824::0::1::::<>GutTest<><>0<>0<><>::
+test_enhancement_benefits.gd::GDScript::2193783576440827293::1781511615::0::1::::<>GutTest<><>0<>0<><>::
 test_enhancement_grants.gd::GDScript::2162111761486233774::1781501195::0::1::::<>GutTest<><>0<>0<><>::
 test_enhancement_grid.gd::GDScript::-1::1781484333::0::1::::<>GutTest<><>0<>0<><>::
 test_garbage_packets.gd::GDScript::6899515524178718143::1780077995::0::1::::<>GutTest<><>0<>0<><>::
 test_hold_queue.gd::GDScript::713915902464943990::1780180787::0::1::::<>GutTest<><>0<>0<><>::
-test_keystones.gd::GDScript::1327897541413568772::1781494751::0::1::::<>GutTest<><>0<>0<><>::
+test_keystones.gd::GDScript::1327897541413568772::1781511623::0::1::::<>GutTest<><>0<>0<><>::
 test_line_clear_delay.gd::GDScript::2066786516519019288::1781134035::0::1::::<>GutTest<><>0<>0<><>::
 test_line_clear_type_popup.gd::GDScript::6869053852341860850::1780959302::0::1::::<>GutTest<><>0<>0<><>::
 test_piece_enhancements.gd::GDScript::5014009034490696780::1781494674::0::1::::<>GutTest<><>0<>0<><>::
-test_resource_registry.gd::GDScript::2421050183762432326::1780710347::0::1::::<>GutTest<><>0<>0<><>::
-test_round_config.gd::GDScript::620702948677388039::1779148405::0::1::::<>GutTest<><>0<>0<><>::
+test_resource_registry.gd::GDScript::2421050183762432326::1781546315::0::1::::<>GutTest<><>0<>0<><>::
+test_round_config.gd::GDScript::620702948677388039::1781662138::0::1::::<>GutTest<><>0<>0<><>::
+test_run_stats_screen.gd::GDScript::1314482990368628627::1781659049::0::1::::<>GutTest<><>0<>0<><>::
 test_seeded_rng.gd::GDScript::5086211945342324350::1779570455::0::1::::<>GutTest<><>0<>0<><>::
 test_shop_collection.gd::GDScript::3322079267928668312::1780010774::0::1::::<>GutTest<><>0<>0<><>::
 test_technique_system.gd::GDScript::4735339834893525304::1781494891::0::1::::<>GutTest<><>0<>0<><>::

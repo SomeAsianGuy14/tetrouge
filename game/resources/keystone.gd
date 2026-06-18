@@ -66,6 +66,7 @@ extends Resource
 @export var per_attack_tag_bonus: int = 0
 @export var reflect_on_flush: float = 0.0
 @export var skip_line_clear_delay: bool = false
+@export var attack_to_shield_pct: float = 0.0
 
 # ── Piece enhancements ──────────────────────────────────────────────────────
 @export var piece_enhance_every_n: int = 0

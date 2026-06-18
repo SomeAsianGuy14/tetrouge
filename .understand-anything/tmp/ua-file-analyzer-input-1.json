@@ -1,0 +1,15 @@
+{
+  "projectRoot": "C:/School/PP/TR",
+  "batchFiles": [
+    {"path": "game/autoloads/resource_registry.gd", "language": "gdscript", "sizeLines": 142, "fileCategory": "code"},
+    {"path": "game/resources/keystone.gd", "language": "gdscript", "sizeLines": 80, "fileCategory": "code"},
+    {"path": "game/resources/round_config.gd", "language": "gdscript", "sizeLines": 44, "fileCategory": "code"},
+    {"path": "game/scenes/game/hud.gd", "language": "gdscript", "sizeLines": 145, "fileCategory": "code"},
+    {"path": "game/scenes/game/run_manager.gd", "language": "gdscript", "sizeLines": 1149, "fileCategory": "code"},
+    {"path": "game/scenes/game/technique_evaluator.gd", "language": "gdscript", "sizeLines": 240, "fileCategory": "code"},
+    {"path": "game/scenes/tetris/tetris_board.gd", "language": "gdscript", "sizeLines": 668, "fileCategory": "code"},
+    {"path": "game/resources/data/enemies/boss_fateless.tres", "language": "godot-resource", "sizeLines": 11, "fileCategory": "data"},
+    {"path": "game/resources/data/enemies/boss_thin.tres", "language": "godot-resource", "sizeLines": 11, "fileCategory": "data"}
+  ],
+  "batchImportData": {}
+}
