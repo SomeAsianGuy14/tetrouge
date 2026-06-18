@@ -25,7 +25,7 @@ func _build_panel() -> void:
 	vbox.set_anchor_and_offset(SIDE_LEFT,   0.0, 80.0)
 	vbox.set_anchor_and_offset(SIDE_RIGHT,  1.0, -80.0)
 	vbox.set_anchor_and_offset(SIDE_TOP,    0.0, 60.0)
-	vbox.set_anchor_and_offset(SIDE_BOTTOM, 1.0, -60.0)
+	vbox.set_anchor_and_offset(SIDE_BOTTOM, 1.0, -220.0)
 	add_child(vbox)
 
 	match _subtype:

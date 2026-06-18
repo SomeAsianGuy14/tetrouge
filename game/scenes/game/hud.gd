@@ -1,6 +1,9 @@
 class_name HUD
 extends Control
 
+@onready var _top_bar: HBoxContainer = $TopBar
+@onready var _info_panel: VBoxContainer = $InfoPanel
+@onready var _inventory_panel: VBoxContainer = $InventoryPanel
 @onready var round_info_label: Label = $TopBar/RoundInfoLabel
 @onready var timer_label: Label = $TopBar/TimerLabel
 @onready var coin_label: Label = $TopBar/CoinLabel
@@ -15,6 +18,7 @@ extends Control
 @onready var b2b_label: Label = $InfoPanel/B2BLabel
 @onready var combo_label: Label = $InfoPanel/ComboLabel
 
+@onready var inventory_coin_label: Label = $InventoryPanel/InventoryCoinLabel
 @onready var _backpack_slots: Array = [
 	$InventoryPanel/BackpackContainer/BackpackSlot0,
 	$InventoryPanel/BackpackContainer/BackpackSlot1,
@@ -58,6 +62,7 @@ func setup(config: RoundConfig) -> void:
 		modifier_label.visible = false
 
 	coin_label.text = "Coins: %d" % Economy.coins
+	inventory_coin_label.text = "Coins: %d" % Economy.coins
 	_refresh_keystone_icons()
 	_refresh_technique_icons()
 	_refresh_backpack_slots()
@@ -84,6 +89,7 @@ func update_timer(time_remaining: float) -> void:
 
 func _on_coins_changed(amount: int) -> void:
 	coin_label.text = "Coins: %d" % amount
+	inventory_coin_label.text = "Coins: %d" % amount
 
 func _refresh_keystone_icons() -> void:
 	for child in keystone_icons.get_children():
@@ -107,6 +113,30 @@ func _refresh_technique_icons() -> void:
 		lbl.mouse_filter = Control.MOUSE_FILTER_STOP
 		lbl.set_meta("id", technique.id)
 		technique_icons.add_child(lbl)
+
+# ── Visibility management ────────────────────────────────────────────────
+
+func hide_combat_elements() -> void:
+	_top_bar.visible = false
+	_info_panel.visible = false
+	for btn in _backpack_slots:
+		btn.disabled = true
+
+func show_combat_elements() -> void:
+	_top_bar.visible = true
+	_info_panel.visible = true
+
+func hide_inventory() -> void:
+	_inventory_panel.visible = false
+
+func show_inventory() -> void:
+	_inventory_panel.visible = true
+
+func refresh_inventory() -> void:
+	_refresh_keystone_icons()
+	_refresh_technique_icons()
+	_refresh_backpack_slots()
+	inventory_coin_label.text = "Coins: %d" % Economy.coins
 
 # ── Animation helpers ─────────────────────────────────────────────────────
 

@@ -3,6 +3,7 @@
 ## Unreleased
 
 ### New Features
+- **Persistent collection HUD** — Your keystones, techniques, backpack, and coin balance are now visible during encounters and the dungeon map, so you can make informed decisions at the Altar, Wishing Well, Library, and Museum. The panel is hidden during shop visits to avoid duplicating the shop's own collection display.
 - **Wishing Well rework** — The Wishing Well no longer awards gold. Instead, each successful throw drops a random item: 60% consumable, 30% technique, 10% keystone. Rewards are capped at 3 per visit. The well handles full backpacks, technique caps, and exhausted pools gracefully.
 
 ### Balance

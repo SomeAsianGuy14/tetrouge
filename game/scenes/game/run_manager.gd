@@ -196,7 +196,8 @@ func enter_room(room: DungeonRoom) -> void:
 
 func _hide_board_ui() -> void:
 	board_container.visible = false
-	hud.visible = false
+	hud.hide_combat_elements()
+	hud.refresh_inventory()
 	if _enemy_display:
 		_enemy_display.queue_free()
 		_enemy_display = null
@@ -209,7 +210,7 @@ func _hide_board_ui() -> void:
 
 func _show_board_ui() -> void:
 	board_container.visible = true
-	hud.visible = true
+	hud.show_combat_elements()
 
 # ── Combat room ────────────────────────────────────────────────────────────
 
@@ -412,6 +413,7 @@ func _draw_enemy(tier: String) -> Enemy:
 
 func _open_shop_room(room: DungeonRoom) -> void:
 	_hide_board_ui()
+	hud.hide_inventory()
 	var scene: PackedScene = load(SCENE_SHOP)
 	var shop = scene.instantiate()
 	_active_overlay = shop
@@ -421,6 +423,8 @@ func _open_shop_room(room: DungeonRoom) -> void:
 func _on_shop_room_closed(room: DungeonRoom) -> void:
 	if _active_overlay:
 		_active_overlay = null
+	hud.show_inventory()
+	hud.refresh_inventory()
 	_flow.resolve_shop(room)
 
 # ── Encounter room ─────────────────────────────────────────────────────────
