@@ -8,6 +8,7 @@ id = "chain_battery"
 display_name = "Chain Battery"
 description = "Every 4 combo clears, send +3 attack."
 cost = 52
+rarity = "rare"
 tags = ["combo"]
 effect_type = "every_nth_combo"
 params = {"n": 4, "bonus": 3}

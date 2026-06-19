@@ -8,6 +8,7 @@ id = "mini_spark"
 display_name = "Mini Spark"
 description = "T-spin minis send +1 attack."
 cost = 40
+rarity = "common"
 tags = ["tspin"]
 effect_type = "flat"
 params = {"on": "tspin_mini", "bonus": 1}

@@ -125,6 +125,7 @@ func _refresh_technique_icons() -> void:
 		var lbl := Label.new()
 		lbl.text = technique.display_name[0]
 		lbl.tooltip_text = "%s\n%s" % [technique.display_name, technique.description]
+		lbl.modulate = Technique.RARITY_COLOR.get(technique.rarity, Color.WHITE)
 		lbl.mouse_filter = Control.MOUSE_FILTER_STOP
 		lbl.set_meta("id", technique.id)
 		technique_icons.add_child(lbl)

@@ -8,6 +8,7 @@ id = "redzone"
 display_name = "Redzone"
 description = "While above 70% board height, attacks send +3."
 cost = 52
+rarity = "rare"
 tags = ["risk"]
 effect_type = "flat"
 params = {"on": "all_clear", "board_above_pct": 0.7, "bonus": 3}

@@ -55,13 +55,13 @@ func _populate_shop() -> void:
 func _populate_technique_slots() -> void:
 	_technique_slot_nodes.clear()
 	var available := _all_techniques.filter(func(t): return not RunState.has_technique(t.id))
-	RunState.seeded_shuffle(available)
+	var drawn := ResourceRegistry.weighted_technique_draw_n(available, RunState.shop_technique_slots, RunState.rng)
 	var count := RunState.shop_technique_slots
 	for i in range(technique_slots.get_child_count()):
 		technique_slots.get_child(i).visible = i < count
 	for i in range(count):
 		var slot: Control = technique_slots.get_child(i) as Control if i < technique_slots.get_child_count() else _create_slot()
-		var item: Resource = available[i] as Resource if i < available.size() else null
+		var item: Technique = drawn[i] as Technique if i < drawn.size() else null
 		_populate_slot(slot, item)
 		if item != null:
 			_technique_slot_nodes.append(slot)
@@ -104,6 +104,8 @@ func _build_item_card(slot: Control, item: Resource) -> void:
 	var name_label := Label.new()
 	name_label.text = item.display_name
 	name_label.add_theme_font_size_override("font_size", 14)
+	if item is Technique:
+		name_label.modulate = Technique.RARITY_COLOR.get(item.rarity, Color.WHITE)
 	vbox.add_child(name_label)
 
 	var desc_label := Label.new()
@@ -113,6 +115,9 @@ func _build_item_card(slot: Control, item: Resource) -> void:
 	vbox.add_child(desc_label)
 
 	var display_cost: int = _effective_cost(item)
+	if item is Technique:
+		display_cost += RunState.rng.randi_range(-4, 4)
+		display_cost = maxi(1, display_cost)
 	var cost_label := Label.new()
 	cost_label.text = "%d coins" % display_cost
 	vbox.add_child(cost_label)
@@ -137,23 +142,23 @@ func _build_item_card(slot: Control, item: Resource) -> void:
 	else:
 		var buy_btn := Button.new()
 		buy_btn.text = "Buy"
-		buy_btn.set_meta("cost", item.cost)
+		buy_btn.set_meta("cost", display_cost)
 		buy_btn.set_meta("is_technique", item is Technique)
-		buy_btn.disabled = not Economy.can_afford(item.cost)
-		buy_btn.connect("pressed", _on_purchase.bind(item, slot))
+		buy_btn.disabled = not Economy.can_afford(display_cost)
+		buy_btn.connect("pressed", _on_purchase_at_cost.bind(item, slot, display_cost))
 		vbox.add_child(buy_btn)
 		_buy_buttons[slot] = buy_btn
-		slot.modulate = Color.WHITE if Economy.can_afford(item.cost) else Color(0.55, 0.55, 0.55)
+		slot.modulate = Color.WHITE if Economy.can_afford(display_cost) else Color(0.55, 0.55, 0.55)
 
-func _on_purchase(item: Resource, slot: Control) -> void:
-	if not Economy.spend_coins(item.cost):
+func _on_purchase_at_cost(item: Resource, slot: Control, purchase_cost: int) -> void:
+	if not Economy.spend_coins(purchase_cost):
 		return
 	if item is Technique:
 		RunState.add_technique(item)
 		_build_technique_icons()
 	elif item is Consumable:
 		if not RunState.add_consumable(item):
-			Economy.add_coins(item.cost)  # refund if full
+			Economy.add_coins(purchase_cost)
 			return
 		_refresh_collection_backpack()
 	_mark_slot_purchased(slot, item)
@@ -215,6 +220,7 @@ func _build_technique_icons() -> void:
 			var technique: Technique = RunState.techniques[i]
 			btn.text = technique.display_name + "\nSell - " + str(_sell_price(technique)) + "c"
 			btn.tooltip_text = technique.display_name + "\n" + technique.description
+			btn.modulate = Technique.RARITY_COLOR.get(technique.rarity, Color.WHITE)
 			btn.disabled = false
 			btn.connect("pressed", _on_sell_technique.bind(technique))
 		else:

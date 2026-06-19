@@ -8,6 +8,7 @@ id = "greedy_hands"
 display_name = "Greedy Hands"
 description = "Gain an additional 8 coins every round, but enemies gain +1 attack."
 cost = 52
+rarity = "rare"
 tags = ["risk", "economy"]
 effect_type = "greedy_hands"
 params = {}

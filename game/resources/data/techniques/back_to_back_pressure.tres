@@ -8,6 +8,7 @@ id = "back_to_back_pressure"
 display_name = "Back-to-Back Pressure"
 description = "Back-to-back Quads send +2 attack."
 cost = 52
+rarity = "rare"
 tags = ["quad"]
 effect_type = "flat"
 params = {"on": "quad", "require_b2b": true, "bonus": 2}

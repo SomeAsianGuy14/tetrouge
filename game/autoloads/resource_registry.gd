@@ -171,3 +171,29 @@ static func get_available_keystones() -> Array:
 static func get_available_techniques() -> Array:
 	return all_techniques.filter(func(t):
 		return t.unlock_condition_id == "" or t.unlock_condition_id in ProfileSave.unlocked_ids)
+
+static func weighted_technique_draw(pool: Array, rng: RandomNumberGenerator) -> Technique:
+	if pool.is_empty():
+		return null
+	var total_weight := 0
+	for t in pool:
+		total_weight += Technique.RARITY_WEIGHT.get(t.rarity, 1)
+	var roll := rng.randi_range(0, total_weight - 1)
+	var cumulative := 0
+	for t in pool:
+		cumulative += Technique.RARITY_WEIGHT.get(t.rarity, 1)
+		if roll < cumulative:
+			return t
+	return pool[pool.size() - 1]
+
+static func weighted_technique_draw_n(pool: Array, n: int, rng: RandomNumberGenerator) -> Array:
+	var remaining := pool.duplicate()
+	var result: Array = []
+	for i in range(n):
+		if remaining.is_empty():
+			break
+		var pick: Technique = weighted_technique_draw(remaining, rng)
+		if pick != null:
+			result.append(pick)
+			remaining.erase(pick)
+	return result

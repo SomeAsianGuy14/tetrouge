@@ -29,15 +29,15 @@ func test_cheap_technique_costs_40() -> void:
 	assert_not_null(t)
 	assert_eq(t.cost, 40)
 
-func test_mid_technique_costs_48() -> void:
+func test_common_technique_combo_payout_costs_40() -> void:
 	var t := ResourceRegistry.find_by_id(ResourceRegistry.all_techniques, "combo_payout")
 	assert_not_null(t)
-	assert_eq(t.cost, 48)
+	assert_eq(t.cost, 40)
 
-func test_expensive_technique_costs_60() -> void:
+func test_epic_technique_perfect_spark_costs_64() -> void:
 	var t := ResourceRegistry.find_by_id(ResourceRegistry.all_techniques, "perfect_spark")
 	assert_not_null(t)
-	assert_eq(t.cost, 60)
+	assert_eq(t.cost, 64)
 
 func test_cheap_consumable_costs_30() -> void:
 	var c := ResourceRegistry.find_by_id(ResourceRegistry.all_consumables, "power_shard")
@@ -56,10 +56,11 @@ func test_expensive_consumable_costs_40() -> void:
 
 # ── All techniques have cost field ────────────────────────────────────────
 
-func test_all_techniques_have_cost_in_range() -> void:
+func test_all_techniques_have_cost_matching_rarity() -> void:
 	for t in ResourceRegistry.all_techniques:
-		assert_true(t.cost >= 40 and t.cost <= 60,
-			"technique %s cost %d should be in 40-60 range" % [t.id, t.cost])
+		var expected: int = Technique.RARITY_BASE_COST.get(t.rarity, -1)
+		assert_eq(t.cost, expected,
+			"technique %s (rarity %s) cost %d should be %d" % [t.id, t.rarity, t.cost, expected])
 
 func test_all_consumables_have_cost_in_range() -> void:
 	for c in ResourceRegistry.all_consumables:

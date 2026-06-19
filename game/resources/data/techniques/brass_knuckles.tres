@@ -8,6 +8,7 @@ id = "brass_knuckles"
 display_name = "Brass Knuckles"
 description = "All line clears send +1 attack."
 cost = 40
+rarity = "common"
 tags = ["general"]
 effect_type = "flat"
 params = {"on": "all_clear", "bonus": 1}

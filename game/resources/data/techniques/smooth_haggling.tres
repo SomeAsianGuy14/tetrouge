@@ -8,6 +8,7 @@ id = "smooth_haggling"
 display_name = "Smooth Haggling"
 description = "Selling a technique refunds 80% of its cost instead of 60%."
 cost = 40
+rarity = "common"
 tags = ["economy"]
 effect_type = "smooth_haggling"
 params = {}

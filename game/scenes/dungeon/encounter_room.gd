@@ -158,9 +158,8 @@ func _wishing_well_award() -> String:
 				RunState.add_consumable(item)
 				return "%s (Consumable)" % item.display_name
 		"technique":
-			RunState.seeded_shuffle(tech_pool)
-			if not tech_pool.is_empty():
-				var item: Technique = tech_pool[0]
+			var item: Technique = ResourceRegistry.weighted_technique_draw(tech_pool, RunState.rng)
+			if item != null:
 				RunState.add_technique(item)
 				return "%s (Technique)" % item.display_name
 		"keystone":
@@ -281,8 +280,7 @@ func _build_library(vbox: VBoxContainer) -> void:
 		"Dusty tomes line the shelves. One technique catches your eye — free of charge.")
 
 	var pool := ResourceRegistry.get_available_techniques()
-	RunState.seeded_shuffle(pool)
-	var candidates := pool.slice(0, mini(10, pool.size()))
+	var candidates := ResourceRegistry.weighted_technique_draw_n(pool, 10, RunState.rng)
 
 	if candidates.is_empty():
 		var no_tech := Label.new()
@@ -306,6 +304,7 @@ func _build_library(vbox: VBoxContainer) -> void:
 		btn.text = "%s — %s" % [t.display_name, t.description]
 		btn.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		btn.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		btn.modulate = Technique.RARITY_COLOR.get(t.rarity, Color.WHITE)
 		btn_list.add_child(btn)
 		btn.connect("pressed", func() -> void:
 			if RunState.techniques.size() < RunState.technique_capacity:

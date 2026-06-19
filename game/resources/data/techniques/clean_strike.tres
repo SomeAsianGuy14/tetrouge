@@ -8,6 +8,7 @@ id = "clean_strike"
 display_name = "Clean Strike"
 description = "Clearing 2+ lines sends +1 bonus attack."
 cost = 40
+rarity = "common"
 tags = ["general", "precision"]
 effect_type = "flat"
 params = {"on": "multiline", "bonus": 1}

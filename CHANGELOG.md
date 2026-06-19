@@ -3,6 +3,7 @@
 ## Unreleased
 
 ### New Features
+- **Technique rarity** — Techniques now have 3 rarity tiers: Common (white), Rare (blue), and Epic (purple). Rarity determines base cost (40/52/64), shop appearance frequency (commons appear most often), and name color across all UI. Shop prices vary ±4 around the base. Wishing Well and Library also use weighted draws.
 - **Clear mastery** — Performing clears in combat now builds XP toward permanent attack bonuses. 7 mastery tracks (Singles, Doubles, Triples, Quads, T-Spin Single/Double/Triple) each grant +1 flat attack per level. XP thresholds escalate with level. Mastery also amplifies matching techniques (+1 per 2 mastery levels). A collapsible mastery panel in the HUD shows progress, and level-up popups appear when thresholds are crossed.
 - **Persistent collection HUD** — Your keystones, techniques, backpack, and coin balance are now visible during encounters and the dungeon map, so you can make informed decisions at the Altar, Wishing Well, Library, and Museum. The panel is hidden during shop visits to avoid duplicating the shop's own collection display.
 - **Wishing Well rework** — The Wishing Well no longer awards gold. Instead, each successful throw drops a random item: 60% consumable, 30% technique, 10% keystone. Rewards are capped at 3 per visit. The well handles full backpacks, technique caps, and exhausted pools gracefully.
