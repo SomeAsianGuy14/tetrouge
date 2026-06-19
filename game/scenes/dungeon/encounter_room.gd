@@ -70,6 +70,10 @@ func _leave_button(vbox: VBoxContainer) -> Button:
 func _on_leave() -> void:
 	emit_signal("encounter_completed")
 
+func _refresh_hud() -> void:
+	if _run_manager and _run_manager.hud:
+		_run_manager.hud.refresh_inventory()
+
 # ── Wishing Well ──────────────────────────────────────────────────────────
 
 func _build_wishing_well(vbox: VBoxContainer) -> void:
@@ -100,6 +104,7 @@ func _build_wishing_well(vbox: VBoxContainer) -> void:
 			else:
 				state[1] += 1
 				result_label.text = "The well shimmers! You receive: %s" % item_name
+				_refresh_hud()
 		else:
 			state[0] = minf(state[0] + 0.01, 1.0)
 			result_label.text = "Nothing happens."
@@ -210,6 +215,7 @@ func _build_altar_technique(vbox: VBoxContainer) -> void:
 				result_label.text = "You received: %s" % granted.display_name
 			else:
 				result_label.text = "The altar shudders — nothing more to give."
+			_refresh_hud()
 			for child in btn_container.get_children():
 				child.queue_free()
 		)
@@ -260,6 +266,7 @@ func _build_altar_keystone(vbox: VBoxContainer) -> void:
 				result_label.text = "You received: %s" % granted.display_name
 			else:
 				result_label.text = "The altar offers nothing more."
+			_refresh_hud()
 			for child in btn_container.get_children():
 				child.queue_free()
 		)
@@ -303,6 +310,7 @@ func _build_library(vbox: VBoxContainer) -> void:
 		btn.connect("pressed", func() -> void:
 			if RunState.techniques.size() < RunState.technique_capacity:
 				RunState.add_technique(t)
+				_refresh_hud()
 			for child in btn_list.get_children():
 				child.disabled = true
 			emit_signal("encounter_completed")
@@ -345,6 +353,7 @@ func _build_head_trauma(vbox: VBoxContainer) -> void:
 		var removed: Technique = RunState.techniques[0]
 		removed_name = removed.display_name
 		RunState.remove_technique(removed)
+		_refresh_hud()
 
 	var msg_label := Label.new()
 	if removed_name.is_empty():
@@ -417,6 +426,7 @@ func _build_museum(vbox: VBoxContainer) -> void:
 	vbox.add_child(take_btn)
 	take_btn.connect("pressed", func() -> void:
 		RunState.add_keystone(exhibit)
+		_refresh_hud()
 		take_btn.disabled = true
 		emit_signal("encounter_completed")
 	)

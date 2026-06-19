@@ -160,6 +160,7 @@ func start_run() -> void:
 
 func _show_starter_keystone_selection() -> void:
 	hud.visible = false
+	hud.hide_inventory()
 	var scene: PackedScene = load(SCENE_KEYSTONE_SELECTION)
 	var screen = scene.instantiate()
 	get_tree().root.add_child(screen)
@@ -168,6 +169,7 @@ func _show_starter_keystone_selection() -> void:
 
 func _on_starter_keystone_chosen(_keystone: Keystone) -> void:
 	hud.visible = true
+	hud.show_inventory()
 	_show_dungeon_map()
 
 func continue_run() -> void:
@@ -908,7 +910,10 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 	var effective_enh_counts: Dictionary = _effective_enhancement_counts(_pending_enh_counts)
 	var effective_enh_params: Dictionary = _effective_enhancement_params()
 
-	var modified: int = raw_attack + technique_atk
+	var mastery_atk: int = 0
+	if not is_bonus_event:
+		mastery_atk = RunState.get_mastery_level(event_type)
+	var modified: int = raw_attack + technique_atk + mastery_atk
 	if not is_bonus_event:
 		modified += PieceEnhancements.honed_bonus(effective_enh_counts, effective_enh_params["honed"])
 	if _is_attack_suppressed(event_type):
@@ -940,6 +945,13 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 			_run_stats.tspins += 1
 		elif event_type == "perfect_clear":
 			_run_stats.perfect_clears += 1
+
+	if not is_bonus_event and event_type != "perfect_clear" and event_type in RunState.MASTERY_TRACKS:
+		var new_level := RunState.grant_mastery_xp(event_type)
+		if new_level > 0:
+			_spawn_mastery_popup(event_type, new_level)
+		if hud:
+			hud._refresh_mastery_panel()
 
 	if modified > 0 and not is_bonus_event:
 		var tag_bonus := 0
@@ -1308,6 +1320,27 @@ func _spawn_event_popup(event: Dictionary, index: int, total: int) -> void:
 
 	if hud:
 		hud.pop_icon(event.get("id", ""))
+
+const _MASTERY_DISPLAY := {
+	"single": "Singles", "double": "Doubles", "triple": "Triples", "quad": "Quads",
+	"tspin_single": "T-Singles", "tspin_double": "T-Doubles", "tspin_triple": "T-Triples",
+}
+
+func _spawn_mastery_popup(track: String, level: int) -> void:
+	var display_name: String = _MASTERY_DISPLAY.get(track, track)
+	var lbl := Label.new()
+	lbl.text = "%s Lv %d!" % [display_name, level]
+	lbl.add_theme_font_size_override("font_size", 14)
+	lbl.modulate = Color(0.5, 1.0, 0.5)
+	var anchor_pos := Vector2(16, 320)
+	if hud and hud._mastery_panel:
+		anchor_pos = hud._mastery_panel.get_global_transform_with_canvas().origin
+	lbl.position = Vector2(anchor_pos.x, anchor_pos.y - 20.0)
+	add_child(lbl)
+	var tw := create_tween()
+	tw.tween_property(lbl, "position", lbl.position + Vector2(0, -40), 0.8)
+	tw.parallel().tween_property(lbl, "modulate:a", 0.0, 0.8)
+	tw.tween_callback(lbl.queue_free)
 
 func _schedule_popups(events: Array, delay: float, reset_elapsed: bool = true) -> void:
 	if reset_elapsed:

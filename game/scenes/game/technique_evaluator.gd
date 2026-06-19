@@ -226,6 +226,13 @@ static func _eval_flat(p: Dictionary, ctx: AttackContext, board_pct: float) -> i
 	var on: String = p.get("on", "")
 	var bonus: int = p.get("bonus", 0)
 
+	var skip_mastery: bool = p.get("require_b2b", false) or on == "perfect_clear"
+	if not skip_mastery:
+		if on in RunState.MASTERY_TRACKS:
+			bonus += RunState.get_mastery_level(on) / 2
+		elif on in ["all_clear", "tspin", "multiline"]:
+			bonus += RunState.get_highest_mastery_for(on) / 2
+
 	if p.get("require_b2b", false) and not ctx.b2b:
 		return 0
 	var above_pct: float = p.get("board_above_pct", -1.0)

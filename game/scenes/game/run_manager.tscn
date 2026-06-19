@@ -12,7 +12,6 @@ position = Vector2(340, 64)
 [node name="HUD" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
-z_index = 10
 script = ExtResource("2")
 
 [node name="TopBar" type="HBoxContainer" parent="HUD"]
@@ -57,7 +56,7 @@ theme_override_font_sizes/font_size = 36
 [node name="RoundBigLabel" type="Label" parent="HUD/InfoPanel"]
 text = "Stage 1 — Small Round"
 autowrap_mode = 3
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 14
 
 [node name="B2BLabel" type="Label" parent="HUD/InfoPanel"]
 text = "B2B"
@@ -72,53 +71,107 @@ theme_override_font_sizes/font_size = 20
 visible = false
 
 
-[node name="InventoryPanel" type="VBoxContainer" parent="HUD"]
-layout_mode = 1
+[node name="PersistentLayer" type="CanvasLayer" parent="HUD"]
+layer = 1
+
+[node name="PersistentRoot" type="Control" parent="HUD/PersistentLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="MasteryPanel" type="VBoxContainer" parent="HUD/PersistentLayer/PersistentRoot"]
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 16.0
-offset_top = -200.0
-offset_right = 200.0
+offset_top = -260.0
+offset_right = 240.0
+offset_bottom = -228.0
+theme_override_constants/separation = 0
+
+[node name="MasteryTracks" type="VBoxContainer" parent="HUD/PersistentLayer/PersistentRoot/MasteryPanel"]
+visible = false
+theme_override_constants/separation = 0
+
+[node name="TrackSingle" type="Label" parent="HUD/PersistentLayer/PersistentRoot/MasteryPanel/MasteryTracks"]
+text = "Singles  Lv 0 (0/10)"
+theme_override_font_sizes/font_size = 13
+
+[node name="TrackDouble" type="Label" parent="HUD/PersistentLayer/PersistentRoot/MasteryPanel/MasteryTracks"]
+text = "Doubles  Lv 0 (0/10)"
+theme_override_font_sizes/font_size = 13
+
+[node name="TrackTriple" type="Label" parent="HUD/PersistentLayer/PersistentRoot/MasteryPanel/MasteryTracks"]
+text = "Triples  Lv 0 (0/5)"
+theme_override_font_sizes/font_size = 13
+
+[node name="TrackQuad" type="Label" parent="HUD/PersistentLayer/PersistentRoot/MasteryPanel/MasteryTracks"]
+text = "Quads  Lv 0 (0/5)"
+theme_override_font_sizes/font_size = 13
+
+[node name="TrackTspinSingle" type="Label" parent="HUD/PersistentLayer/PersistentRoot/MasteryPanel/MasteryTracks"]
+text = "T-Singles  Lv 0 (0/10)"
+theme_override_font_sizes/font_size = 13
+
+[node name="TrackTspinDouble" type="Label" parent="HUD/PersistentLayer/PersistentRoot/MasteryPanel/MasteryTracks"]
+text = "T-Doubles  Lv 0 (0/10)"
+theme_override_font_sizes/font_size = 13
+
+[node name="TrackTspinTriple" type="Label" parent="HUD/PersistentLayer/PersistentRoot/MasteryPanel/MasteryTracks"]
+text = "T-Triples  Lv 0 (0/5)"
+theme_override_font_sizes/font_size = 13
+
+[node name="MasteryHeader" type="Button" parent="HUD/PersistentLayer/PersistentRoot/MasteryPanel"]
+text = "▶ Mastery"
+alignment = 0
+theme_override_font_sizes/font_size = 14
+
+[node name="InventoryPanel" type="VBoxContainer" parent="HUD/PersistentLayer/PersistentRoot"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -228.0
+offset_right = 240.0
 offset_bottom = -8.0
-theme_override_constants/separation = 2
+theme_override_constants/separation = 3
 
-[node name="KeystonesHeader" type="Label" parent="HUD/InventoryPanel"]
+[node name="KeystonesHeader" type="Label" parent="HUD/PersistentLayer/PersistentRoot/InventoryPanel"]
 text = "Keystones"
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 14
 
-[node name="KeystoneIcons" type="HBoxContainer" parent="HUD/InventoryPanel"]
+[node name="KeystoneIcons" type="HBoxContainer" parent="HUD/PersistentLayer/PersistentRoot/InventoryPanel"]
 
-[node name="TechniquesHeader" type="Label" parent="HUD/InventoryPanel"]
+[node name="TechniquesHeader" type="Label" parent="HUD/PersistentLayer/PersistentRoot/InventoryPanel"]
 text = "Techniques"
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 14
 
-[node name="TechniqueIcons" type="HBoxContainer" parent="HUD/InventoryPanel"]
+[node name="TechniqueIcons" type="HBoxContainer" parent="HUD/PersistentLayer/PersistentRoot/InventoryPanel"]
 
-[node name="BackpackHeader" type="Label" parent="HUD/InventoryPanel"]
+[node name="BackpackHeader" type="Label" parent="HUD/PersistentLayer/PersistentRoot/InventoryPanel"]
 text = "Backpack"
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 14
 
-[node name="BackpackContainer" type="HBoxContainer" parent="HUD/InventoryPanel"]
+[node name="BackpackContainer" type="HBoxContainer" parent="HUD/PersistentLayer/PersistentRoot/InventoryPanel"]
 theme_override_constants/separation = 4
 
-[node name="BackpackSlot0" type="Button" parent="HUD/InventoryPanel/BackpackContainer"]
-custom_minimum_size = Vector2(52, 40)
+[node name="BackpackSlot0" type="Button" parent="HUD/PersistentLayer/PersistentRoot/InventoryPanel/BackpackContainer"]
+custom_minimum_size = Vector2(64, 44)
 text = "—"
 autowrap_mode = 3
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 14
 
-[node name="BackpackSlot1" type="Button" parent="HUD/InventoryPanel/BackpackContainer"]
-custom_minimum_size = Vector2(52, 40)
+[node name="BackpackSlot1" type="Button" parent="HUD/PersistentLayer/PersistentRoot/InventoryPanel/BackpackContainer"]
+custom_minimum_size = Vector2(64, 44)
 text = "—"
 autowrap_mode = 3
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 14
 
-[node name="BackpackSlot2" type="Button" parent="HUD/InventoryPanel/BackpackContainer"]
-custom_minimum_size = Vector2(52, 40)
+[node name="BackpackSlot2" type="Button" parent="HUD/PersistentLayer/PersistentRoot/InventoryPanel/BackpackContainer"]
+custom_minimum_size = Vector2(64, 44)
 text = "—"
 autowrap_mode = 3
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 14
 
-[node name="InventoryCoinLabel" type="Label" parent="HUD/InventoryPanel"]
+[node name="InventoryCoinLabel" type="Label" parent="HUD/PersistentLayer/PersistentRoot/InventoryPanel"]
 text = "Coins: 0"
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 14

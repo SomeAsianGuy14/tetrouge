@@ -7,6 +7,18 @@ func _ready() -> void:
 const TOTAL_FLOORS := 4
 const STARTING_COINS := 30
 
+const MASTERY_TRACKS := ["single", "double", "triple", "quad", "tspin_single", "tspin_double", "tspin_triple"]
+
+const MASTERY_BASE_XP := {
+	"single": 10, "double": 10, "triple": 5, "quad": 5,
+	"tspin_single": 10, "tspin_double": 10, "tspin_triple": 5,
+}
+
+const MASTERY_XP_INCREMENT := {
+	"single": 2, "double": 2, "triple": 1, "quad": 1,
+	"tspin_single": 2, "tspin_double": 2, "tspin_triple": 1,
+}
+
 const TIER_BONUS := {
 	"Small": 0,
 	"Big":   12,
@@ -28,6 +40,8 @@ var used_boss_modifiers: Array = []
 var used_boss_enemy_ids: Array = []
 var used_keystone_ids: Array = []
 
+var mastery: Dictionary = {}
+
 var shop_technique_slots: int = 5
 var consumable_capacity: int = 3
 var technique_capacity: int = 4
@@ -44,6 +58,7 @@ func reset() -> void:
 	used_boss_modifiers.clear()
 	used_boss_enemy_ids.clear()
 	used_keystone_ids.clear()
+	_reset_mastery()
 	shop_technique_slots = 5
 	consumable_capacity = 3
 	technique_capacity = 4
@@ -112,6 +127,47 @@ func remove_technique(technique) -> void:
 
 func _apply_keystone_effects(_keystone) -> void:
 	pass
+
+func _reset_mastery() -> void:
+	mastery.clear()
+	for track in MASTERY_TRACKS:
+		mastery[track] = {"xp": 0, "level": 0}
+
+func get_mastery_threshold(track: String) -> int:
+	var base: int = MASTERY_BASE_XP.get(track, 10)
+	var inc: int = MASTERY_XP_INCREMENT.get(track, 1)
+	var level: int = mastery.get(track, {"level": 0}).level
+	return base + inc * level
+
+func grant_mastery_xp(track: String) -> int:
+	if track not in mastery:
+		return 0
+	mastery[track].xp += 1
+	var threshold := get_mastery_threshold(track)
+	if mastery[track].xp >= threshold:
+		mastery[track].xp -= threshold
+		mastery[track].level += 1
+		return mastery[track].level
+	return 0
+
+func get_mastery_level(track: String) -> int:
+	if track not in mastery:
+		return 0
+	return mastery[track].level
+
+func get_highest_mastery_for(category: String) -> int:
+	var best := 0
+	match category:
+		"all_clear":
+			for t in MASTERY_TRACKS:
+				best = maxi(best, get_mastery_level(t))
+		"tspin":
+			for t in ["tspin_single", "tspin_double", "tspin_triple"]:
+				best = maxi(best, get_mastery_level(t))
+		"multiline":
+			for t in ["double", "triple", "quad"]:
+				best = maxi(best, get_mastery_level(t))
+	return best
 
 func seeded_shuffle(arr: Array) -> void:
 	var i := arr.size() - 1

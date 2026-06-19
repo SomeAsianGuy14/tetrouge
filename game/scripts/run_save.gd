@@ -29,6 +29,8 @@ static func save() -> void:
 	cfg.set_value("inventory", "used_boss_enemy_ids", RunState.used_boss_enemy_ids)
 	cfg.set_value("inventory", "used_keystone_ids", RunState.used_keystone_ids)
 
+	cfg.set_value("mastery", "tracks", RunState.mastery.duplicate(true))
+
 	cfg.set_value("rng", "seed", RunState.run_seed)
 	cfg.set_value("rng", "state", RunState.rng.state)
 
@@ -75,6 +77,12 @@ static func load_into_state() -> bool:
 	RunState.used_boss_modifiers = cfg.get_value("inventory", "used_boss_modifier_ids", [])
 	RunState.used_boss_enemy_ids = cfg.get_value("inventory", "used_boss_enemy_ids", [])
 	RunState.used_keystone_ids = cfg.get_value("inventory", "used_keystone_ids", [])
+
+	var saved_mastery: Dictionary = cfg.get_value("mastery", "tracks", {})
+	RunState._reset_mastery()
+	for track in RunState.MASTERY_TRACKS:
+		if track in saved_mastery:
+			RunState.mastery[track] = saved_mastery[track]
 
 	RunState.run_seed = cfg.get_value("rng", "seed", randi())
 	RunState.rng.seed = RunState.run_seed

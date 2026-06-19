@@ -3,14 +3,15 @@ extends Control
 
 @onready var _top_bar: HBoxContainer = $TopBar
 @onready var _info_panel: VBoxContainer = $InfoPanel
-@onready var _inventory_panel: VBoxContainer = $InventoryPanel
+@onready var _persistent_root: Control = $PersistentLayer/PersistentRoot
+@onready var _inventory_panel: VBoxContainer = $PersistentLayer/PersistentRoot/InventoryPanel
 @onready var round_info_label: Label = $TopBar/RoundInfoLabel
 @onready var timer_label: Label = $TopBar/TimerLabel
 @onready var coin_label: Label = $TopBar/CoinLabel
 @onready var round_label: Label = $TopBar/RoundLabel
 @onready var modifier_label: Label = $TopBar/ModifierLabel
-@onready var keystone_icons: HBoxContainer = $InventoryPanel/KeystoneIcons
-@onready var technique_icons: HBoxContainer = $InventoryPanel/TechniqueIcons
+@onready var keystone_icons: HBoxContainer = $PersistentLayer/PersistentRoot/InventoryPanel/KeystoneIcons
+@onready var technique_icons: HBoxContainer = $PersistentLayer/PersistentRoot/InventoryPanel/TechniqueIcons
 
 @onready var timer_header_label: Label = $InfoPanel/TimerHeaderLabel
 @onready var timer_big_label: Label = $InfoPanel/TimerBigLabel
@@ -18,11 +19,23 @@ extends Control
 @onready var b2b_label: Label = $InfoPanel/B2BLabel
 @onready var combo_label: Label = $InfoPanel/ComboLabel
 
-@onready var inventory_coin_label: Label = $InventoryPanel/InventoryCoinLabel
+@onready var inventory_coin_label: Label = $PersistentLayer/PersistentRoot/InventoryPanel/InventoryCoinLabel
+@onready var _mastery_panel: VBoxContainer = $PersistentLayer/PersistentRoot/MasteryPanel
+@onready var _mastery_header: Button = $PersistentLayer/PersistentRoot/MasteryPanel/MasteryHeader
+@onready var _mastery_tracks_container: VBoxContainer = $PersistentLayer/PersistentRoot/MasteryPanel/MasteryTracks
+@onready var _mastery_track_labels: Array = [
+	$PersistentLayer/PersistentRoot/MasteryPanel/MasteryTracks/TrackSingle,
+	$PersistentLayer/PersistentRoot/MasteryPanel/MasteryTracks/TrackDouble,
+	$PersistentLayer/PersistentRoot/MasteryPanel/MasteryTracks/TrackTriple,
+	$PersistentLayer/PersistentRoot/MasteryPanel/MasteryTracks/TrackQuad,
+	$PersistentLayer/PersistentRoot/MasteryPanel/MasteryTracks/TrackTspinSingle,
+	$PersistentLayer/PersistentRoot/MasteryPanel/MasteryTracks/TrackTspinDouble,
+	$PersistentLayer/PersistentRoot/MasteryPanel/MasteryTracks/TrackTspinTriple,
+]
 @onready var _backpack_slots: Array = [
-	$InventoryPanel/BackpackContainer/BackpackSlot0,
-	$InventoryPanel/BackpackContainer/BackpackSlot1,
-	$InventoryPanel/BackpackContainer/BackpackSlot2,
+	$PersistentLayer/PersistentRoot/InventoryPanel/BackpackContainer/BackpackSlot0,
+	$PersistentLayer/PersistentRoot/InventoryPanel/BackpackContainer/BackpackSlot1,
+	$PersistentLayer/PersistentRoot/InventoryPanel/BackpackContainer/BackpackSlot2,
 ]
 
 var _run_manager = null  # set by RunManager after instantiation
@@ -33,6 +46,7 @@ func set_run_manager(rm) -> void:
 
 func _ready() -> void:
 	Economy.connect("coins_changed", _on_coins_changed)
+	_mastery_header.connect("pressed", _toggle_mastery_panel)
 	for i in _backpack_slots.size():
 		_backpack_slots[i].connect("pressed", _on_backpack_slot_pressed.bind(i))
 	timer_label.visible = false
@@ -66,6 +80,7 @@ func setup(config: RoundConfig) -> void:
 	_refresh_keystone_icons()
 	_refresh_technique_icons()
 	_refresh_backpack_slots()
+	_refresh_mastery_panel()
 	update_b2b_combo(false, 0, -1)
 
 func update_b2b_combo(is_b2b: bool, b2b_count: int, combo: int) -> void:
@@ -127,16 +142,40 @@ func show_combat_elements() -> void:
 	_info_panel.visible = true
 
 func hide_inventory() -> void:
-	_inventory_panel.visible = false
+	_persistent_root.visible = false
 
 func show_inventory() -> void:
-	_inventory_panel.visible = true
+	_persistent_root.visible = true
 
 func refresh_inventory() -> void:
 	_refresh_keystone_icons()
 	_refresh_technique_icons()
 	_refresh_backpack_slots()
+	_refresh_mastery_panel()
 	inventory_coin_label.text = "Coins: %d" % Economy.coins
+
+# ── Mastery panel ────────────────────────────────────────────────────────
+
+const _MASTERY_DISPLAY_NAMES := {
+	"single": "Singles", "double": "Doubles", "triple": "Triples", "quad": "Quads",
+	"tspin_single": "T-Singles", "tspin_double": "T-Doubles", "tspin_triple": "T-Triples",
+}
+
+const _MASTERY_COLLAPSED_TOP := -260.0
+const _MASTERY_EXPANDED_TOP := -400.0
+
+func _toggle_mastery_panel() -> void:
+	_mastery_tracks_container.visible = not _mastery_tracks_container.visible
+	_mastery_header.text = "▼ Mastery" if _mastery_tracks_container.visible else "▶ Mastery"
+	_mastery_panel.offset_top = _MASTERY_EXPANDED_TOP if _mastery_tracks_container.visible else _MASTERY_COLLAPSED_TOP
+
+func _refresh_mastery_panel() -> void:
+	for i in RunState.MASTERY_TRACKS.size():
+		var track: String = RunState.MASTERY_TRACKS[i]
+		var data: Dictionary = RunState.mastery.get(track, {"xp": 0, "level": 0})
+		var display_name: String = _MASTERY_DISPLAY_NAMES.get(track, track)
+		var threshold: int = RunState.get_mastery_threshold(track)
+		_mastery_track_labels[i].text = "%s  Lv %d (%d/%d)" % [display_name, data.level, data.xp, threshold]
 
 # ── Animation helpers ─────────────────────────────────────────────────────
 

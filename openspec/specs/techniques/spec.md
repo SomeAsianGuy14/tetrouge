@@ -12,11 +12,15 @@ Techniques SHALL be permanent passive items purchased from the shop that modify 
 - **THEN** all previously purchased Techniques remain active
 
 ### Requirement: Multiple Techniques stack additively on flat bonuses, multiplicatively on multipliers
-When multiple Techniques modify the same event type, flat bonuses SHALL be summed. Multipliers SHALL be applied after all additive bonuses. The order of application SHALL be: base attack + sum(flat bonuses) × product(multipliers).
+When multiple Techniques modify the same event type, flat bonuses SHALL be summed. Multipliers SHALL be applied after all additive bonuses. The order of application SHALL be: base attack + mastery bonus + sum(flat bonuses with mastery amplification) × product(multipliers).
 
 #### Scenario: Two flat bonus Techniques stack
 - **WHEN** two Techniques each add +1 to T-spin Double attack
 - **THEN** a T-spin Double generates 4 + 1 + 1 = 6 attack
+
+#### Scenario: Two flat bonus Techniques stack with mastery
+- **WHEN** two Techniques each add +1 to T-spin Double attack and tspin_double mastery is level 4
+- **THEN** a T-spin Double generates base attack + mastery(4) + technique1(1 + floor(4/2)) + technique2(1 + floor(4/2))
 
 ### Requirement: Enhancement-granting technique effect type
 Techniques SHALL support `effect_type = "piece_enhancer"` with `params = {"enhancement": <type>, "every_n": N}`: every Nth spawned piece in a round is enhanced with the given type (subject to grant precedence rules in the piece-enhancements capability). The technique evaluator SHALL treat `piece_enhancer` as a no-op for attack and economy evaluation and SHALL NOT emit an unknown-effect-type warning for it.
