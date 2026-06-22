@@ -436,37 +436,37 @@ func test_evaluate_totals_unchanged_by_events_addition() -> void:
 
 # ── RunState.technique_capacity ───────────────────────────────────────────────
 
-func test_technique_capacity_is_4_at_run_start() -> void:
+func test_technique_capacity_is_5_at_run_start() -> void:
 	RunState.reset()
-	assert_eq(RunState.technique_capacity, 4)
+	assert_eq(RunState.technique_capacity, 5)
 
-func test_technique_capacity_increases_to_5_at_floor_2() -> void:
+func test_technique_capacity_stays_5_at_floor_2() -> void:
 	RunState.reset()
 	RunState.advance_floor()
 	assert_eq(RunState.floor, 2)
 	assert_eq(RunState.technique_capacity, 5)
 
-func test_technique_capacity_increases_to_6_at_floor_3() -> void:
+func test_technique_capacity_stays_5_at_floor_3() -> void:
 	RunState.reset()
 	RunState.advance_floor()
 	RunState.advance_floor()
 	assert_eq(RunState.floor, 3)
-	assert_eq(RunState.technique_capacity, 6)
+	assert_eq(RunState.technique_capacity, 5)
 
-func test_technique_capacity_increases_to_7_at_floor_4() -> void:
+func test_technique_capacity_stays_5_at_floor_4() -> void:
 	RunState.reset()
 	RunState.advance_floor()
 	RunState.advance_floor()
 	RunState.advance_floor()
 	assert_eq(RunState.floor, 4)
-	assert_eq(RunState.technique_capacity, 7)
+	assert_eq(RunState.technique_capacity, 5)
 
 func test_technique_capacity_reset_on_run_reset() -> void:
 	RunState.reset()
 	RunState.advance_floor()
 	assert_eq(RunState.technique_capacity, 5)
 	RunState.reset()
-	assert_eq(RunState.technique_capacity, 4)
+	assert_eq(RunState.technique_capacity, 5)
 
 # ── Burning Board ─────────────────────────────────────────────────────────────
 

@@ -5,6 +5,7 @@ extends GutTest
 var _saved_highest_beaten: int
 var _saved_unlocked_ids: Array
 var _saved_runs_completed: int
+var _saved_victories: int
 var _saved_total_damage: int
 var _saved_quad_damage: int
 var _saved_tspin_damage: int
@@ -16,6 +17,7 @@ func before_each() -> void:
 	_saved_highest_beaten = ProfileSave.highest_beaten
 	_saved_unlocked_ids = ProfileSave.unlocked_ids.duplicate()
 	_saved_runs_completed = ProfileSave.runs_completed
+	_saved_victories = ProfileSave.victories
 	_saved_total_damage = ProfileSave.total_damage
 	_saved_quad_damage = ProfileSave.total_quad_damage
 	_saved_tspin_damage = ProfileSave.total_tspin_damage
@@ -27,12 +29,14 @@ func after_each() -> void:
 	ProfileSave.highest_beaten = _saved_highest_beaten
 	ProfileSave.unlocked_ids = _saved_unlocked_ids
 	ProfileSave.runs_completed = _saved_runs_completed
+	ProfileSave.victories = _saved_victories
 	ProfileSave.total_damage = _saved_total_damage
 	ProfileSave.total_quad_damage = _saved_quad_damage
 	ProfileSave.total_tspin_damage = _saved_tspin_damage
 	ProfileSave.highest_combo_chain = _saved_highest_combo
 	ProfileSave.highest_b2b = _saved_highest_b2b
 	AscensionManager.current_level = _saved_ascension_level
+	ProfileSave.save_profile()
 
 # ── ProfileSave.record_victory ────────────────────────────────────────────────
 

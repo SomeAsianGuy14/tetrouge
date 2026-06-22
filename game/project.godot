@@ -27,6 +27,7 @@ RunState="*res://autoloads/run_state.gd"
 ResourceRegistry="*res://autoloads/resource_registry.gd"
 ProfileSave="*res://scripts/profile_save.gd"
 AscensionManager="*res://autoloads/ascension_manager.gd"
+DamageLog="*res://autoloads/damage_log.gd"
 DevConsole="*res://scenes/debug/dev_console.tscn"
 
 [display]

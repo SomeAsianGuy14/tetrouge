@@ -29,4 +29,4 @@ func _draw() -> void:
 
 	if _charges > TetrisBoard.VISIBLE_ROWS:
 		var overflow_text := "+%d" % (_charges - TetrisBoard.VISIBLE_ROWS)
-		draw_string(ThemeDB.fallback_font, Vector2(0.0, 12.0), overflow_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 10, SHIELD_COLOR)
+		draw_string(ThemeDB.fallback_font, Vector2(0.0, -4.0), overflow_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 10, SHIELD_COLOR)

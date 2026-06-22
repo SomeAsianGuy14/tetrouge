@@ -56,13 +56,22 @@ func _draw_mini_piece(piece_type: String, origin: Vector2, color: Color, enh_typ
 		var px := origin + Vector2((c.x + off_x) * MINI_CELL, (c.y + off_y) * MINI_CELL)
 		_draw_mini_cell(px, color, enh_type)
 
+func _draw_mini_metallic(rect: Rect2, color: Color) -> void:
+	var dark := color.darkened(0.20)
+	var mid := color
+	var bright := color.lightened(0.30)
+	draw_rect(rect, dark)
+	draw_rect(Rect2(rect.position, Vector2(rect.size.x, rect.size.y * 0.55)), mid)
+	var hl := Rect2(rect.position + Vector2(2, 2), Vector2(rect.size.x - 4, rect.size.y * 0.22))
+	draw_rect(hl, bright)
+
 func _draw_mini_cell(px: Vector2, base_color: Color, enh_type: String) -> void:
 	var rect := Rect2(px + Vector2(1, 1), Vector2(MINI_CELL - 2, MINI_CELL - 2))
 	match enh_type:
 		PieceEnhancements.HONED:
-			draw_rect(rect, PieceEnhancements.HONED_COLOR)
+			_draw_mini_metallic(rect, PieceEnhancements.HONED_COLOR)
 		PieceEnhancements.GILDED:
-			draw_rect(rect, PieceEnhancements.GILDED_COLOR)
+			_draw_mini_metallic(rect, PieceEnhancements.GILDED_COLOR)
 		PieceEnhancements.REINFORCED:
 			draw_rect(rect, PieceEnhancements.REINFORCED_FILL_COLOR)
 			_draw_mini_cell_border(rect, PieceEnhancements.REINFORCED_BORDER_COLOR)

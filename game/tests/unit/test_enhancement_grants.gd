@@ -241,6 +241,7 @@ func test_technique_piece_enhancer_wins_tie_with_keystone() -> void:
 	assert_eq(_board.current_enhancement, "")
 	_rm._on_piece_spawned(_board.current_type)
 	assert_eq(_board.current_enhancement, PieceEnhancements.HONED, "technique grant takes precedence over keystone on a tie")
+	assert_eq(_rm._enhancement_grant_queue, [{"type": PieceEnhancements.GILDED, "remaining": 1}], "keystone overflow queued for next piece")
 
 func test_grant_queue_promotes_next_entry_when_active_grant_drains() -> void:
 	_rm._enhancement_grant = {"type": PieceEnhancements.HONED, "remaining": 1}
@@ -248,12 +249,69 @@ func test_grant_queue_promotes_next_entry_when_active_grant_drains() -> void:
 
 	_rm._on_piece_spawned(_board.current_type)
 	assert_eq(_board.current_enhancement, PieceEnhancements.HONED, "active grant still in effect")
-	assert_eq(_rm._enhancement_grant, {"type": PieceEnhancements.GILDED, "remaining": 2}, "queued grant promoted to active")
-	assert_eq(_rm._enhancement_grant_queue, [], "queue drained")
 
 	_rm._on_piece_spawned(_board.current_type)
 	assert_eq(_board.current_enhancement, PieceEnhancements.GILDED, "promoted grant now applies")
 	assert_eq(_rm._enhancement_grant, {"type": PieceEnhancements.GILDED, "remaining": 1})
+
+# ── overflow: blocked periodic grants queue for next piece ──────────────
+
+func test_technique_blocked_by_consumable_queues_overflow() -> void:
+	var tech := _make_enhancer_technique(PieceEnhancements.HONED, 1)
+	RunState.techniques = [tech]
+	_rm._enhancement_cadence = {tech.id: 0}
+	_rm._enhancement_grant = {"type": PieceEnhancements.GILDED, "remaining": 1}
+
+	_rm._on_piece_spawned(_board.current_type)
+	assert_eq(_board.current_enhancement, PieceEnhancements.GILDED, "consumable wins")
+	assert_eq(_rm._enhancement_grant_queue, [{"type": PieceEnhancements.HONED, "remaining": 1}], "technique overflow queued")
+
+	_rm._on_piece_spawned(_board.current_type)
+	assert_eq(_board.current_enhancement, PieceEnhancements.HONED, "overflow applied to next piece")
+
+func test_keystone_blocked_by_consumable_queues_overflow() -> void:
+	var ks := _make_enhancer_keystone(PieceEnhancements.REINFORCED, 1)
+	RunState.keystones = [ks]
+	_rm._enhancement_cadence = {ks.id: 0}
+	_rm._enhancement_grant = {"type": PieceEnhancements.AMPLIFIED, "remaining": 1}
+
+	_rm._on_piece_spawned(_board.current_type)
+	assert_eq(_board.current_enhancement, PieceEnhancements.AMPLIFIED, "consumable wins")
+	assert_eq(_rm._enhancement_grant_queue, [{"type": PieceEnhancements.REINFORCED, "remaining": 1}], "keystone overflow queued")
+
+	_rm._on_piece_spawned(_board.current_type)
+	assert_eq(_board.current_enhancement, PieceEnhancements.REINFORCED, "overflow applied to next piece")
+
+func test_tie_overflow_applies_to_immediately_next_piece() -> void:
+	var tech := _make_enhancer_technique(PieceEnhancements.HONED, 2)
+	var ks := _make_enhancer_keystone(PieceEnhancements.GILDED, 2)
+	RunState.techniques = [tech]
+	RunState.keystones = [ks]
+	_rm._enhancement_cadence = {tech.id: 0, ks.id: 0}
+
+	_rm._on_piece_spawned(_board.current_type)
+	assert_eq(_board.current_enhancement, "", "piece 1: neither source fires yet")
+	_rm._on_piece_spawned(_board.current_type)
+	assert_eq(_board.current_enhancement, PieceEnhancements.HONED, "piece 2: technique wins tie")
+
+	_rm._on_piece_spawned(_board.current_type)
+	assert_eq(_board.current_enhancement, PieceEnhancements.GILDED, "piece 3: keystone overflow from tie fires on next piece")
+
+func test_two_techniques_blocked_both_queue_overflow() -> void:
+	var t1 := _make_enhancer_technique(PieceEnhancements.HONED, 1)
+	t1.id = "tech_honed"
+	var t2 := _make_enhancer_technique(PieceEnhancements.AMPLIFIED, 1)
+	t2.id = "tech_amplified"
+	RunState.techniques = [t1, t2]
+	_rm._enhancement_cadence = {t1.id: 0, t2.id: 0}
+
+	_rm._on_piece_spawned(_board.current_type)
+	assert_eq(_board.current_enhancement, PieceEnhancements.HONED, "first technique wins")
+	assert_eq(_rm._enhancement_grant_queue.size(), 1, "second technique overflow queued")
+	assert_eq(_rm._enhancement_grant_queue[0]["type"], PieceEnhancements.AMPLIFIED)
+
+	_rm._on_piece_spawned(_board.current_type)
+	assert_eq(_board.current_enhancement, PieceEnhancements.AMPLIFIED, "overflow applied next")
 
 # ── independent random resolution across multiple pieces ─────────────────
 

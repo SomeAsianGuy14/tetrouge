@@ -44,10 +44,11 @@ var mastery: Dictionary = {}
 
 var shop_technique_slots: int = 5
 var consumable_capacity: int = 3
-var technique_capacity: int = 4
+var technique_capacity: int = 5
 
 signal run_started
 signal floor_changed(floor_number: int)
+signal build_changed
 
 func reset() -> void:
 	floor = 1
@@ -61,7 +62,7 @@ func reset() -> void:
 	_reset_mastery()
 	shop_technique_slots = 5
 	consumable_capacity = 3
-	technique_capacity = 4
+	technique_capacity = 5
 	run_seed = randi()
 	rng.seed = run_seed
 	current_floor_data = DungeonGenerator.generate(floor, rng)
@@ -72,7 +73,6 @@ func is_boss_room(room: DungeonRoom) -> bool:
 func advance_floor() -> void:
 	floor += 1
 	combat_rooms_cleared_this_floor = 0
-	technique_capacity = 4 + (floor - 1)
 	if floor <= TOTAL_FLOORS:
 		current_floor_data = DungeonGenerator.generate(floor, rng)
 	emit_signal("floor_changed", floor)
@@ -109,21 +109,26 @@ func add_keystone(keystone) -> void:
 	keystones.append(keystone)
 	used_keystone_ids.append(keystone.id)
 	_apply_keystone_effects(keystone)
+	build_changed.emit()
 
 func add_technique(technique) -> void:
 	techniques.append(technique)
+	build_changed.emit()
 
 func add_consumable(consumable) -> bool:
 	if consumables.size() >= consumable_capacity:
 		return false
 	consumables.append(consumable)
+	build_changed.emit()
 	return true
 
 func remove_consumable(consumable) -> void:
 	consumables.erase(consumable)
+	build_changed.emit()
 
 func remove_technique(technique) -> void:
 	techniques.erase(technique)
+	build_changed.emit()
 
 func _apply_keystone_effects(_keystone) -> void:
 	pass

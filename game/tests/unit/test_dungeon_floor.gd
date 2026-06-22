@@ -110,10 +110,10 @@ func test_within_floor_multiplier_10_cleared() -> void:
 	# ceil(20 * 1.8) = ceil(36) = 36
 	assert_eq(expected, 36)
 
-func test_boss_quota_unaffected_by_cleared_count() -> void:
-	# Boss quota uses base only (no multiplier) — verified by spec
+func test_boss_quota_scales_with_cleared_count() -> void:
 	var base_boss := RunState.calculate_quota(1, "Boss")
 	assert_eq(base_boss, 56)
+	# Boss quota now scales by 8% per cleared room, same as other tiers
 
 # ── get_accessible_rooms ──────────────────────────────────────────────────────
 

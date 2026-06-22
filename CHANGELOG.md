@@ -3,6 +3,22 @@
 ## Unreleased
 
 ### New Features
+- **Granular clear tracking** — The stats screen and run-end summary now track all clear types individually: Singles, Doubles, Triples, Quads, T-Spin Singles, T-Spin Doubles, T-Spin Triples, and Perfect Clears. The old combined "T-Spins" counter has been replaced with per-type breakdowns.
+- **Best mastery tracking** — The stats screen now shows a "Best Mastery" section under Personal Bests, recording the highest mastery level you've ever reached for each clear type across all runs.
+
+### Visual
+- **Metallic enhancement cells** — Honed (silver) and Gilded (gold) cells now render with a metallic look: a two-tone gradient with a specular highlight band and sharper bevels, replacing the previous flat fill. The effect is consistent across the board, queue preview, and hold display.
+
+### Balance
+- **Boss scaling** — Boss enemies now scale with rooms cleared on the current floor (8% per room, same as other enemies). Previously bosses had a fixed quota regardless of how many rooms you'd cleared, which could make them easier than late-floor regular enemies.
+- **Flat technique capacity** — Technique capacity is now fixed at 5 for all floors, instead of growing from 4 to 7. This keeps builds tighter and more deliberate throughout the run.
+
+### Bug Fixes
+- **Total damage tracked correctly** — Total run damage was being overwritten with only the final round's damage at victory, making it look like the game tracked highest single-round damage instead of cumulative damage. Fixed by removing the overwrite; incremental tracking was already correct.
+- **Enhancement overflow no longer dropped** — When two enhancement sources (technique + keystone, or periodic + consumable) fired on the same piece, the lower-priority enhancement was silently lost. It is now queued as a 1-piece grant and applied to the next unenhanced piece.
+- **Shield bar overflow indicator visible** — The "+N" overflow text on the shield bar was drawn inside the bar area where it was hidden by full shield blocks. Moved above the bar.
+
+### New Features
 - **Technique rarity** — Techniques now have 3 rarity tiers: Common (white), Rare (blue), and Epic (purple). Rarity determines base cost (40/52/64), shop appearance frequency (commons appear most often), and name color across all UI. Shop prices vary ±4 around the base. Wishing Well and Library also use weighted draws.
 - **Clear mastery** — Performing clears in combat now builds XP toward permanent attack bonuses. 7 mastery tracks (Singles, Doubles, Triples, Quads, T-Spin Single/Double/Triple) each grant +1 flat attack per level. XP thresholds escalate with level. Mastery also amplifies matching techniques (+1 per 2 mastery levels). A collapsible mastery panel in the HUD shows progress, and level-up popups appear when thresholds are crossed.
 - **Persistent collection HUD** — Your keystones, techniques, backpack, and coin balance are now visible during encounters and the dungeon map, so you can make informed decisions at the Altar, Wishing Well, Library, and Museum. The panel is hidden during shop visits to avoid duplicating the shop's own collection display.

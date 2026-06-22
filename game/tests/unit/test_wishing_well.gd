@@ -24,7 +24,7 @@ func before_each() -> void:
 	RunState.techniques.clear()
 	RunState.consumables.clear()
 	RunState.used_keystone_ids.clear()
-	RunState.technique_capacity = 4
+	RunState.technique_capacity = 5
 	RunState.consumable_capacity = 3
 	Economy.coins = 100
 	RunState.rng.seed = 42

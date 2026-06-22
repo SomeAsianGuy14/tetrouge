@@ -831,12 +831,34 @@ func _enhancement_fill_color(enh_type: String, fallback_color: Color) -> Color:
 		_:
 			return fallback_color
 
+func _draw_metallic_cell(col: int, screen_row: int, color: Color) -> void:
+	var x := col * CELL_SIZE + 1
+	var y := screen_row * CELL_SIZE + 1
+	var s := CELL_SIZE - 2
+
+	var dark := color.darkened(0.20)
+	var mid := color
+	var bright := color.lightened(0.30)
+
+	# Bottom half — darker base
+	draw_rect(Rect2(x, y, s, s), dark)
+	# Top half — mid tone
+	draw_rect(Rect2(x, y, s, s * 0.55), mid)
+	# Specular highlight band in upper quarter
+	draw_rect(Rect2(x + 3, y + 3, s - 6, s * 0.22), bright)
+
+	# Metallic bevels — sharper contrast than normal cells
+	draw_rect(Rect2(x, y, s, BEVEL_SIZE), color.lightened(0.55))
+	draw_rect(Rect2(x, y + BEVEL_SIZE, BEVEL_SIZE, s - BEVEL_SIZE), color.lightened(0.35))
+	draw_rect(Rect2(x, y + s - BEVEL_SIZE, s, BEVEL_SIZE), color.darkened(0.65))
+	draw_rect(Rect2(x + s - BEVEL_SIZE, y, BEVEL_SIZE, s - BEVEL_SIZE), color.darkened(0.50))
+
 func _draw_enhanced_cell(col: int, screen_row: int, base_color: Color, enh_type: String) -> void:
 	match enh_type:
 		PieceEnhancements.HONED:
-			_draw_cell(col, screen_row, PieceEnhancements.HONED_COLOR)
+			_draw_metallic_cell(col, screen_row, PieceEnhancements.HONED_COLOR)
 		PieceEnhancements.GILDED:
-			_draw_cell(col, screen_row, PieceEnhancements.GILDED_COLOR)
+			_draw_metallic_cell(col, screen_row, PieceEnhancements.GILDED_COLOR)
 		PieceEnhancements.REINFORCED:
 			_draw_cell(col, screen_row, PieceEnhancements.REINFORCED_FILL_COLOR)
 			_draw_cell_border(col, screen_row, PieceEnhancements.REINFORCED_BORDER_COLOR)

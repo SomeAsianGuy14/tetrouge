@@ -80,8 +80,13 @@ static func add_stats_section(parent: VBoxContainer, run_stats: RunStats, pbs: D
 	add_stat_row(parent, "Best B2B",
 			str(run_stats.highest_b2b if run_stats else 0) if (run_stats and run_stats.highest_b2b > 0) else "—",
 			pbs.has("highest_b2b"))
+	add_stat_row(parent, "Singles", str(run_stats.singles if run_stats else 0))
+	add_stat_row(parent, "Doubles", str(run_stats.doubles if run_stats else 0))
+	add_stat_row(parent, "Triples", str(run_stats.triples if run_stats else 0))
 	add_stat_row(parent, "Quads", str(run_stats.quads if run_stats else 0))
-	add_stat_row(parent, "T-Spins", str(run_stats.tspins if run_stats else 0))
+	add_stat_row(parent, "T-Spin Singles", str(run_stats.tspin_singles if run_stats else 0))
+	add_stat_row(parent, "T-Spin Doubles", str(run_stats.tspin_doubles if run_stats else 0))
+	add_stat_row(parent, "T-Spin Triples", str(run_stats.tspin_triples if run_stats else 0))
 	add_stat_row(parent, "Perfect Clears", str(run_stats.perfect_clears if run_stats else 0))
 	add_stat_row(parent, "Run Time",
 			format_time(run_stats.run_time if run_stats else 0.0))

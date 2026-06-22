@@ -152,6 +152,8 @@ func start_run() -> void:
 	var _asc := AscensionManager.get_modifiers(AscensionManager.current_level)
 	RunState.consumable_capacity = maxi(0, RunState.consumable_capacity + _asc.get("consumable_capacity_delta", 0))
 	RunState.technique_capacity = maxi(1, RunState.technique_capacity + _asc.get("technique_capacity_delta", 0))
+	DamageLog.start_run(RunState.run_seed, AscensionManager.current_level)
+	DamageLog.log_build()
 	RunState.emit_signal("run_started")
 	if _asc.get("skip_starter_keystone", false):
 		_show_dungeon_map()
@@ -174,6 +176,8 @@ func _on_starter_keystone_chosen(_keystone: Keystone) -> void:
 
 func continue_run() -> void:
 	_run_stats = RunStats.new()
+	DamageLog.start_run(RunState.run_seed, AscensionManager.current_level)
+	DamageLog.log_build()
 	_show_dungeon_map()
 
 # ── Dungeon map ────────────────────────────────────────────────────────────
@@ -337,11 +341,7 @@ func _build_round_config(room: DungeonRoom) -> RoundConfig:
 	if _asc_quota != 1.0:
 		base_quota = ceili(base_quota * _asc_quota)
 
-	# Within-floor scaling for non-boss rooms
-	if not RunState.is_boss_room(room):
-		cfg.quota = ceili(base_quota * (1.0 + RunState.combat_rooms_cleared_this_floor * 0.08))
-	else:
-		cfg.quota = base_quota
+	cfg.quota = ceili(base_quota * (1.0 + RunState.combat_rooms_cleared_this_floor * 0.08))
 
 	for keystone in RunState.keystones:
 		keystone.apply_to_config(cfg)
@@ -721,15 +721,15 @@ func _on_piece_spawned(_piece_type: String) -> void:
 
 static func _advance_enhancement_state(grant: Dictionary, cadence: Dictionary, techniques: Array, keystones: Array, grant_queue: Array) -> String:
 	var assigned := ""
+	if grant.get("remaining", 0) <= 0 and grant_queue.size() > 0:
+		var next_grant: Dictionary = grant_queue.pop_front()
+		grant["type"] = next_grant.get("type", "")
+		grant["remaining"] = next_grant.get("remaining", 0)
 	if grant.get("remaining", 0) > 0:
 		assigned = grant.get("type", "")
 		grant["remaining"] -= 1
 		if grant["remaining"] <= 0:
 			grant.clear()
-			if grant_queue.size() > 0:
-				var next_grant: Dictionary = grant_queue.pop_front()
-				grant["type"] = next_grant.get("type", "")
-				grant["remaining"] = next_grant.get("remaining", 0)
 	for t in techniques:
 		if t.effect_type != "piece_enhancer":
 			continue
@@ -741,6 +741,10 @@ static func _advance_enhancement_state(grant: Dictionary, cadence: Dictionary, t
 			cadence[t.id] = 0
 			if assigned == "":
 				assigned = t.params.get("enhancement", "")
+			else:
+				var overflow_type: String = PieceEnhancements.resolve_type(t.params.get("enhancement", ""))
+				if overflow_type != "":
+					grant_queue.append({"type": overflow_type, "remaining": 1})
 	for ks in keystones:
 		if ks.piece_enhance_every_n <= 0:
 			continue
@@ -749,6 +753,10 @@ static func _advance_enhancement_state(grant: Dictionary, cadence: Dictionary, t
 			cadence[ks.id] = 0
 			if assigned == "":
 				assigned = ks.piece_enhance_type
+			else:
+				var overflow_type: String = PieceEnhancements.resolve_type(ks.piece_enhance_type)
+				if overflow_type != "":
+					grant_queue.append({"type": overflow_type, "remaining": 1})
 	return PieceEnhancements.resolve_type(assigned)
 
 func preview_enhancements(count: int) -> Array[String]:
@@ -913,20 +921,39 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 	var mastery_atk: int = 0
 	if not is_bonus_event:
 		mastery_atk = RunState.get_mastery_level(event_type)
-	var modified: int = raw_attack + technique_atk + mastery_atk
+	var honed_atk: int = 0
 	if not is_bonus_event:
-		modified += PieceEnhancements.honed_bonus(effective_enh_counts, effective_enh_params["honed"])
+		honed_atk = PieceEnhancements.honed_bonus(effective_enh_counts, effective_enh_params["honed"])
+	var modified: int = raw_attack + technique_atk + mastery_atk + honed_atk
+	var keystone_flat_delta := 0
+	var consumable_flat_delta := 0
+	var log_surge_mult := 1.0
+	var log_keystone_mult := 1.0
+	var log_amplified_mult := 1.0
 	if _is_attack_suppressed(event_type):
 		modified = 0
 	else:
+		var pre_ks_flat := modified
 		modified = _apply_keystone_flat_bonuses(modified, event_type)
+		keystone_flat_delta = modified - pre_ks_flat
+
+		var pre_con_flat := modified
 		modified = _apply_consumable_flat_bonuses(modified, event_type)
+		consumable_flat_delta = modified - pre_con_flat
+
+		var pre_surge := modified
 		modified = _apply_consumable_surge(modified, event_type)
+		log_surge_mult = 2.0 if modified != pre_surge and pre_surge > 0 else 1.0
+
+		var pre_ks_mult := modified
 		modified = _apply_keystone_multipliers(modified, event_type)
+		log_keystone_mult = float(modified) / float(pre_ks_mult) if pre_ks_mult > 0 else 1.0
+
 		if not is_bonus_event:
 			var amp := PieceEnhancements.amplified_multiplier(effective_enh_counts, effective_enh_params["amplified"])
 			if amp > 1.0:
 				modified = int(float(modified) * amp)
+				log_amplified_mult = amp
 
 	if not is_bonus_event and current_config.boss_modifier:
 		if not current_config.boss_modifier.attack_counts_toward_quota(event_type):
@@ -939,12 +966,15 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 
 	if _run_stats and not is_bonus_event and event_type in CLEAR_TYPE_DISPLAY:
 		_run_stats.clear_counts[event_type] = _run_stats.clear_counts.get(event_type, 0) + 1
-		if event_type == "quad":
-			_run_stats.quads += 1
-		elif event_type.begins_with("tspin"):
-			_run_stats.tspins += 1
-		elif event_type == "perfect_clear":
-			_run_stats.perfect_clears += 1
+		match event_type:
+			"single": _run_stats.singles += 1
+			"double": _run_stats.doubles += 1
+			"triple": _run_stats.triples += 1
+			"quad": _run_stats.quads += 1
+			"tspin_single", "tspin_mini": _run_stats.tspin_singles += 1
+			"tspin_double": _run_stats.tspin_doubles += 1
+			"tspin_triple": _run_stats.tspin_triples += 1
+			"perfect_clear": _run_stats.perfect_clears += 1
 
 	if not is_bonus_event and event_type != "perfect_clear" and event_type in RunState.MASTERY_TRACKS:
 		var new_level := RunState.grant_mastery_xp(event_type)
@@ -953,6 +983,7 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 		if hud:
 			hud._refresh_mastery_panel()
 
+	var log_tag_bonus := 0
 	if modified > 0 and not is_bonus_event:
 		var tag_bonus := 0
 		for ks in RunState.keystones:
@@ -963,7 +994,9 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 			for t in RunState.techniques:
 				if t.tags.size() >= 2:
 					qualifying += 1
-			modified += tag_bonus * qualifying
+			var tag_delta := tag_bonus * qualifying
+			modified += tag_delta
+			log_tag_bonus = tag_delta
 
 	if not is_bonus_event and ctx.lines_cleared > 0:
 		for ks in RunState.keystones:
@@ -973,6 +1006,15 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 					_garbage_shield += shield_gain
 					if _shield_bar:
 						_shield_bar.update_charges(_garbage_shield)
+
+	if modified > 0:
+		var tier := current_config.enemy.tier if current_config and current_config.enemy else ""
+		DamageLog.log_attack(
+			RunState.floor, tier, event_type,
+			raw_attack, technique_atk, mastery_atk, honed_atk,
+			keystone_flat_delta, consumable_flat_delta,
+			log_surge_mult, log_keystone_mult, log_amplified_mult,
+			log_tag_bonus, modified)
 
 	var to_quota: int = _drain_attack(modified)
 	quota_accumulated += to_quota
@@ -1306,11 +1348,11 @@ func _spawn_event_popup(event: Dictionary, index: int, total: int) -> void:
 	lbl.modulate = event.get("color", Color.WHITE)
 
 	var anchor_pos := Vector2(16, 360)
-	if hud:
-		anchor_pos = hud.keystone_icons.get_global_transform_with_canvas().origin
+	if hud and hud._mastery_panel:
+		anchor_pos = hud._mastery_panel.get_global_transform_with_canvas().origin
 
 	var spread := (index - (total - 1) * 0.5) * 20.0
-	lbl.position = Vector2(anchor_pos.x, anchor_pos.y - 40.0 + spread)
+	lbl.position = Vector2(anchor_pos.x, anchor_pos.y - 20.0 + spread)
 	add_child(lbl)
 
 	var tw := create_tween()
@@ -1464,6 +1506,10 @@ func _end_round(success: bool) -> void:
 	_popup_elapsed = 0.0
 	_technique_pre_evaluated = false
 	_pre_evaluated_technique_atk = 0
+	var _round_tier := current_config.enemy.tier if current_config and current_config.enemy else ""
+	var _round_pieces := _technique_round_state.pieces_placed if _technique_round_state else 0
+	DamageLog.log_round_end(RunState.floor, _round_tier,
+		current_config.quota if current_config else 0, round_timer, _round_pieces)
 	_notify_attack_bar()
 	if current_board:
 		current_board.is_active = false
@@ -1593,6 +1639,7 @@ func _compute_pbs(run_stats: RunStats) -> Dictionary:
 
 func _show_failure() -> void:
 	RunSave.delete()
+	DamageLog.log_run_end("failure")
 	if not is_inside_tree():
 		return
 	var pbs: Dictionary = _compute_pbs(_run_stats) if _run_stats else {}
@@ -1603,8 +1650,7 @@ func _show_failure() -> void:
 
 func _show_victory() -> void:
 	RunSave.delete()
-	if _run_stats:
-		_run_stats.total_damage = int(quota_accumulated)
+	DamageLog.log_run_end("victory")
 	var beaten_level := AscensionManager.current_level
 	var pbs: Dictionary = _compute_pbs(_run_stats) if _run_stats else {}
 	var scene: PackedScene = load(SCENE_RUN_VICTORY)
@@ -1613,6 +1659,8 @@ func _show_victory() -> void:
 	screen.setup(_run_stats, pbs, Economy.coins, beaten_level)
 	ProfileSave.record_victory(beaten_level)
 	if _run_stats:
+		for track in RunState.MASTERY_TRACKS:
+			_run_stats.mastery_levels[track] = RunState.get_mastery_level(track)
 		ProfileSave.accumulate_stats(_run_stats)
 		UnlockChecker.check_all(_run_stats, ProfileSave)
 
