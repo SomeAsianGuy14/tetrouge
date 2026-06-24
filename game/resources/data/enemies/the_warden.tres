@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("1")
 id = "the_warden"
-display_name = "The Warden"
+display_name = "Dungeon Warden"
 color = Color(0.5, 0.05, 0.05, 1)
 sprite = ExtResource("2_h4jpr")
 tier = "Elite"

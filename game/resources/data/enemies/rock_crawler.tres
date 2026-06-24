@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("1")
 id = "rock_crawler"
-display_name = "Rock Crawler"
+display_name = "Stone Crab"
 color = Color(0.55, 0.3, 0.1, 1)
 sprite = ExtResource("2_peuah")
 tier = "Small"

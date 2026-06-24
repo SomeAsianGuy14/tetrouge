@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="BossModifier" format=3]
+
+[ext_resource type="Script" path="res://resources/boss_modifier.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "the_klepto"
+display_name = "The Klepto"
+description = "Drains your mastery."
+mastery_drain = 5

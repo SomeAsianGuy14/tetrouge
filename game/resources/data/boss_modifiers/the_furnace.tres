@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="BossModifier" format=3]
+
+[ext_resource type="Script" path="res://resources/boss_modifier.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "the_furnace"
+display_name = "The Furnace"
+description = "Relentless attacks every 5 seconds."
+fixed_interval = 5.0

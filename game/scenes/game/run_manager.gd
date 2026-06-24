@@ -104,6 +104,7 @@ var _round_income_breakdown: Dictionary = {}
 var _popup_schedule: Array = []
 var _popup_elapsed: float = 0.0
 var _technique_pre_evaluated: bool = false
+var _popups_pre_scheduled: bool = false
 var _pre_evaluated_technique_atk: int = 0
 var _clear_popup_shown_this_piece: bool = false
 var _active_clear_popup_label: Label = null
@@ -149,6 +150,7 @@ func start_run() -> void:
 	Economy.reset()
 	Economy.add_coins(RunState.STARTING_COINS)
 	_run_stats = RunStats.new()
+	_run_stats.run_start_msec = Time.get_ticks_msec()
 	var _asc := AscensionManager.get_modifiers(AscensionManager.current_level)
 	RunState.consumable_capacity = maxi(0, RunState.consumable_capacity + _asc.get("consumable_capacity_delta", 0))
 	RunState.technique_capacity = maxi(1, RunState.technique_capacity + _asc.get("technique_capacity_delta", 0))
@@ -176,6 +178,7 @@ func _on_starter_keystone_chosen(_keystone: Keystone) -> void:
 
 func continue_run() -> void:
 	_run_stats = RunStats.new()
+	_run_stats.run_start_msec = Time.get_ticks_msec()
 	DamageLog.start_run(RunState.run_seed, AscensionManager.current_level)
 	DamageLog.log_build()
 	_show_dungeon_map()
@@ -221,6 +224,11 @@ func _show_board_ui() -> void:
 # ── Combat room ────────────────────────────────────────────────────────────
 
 func _start_combat_room(room: DungeonRoom) -> void:
+	if RunState.pickpocket_revenge_room_idx >= 0 and RunState.current_floor_data:
+		var room_idx := RunState.current_floor_data.get_room_index(room)
+		if room_idx == RunState.pickpocket_revenge_room_idx:
+			_mimic_enemy_override = ResourceRegistry.find_by_id(ResourceRegistry.all_enemies, "pickpocket_enemy")
+			RunState.pickpocket_revenge_room_idx = -1
 	_show_board_ui()
 	start_round(room)
 
@@ -229,6 +237,9 @@ func start_round(room: DungeonRoom) -> void:
 	_garbage_packets = []
 	_deferred_reflect_lines = 0
 	current_config = _build_round_config(room)
+	if _mimic_enemy_override != null:
+		current_config.enemy = _mimic_enemy_override
+		_mimic_enemy_override = null
 	hud.setup(current_config)
 	quota_accumulated = 0.0
 	surplus_attack = 0
@@ -380,6 +391,28 @@ func _build_round_config(room: DungeonRoom) -> RoundConfig:
 	if enemy.ability:
 		cfg.boss_modifier = enemy.ability
 		enemy.ability.apply_to_config(cfg)
+		if enemy.ability.fixed_interval > 0.0:
+			cfg.garbage_interval_min = enemy.ability.fixed_interval
+			cfg.garbage_interval_max = enemy.ability.fixed_interval
+		if enemy.ability.hp_multiplier != 1.0:
+			cfg.quota = ceili(cfg.quota * enemy.ability.hp_multiplier)
+		if enemy.ability.attack_multiplier != 1.0:
+			cfg.garbage_lines_min = ceili(cfg.garbage_lines_min * enemy.ability.attack_multiplier)
+			cfg.garbage_lines_max = ceili(cfg.garbage_lines_max * enemy.ability.attack_multiplier)
+		if enemy.ability.scaling_per_kill > 0.0:
+			cfg.quota = ceili(cfg.quota * (1.0 + enemy.ability.scaling_per_kill * RunState.enemies_killed))
+		if enemy.ability.mastery_drain > 0:
+			for track in RunState.MASTERY_TRACKS:
+				RunState.mastery[track].level = maxi(0, RunState.mastery[track].level - enemy.ability.mastery_drain)
+		if enemy.ability.composite:
+			var normal_bosses := _load_enemy_pool("Boss")
+			var mods: Array = []
+			for b in normal_bosses:
+				if b.ability != null and b.ability.reflect_ratio <= 0.0:
+					mods.append(b.ability)
+			RunState.seeded_shuffle(mods)
+			for i in mini(2, mods.size()):
+				mods[i].apply_to_config(cfg)
 
 	cfg.show_timer = RunState.has_keystone("golden_watch") or \
 		(cfg.boss_modifier != null and cfg.boss_modifier.id == "the_blitz")
@@ -396,14 +429,16 @@ func _build_round_config(room: DungeonRoom) -> RoundConfig:
 func _load_enemy_pool(tier: String) -> Array:
 	var result := []
 	for res in ResourceRegistry.all_enemies:
-		if res.tier == tier:
+		if res.tier == tier and not res.encounter_only:
 			result.append(res)
 	return result
 
 func _draw_enemy(tier: String) -> Enemy:
+	if tier == "Boss" and RunState.floor >= RunState.TOTAL_FLOORS:
+		tier = "FinalBoss"
 	var pool := _load_enemy_pool(tier)
 	var available: Array
-	if tier == "Boss":
+	if tier == "Boss" or tier == "FinalBoss":
 		available = pool.filter(func(e): return e.id not in RunState.used_boss_enemy_ids)
 		if available.is_empty():
 			available = pool
@@ -411,7 +446,7 @@ func _draw_enemy(tier: String) -> Enemy:
 		available = pool
 	RunState.seeded_shuffle(available)
 	var chosen: Enemy = available[0]
-	if tier == "Boss":
+	if tier == "Boss" or tier == "FinalBoss":
 		RunState.used_boss_enemy_ids.append(chosen.id)
 	return chosen
 
@@ -484,6 +519,17 @@ func _on_flow_victory_requested() -> void:
 
 func _on_flow_failure_requested() -> void:
 	_show_failure()
+
+var _mimic_enemy_override: Enemy = null
+
+func start_mimic_combat() -> void:
+	if _active_overlay:
+		_active_overlay.queue_free()
+		_active_overlay = null
+	_mimic_enemy_override = ResourceRegistry.find_by_id(ResourceRegistry.all_enemies, "mimic_enemy")
+	var synthetic_room: DungeonRoom = _flow.begin_robbers_combat()
+	_show_board_ui()
+	start_round(synthetic_room)
 
 # Special case: Robbers "fight" choice triggers an Elite combat
 func start_robbers_combat() -> void:
@@ -599,7 +645,8 @@ func _tick_enemy_garbage(delta: float) -> void:
 		_enemy_timer = 0.0
 		if current_config.reflect_ratio <= 0.0:
 			var n := randi_range(current_config.garbage_lines_min, current_config.garbage_lines_max)
-			if n > 0 and _garbage_shield > 0:
+			var shields_bypassed: bool = current_config.boss_modifier != null and current_config.boss_modifier.ignore_shields
+			if n > 0 and _garbage_shield > 0 and not shields_bypassed:
 				var absorbed := mini(n, _garbage_shield)
 				_garbage_shield -= absorbed
 				n -= absorbed
@@ -619,6 +666,9 @@ func _tick_enemy_garbage(delta: float) -> void:
 			if _technique_round_state:
 				_technique_round_state.after_receive_pending = true
 		_next_garbage_interval = randf_range(current_config.garbage_interval_min, current_config.garbage_interval_max)
+		if current_config.boss_modifier and current_config.boss_modifier.scaling_interval:
+			var hp_pct := maxf(0.2, 1.0 - quota_accumulated / maxf(1.0, float(current_config.quota)))
+			_next_garbage_interval *= hp_pct
 		if _enemy_display:
 			_enemy_display.update_windup(0.0, _next_garbage_interval)
 
@@ -862,6 +912,7 @@ func _on_line_clear_delay_started(clear_type: String) -> void:
 	if all_events.size() > 0:
 		_schedule_popups(all_events, current_config.line_clear_delay if current_config else 0.0)
 	_technique_pre_evaluated = true
+	_popups_pre_scheduled = true
 
 func _on_piece_rotated(piece_type: String) -> void:
 	if piece_type == "T":
@@ -1024,12 +1075,13 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 		if reflect_lines > 0:
 			_deferred_reflect_lines += reflect_lines
 
-	if not is_bonus_event and not _technique_pre_evaluated:
+	if not is_bonus_event and not _popups_pre_scheduled:
 		var ks_events := _collect_keystone_events(modified, event_type)
 		_fire_keystone_visuals(ks_events)
 		var all_events := technique_events + ks_events
 		if all_events.size() > 0:
 			_schedule_popups(all_events, 0.0)
+	_popups_pre_scheduled = false
 
 	if quota_accumulated >= current_config.quota:
 		_end_round(true)
@@ -1156,6 +1208,9 @@ func _is_attack_suppressed(event_type: String) -> bool:
 		if ks.suppress_tspin_triple and event_type == "tspin_triple":
 			return true
 		if ks.suppress_non_singles and event_type != "single":
+			return true
+	if current_config and current_config.boss_modifier and current_config.boss_modifier.suppress_same_clear:
+		if _technique_round_state and _technique_round_state.last_clear_type != "" and event_type == _technique_round_state.last_clear_type:
 			return true
 	return false
 
@@ -1491,11 +1546,12 @@ func _end_round(success: bool) -> void:
 		return
 	_round_ended = true
 	if _run_stats:
-		_run_stats.run_time += round_timer
+		_run_stats.run_time = (Time.get_ticks_msec() - _run_stats.run_start_msec) / 1000.0
 	_garbage_packets = []
 	_popup_schedule.clear()
 	_popup_elapsed = 0.0
 	_technique_pre_evaluated = false
+	_popups_pre_scheduled = false
 	_pre_evaluated_technique_atk = 0
 	var _round_tier := current_config.enemy.tier if current_config and current_config.enemy else ""
 	var _round_pieces := _technique_round_state.pieces_placed if _technique_round_state else 0
@@ -1508,6 +1564,11 @@ func _end_round(success: bool) -> void:
 		_flow.resolve_combat(false)
 		return
 
+	if current_config and current_config.enemy and current_config.enemy.id == "pickpocket_enemy":
+		Economy.add_coins(RunState.pickpocket_stolen_gold)
+		RunState.pickpocket_stolen_gold = 0
+	if current_config and current_config.enemy and current_config.enemy.id == "mimic_enemy":
+		Economy.add_coins(50)
 	var surplus_income := _calculate_surplus_income()
 	var keystone_income := _apply_keystone_economy()
 	Economy.add_coins(surplus_income)

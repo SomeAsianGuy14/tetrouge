@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Enemy" format=3]
+
+[ext_resource type="Script" uid="uid://dqm7x3n1vp5fy" path="res://resources/enemy.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "robbers_enemy"
+display_name = "Robbers"
+flavor_text = "Your gold or your life."
+color = Color(0.4, 0.3, 0.2, 1)
+tier = "Elite"
+garbage_interval = 15.0
+encounter_only = true

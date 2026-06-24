@@ -52,10 +52,10 @@ func test_boss_enemy_not_repeated() -> void:
 	RunState.used_boss_enemy_ids.clear()
 
 	var boss_pool := _load_enemies_by_tier("Boss")
-	assert_eq(boss_pool.size(), 9, "Expected 9 boss enemies in pool")
+	assert_eq(boss_pool.size(), 14, "Expected 14 boss enemies in pool")
 
 	var drawn_ids := []
-	for _i in 9:
+	for _i in 14:
 		var available := boss_pool.filter(func(e): return e.id not in RunState.used_boss_enemy_ids)
 		RunState.seeded_shuffle(available)
 		var chosen = available[0]
@@ -72,3 +72,20 @@ func test_common_enemy_from_correct_tier() -> void:
 		for enemy in pool:
 			assert_eq(enemy.tier, tier,
 				"Enemy '%s' should have tier '%s' but has '%s'" % [enemy.id, tier, enemy.tier])
+
+func test_encounter_only_excluded_from_registry_pool() -> void:
+	for tier in ["Small", "Big", "Elite"]:
+		var pool: Array = []
+		for res in ResourceRegistry.all_enemies:
+			if res.tier == tier and not res.encounter_only:
+				pool.append(res)
+		for enemy in pool:
+			assert_false(enemy.encounter_only,
+				"Encounter-only enemy '%s' should not be in filtered pool" % enemy.id)
+
+func test_enemy_kill_counter_increments_and_resets() -> void:
+	RunState.enemies_killed = 0
+	RunState.enemies_killed += 1
+	assert_eq(RunState.enemies_killed, 1)
+	RunState.reset()
+	assert_eq(RunState.enemies_killed, 0)

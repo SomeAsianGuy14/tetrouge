@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Enemy" format=3]
+
+[ext_resource type="Script" uid="uid://dqm7x3n1vp5fy" path="res://resources/enemy.gd" id="1"]
+[ext_resource type="Resource" path="res://resources/data/boss_modifiers/the_furnace.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = "boss_furnace"
+display_name = "The Furnace"
+flavor_text = "The heat is relentless."
+color = Color(0.9, 0.4, 0.05, 1)
+tier = "Boss"
+garbage_interval = 12.0
+ability = ExtResource("2")

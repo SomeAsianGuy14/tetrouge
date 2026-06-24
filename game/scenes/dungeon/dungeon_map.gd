@@ -103,6 +103,10 @@ func _create_room_button(room: DungeonRoom, accessible: Array, parent: Control) 
 		_tint(btn, _accessible_color(room))
 		btn.disabled = false
 		btn.connect("pressed", _on_room_pressed.bind(room))
+	elif room.revealed:
+		btn.text = _accessible_label(room)
+		_tint(btn, COLOR_FOG)
+		btn.disabled = true
 	else:
 		btn.text = "???"
 		_tint(btn, COLOR_FOG)

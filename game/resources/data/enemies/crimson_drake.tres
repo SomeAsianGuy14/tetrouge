@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("1")
 id = "crimson_drake"
-display_name = "Crimson Drake"
+display_name = "Lesser Drake"
 color = Color(0.8, 0.05, 0.1, 1)
 sprite = ExtResource("2_oskjg")
 tier = "Elite"

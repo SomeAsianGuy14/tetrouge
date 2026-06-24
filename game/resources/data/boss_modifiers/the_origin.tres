@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="BossModifier" format=3]
+
+[ext_resource type="Script" path="res://resources/boss_modifier.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "the_origin"
+display_name = "The Origin"
+description = "Grows stronger with every enemy defeated."
+scaling_per_kill = 0.05

@@ -36,6 +36,7 @@ func resolve_combat(won: bool) -> void:
 		pending_room_clear = null
 	if not is_boss:
 		RunState.combat_rooms_cleared_this_floor += 1
+		RunState.enemies_killed += 1
 	round_success_requested.emit(is_boss)
 
 func confirm_boss_cleared() -> void:

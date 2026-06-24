@@ -174,6 +174,10 @@ func _build_ui() -> void:
 	_windup_label.text = "ATK: --s"
 	_windup_container.add_child(_windup_label)
 
+	if _enemy and _enemy.ability and _enemy.ability.hidden_ui:
+		hp_container.visible = false
+		_windup_container.visible = false
+
 # ── Public API ─────────────────────────────────────────────────────────────
 
 func set_attack_bar_visible(vis: bool) -> void:
@@ -194,6 +198,8 @@ func update_hp(accumulated: float) -> void:
 
 func update_windup(timer: float, interval: float) -> void:
 	if _windup_bar == null:
+		return
+	if _enemy and _enemy.ability and _enemy.ability.hidden_ui:
 		return
 	var ratio := timer / interval if interval > 0.0 else 0.0
 	_windup_bar.value = ratio
@@ -271,6 +277,8 @@ func stop_animations() -> void:
 # ── Lunge animation ────────────────────────────────────────────────────────
 
 func on_attack_fired() -> void:
+	if _enemy and _enemy.ability and _enemy.ability.hidden_ui:
+		return
 	_stop_pulse()
 	if _lunge_tween and _lunge_tween.is_valid():
 		_lunge_tween.kill()

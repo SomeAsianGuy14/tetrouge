@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("1")
 id = "void_knight"
-display_name = "Void Knight"
+display_name = "Fallen Knight"
 color = Color(0.25, 0.05, 0.4, 1)
 sprite = ExtResource("2_gckyr")
 tier = "Elite"

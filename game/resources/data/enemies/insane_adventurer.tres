@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="Enemy" format=3]
+
+[ext_resource type="Script" uid="uid://dqm7x3n1vp5fy" path="res://resources/enemy.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "insane_adventurer"
+display_name = "Insane Adventurer"
+flavor_text = "The dungeon has broken their mind."
+color = Color(0.55, 0.35, 0.2, 1)
+tier = "Big"
+garbage_interval = 17.0

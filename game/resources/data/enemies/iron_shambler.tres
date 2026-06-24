@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("1")
 id = "iron_revenant"
-display_name = "Iron Revenant"
+display_name = "Armored Skeleton"
 color = Color(0.4, 0.6, 0.8, 1)
 sprite = ExtResource("2_coccx")
 tier = "Big"

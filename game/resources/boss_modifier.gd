@@ -22,6 +22,20 @@ extends Resource
 # Attack filter — which event types count toward quota (empty = all count)
 @export var quota_whitelist: Array[String] = []  # empty = all; non-empty = only these
 
+# New boss abilities
+@export var ignore_shields: bool = false
+@export var suppress_same_clear: bool = false
+@export var scaling_interval: bool = false
+@export var hidden_ui: bool = false
+@export var fixed_interval: float = 0.0
+
+# Final boss properties
+@export var hp_multiplier: float = 1.0
+@export var attack_multiplier: float = 1.0
+@export var mastery_drain: int = 0
+@export var scaling_per_kill: float = 0.0
+@export var composite: bool = false
+
 func apply_to_config(config: RoundConfig) -> void:
 	if disable_hold:
 		config.hold_disabled = true

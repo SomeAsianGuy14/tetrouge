@@ -17,7 +17,14 @@ const ENCOUNTER_SUBTYPES := [
 	"robbers",
 	"head_trauma",
 	"pickpocket",
-	"museum",
+	"treasure_chest",
+	"tutor",
+	"sleeping_beast",
+	"laboratory",
+	"demonic_deal",
+	"mimic",
+	"beggar",
+	"map_room",
 ]
 
 var room_type: String = ""
@@ -25,6 +32,7 @@ var encounter_subtype: String = ""  # only set when room_type == TYPE_ENCOUNTER
 var tile_footprint: Array[Vector2i] = []
 var visual_size: Vector2i = Vector2i(1, 1)
 var cleared: bool = false
+var revealed: bool = false
 var adjacency: Array[int] = []  # indices into DungeonFloor.rooms
 
 func get_combat_tier() -> String:

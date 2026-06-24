@@ -9,3 +9,4 @@ extends Resource
 @export var tier: String = ""
 @export var garbage_interval: float = 30.0
 @export var ability: BossModifier = null
+@export var encounter_only: bool = false

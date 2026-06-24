@@ -46,6 +46,10 @@ var shop_technique_slots: int = 5
 var consumable_capacity: int = 3
 var technique_capacity: int = 5
 
+var pickpocket_stolen_gold: int = 0
+var pickpocket_revenge_room_idx: int = -1
+var enemies_killed: int = 0
+
 signal run_started
 signal floor_changed(floor_number: int)
 signal build_changed
@@ -63,6 +67,9 @@ func reset() -> void:
 	shop_technique_slots = 5
 	consumable_capacity = 3
 	technique_capacity = 5
+	pickpocket_stolen_gold = 0
+	pickpocket_revenge_room_idx = -1
+	enemies_killed = 0
 	run_seed = randi()
 	rng.seed = run_seed
 	current_floor_data = DungeonGenerator.generate(floor, rng)

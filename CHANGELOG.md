@@ -3,6 +3,19 @@
 ## Unreleased
 
 ### New Features
+- **7 new encounter rooms** — Tutor (gain +2 random mastery), Sleeping Beast (optional hard fight for rewards), Laboratory (take up to 3 consumables), Demonic Deal (trade 3 mastery levels for 150 coins), Mimic (disguised as Treasure Chest, triggers combat), Beggar (offer 50 gold for a random technique), Map Room (reveal all fogged rooms).
+- **Encounter reworks** — Museum renamed to Treasure Chest (same look as Mimic for surprise). Pickpocket now spawns a revenge combat room where you can reclaim stolen gold. Head Trauma can be dodged if you have speed-related items.
+- **6 new enemies** — Corrupted Mage, Venomous Archer, Possessed Blade, Insane Adventurer, Giant Frog, Unstable Construct. Plus 3 encounter-specific enemies (Pickpocket, Robbers, Mimic) that don't appear in the general pool.
+- **5 new bosses** — The Ram (attacks ignore shields), The Jester (consecutive same clears deal no damage), The Berserker (attacks faster at lower HP), The Forgotten (hidden HP/attack bars), The Furnace (attacks every 5 seconds).
+- **Final boss pool** — Floor 4 boss is now drawn from a separate pool: The Mutant (combines 2 random boss effects), The Titan (double HP and attack), The Klepto (drains 5 mastery levels), The Origin (scales with enemies killed).
+- **Enemy renames** — Rock Crawler → Stone Crab, The Warden → Dungeon Warden, Void Knight → Fallen Knight, Crimson Drake → Lesser Drake, Iron Shambler → Armored Skeleton.
+
+### Bug Fixes
+- **Popup events no longer fire twice** — Keystone and technique activation popups were being scheduled both during line clear delay and again during attack processing, causing duplicate floating labels. Now popups only fire once per clear.
+- **Run time tracks wall-clock time** — Run time was incorrectly tracking time remaining on the round timer (counting down from 180s). Now uses wall-clock elapsed time from run start, capturing all time including map, shops, and encounters.
+- **Consumables disabled outside combat** — Backpack items can no longer be used from the dungeon map or encounter screens. Buttons are greyed out until entering a fight.
+
+### New Features
 - **Granular clear tracking** — The stats screen and run-end summary now track all clear types individually: Singles, Doubles, Triples, Quads, T-Spin Singles, T-Spin Doubles, T-Spin Triples, and Perfect Clears. The old combined "T-Spins" counter has been replaced with per-type breakdowns.
 - **Best mastery tracking** — The stats screen now shows a "Best Mastery" section under Personal Bests, recording the highest mastery level you've ever reached for each clear type across all runs.
 

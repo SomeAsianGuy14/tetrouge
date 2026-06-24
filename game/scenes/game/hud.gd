@@ -1,6 +1,8 @@
 class_name HUD
 extends Control
 
+var _in_combat: bool = false
+
 @onready var _top_bar: HBoxContainer = $TopBar
 @onready var _info_panel: VBoxContainer = $InfoPanel
 @onready var _persistent_root: Control = $PersistentLayer/PersistentRoot
@@ -133,12 +135,14 @@ func _refresh_technique_icons() -> void:
 # ── Visibility management ────────────────────────────────────────────────
 
 func hide_combat_elements() -> void:
+	_in_combat = false
 	_top_bar.visible = false
 	_info_panel.visible = false
 	for btn in _backpack_slots:
 		btn.disabled = true
 
 func show_combat_elements() -> void:
+	_in_combat = true
 	_top_bar.visible = true
 	_info_panel.visible = true
 
@@ -222,7 +226,7 @@ func _refresh_backpack_slots() -> void:
 			var item: Consumable = RunState.consumables[i]
 			btn.text = item.display_name
 			btn.tooltip_text = item.description
-			btn.disabled = false
+			btn.disabled = not _in_combat
 		else:
 			btn.text = "—"
 			btn.tooltip_text = ""

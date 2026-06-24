@@ -15,5 +15,6 @@ var tspin_doubles: int = 0
 var tspin_triples: int = 0
 var perfect_clears: int = 0
 var run_time: float = 0.0
+var run_start_msec: int = 0
 var clear_counts: Dictionary = {}
 var mastery_levels: Dictionary = {}
