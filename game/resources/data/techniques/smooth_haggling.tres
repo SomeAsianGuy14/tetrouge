@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1")
 id = "smooth_haggling"
-display_name = "Smooth Haggling"
+display_name = "Upcharging"
 description = "Selling a technique refunds 80% of its cost instead of 60%."
 cost = 40
 rarity = "common"

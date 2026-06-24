@@ -12,6 +12,15 @@
 ### Balance
 - **Boss scaling** — Boss enemies now scale with rooms cleared on the current floor (8% per room, same as other enemies). Previously bosses had a fixed quota regardless of how many rooms you'd cleared, which could make them easier than late-floor regular enemies.
 - **Flat technique capacity** — Technique capacity is now fixed at 5 for all floors, instead of growing from 4 to 7. This keeps builds tighter and more deliberate throughout the run.
+- **Technique damage buffs** — Clean Strike +1→+2, Low Pressure +1→+2, Opening Blow +3→+5, Patience +1→+2, Quad Echo +1→+3, Side Strike +1→+3, Flatline +2→+5, Flow Step +2→+5, Golden Blade +2→+4, Recycling +3→+4, Redzone +3→+4, Adrenaline Rush +5→+8, Glass Cannon +4→+8, Reckless Assault +4→+6, Finisher +1→+4. Dualcasting reduced +3→+2.
+- **Keystone buffs** — Simple Sword/Wand +2→+3, Simple Shield 5→10, Legionnaire's Shield 10→20, Simplicity 2×→3×, Holy Cheese 2×→3×, Dizzy +4→+8, Golden Watch now earns 1 coin per second remaining (up from 1 per 5 seconds).
+- **Rarity moves** — Sharpen, Barricade, Finisher moved to Rare. Perfect Spark, Compact Setup moved from Epic to Rare (Compact Setup threshold reduced to 30%).
+- **Technique reworks** — Backpedaling now grants 1 shield per clear while combo >3 (was: next piece Reinforced). Escalation fires every 5 attacks for +5 (was: every 10 pieces for +2). Switch-Up grants +2 when clear type differs from previous (was: hard-drop/soft-drop alternation). Green Thumb awards 20 coins after 6 garbage lines (was: 4 coins per 5 lines). Combo Spike triggers every 3rd combo clear (was: 5th). Delayed Cannon → One-Two Punch: +6 when clear matches previous (was: alternating quad bonus). Gambler's Blade 50/50 for +8/-4 (was: 25/25 for +4/-2).
+- **Burning Board** moved from Epic technique to keystone. Now multiplies all damage by ×1.5 (was: flat +3). Self-damage unchanged.
+- **Enchant** moved from keystone to Rare technique. Now +3 damage per tspin-tagged technique on T-Spins (was: +2 per tspin/general technique as keystone).
+- **Sticky Fingers** (was Greedy Hands) coin gain increased from 8 to 15.
+- **Removed** — Chain Starter, Mini Spark, Chain Battery, Four Disciplines (techniques); Hybrid Reactor, Whirl, Flexible (keystones).
+- **Renames** — Coupon → Haggling, Bounty List → Bounty Connections, Hone → Slash, Smooth Haggling → Upcharging, Simple Flail → Simple Bow, Mace and Chain → Recurve Bow, Charging Up → Supercharge.
 
 ### Bug Fixes
 - **Total damage tracked correctly** — Total run damage was being overwritten with only the final round's damage at victory, making it look like the game tracked highest single-round damage instead of cumulative damage. Fixed by removing the overwrite; incremental tracking was already correct.

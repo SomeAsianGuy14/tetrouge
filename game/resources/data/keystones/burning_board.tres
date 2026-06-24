@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Keystone" format=3]
+
+[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "burning_board"
+display_name = "Burning Board"
+description = "All attacks deal x1.5 damage, but every 5 seconds take 1 damage."
+flavor_text = "The floor is lava"
+category = "Risk"
+all_attack_multiplier = 1.5
+burning_board = true

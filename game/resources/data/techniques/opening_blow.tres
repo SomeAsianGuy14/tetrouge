@@ -6,9 +6,9 @@
 script = ExtResource("1")
 id = "opening_blow"
 display_name = "Opening Blow"
-description = "Your first line clear each round sends +3 attack."
+description = "Your first line clear each round sends +5 attack."
 cost = 40
 rarity = "common"
 tags = ["general"]
 effect_type = "first_clear"
-params = {"bonus": 3}
+params = {"bonus": 5}

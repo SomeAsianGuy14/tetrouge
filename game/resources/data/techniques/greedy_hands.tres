@@ -5,8 +5,8 @@
 [resource]
 script = ExtResource("1")
 id = "greedy_hands"
-display_name = "Greedy Hands"
-description = "Gain an additional 8 coins every round, but enemies gain +1 attack."
+display_name = "Sticky Fingers"
+description = "Gain an additional 15 coins every round, but enemies gain +1 attack."
 cost = 52
 rarity = "rare"
 tags = ["risk", "economy"]

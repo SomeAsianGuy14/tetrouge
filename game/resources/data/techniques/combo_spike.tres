@@ -6,9 +6,9 @@
 script = ExtResource("1")
 id = "combo_spike"
 display_name = "Combo Spike"
-description = "Every 5th combo clear sends +5 attack."
+description = "Every 3rd combo clear sends +5 attack."
 cost = 64
 rarity = "epic"
 tags = ["combo"]
 effect_type = "combo_spike"
-params = {"n": 5, "bonus": 5}
+params = {"n": 3, "bonus": 5}

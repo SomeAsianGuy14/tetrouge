@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_lreus")
 id = "hone"
-display_name = "Hone"
+display_name = "Slash"
 description = "Quads send +2 attack."
 cost = 40
 rarity = "common"

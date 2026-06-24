@@ -6,7 +6,7 @@
 script = ExtResource("1")
 id = "dizzy"
 display_name = "Dizzy"
-description = "If you rotate the T-piece more than 4 times before locking, the T-Spin deals +4 damage."
+description = "If you rotate the T-piece more than 4 times before locking, the T-Spin deals +8 damage."
 flavor_text = "You spin my head right round right round"
 category = "T-Spin"
 dizzy = true

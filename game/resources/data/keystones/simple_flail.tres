@@ -5,9 +5,9 @@
 [resource]
 script = ExtResource("1")
 id = "simple_flail"
-display_name = "Simple Flail"
+display_name = "Simple Bow"
 description = "Singles and doubles deal +1 damage."
-flavor_text = "Just a flail"
+flavor_text = "Just a bow"
 is_starter = true
 category = "Starter"
 single_bonus = 1

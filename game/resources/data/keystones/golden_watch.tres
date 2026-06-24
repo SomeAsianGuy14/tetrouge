@@ -6,7 +6,7 @@
 script = ExtResource("1")
 id = "golden_watch"
 display_name = "Golden Watch"
-description = "Gain a 3-minute timer. At round end, earn 1 coin for every 5 seconds remaining on the timer."
+description = "Gain a 3-minute timer. At round end, earn 1 coin for every second remaining on the timer."
 flavor_text = "Time is money"
 category = "Economic"
 time_coins = true

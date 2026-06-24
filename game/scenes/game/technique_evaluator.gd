@@ -126,8 +126,9 @@ static func _eval_attack(t: Resource, ctx: AttackContext, rs: TechniqueRoundStat
 			return 0
 
 		"escalation":
-			if is_clear and rs.escalation_pending:
-				return p.get("bonus", 2)
+			var every_n: int = p.get("every_n_attacks", 5)
+			if is_clear and (rs.attack_events_this_round + 1) % every_n == 0:
+				return p.get("bonus", 5)
 			return 0
 
 		"gambler_rng":
@@ -146,7 +147,7 @@ static func _eval_attack(t: Resource, ctx: AttackContext, rs: TechniqueRoundStat
 			return p.get("attack_bonus", 4) if is_clear else 0
 
 		"burning_board":
-			return p.get("attack_bonus", 3) if is_clear else 0
+			return 0
 
 		"flash_step":
 			return 0  # movement effect only; handled via flags
@@ -200,6 +201,16 @@ static func _eval_attack(t: Resource, ctx: AttackContext, rs: TechniqueRoundStat
 				return p.get("bonus", 1)
 			return 0
 
+		"different_clear_bonus":
+			if is_clear and rs.last_clear_type != "" and ctx.event_type != rs.last_clear_type:
+				return p.get("bonus", 2)
+			return 0
+
+		"same_clear_bonus":
+			if is_clear and rs.last_clear_type != "" and ctx.event_type == rs.last_clear_type:
+				return p.get("bonus", 6)
+			return 0
+
 		"good_planning":
 			if is_clear and rs.good_planning_pending:
 				return p.get("bonus", 2)
@@ -210,9 +221,19 @@ static func _eval_attack(t: Resource, ctx: AttackContext, rs: TechniqueRoundStat
 				return p.get("bonus", 2)
 			return 0
 
+		"per_tspin_technique":
+			if not is_tspin:
+				return 0
+			var tspin_count := 0
+			for tech in RunState.techniques:
+				if "tspin" in tech.tags:
+					tspin_count += 1
+			return p.get("bonus_per_technique", 3) * tspin_count
+
 		"economy", "coupon", "specialist_discount", "smooth_haggling", "bounty_list", \
 		"combo_payout", "green_thumb", "piece_enhancer", \
-		"attack_to_shield", "height_shield", "post_quad_enhance", "post_combo_enhance":
+		"attack_to_shield", "height_shield", "post_quad_enhance", "post_combo_enhance", \
+		"shield_per_clear_while_combo":
 			return 0  # shop/economy/shield/grant effects only — handled outside evaluator
 
 		_:
@@ -229,9 +250,9 @@ static func _eval_flat(p: Dictionary, ctx: AttackContext, board_pct: float) -> i
 	var skip_mastery: bool = p.get("require_b2b", false) or on == "perfect_clear"
 	if not skip_mastery:
 		if on in RunState.MASTERY_TRACKS:
-			bonus += RunState.get_mastery_level(on) / 2
+			bonus += RunState.get_mastery_level(on)
 		elif on in ["all_clear", "tspin", "multiline"]:
-			bonus += RunState.get_highest_mastery_for(on) / 2
+			bonus += RunState.get_highest_mastery_for(on)
 
 	if p.get("require_b2b", false) and not ctx.b2b:
 		return 0
@@ -288,9 +309,6 @@ static func _collect_flags(techniques: Array, ctx: AttackContext, _rs: Technique
 			"flash_step":
 				if ctx.lines_cleared >= t.params.get("min_lines", 2):
 					flags.append("flash_step_arr")
-			"burning_board":
-				if ctx.lines_cleared > 0:
-					flags.append("burning_board")
 			"glass_cannon":
 				if ctx.lines_cleared > 0:
 					flags.append("glass_cannon")
@@ -303,4 +321,8 @@ static func _collect_flags(techniques: Array, ctx: AttackContext, _rs: Technique
 				var threshold: int = t.params.get("combo_threshold", 0)
 				if ctx.combo > threshold:
 					flags.append("post_combo_enhance:" + str(t.params.get("enhancement", "")))
+			"shield_per_clear_while_combo":
+				var threshold: int = t.params.get("combo_threshold", 3)
+				if ctx.lines_cleared > 0 and ctx.combo > threshold:
+					flags.append("shield_per_clear:" + str(t.params.get("shield_per_clear", 1)))
 	return flags

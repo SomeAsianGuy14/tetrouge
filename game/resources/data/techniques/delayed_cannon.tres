@@ -4,11 +4,11 @@
 
 [resource]
 script = ExtResource("1")
-id = "delayed_cannon"
-display_name = "Delayed Cannon"
-description = "Every second Quad sends +5 attack instead of the usual bonus."
+id = "one_two_punch"
+display_name = "One-Two Punch"
+description = "If your clear was the same as the previous it deals +6 damage."
 cost = 64
 rarity = "epic"
 tags = ["quad"]
-effect_type = "delayed_cannon"
-params = {"base_bonus": 3, "spike_bonus": 5}
+effect_type = "same_clear_bonus"
+params = {"bonus": 6}

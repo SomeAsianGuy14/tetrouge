@@ -6,9 +6,9 @@
 script = ExtResource("1")
 id = "green_thumb"
 display_name = "Green Thumb"
-description = "Gain 4 coins for every 5 garbage rows cleared."
+description = "After clearing 6 garbage lines gain 20 coins."
 cost = 40
 rarity = "common"
 tags = ["economy", "garbage"]
 effect_type = "green_thumb"
-params = {"rows_per_coin": 5, "coins_per_trigger": 4}
+params = {"rows_threshold": 6, "coins": 20}

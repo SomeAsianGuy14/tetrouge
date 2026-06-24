@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1")
 id = "coupon"
-display_name = "Coupon"
+display_name = "Haggling"
 description = "Techniques cost 10% less."
 cost = 40
 rarity = "common"

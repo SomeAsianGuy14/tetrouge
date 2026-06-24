@@ -67,6 +67,8 @@ extends Resource
 @export var reflect_on_flush: float = 0.0
 @export var skip_line_clear_delay: bool = false
 @export var attack_to_shield_pct: float = 0.0
+@export var all_attack_multiplier: float = 0.0
+@export var burning_board: bool = false
 
 # ── Piece enhancements ──────────────────────────────────────────────────────
 @export var piece_enhance_every_n: int = 0

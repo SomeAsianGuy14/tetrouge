@@ -6,9 +6,9 @@
 script = ExtResource("1")
 id = "backpedaling"
 display_name = "Backpedaling"
-description = "After your combo count exceeds 5, your next piece is Reinforced."
+description = "While your combo is above 3, gain 1 shield per clear."
 cost = 40
 rarity = "common"
-tags = ["combo", "enhancement"]
-effect_type = "post_combo_enhance"
-params = {"enhancement": "reinforced", "combo_threshold": 5}
+tags = ["combo"]
+effect_type = "shield_per_clear_while_combo"
+params = {"combo_threshold": 3, "shield_per_clear": 1}

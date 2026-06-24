@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Technique" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "enchant"
+display_name = "Enchant"
+description = "T-spins deal +3 damage for each T-spin technique."
+cost = 52
+rarity = "rare"
+tags = ["tspin"]
+effect_type = "per_tspin_technique"
+params = {"bonus_per_technique": 3}

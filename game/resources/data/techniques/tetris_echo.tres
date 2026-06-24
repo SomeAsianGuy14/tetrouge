@@ -6,9 +6,9 @@
 script = ExtResource("1")
 id = "tetris_echo"
 display_name = "Quad Echo"
-description = "After a Quad, your next single/double/triple sends +1 attack."
+description = "After a Quad, your next single/double/triple sends +3 attack."
 cost = 40
 rarity = "common"
 tags = ["quad", "general"]
 effect_type = "tetris_echo"
-params = {"bonus": 1}
+params = {"bonus": 3}

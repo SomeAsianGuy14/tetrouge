@@ -6,9 +6,9 @@
 script = ExtResource("1")
 id = "switch_up"
 display_name = "Switch-Up"
-description = "After a hard drop, your next soft-drop placement sends +1 attack if it clears a line."
+description = "If your clear is different from your last clear it deals +2 damage."
 cost = 40
 rarity = "common"
 tags = ["speed"]
-effect_type = "switch_up"
-params = {"bonus": 1}
+effect_type = "different_clear_bonus"
+params = {"bonus": 2}

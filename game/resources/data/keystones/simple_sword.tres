@@ -6,8 +6,8 @@
 script = ExtResource("1")
 id = "simple_sword"
 display_name = "Simple Sword"
-description = "Quads deal +2 damage."
+description = "Quads deal +3 damage."
 flavor_text = "Just a sword"
 is_starter = true
 category = "Starter"
-quad_bonus = 2
+quad_bonus = 3

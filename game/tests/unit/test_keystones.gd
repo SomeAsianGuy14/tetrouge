@@ -80,21 +80,17 @@ func test_single_bonus_applies_to_zero_attack_single() -> void:
 	RunState.keystones.append(ks)
 	assert_eq(_rm._apply_keystone_flat_bonuses(0, "single"), 3)
 
-func test_per_technique_tspin_bonus_counts_general_techniques() -> void:
+func test_tspin_any_bonus_applies_to_tspin_double() -> void:
 	var ks := _make_keystone()
-	ks.per_technique_tspin_bonus = 2
+	ks.tspin_any_bonus = 3
 	RunState.keystones.append(ks)
-	RunState.techniques.append(_make_technique("tspin"))
-	RunState.techniques.append(_make_technique("general"))
-	# 4 base + (2 per technique * 2 techniques) = 8
-	assert_eq(_rm._apply_keystone_flat_bonuses(4, "tspin_double"), 8)
+	assert_eq(_rm._apply_keystone_flat_bonuses(4, "tspin_double"), 7)
 
-func test_per_technique_tspin_bonus_applies_to_tspin_mini() -> void:
+func test_tspin_any_bonus_applies_to_tspin_mini() -> void:
 	var ks := _make_keystone()
-	ks.per_technique_tspin_bonus = 2
+	ks.tspin_any_bonus = 3
 	RunState.keystones.append(ks)
-	RunState.techniques.append(_make_technique("tspin"))
-	assert_eq(_rm._apply_keystone_flat_bonuses(1, "tspin_mini"), 3)
+	assert_eq(_rm._apply_keystone_flat_bonuses(1, "tspin_mini"), 4)
 
 func test_collect_keystone_events_returns_empty_for_suppressed_event() -> void:
 	var suppressor := _make_keystone()
@@ -118,7 +114,7 @@ func test_dizzy_adds_bonus_after_five_t_rotations() -> void:
 	ks.dizzy = true
 	RunState.keystones.append(ks)
 	_rm._t_spin_rotations = 5
-	assert_eq(_rm._apply_keystone_flat_bonuses(4, "tspin_double"), 8)
+	assert_eq(_rm._apply_keystone_flat_bonuses(4, "tspin_double"), 12)
 	_rm._t_spin_rotations = 4
 	assert_eq(_rm._apply_keystone_flat_bonuses(4, "tspin_double"), 4)
 
@@ -180,12 +176,12 @@ func test_dizzy_no_bonus_at_exactly_4_rotations() -> void:
 	_rm._t_spin_rotations = 4
 	assert_eq(_rm._apply_keystone_flat_bonuses(4, "tspin_double"), 4)
 
-func test_dizzy_adds_4_when_rotation_count_exceeds_4() -> void:
+func test_dizzy_adds_8_when_rotation_count_exceeds_4() -> void:
 	var ks := _make_keystone()
 	ks.dizzy = true
 	RunState.keystones.append(ks)
 	_rm._t_spin_rotations = 5
-	assert_eq(_rm._apply_keystone_flat_bonuses(4, "tspin_double"), 8)
+	assert_eq(_rm._apply_keystone_flat_bonuses(4, "tspin_double"), 12)
 
 func test_pc_first_multiplier_applies_on_first_pc() -> void:
 	var ks := _make_keystone()
@@ -243,14 +239,14 @@ func test_end_round_coins_from_two_keystones_credits_total() -> void:
 	assert_eq(Economy.coins, 3)
 	assert_eq(income, 3, "returned total matches coins credited")
 
-func test_time_coins_grants_floor_of_time_divided_by_5() -> void:
+func test_time_coins_grants_1_coin_per_second_remaining() -> void:
 	var ks := _make_keystone()
 	ks.time_coins = true
 	RunState.keystones.append(ks)
 	_rm.round_timer = 17.0
 	var income := _rm._apply_keystone_economy()
-	assert_eq(Economy.coins, 9)
-	assert_eq(income, 9, "returned total matches coins credited")
+	assert_eq(Economy.coins, 17)
+	assert_eq(income, 17, "returned total matches coins credited")
 
 # ── Conditional availability ──────────────────────────────────────────────
 
@@ -312,105 +308,6 @@ func test_add_keystone_replaces_nonexistent_base_adds_normally() -> void:
 	RunState.add_keystone(upgrade)
 	assert_eq(RunState.keystones.size(), 1)
 	assert_eq(RunState.keystones[0].id, "great_sword")
-
-# ── Hybrid Reactor ────────────────────────────────────────────────────────
-
-func test_hybrid_reactor_bonus_applies_when_attack_nonzero() -> void:
-	var ks := _make_keystone()
-	ks.per_attack_tag_bonus = 3
-	RunState.keystones = [ks]
-	var t1 := Technique.new()
-	t1.tags = ["risk", "offense"]
-	var t2 := Technique.new()
-	t2.tags = ["defense", "utility"]
-	RunState.techniques = [t1, t2]
-	_rm.current_config.quota = 9999
-	var modified := 5
-	if modified > 0:
-		var tag_bonus := 0
-		for k in RunState.keystones:
-			if k.per_attack_tag_bonus > 0:
-				tag_bonus += k.per_attack_tag_bonus
-		var qualifying := 0
-		for t in RunState.techniques:
-			if t.tags.size() >= 2:
-				qualifying += 1
-		modified += tag_bonus * qualifying
-	assert_eq(modified, 5 + 3 * 2)
-
-func test_hybrid_reactor_bonus_zero_when_attack_zero() -> void:
-	var ks := _make_keystone()
-	ks.per_attack_tag_bonus = 3
-	RunState.keystones = [ks]
-	var t1 := Technique.new()
-	t1.tags = ["risk", "offense"]
-	RunState.techniques = [t1]
-	var modified := 0
-	if modified > 0:
-		modified += 3
-	assert_eq(modified, 0)
-
-func test_hybrid_reactor_zero_when_no_qualifying_techniques() -> void:
-	var ks := _make_keystone()
-	ks.per_attack_tag_bonus = 3
-	RunState.keystones = [ks]
-	var t1 := Technique.new()
-	t1.tags = ["risk"]
-	RunState.techniques = [t1]
-	var modified := 5
-	if modified > 0:
-		var tag_bonus := 0
-		for k in RunState.keystones:
-			if k.per_attack_tag_bonus > 0:
-				tag_bonus += k.per_attack_tag_bonus
-		var qualifying := 0
-		for t in RunState.techniques:
-			if t.tags.size() >= 2:
-				qualifying += 1
-		modified += tag_bonus * qualifying
-	assert_eq(modified, 5)
-
-func test_hybrid_reactor_bonus_not_applied_on_b2b_event() -> void:
-	var ks := _make_keystone()
-	ks.per_attack_tag_bonus = 3
-	RunState.keystones = [ks]
-	var t1 := Technique.new()
-	t1.tags = ["risk", "offense"]
-	RunState.techniques = [t1]
-	var modified := 5
-	var is_bonus_event := true  # event_type == "b2b"
-	if modified > 0 and not is_bonus_event:
-		var tag_bonus := 0
-		for k in RunState.keystones:
-			if k.per_attack_tag_bonus > 0:
-				tag_bonus += k.per_attack_tag_bonus
-		var qualifying := 0
-		for t in RunState.techniques:
-			if t.tags.size() >= 2:
-				qualifying += 1
-		modified += tag_bonus * qualifying
-	assert_eq(modified, 5, "b2b event: tag bonus must not apply")
-
-func test_hybrid_reactor_bonus_not_applied_on_combo_event() -> void:
-	var ks := _make_keystone()
-	ks.per_attack_tag_bonus = 3
-	RunState.keystones = [ks]
-	var t1 := Technique.new()
-	t1.tags = ["risk", "offense"]
-	RunState.techniques = [t1]
-	var modified := 3
-	var is_bonus_event := true  # event_type == "combo"
-	if modified > 0 and not is_bonus_event:
-		var tag_bonus := 0
-		for k in RunState.keystones:
-			if k.per_attack_tag_bonus > 0:
-				tag_bonus += k.per_attack_tag_bonus
-		var qualifying := 0
-		for t in RunState.techniques:
-			if t.tags.size() >= 2:
-				qualifying += 1
-		modified += tag_bonus * qualifying
-	assert_eq(modified, 3, "combo event: tag bonus must not apply")
 
 # ── Reflect keystone ─────────────────────────────────────────────────────
 

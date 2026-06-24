@@ -6,9 +6,9 @@
 script = ExtResource("1")
 id = "gamblers_blade"
 display_name = "Gambler's Blade"
-description = "Attacks have a 25% chance to send +4 and a 25% chance to send -2."
+description = "Attacks have a 50% chance to deal +8 damage and a 50% chance to deal -4 damage."
 cost = 64
 rarity = "epic"
 tags = ["risk"]
 effect_type = "gambler_rng"
-params = {"win_chance": 0.25, "win_bonus": 4, "loss_chance": 0.25, "loss_penalty": 2}
+params = {"win_chance": 0.5, "win_bonus": 8, "loss_chance": 0.5, "loss_penalty": 4}

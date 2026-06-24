@@ -6,9 +6,9 @@
 script = ExtResource("1")
 id = "redzone"
 display_name = "Redzone"
-description = "While above 70% board height, attacks send +3."
+description = "While above 70% board height, attacks send +4."
 cost = 52
 rarity = "rare"
 tags = ["risk"]
 effect_type = "flat"
-params = {"on": "all_clear", "board_above_pct": 0.7, "bonus": 3}
+params = {"on": "all_clear", "board_above_pct": 0.7, "bonus": 4}

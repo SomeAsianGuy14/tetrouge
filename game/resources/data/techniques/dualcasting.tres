@@ -6,9 +6,9 @@
 script = ExtResource("1")
 id = "dualcasting"
 display_name = "Dualcasting"
-description = "T-spin doubles send +3 extra attack."
+description = "T-spin doubles send +2 extra attack."
 cost = 40
 rarity = "common"
 tags = ["tspin"]
 effect_type = "flat"
-params = {"on": "tspin_double", "bonus": 3}
+params = {"on": "tspin_double", "bonus": 2}

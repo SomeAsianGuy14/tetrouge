@@ -6,9 +6,9 @@
 script = ExtResource("1")
 id = "low_pressure"
 display_name = "Low Pressure"
-description = "While your board is below 40% height, line clears send +1 attack."
+description = "While your board is below 40% height, line clears send +2 attack."
 cost = 40
 rarity = "common"
 tags = ["precision"]
 effect_type = "flat"
-params = {"on": "all_clear", "board_below_pct": 0.4, "bonus": 1}
+params = {"on": "all_clear", "board_below_pct": 0.4, "bonus": 2}

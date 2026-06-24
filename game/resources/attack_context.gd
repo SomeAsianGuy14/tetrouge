@@ -15,3 +15,4 @@ extends Resource
 @export var piece_placement_count: int = 0
 @export var enemy_hp_pct: float = 1.0   # 0.0–1.0; used by Finisher
 @export var cleared_enh_counts: Dictionary = {}
+@export var event_type: String = ""

@@ -6,8 +6,8 @@
 script = ExtResource("1")
 id = "simple_shield"
 display_name = "Simple Shield"
-description = "Start each round with 5 shield."
+description = "Start each round with 10 shield."
 flavor_text = "Just a shield"
 is_starter = true
 category = "Starter"
-start_shield = 5
+start_shield = 10

@@ -245,7 +245,11 @@ func start_round(room: DungeonRoom) -> void:
 	_hard_drop_used_this_piece = false
 	_rotations_this_piece = 0
 	_piece_spawn_time = 0.0
-	_burning_board_active = RunState.has_technique("burning_board")
+	_burning_board_active = false
+	for ks in RunState.keystones:
+		if ks.burning_board:
+			_burning_board_active = true
+			break
 	_burning_board_timer = 0.0
 	_flash_step_arr_pending = false
 	_flash_step_arr_active = false
@@ -984,19 +988,6 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 			hud._refresh_mastery_panel()
 
 	var log_tag_bonus := 0
-	if modified > 0 and not is_bonus_event:
-		var tag_bonus := 0
-		for ks in RunState.keystones:
-			if ks.per_attack_tag_bonus > 0:
-				tag_bonus += ks.per_attack_tag_bonus
-		if tag_bonus > 0:
-			var qualifying := 0
-			for t in RunState.techniques:
-				if t.tags.size() >= 2:
-					qualifying += 1
-			var tag_delta := tag_bonus * qualifying
-			modified += tag_delta
-			log_tag_bonus = tag_delta
 
 	if not is_bonus_event and ctx.lines_cleared > 0:
 		for ks in RunState.keystones:
@@ -1056,6 +1047,7 @@ func _build_attack_context(raw_attack: int, event_type: String) -> AttackContext
 	ctx.piece_placement_count = _technique_round_state.pieces_placed if _technique_round_state else 0
 	ctx.enemy_hp_pct = maxf(0.0, 1.0 - quota_accumulated / maxf(1.0, float(current_config.quota))) if current_config else 1.0
 	ctx.cleared_enh_counts = _pending_enh_counts
+	ctx.event_type = event_type
 	match event_type:
 		"single":          ctx.lines_cleared = 1
 		"double":          ctx.lines_cleared = 2
@@ -1073,8 +1065,6 @@ func _handle_technique_flags(flags: Array) -> void:
 		match flag:
 			"flash_step_arr":
 				_flash_step_arr_pending = true
-			"burning_board":
-				_burning_board_active = true
 			"glass_cannon":
 				pass
 			"greedy_hands":
@@ -1084,6 +1074,11 @@ func _handle_technique_flags(flags: Array) -> void:
 					var enh_type: String = flag.split(":")[1]
 					if enh_type != "":
 						_queue_enhancement_grant(enh_type, 1)
+				elif flag.begins_with("shield_per_clear:"):
+					var shield_amount := int(flag.split(":")[1])
+					_garbage_shield += shield_amount
+					if _shield_bar:
+						_shield_bar.update_charges(_garbage_shield)
 
 func _update_round_state_after_eval(ctx: AttackContext, _eval: Dictionary) -> void:
 	if _technique_round_state == null:
@@ -1093,9 +1088,6 @@ func _update_round_state_after_eval(ctx: AttackContext, _eval: Dictionary) -> vo
 		rs.clears_this_round += 1
 		rs.attack_events_this_round += 1
 		rs.total_garbage_sent += ctx.garbage_sent
-
-		if ctx.tspin != "" and RunState.has_keystone("whirl") and current_board:
-			current_board.combo += 1
 
 		if ctx.tspin != "":
 			rs.tspin_count += 1
@@ -1111,6 +1103,7 @@ func _update_round_state_after_eval(ctx: AttackContext, _eval: Dictionary) -> vo
 			rs.last_clear_was_tetris = false
 			rs.tetris_echo_pending = false
 
+		rs.last_clear_type = ctx.event_type
 		if rs.opening_blow_used == false:
 			rs.opening_blow_used = true
 		if rs.follow_up_pending:
@@ -1184,14 +1177,10 @@ static func compute_keystone_flat_bonus(ks: Keystone, event_type: String, techni
 				"tspin_double": b += ks.tspin_double_bonus
 				"tspin_triple": b += ks.tspin_triple_bonus
 			b += ks.tspin_any_bonus
-			if ks.per_technique_tspin_bonus > 0:
-				for t in techniques:
-					if "tspin" in t.tags or "general" in t.tags:
-						b += ks.per_technique_tspin_bonus
 		"b2b":
 			b += ks.b2b_bonus
 	if ks.dizzy and event_type.begins_with("tspin") and event_type != "tspin_mini" and t_rotations > 4:
-		b += 4
+		b += 8
 	return b
 
 func _apply_keystone_flat_bonuses(attack: int, event_type: String) -> int:
@@ -1231,6 +1220,8 @@ func _apply_keystone_multipliers(attack: int, event_type: String) -> int:
 					ks_mult *= ks.pc_first_multiplier
 				elif ks.pc_after_first_multiplier > 0.0 and _pc_count_this_round > 0:
 					ks_mult *= ks.pc_after_first_multiplier
+		if ks.all_attack_multiplier > 0.0:
+			ks_mult *= ks.all_attack_multiplier
 		if ks.risky_business and event_type not in ["b2b", "combo"]:
 			for row_idx in _last_cleared_rows:
 				if row_idx >= TetrisBoard.HIDDEN_ROWS and row_idx < TetrisBoard.HIDDEN_ROWS + 5:
@@ -1545,7 +1536,7 @@ func _apply_keystone_economy() -> int:
 		if ks.end_round_coins > 0:
 			total += ks.end_round_coins
 		if ks.time_coins:
-			total += int(round_timer / 5.0) * 3
+			total += int(round_timer)
 	Economy.coins += total
 	return total
 
@@ -1556,7 +1547,7 @@ func _calculate_surplus_income() -> int:
 			var divisor: int = technique.params.get("divisor", 2)
 			income += surplus_attack / divisor
 	if _greedy_hands_active:
-		income += 8
+		income += 15
 	if _flow and RunState.is_boss_room(_flow.current_room) and RunState.has_technique("bounty_list"):
 		income += 40
 	return income

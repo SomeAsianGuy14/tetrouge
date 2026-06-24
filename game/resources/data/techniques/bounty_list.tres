@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1")
 id = "bounty_list"
-display_name = "Bounty List"
+display_name = "Bounty Connections"
 description = "Gain 40 coins after defeating bosses."
 cost = 40
 rarity = "common"

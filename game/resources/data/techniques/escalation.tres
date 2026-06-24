@@ -6,9 +6,9 @@
 script = ExtResource("1")
 id = "escalation"
 display_name = "Escalation"
-description = "Every 10 pieces placed, your next attack gains +2."
+description = "Every 5 attacks deal an additional 5 damage."
 cost = 40
 rarity = "common"
 tags = ["general", "speed"]
 effect_type = "escalation"
-params = {"bonus": 2}
+params = {"every_n_attacks": 5, "bonus": 5}

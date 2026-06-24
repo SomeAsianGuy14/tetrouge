@@ -6,9 +6,9 @@
 script = ExtResource("1")
 id = "recycling"
 display_name = "Recycling"
-description = "T-spins that clear garbage send +3 attack."
+description = "T-spins that clear garbage send +4 attack."
 cost = 52
 rarity = "rare"
 tags = ["tspin", "garbage"]
 effect_type = "tspin_garbage"
-params = {"bonus": 3}
+params = {"bonus": 4}

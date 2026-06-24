@@ -6,8 +6,8 @@
 script = ExtResource("1")
 id = "holy_cheese"
 display_name = "Holy Cheese"
-description = "Singles deal 2x damage. All other clear types deal no damage."
+description = "Singles deal 3x damage. All other clear types deal no damage."
 flavor_text = "Man it stinks in here"
 category = "Combo"
-single_multiplier = 2.0
+single_multiplier = 3.0
 suppress_non_singles = true

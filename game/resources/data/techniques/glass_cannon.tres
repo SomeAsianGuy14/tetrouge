@@ -6,9 +6,9 @@
 script = ExtResource("1")
 id = "glass_cannon"
 display_name = "Glass Cannon"
-description = "All attacks send +4, but incoming garbage is +2."
+description = "All attacks send +8, but incoming garbage is +2."
 cost = 64
 rarity = "epic"
 tags = ["risk"]
 effect_type = "glass_cannon"
-params = {"attack_bonus": 4}
+params = {"attack_bonus": 8}

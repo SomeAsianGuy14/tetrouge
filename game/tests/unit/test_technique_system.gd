@@ -7,17 +7,21 @@ var _TechniqueEvaluator = preload("res://scenes/game/technique_evaluator.gd")
 var _saved_floor: int
 var _saved_techniques: Array
 var _saved_technique_capacity: int
+var _saved_mastery: Dictionary
 
 func before_each() -> void:
 	_saved_floor = RunState.floor
 	_saved_techniques = RunState.techniques.duplicate()
 	_saved_technique_capacity = RunState.technique_capacity
+	_saved_mastery = RunState.mastery.duplicate(true)
 	RunState.techniques = []
+	RunState._reset_mastery()
 
 func after_each() -> void:
 	RunState.floor = _saved_floor
 	RunState.techniques = _saved_techniques
 	RunState.technique_capacity = _saved_technique_capacity
+	RunState.mastery = _saved_mastery
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -470,41 +474,14 @@ func test_technique_capacity_reset_on_run_reset() -> void:
 
 # ── Burning Board ─────────────────────────────────────────────────────────────
 
-func test_burning_board_adds_attack_bonus_on_clear() -> void:
+func test_burning_board_technique_returns_zero_now_keystone() -> void:
 	var t := Technique.new()
 	t.effect_type = "burning_board"
 	t.params = {"attack_bonus": 3}
 	var ctx := _make_ctx(1)
-	var rs := TechniqueRoundState.new()
-	var result: Dictionary = _TechniqueEvaluator.evaluate([t], ctx, rs)
-	assert_eq(result.attack_delta, 3)
-
-func test_burning_board_no_bonus_on_no_clear() -> void:
-	var t := Technique.new()
-	t.effect_type = "burning_board"
-	t.params = {"attack_bonus": 3}
-	var ctx := _make_ctx(0)
 	var rs := TechniqueRoundState.new()
 	var result: Dictionary = _TechniqueEvaluator.evaluate([t], ctx, rs)
 	assert_eq(result.attack_delta, 0)
-
-func test_burning_board_flag_emitted_on_clear() -> void:
-	var t := Technique.new()
-	t.effect_type = "burning_board"
-	t.params = {"attack_bonus": 3}
-	var ctx := _make_ctx(1)
-	var rs := TechniqueRoundState.new()
-	var result: Dictionary = _TechniqueEvaluator.evaluate([t], ctx, rs)
-	assert_has(result.flags, "burning_board")
-
-func test_burning_board_no_flag_on_no_clear() -> void:
-	var t := Technique.new()
-	t.effect_type = "burning_board"
-	t.params = {"attack_bonus": 3}
-	var ctx := _make_ctx(0)
-	var rs := TechniqueRoundState.new()
-	var result: Dictionary = _TechniqueEvaluator.evaluate([t], ctx, rs)
-	assert_does_not_have(result.flags, "burning_board")
 
 # ── every_nth_clear timing ────────────────────────────────────────────────────
 
@@ -584,22 +561,22 @@ func test_preparation_does_not_fire_on_non_quad_clear() -> void:
 	var result: Dictionary = _TechniqueEvaluator.evaluate([t], ctx, rs)
 	assert_does_not_have(result.flags, "post_quad_enhance:honed")
 
-# ── Backpedaling (post_combo_enhance) ─────────────────────────────────────
+# ── Backpedaling (shield_per_clear_while_combo) ──────────────────────────
 
-func test_backpedaling_queues_reinforced_grant_above_combo_threshold() -> void:
+func test_backpedaling_grants_shield_above_combo_threshold() -> void:
 	var t := Technique.new()
-	t.effect_type = "post_combo_enhance"
-	t.params = {"enhancement": "reinforced", "combo_threshold": 5}
-	var ctx := _make_ctx(1, "", false, 6)
+	t.effect_type = "shield_per_clear_while_combo"
+	t.params = {"combo_threshold": 3, "shield_per_clear": 1}
+	var ctx := _make_ctx(1, "", false, 4)
 	var rs := TechniqueRoundState.new()
 	var result: Dictionary = _TechniqueEvaluator.evaluate([t], ctx, rs)
-	assert_has(result.flags, "post_combo_enhance:reinforced")
+	assert_has(result.flags, "shield_per_clear:1")
 
 func test_backpedaling_does_not_fire_at_or_below_combo_threshold() -> void:
 	var t := Technique.new()
-	t.effect_type = "post_combo_enhance"
-	t.params = {"enhancement": "reinforced", "combo_threshold": 5}
-	var ctx := _make_ctx(1, "", false, 5)
+	t.effect_type = "shield_per_clear_while_combo"
+	t.params = {"combo_threshold": 3, "shield_per_clear": 1}
+	var ctx := _make_ctx(1, "", false, 3)
 	var rs := TechniqueRoundState.new()
 	var result: Dictionary = _TechniqueEvaluator.evaluate([t], ctx, rs)
-	assert_does_not_have(result.flags, "post_combo_enhance:reinforced")
+	assert_does_not_have(result.flags, "shield_per_clear:1")

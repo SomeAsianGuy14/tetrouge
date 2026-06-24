@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1")
 id = "charging_up"
-display_name = "Charging Up"
+display_name = "Supercharge"
 description = "Every 10th piece spawns Amplified."
 flavor_text = "Feel the energy build"
 category = "Enhancement"

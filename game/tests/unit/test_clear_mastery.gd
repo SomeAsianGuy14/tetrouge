@@ -85,7 +85,7 @@ func test_mastery_amplifies_specific_technique() -> void:
 	ctx.lines_cleared = 4
 	var bonus := TechniqueEvaluator._eval_flat(
 		{"on": "quad", "bonus": 2}, ctx, 0.5)
-	assert_eq(bonus, 2 + 6 / 2, "bonus 2 + floor(6/2) = 5")
+	assert_eq(bonus, 2 + 6, "bonus 2 + mastery 6 = 8")
 
 func test_mastery_amplifies_broad_technique_with_highest() -> void:
 	RunState.mastery["single"].level = 2
@@ -94,7 +94,7 @@ func test_mastery_amplifies_broad_technique_with_highest() -> void:
 	ctx.lines_cleared = 1
 	var bonus := TechniqueEvaluator._eval_flat(
 		{"on": "all_clear", "bonus": 1}, ctx, 0.5)
-	assert_eq(bonus, 1 + 8 / 2, "bonus 1 + floor(8/2) = 5")
+	assert_eq(bonus, 1 + 8, "bonus 1 + mastery 8 = 9")
 
 func test_require_b2b_technique_not_amplified() -> void:
 	RunState.mastery["quad"].level = 10

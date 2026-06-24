@@ -6,9 +6,9 @@
 script = ExtResource("1")
 id = "flatline"
 display_name = "Flatline"
-description = "If your board height is 2 or less after a clear, gain +2 attack."
+description = "If your board height is 2 or less after a clear, gain +5 attack."
 cost = 52
 rarity = "rare"
 tags = ["precision"]
 effect_type = "flat"
-params = {"on": "all_clear", "board_below_pct": 0.15, "bonus": 2}
+params = {"on": "all_clear", "board_below_pct": 0.15, "bonus": 5}

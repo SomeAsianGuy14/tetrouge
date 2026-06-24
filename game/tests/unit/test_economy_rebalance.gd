@@ -17,10 +17,10 @@ func test_combo_payout_awards_20_coins() -> void:
 	assert_not_null(t)
 	assert_eq(t.params.get("coins", 0), 20)
 
-func test_green_thumb_awards_4_coins_per_trigger() -> void:
+func test_green_thumb_awards_20_coins_at_threshold() -> void:
 	var t := ResourceRegistry.find_by_id(ResourceRegistry.all_techniques, "green_thumb")
 	assert_not_null(t)
-	assert_eq(t.params.get("coins_per_trigger", 0), 4)
+	assert_eq(t.params.get("coins", 0), 20)
 
 # ── Price verification (spot checks) ─────────────────────────────────────
 
@@ -34,10 +34,10 @@ func test_common_technique_combo_payout_costs_40() -> void:
 	assert_not_null(t)
 	assert_eq(t.cost, 40)
 
-func test_epic_technique_perfect_spark_costs_64() -> void:
+func test_rare_technique_perfect_spark_costs_52() -> void:
 	var t := ResourceRegistry.find_by_id(ResourceRegistry.all_techniques, "perfect_spark")
 	assert_not_null(t)
-	assert_eq(t.cost, 64)
+	assert_eq(t.cost, 52)
 
 func test_cheap_consumable_costs_30() -> void:
 	var c := ResourceRegistry.find_by_id(ResourceRegistry.all_consumables, "power_shard")

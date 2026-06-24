@@ -7,26 +7,26 @@ func test_all_techniques_have_rarity() -> void:
 		assert_true(t.rarity in ["common", "rare", "epic"],
 			"technique %s has invalid rarity '%s'" % [t.id, t.rarity])
 
-func test_common_count_is_31() -> void:
+func test_common_count_is_26() -> void:
 	var count := 0
 	for t in ResourceRegistry.all_techniques:
 		if t.rarity == "common":
 			count += 1
-	assert_eq(count, 31)
+	assert_eq(count, 26)
 
-func test_rare_count_is_14() -> void:
+func test_rare_count_is_19() -> void:
 	var count := 0
 	for t in ResourceRegistry.all_techniques:
 		if t.rarity == "rare":
 			count += 1
-	assert_eq(count, 14)
+	assert_eq(count, 19)
 
-func test_epic_count_is_12() -> void:
+func test_epic_count_is_8() -> void:
 	var count := 0
 	for t in ResourceRegistry.all_techniques:
 		if t.rarity == "epic":
 			count += 1
-	assert_eq(count, 12)
+	assert_eq(count, 8)
 
 # ── Base cost ────────────────────────────────────────────────────────────
 
