@@ -197,7 +197,8 @@ func _add_undiscovered_row(item: Resource) -> void:
 	name_lbl.modulate = Color(0.4, 0.4, 0.4)
 	row.add_child(name_lbl)
 
-	var cond_id: String = item.get("unlock_condition_id") if item.get("unlock_condition_id") else ""
+	var raw_cond = item.get("unlock_condition_id")
+	var cond_id: String = str(raw_cond) if raw_cond != null and raw_cond != "" else ""
 	if cond_id != "":
 		var progress_text := _get_unlock_progress(cond_id)
 		if not progress_text.is_empty():
