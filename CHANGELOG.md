@@ -1,105 +1,44 @@
 # Changelog
 
-## Unreleased
+## [0.4.0] — 2026-06-28
 
 ### New Features
-- **11 new techniques** — Guard (quad shield), Staff Spin (tspin shield), Brace (round-start shield), Volley (first 3 attacks +2), Perfect Placement (+8 on perfect clears), Slow and Steady (+4 on slow clears), Safe Distance (shield near enemy attack), Double Barrel (+6 consecutive tspins), Concentrate (+2 when no garbage received), Whirlwind (+3 per quad technique), Charging Up technique (combo >5 spawns amplified).
-- **8 new keystones** — Investment (1 coin per 10 held after combat), Hardened Steel (2× shield gains), Shield Bash (shield gains deal damage), Cripple (+5s enemy attack interval), Nothing to Waste (+20 coins on kill), Equivalent Exchange (trade techniques in shops), Big Brain (+2 technique slots), Ramping Rhythm (scaling flat bonus over time).
-- **Garbage-reactive techniques** — Thrash (deal 1 damage per garbage line received) and Retribution (next attack deals +3 after receiving garbage) fire when the enemy attacks.
-- **Blood Offering** (Epic) — All attacks deal +3, permanently increasing by +2 each time you defeat an enemy. Bonus persists across rounds within the run.
-- **Relentless Assault** (Epic) — All attacks deal +1 damage, increasing by +1 per attack performed. Resets when the enemy fires garbage.
-- **Concentrate** (Rare) — All attacks deal +2 if you haven't received garbage this round.
-- **Ignition** (Keystone) — All attacks deal ×1.5 damage, but damage is delivered as a burn over 5 seconds instead of instantly.
-- **Master of None** (Keystone) — Lose all techniques and can't gain more. Mastery XP gains are doubled.
-- **Master of One** (Keystone) — Your highest mastery clear deals ×3 damage. All other clears deal no damage.
-
-### Balance
-- **Room distribution rebalanced** — Dungeon floors now generate more combats and fewer encounters. The type pool shifted from 50% encounters / 50% combat to 25% encounters / 62% combat / 13% shop. Floors now have ~3 shops (up from 2), ~7-8 combats, and ~3 encounters.
-
-### New Features
-- **7 new encounter rooms** — Tutor (gain +2 random mastery), Sleeping Beast (optional hard fight for rewards), Laboratory (take up to 3 consumables), Demonic Deal (trade 3 mastery levels for 150 coins), Mimic (disguised as Treasure Chest, triggers combat), Beggar (offer 50 gold for a random technique), Map Room (reveal all fogged rooms).
-- **Encounter reworks** — Museum renamed to Treasure Chest (same look as Mimic for surprise). Pickpocket now spawns a revenge combat room where you can reclaim stolen gold. Head Trauma can be dodged if you have speed-related items.
-- **6 new enemies** — Corrupted Mage, Venomous Archer, Possessed Blade, Insane Adventurer, Giant Frog, Unstable Construct. Plus 3 encounter-specific enemies (Pickpocket, Robbers, Mimic) that don't appear in the general pool.
-- **5 new bosses** — The Ram (attacks ignore shields), The Jester (consecutive same clears deal no damage), The Berserker (attacks faster at lower HP), The Forgotten (hidden HP/attack bars), The Furnace (attacks every 5 seconds).
-- **Final boss pool** — Floor 4 boss is now drawn from a separate pool: The Mutant (combines 2 random boss effects), The Titan (double HP and attack), The Klepto (drains 5 mastery levels), The Origin (scales with enemies killed).
-- **Enemy renames** — Rock Crawler → Stone Crab, The Warden → Dungeon Warden, Void Knight → Fallen Knight, Crimson Drake → Lesser Drake, Iron Shambler → Armored Skeleton.
-
-### Bug Fixes
-- **Popup events no longer fire twice** — Keystone and technique activation popups were being scheduled both during line clear delay and again during attack processing, causing duplicate floating labels. Now popups only fire once per clear.
-- **Run time tracks wall-clock time** — Run time was incorrectly tracking time remaining on the round timer (counting down from 180s). Now uses wall-clock elapsed time from run start, capturing all time including map, shops, and encounters.
-- **Consumables disabled outside combat** — Backpack items can no longer be used from the dungeon map or encounter screens. Buttons are greyed out until entering a fight.
-
-### New Features
-- **Granular clear tracking** — The stats screen and run-end summary now track all clear types individually: Singles, Doubles, Triples, Quads, T-Spin Singles, T-Spin Doubles, T-Spin Triples, and Perfect Clears. The old combined "T-Spins" counter has been replaced with per-type breakdowns.
-- **Best mastery tracking** — The stats screen now shows a "Best Mastery" section under Personal Bests, recording the highest mastery level you've ever reached for each clear type across all runs.
+- **Compendium** — A new screen accessible from the main menu tracks all discovered keystones, techniques, consumables, enemies, and bosses across runs. Five tabs with discovery counters. Discovered items show name and details; undiscovered show "???" with unlock progress if applicable.
+- **17 new techniques** — Guard, Staff Spin, Brace, Volley, Perfect Placement, Slow and Steady, Safe Distance, Double Barrel, Whirlwind, Charging Up (technique), Thrash, Retribution, Concentrate, Blood Offering, Relentless Assault, and more.
+- **19 new keystones** — Investment, Hardened Steel, Shield Bash, Cripple, Nothing to Waste, Equivalent Exchange, Big Brain, Ramping Rhythm, Ignition, Master of None, Master of One, Burning Board (moved from technique), and more.
+- **7 new encounter rooms** — Tutor, Sleeping Beast, Laboratory, Demonic Deal, Mimic (disguised as Treasure Chest), Beggar, Map Room (reveals all fog).
+- **Encounter reworks** — Museum → Treasure Chest. Pickpocket spawns a revenge combat room. Head Trauma dodgeable with speed items.
+- **6 new enemies** — Corrupted Mage, Venomous Archer, Possessed Blade, Insane Adventurer, Giant Frog, Unstable Construct. Plus 3 encounter-specific enemies.
+- **5 new bosses** — The Ram (ignores shields), The Jester (punishes same clears), The Berserker (faster at low HP), The Forgotten (hidden UI), The Furnace (5s fixed attacks).
+- **Final boss pool** — Floor 4 draws from a separate pool: The Mutant (2 random boss effects), The Titan (2× HP/attack), The Klepto (drains mastery), The Origin (scales with kills).
+- **Granular clear tracking** — Stats screen tracks all clear types individually with per-type breakdowns.
+- **Best mastery tracking** — Stats screen shows highest mastery level reached per clear type across runs.
+- **Damage-over-time system** — Ignition keystone delivers damage as a burn over 5 seconds.
+- **Garbage-reactive techniques** — Thrash and Retribution fire when enemy sends garbage.
+- **Persistent technique state** — Blood Offering's damage permanently increases per kill within a run.
+- **Mastery keystones** — Master of None (no techniques, 2× mastery XP) and Master of One (×3 highest mastery, suppress others).
 
 ### Visual
-- **Metallic enhancement cells** — Honed (silver) and Gilded (gold) cells now render with a metallic look: a two-tone gradient with a specular highlight band and sharper bevels, replacing the previous flat fill. The effect is consistent across the board, queue preview, and hold display.
+- **Metallic enhancement cells** — Honed (silver) and Gilded (gold) cells render with a polished metallic look across board, queue, and hold display.
 
 ### Balance
-- **Boss scaling** — Boss enemies now scale with rooms cleared on the current floor (8% per room, same as other enemies). Previously bosses had a fixed quota regardless of how many rooms you'd cleared, which could make them easier than late-floor regular enemies.
-- **Flat technique capacity** — Technique capacity is now fixed at 5 for all floors, instead of growing from 4 to 7. This keeps builds tighter and more deliberate throughout the run.
-- **Technique damage buffs** — Clean Strike +1→+2, Low Pressure +1→+2, Opening Blow +3→+5, Patience +1→+2, Quad Echo +1→+3, Side Strike +1→+3, Flatline +2→+5, Flow Step +2→+5, Golden Blade +2→+4, Recycling +3→+4, Redzone +3→+4, Adrenaline Rush +5→+8, Glass Cannon +4→+8, Reckless Assault +4→+6, Finisher +1→+4. Dualcasting reduced +3→+2.
-- **Keystone buffs** — Simple Sword/Wand +2→+3, Simple Shield 5→10, Legionnaire's Shield 10→20, Simplicity 2×→3×, Holy Cheese 2×→3×, Dizzy +4→+8, Golden Watch now earns 1 coin per second remaining (up from 1 per 5 seconds).
-- **Rarity moves** — Sharpen, Barricade, Finisher moved to Rare. Perfect Spark, Compact Setup moved from Epic to Rare (Compact Setup threshold reduced to 30%).
-- **Technique reworks** — Backpedaling now grants 1 shield per clear while combo >3 (was: next piece Reinforced). Escalation fires every 5 attacks for +5 (was: every 10 pieces for +2). Switch-Up grants +2 when clear type differs from previous (was: hard-drop/soft-drop alternation). Green Thumb awards 20 coins after 6 garbage lines (was: 4 coins per 5 lines). Combo Spike triggers every 3rd combo clear (was: 5th). Delayed Cannon → One-Two Punch: +6 when clear matches previous (was: alternating quad bonus). Gambler's Blade 50/50 for +8/-4 (was: 25/25 for +4/-2).
-- **Burning Board** moved from Epic technique to keystone. Now multiplies all damage by ×1.5 (was: flat +3). Self-damage unchanged.
-- **Enchant** moved from keystone to Rare technique. Now +3 damage per tspin-tagged technique on T-Spins (was: +2 per tspin/general technique as keystone).
-- **Sticky Fingers** (was Greedy Hands) coin gain increased from 8 to 15.
-- **Removed** — Chain Starter, Mini Spark, Chain Battery, Four Disciplines (techniques); Hybrid Reactor, Whirl, Flexible (keystones).
-- **Renames** — Coupon → Haggling, Bounty List → Bounty Connections, Hone → Slash, Smooth Haggling → Upcharging, Simple Flail → Simple Bow, Mace and Chain → Recurve Bow, Charging Up → Supercharge.
+- **Major technique rebalance** — 16 technique damage buffs, 7 technique reworks, 5 rarity moves. Dualcasting reduced.
+- **Major keystone rebalance** — Simple Sword/Wand +3, Simple Shield 10, Legionnaire's Shield 20, Simplicity/Holy Cheese 3×, Dizzy +8, Golden Watch 1 coin/second.
+- **Burning Board** moved to keystone with ×1.5 all-damage multiplier. **Enchant** moved to rare technique (+3 per tspin technique).
+- **Boss scaling** — Bosses now scale with rooms cleared (8% per room), same as other enemies.
+- **Flat technique capacity** — Fixed at 5 for all floors (was 4→7).
+- **Room distribution rebalanced** — More combats, fewer encounters. ~3 shops, ~7-8 combats, ~3 encounters per floor.
+- **Removed** — Chain Starter, Mini Spark, Chain Battery, Four Disciplines, Hybrid Reactor, Whirl, Flexible, Gilded Touch.
+- **Renames** — Coupon → Haggling, Bounty List → Bounty Connections, Hone → Slash, Smooth Haggling → Upcharging, Simple Flail → Simple Bow, Mace and Chain → Recurve Bow, Charging Up → Supercharge. Enemy renames: Rock Crawler → Stone Crab, The Warden → Dungeon Warden, Void Knight → Fallen Knight, Crimson Drake → Lesser Drake, Iron Shambler → Armored Skeleton.
 
 ### Bug Fixes
-- **Total damage tracked correctly** — Total run damage was being overwritten with only the final round's damage at victory, making it look like the game tracked highest single-round damage instead of cumulative damage. Fixed by removing the overwrite; incremental tracking was already correct.
-- **Enhancement overflow no longer dropped** — When two enhancement sources (technique + keystone, or periodic + consumable) fired on the same piece, the lower-priority enhancement was silently lost. It is now queued as a 1-piece grant and applied to the next unenhanced piece.
-- **Shield bar overflow indicator visible** — The "+N" overflow text on the shield bar was drawn inside the bar area where it was hidden by full shield blocks. Moved above the bar.
-
-### New Features
-- **Technique rarity** — Techniques now have 3 rarity tiers: Common (white), Rare (blue), and Epic (purple). Rarity determines base cost (40/52/64), shop appearance frequency (commons appear most often), and name color across all UI. Shop prices vary ±4 around the base. Wishing Well and Library also use weighted draws.
-- **Clear mastery** — Performing clears in combat now builds XP toward permanent attack bonuses. 7 mastery tracks (Singles, Doubles, Triples, Quads, T-Spin Single/Double/Triple) each grant +1 flat attack per level. XP thresholds escalate with level. Mastery also amplifies matching techniques (+1 per 2 mastery levels). A collapsible mastery panel in the HUD shows progress, and level-up popups appear when thresholds are crossed.
-- **Persistent collection HUD** — Your keystones, techniques, backpack, and coin balance are now visible during encounters and the dungeon map, so you can make informed decisions at the Altar, Wishing Well, Library, and Museum. The panel is hidden during shop visits to avoid duplicating the shop's own collection display.
-- **Wishing Well rework** — The Wishing Well no longer awards gold. Instead, each successful throw drops a random item: 60% consumable, 30% technique, 10% keystone. Rewards are capped at 3 per visit. The well handles full backpacks, technique caps, and exhausted pools gracefully.
-
-### Balance
-- **Economy rebalance** — All income sources buffed to match gilded-tier levels. Base payout increased from 4 to 15. Starting coins increased from 8 to 30. Keystone income buffed (Slightly Magical Coin 1→5, Magical Coin 4→15, Golden Watch 1→3 coins per 5 seconds). Economy technique rewards buffed (Combo Payout 5→20, Greedy Hands 2→8, Green Thumb 1→4 per trigger, Bounty List 10→40). Surplus attack conversion improved (÷3 → ÷2).
-- **Price rescaling** — Technique costs raised from 3–8 to 40–60 range. Consumable costs raised from 4–6 to 30–40 range. Prices scale proportionally so relative ordering is preserved.
-- **Bigger shops** — Shops now display 5 technique slots and 3 consumable slots (up from 3 and 2). Each rare shop visit feels like a bigger event with more choices.
-- **Guaranteed shops** — Each dungeon floor now guarantees at least 2 shops (one per spine path). You'll always have somewhere to spend.
-- **Interest removed** — The interest-on-unspent-coins mechanic has been removed. It was designed for frequent shop visits and no longer serves a purpose with rarer shops.
-- **Vouchers removed** — The voucher system (Interest Cap Up, Expanded Shop, Consumable Expert, Bonus Round) has been removed. Their beneficial effects are now baked into the default shop and backpack sizes.
-
-### New Features
-- **Dungeon floor exploration** — Runs are now structured as 4 floors, each represented by a 6×6 dungeon map you navigate room by room. You start at the bottom-left corner and work toward the top-right Boss room, which is always visible from the start.
-- **Dungeon map** — Each floor has 8–12 rooms of varying sizes. Fog of war hides rooms you can't reach yet; cleared-room neighbors are revealed and show their type. You choose your own path.
-- **Room variety** — Eight new encounter rooms alongside the standard combat rooms and shops: Wishing Well (gamble coins for a payout), Altar of Techniques (sacrifice a technique for a random one), Altar of Keystones (sacrifice a keystone for a random one), Library (pick a free technique from a pool of 10), Robbers (surrender gold or fight an Elite), Unfortunate Head Trauma (lose a random technique), Pickpocket (lose half your coins), and Museum (claim a free keystone on display).
-- **Within-floor scaling** — The more combat rooms you clear before fighting the boss, the tougher (and more rewarding) later encounters become. Boss difficulty is fixed per floor, giving you a meaningful choice between a riskier longer path and a quicker beeline.
-- **Shop as optional room** — The shop is now a map room you discover and opt into rather than appearing automatically after every fight.
-- **Run stats screen** — After every run (win or loss) a stats summary shows Total Damage, Best Combo, Best B2B, Quads, T-Spins, Perfect Clears, Run Time, and Most Common Clear. Personal-best values are marked with a gold ★ PB badge. A build summary lists the keystones and techniques you were running.
-- **Stats menu** — A new Stats button on the main menu opens a persistent stats screen with three sections: Career (runs played, victories, best ascension), Personal Bests (best single-run damage, longest combo, longest B2B), and Lifetime Totals (total damage, quads, T-spins, total play time).
-- **The Best Defense (keystone)** — Converts 25% of each attack into garbage shield charges. Moved from the technique pool to the keystone pool to better reflect its power level.
-
-### Balance
-- **4 floors replace 5 stages** — Run length is unchanged overall; enemy quota now scales exponentially per floor (same formula, retuned for 4 tiers). Technique capacity grows from 4 at floor 1 to 7 at floor 4.
-
-### Balance
-- **Enemy HP scales exponentially** — Enemy HP now doubles each stage (base × 2ⁿ⁻¹) with a growing per-round offset, replacing the previous flat +15/stage formula. Stage 1 is unchanged (20–44 HP). Stage 2 rises to 40–82, stage 3 to 80–140, stage 4 to 160–238, and stage 5 to 320–416. Builds that came online early no longer trivialise mid-game enemies.
-
-### Bug Fixes
-- **All dungeon rooms are now reachable** — Rooms that were placed with no adjacency path from the start room are now automatically removed before the floor is finalised, so you can never encounter a room on the map that is permanently inaccessible.
-- **Defeating the Robbers now clears the encounter room** — Choosing to fight and winning the Elite combat now correctly marks the Robbers encounter room as cleared so it no longer shows as incomplete on the dungeon map.
-- **Library shows its technique list** — The scroll area in the Library encounter now constrains button widths correctly so all available techniques are visible and selectable.
-- **Wishing Well probability now accumulates correctly** — Each failed throw reliably increases the success chance by 1%; the display now reflects the true running probability.
-- **Enemy health bar no longer persists into the shop or encounter rooms** — The enemy display, attack bar, and shield bar are now properly freed when leaving a combat room.
-- **Boss room tile is now clickable** — The Boss tile on the dungeon map was enabled when adjacent but had no press handler wired; it now correctly navigates into the boss fight.
-- **Continue now returns to the dungeon map** — Pressing Continue from the main menu no longer crashes; the game resumes at the floor map so you can choose your next room.
-- **Combat now works correctly after leaving an encounter room** — The encounter room overlay was not being freed when leaving via the Leave/Dismiss button, causing it to cover the combat board on the next fight. The overlay is now properly removed.
-- **RunFlow state machine** — Room-transition logic (routing, clearing, floor advancement, victory/failure decisions) is now in a dedicated `RunFlow` class that can be fully unit tested without a scene tree. RunManager delegates to it via signals.
-- **Dungeon floors are now uniquely shaped every run** — Floor generation previously fell back to a fixed L-shaped template on almost every seed because random room placement rarely produced a connected path between the start and boss corners. Floors now use a spine-first approach: a seeded random path from start to boss is always placed first, then 1–3 branch rooms grow outward from it, producing a varied branching map that is always fully connected.
-- **Stats and ascension records now persist when debugging** — Profile data is loaded at startup (in the autoload) instead of only when the main menu scene initialises, so records are available regardless of which scene you enter from.
-- **Build summary shows correct names** — The keystone and technique names on the run-end screen now display the item's display name instead of showing a blank (the internal `name` property of a bare Resource).
-
-### Removed
-- **Gilded Touch (technique)** — Removed from the technique pool.
+- **Total damage tracked correctly** — Was overwriting run total with last round's damage.
+- **Enhancement overflow no longer dropped** — Blocked enhancements now queue for next piece.
+- **Shield bar overflow indicator visible** — Moved above the bar.
+- **Popup events no longer fire twice** — Duplicate keystone/technique popups fixed.
+- **Run time tracks wall-clock time** — Was tracking timer remaining instead of elapsed.
+- **Consumables disabled outside combat** — Backpack greyed out on map/encounters.
+- **Victories stat no longer inflated by tests** — Test suite now saves/restores profile correctly.
 
 ## [0.3.0] — 2026-06-15
 
