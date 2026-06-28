@@ -84,6 +84,9 @@ var _locked_pivot_col: int = -1
 var _piece_spawn_time: float = 0.0
 var _burning_board_timer: float = 0.0
 var _burning_board_active: bool = false
+var _burn_pool: float = 0.0
+var _burn_active: bool = false
+var _burn_duration: float = 5.0
 var _deferred_reflect_lines: int = 0
 var _flash_step_arr_pending: bool = false
 var _flash_step_arr_active: bool = false
@@ -257,14 +260,23 @@ func start_round(room: DungeonRoom) -> void:
 	_rotations_this_piece = 0
 	_piece_spawn_time = 0.0
 	_burning_board_active = false
+	_burn_active = false
+	_burn_pool = 0.0
 	for ks in RunState.keystones:
 		if ks.burning_board:
 			_burning_board_active = true
-			break
+		if ks.burn_duration > 0.0:
+			_burn_active = true
+			_burn_duration = ks.burn_duration
 	_burning_board_timer = 0.0
 	_flash_step_arr_pending = false
 	_flash_step_arr_active = false
 	_greedy_hands_active = RunState.has_technique("greedy_hands")
+	for ks in RunState.keystones:
+		if ks.master_of_none:
+			RunState.techniques.clear()
+			RunState.technique_capacity = 0
+			RunState.mastery_xp_multiplier = 2
 	_round_technique_coins = 0
 	_round_enhancement_coins = 0
 	_reset_enhancement_round_state()
@@ -557,6 +569,7 @@ func _process(delta: float) -> void:
 	_handle_input()
 	_tick_timer(delta)
 	_tick_burning_board(delta)
+	_tick_burn(delta)
 	_tick_enemy_garbage(delta)
 	_drain_popup_schedule(delta)
 	if _enemy_display and current_config:
@@ -644,7 +657,8 @@ func _tick_enemy_garbage(delta: float) -> void:
 	if _enemy_timer >= _next_garbage_interval:
 		_enemy_timer = 0.0
 		if current_config.reflect_ratio <= 0.0:
-			var n := randi_range(current_config.garbage_lines_min, current_config.garbage_lines_max)
+			var raw_lines := randi_range(current_config.garbage_lines_min, current_config.garbage_lines_max)
+			var n := raw_lines
 			var shields_bypassed: bool = current_config.boss_modifier != null and current_config.boss_modifier.ignore_shields
 			if n > 0 and _garbage_shield > 0 and not shields_bypassed:
 				var absorbed := mini(n, _garbage_shield)
@@ -665,12 +679,36 @@ func _tick_enemy_garbage(delta: float) -> void:
 			_notify_attack_bar()
 			if _technique_round_state:
 				_technique_round_state.after_receive_pending = true
+				_technique_round_state.garbage_received_this_round = true
+				_technique_round_state.relentless_counter = 0
+			_on_garbage_received(raw_lines)
 		_next_garbage_interval = randf_range(current_config.garbage_interval_min, current_config.garbage_interval_max)
 		if current_config.boss_modifier and current_config.boss_modifier.scaling_interval:
 			var hp_pct := maxf(0.2, 1.0 - quota_accumulated / maxf(1.0, float(current_config.quota)))
 			_next_garbage_interval *= hp_pct
 		if _enemy_display:
 			_enemy_display.update_windup(0.0, _next_garbage_interval)
+
+func _on_garbage_received(lines: int) -> void:
+	if lines <= 0:
+		return
+	for t in RunState.techniques:
+		match t.effect_type:
+			"on_garbage_damage":
+				var bonus: int = t.params.get("bonus", 1)
+				var dmg := lines * bonus
+				quota_accumulated += dmg
+				if _enemy_display:
+					_enemy_display.update_hp(quota_accumulated)
+				if _run_stats:
+					_run_stats.total_damage += dmg
+				if current_config and quota_accumulated >= current_config.quota:
+					_end_round(true)
+					return
+			"on_garbage_buff":
+				if _technique_round_state:
+					_technique_round_state.retribution_pending = true
+					_technique_round_state.retribution_bonus = t.params.get("bonus", 3)
 
 func _build_technique_states() -> Dictionary:
 	var states := {}
@@ -710,6 +748,21 @@ func _tick_burning_board(delta: float) -> void:
 		_burning_board_timer -= 5.0
 		var col := randi() % current_config.board_width
 		current_board.insert_garbage_rows(1, col)
+
+func _tick_burn(delta: float) -> void:
+	if not _burn_active or _burn_pool <= 0.0:
+		return
+	var drain := _burn_pool / _burn_duration * delta
+	drain = minf(drain, _burn_pool)
+	_burn_pool -= drain
+	if _burn_pool < 0.01:
+		drain += _burn_pool
+		_burn_pool = 0.0
+	quota_accumulated += drain
+	if _enemy_display:
+		_enemy_display.update_hp(quota_accumulated)
+	if current_config and quota_accumulated >= current_config.quota:
+		_end_round(true)
 
 # ── Attack signal handler ─────────────────────────────────────────────────
 
@@ -1059,7 +1112,10 @@ func _on_attack_generated(raw_attack: int, event_type: String) -> void:
 			log_tag_bonus, modified)
 
 	var to_quota: int = _drain_attack(modified)
-	quota_accumulated += to_quota
+	if _burn_active and to_quota > 0:
+		_burn_pool += to_quota
+	else:
+		quota_accumulated += to_quota
 	surplus_attack = maxi(0, int(quota_accumulated) - current_config.quota)
 	if _enemy_display:
 		_enemy_display.update_hp(quota_accumulated)
@@ -1177,6 +1233,9 @@ func _update_round_state_after_eval(ctx: AttackContext, _eval: Dictionary) -> vo
 			rs.flow_step_pending = false
 		if rs.good_planning_pending:
 			rs.good_planning_pending = false
+		if rs.retribution_pending:
+			rs.retribution_pending = false
+		rs.relentless_counter += 1
 
 		if not rs.combo_payout_used:
 			for t in RunState.techniques:
@@ -1212,6 +1271,19 @@ func _is_attack_suppressed(event_type: String) -> bool:
 	if current_config and current_config.boss_modifier and current_config.boss_modifier.suppress_same_clear:
 		if _technique_round_state and _technique_round_state.last_clear_type != "" and event_type == _technique_round_state.last_clear_type:
 			return true
+	for ks in RunState.keystones:
+		if ks.master_of_one:
+			var best_level := 0
+			var best_tracks: Array = []
+			for track in RunState.MASTERY_TRACKS:
+				var level: int = RunState.get_mastery_level(track)
+				if level > best_level:
+					best_level = level
+					best_tracks = [track]
+				elif level == best_level and level > 0:
+					best_tracks.append(track)
+			if best_level > 0 and event_type not in best_tracks:
+				return true
 	return false
 
 static func compute_keystone_flat_bonus(ks: Keystone, event_type: String, techniques: Array, t_rotations: int) -> int:
@@ -1277,6 +1349,8 @@ func _apply_keystone_multipliers(attack: int, event_type: String) -> int:
 					ks_mult *= ks.pc_after_first_multiplier
 		if ks.all_attack_multiplier > 0.0:
 			ks_mult *= ks.all_attack_multiplier
+		if ks.master_of_one and event_type in RunState.MASTERY_TRACKS:
+			ks_mult *= 3.0
 		if ks.risky_business and event_type not in ["b2b", "combo"]:
 			for row_idx in _last_cleared_rows:
 				if row_idx >= TetrisBoard.HIDDEN_ROWS and row_idx < TetrisBoard.HIDDEN_ROWS + 5:
@@ -1579,6 +1653,13 @@ func _end_round(success: bool) -> void:
 		"techniques": _round_technique_coins + surplus_income + keystone_income,
 		"enhancements": _round_enhancement_coins,
 	}
+
+	for t in RunState.techniques:
+		if t.effect_type == "blood_offering":
+			var kill_bonus: int = t.params.get("kill_bonus", 2)
+			if not RunState.technique_state.has(t.id):
+				RunState.technique_state[t.id] = {"bonus": t.params.get("base_bonus", 3)}
+			RunState.technique_state[t.id]["bonus"] += kill_bonus
 
 	_flow.resolve_combat(true)
 

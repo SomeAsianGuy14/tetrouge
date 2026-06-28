@@ -3,6 +3,18 @@
 ## Unreleased
 
 ### New Features
+- **Garbage-reactive techniques** — Thrash (deal 1 damage per garbage line received) and Retribution (next attack deals +3 after receiving garbage) fire when the enemy attacks.
+- **Blood Offering** (Epic) — All attacks deal +3, permanently increasing by +2 each time you defeat an enemy. Bonus persists across rounds within the run.
+- **Relentless Assault** (Epic) — All attacks deal +1 damage, increasing by +1 per attack performed. Resets when the enemy fires garbage.
+- **Concentrate** (Rare) — All attacks deal +2 if you haven't received garbage this round.
+- **Ignition** (Keystone) — All attacks deal ×1.5 damage, but damage is delivered as a burn over 5 seconds instead of instantly.
+- **Master of None** (Keystone) — Lose all techniques and can't gain more. Mastery XP gains are doubled.
+- **Master of One** (Keystone) — Your highest mastery clear deals ×3 damage. All other clears deal no damage.
+
+### Balance
+- **Room distribution rebalanced** — Dungeon floors now generate more combats and fewer encounters. The type pool shifted from 50% encounters / 50% combat to 25% encounters / 62% combat / 13% shop. Floors now have ~3 shops (up from 2), ~7-8 combats, and ~3 encounters.
+
+### New Features
 - **7 new encounter rooms** — Tutor (gain +2 random mastery), Sleeping Beast (optional hard fight for rewards), Laboratory (take up to 3 consumables), Demonic Deal (trade 3 mastery levels for 150 coins), Mimic (disguised as Treasure Chest, triggers combat), Beggar (offer 50 gold for a random technique), Map Room (reveal all fogged rooms).
 - **Encounter reworks** — Museum renamed to Treasure Chest (same look as Mimic for surprise). Pickpocket now spawns a revenge combat room where you can reclaim stolen gold. Head Trauma can be dodged if you have speed-related items.
 - **6 new enemies** — Corrupted Mage, Venomous Archer, Possessed Blade, Insane Adventurer, Giant Frog, Unstable Construct. Plus 3 encounter-specific enemies (Pickpocket, Robbers, Mimic) that don't appear in the general pool.

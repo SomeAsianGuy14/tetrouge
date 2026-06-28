@@ -45,6 +45,9 @@ const all_keystones: Array = [
 	preload("res://resources/data/keystones/burning_board.tres"),
 	preload("res://resources/data/keystones/reflect.tres"),
 	preload("res://resources/data/keystones/the_best_defense.tres"),
+	preload("res://resources/data/keystones/ignition.tres"),
+	preload("res://resources/data/keystones/master_of_none.tres"),
+	preload("res://resources/data/keystones/master_of_one.tres"),
 ]
 
 const all_techniques: Array = [
@@ -101,6 +104,10 @@ const all_techniques: Array = [
 	preload("res://resources/data/techniques/spinning_strike.tres"),
 	preload("res://resources/data/techniques/switch_up.tres"),
 	preload("res://resources/data/techniques/tetris_echo.tres"),
+	preload("res://resources/data/techniques/thrash.tres"),
+	preload("res://resources/data/techniques/retribution.tres"),
+	preload("res://resources/data/techniques/blood_offering.tres"),
+	preload("res://resources/data/techniques/relentless_assault.tres"),
 ]
 
 const all_consumables: Array = [

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Keystone" format=3]
+
+[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "ignition"
+display_name = "Ignition"
+description = "All attacks deal x1.5 damage but damage is dealt as a burn over 5 seconds."
+flavor_text = "Slow and steady wins the race"
+category = "Risk"
+all_attack_multiplier = 1.5
+burn_duration = 5.0

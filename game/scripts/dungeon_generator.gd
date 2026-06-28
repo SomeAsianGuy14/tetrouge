@@ -17,9 +17,11 @@ const ROOM_SIZES := [
 # Room type pool for interior rooms (shops placed separately to guarantee 2 per floor)
 const INTERIOR_TYPES := [
 	DungeonRoom.TYPE_COMBAT_SMALL,
+	DungeonRoom.TYPE_COMBAT_SMALL,
+	DungeonRoom.TYPE_COMBAT_BIG,
 	DungeonRoom.TYPE_COMBAT_BIG,
 	DungeonRoom.TYPE_COMBAT_ELITE,
-	DungeonRoom.TYPE_ENCOUNTER,
+	DungeonRoom.TYPE_SHOP,
 	DungeonRoom.TYPE_ENCOUNTER,
 	DungeonRoom.TYPE_ENCOUNTER,
 ]

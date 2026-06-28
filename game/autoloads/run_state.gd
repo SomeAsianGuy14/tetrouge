@@ -41,6 +41,8 @@ var used_boss_enemy_ids: Array = []
 var used_keystone_ids: Array = []
 
 var mastery: Dictionary = {}
+var technique_state: Dictionary = {}
+var mastery_xp_multiplier: int = 1
 
 var shop_technique_slots: int = 5
 var consumable_capacity: int = 3
@@ -64,6 +66,8 @@ func reset() -> void:
 	used_boss_enemy_ids.clear()
 	used_keystone_ids.clear()
 	_reset_mastery()
+	technique_state.clear()
+	mastery_xp_multiplier = 1
 	shop_technique_slots = 5
 	consumable_capacity = 3
 	technique_capacity = 5
@@ -154,7 +158,7 @@ func get_mastery_threshold(track: String) -> int:
 func grant_mastery_xp(track: String) -> int:
 	if track not in mastery:
 		return 0
-	mastery[track].xp += 1
+	mastery[track].xp += mastery_xp_multiplier
 	var threshold := get_mastery_threshold(track)
 	if mastery[track].xp >= threshold:
 		mastery[track].xp -= threshold

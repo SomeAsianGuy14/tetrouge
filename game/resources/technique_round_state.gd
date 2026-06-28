@@ -27,6 +27,12 @@ var switch_up_armed: bool = false         # Switch-Up: previous piece was hard-d
 var last_clear_type: String = ""         # Track previous clear type for Switch-Up/One-Two Punch
 var last_stand_triggered: bool = false    # Last Stand: shield grant once per round
 
+# Garbage-reactive
+var retribution_pending: bool = false
+var retribution_bonus: int = 0
+var relentless_counter: int = 0
+var garbage_received_this_round: bool = false
+
 # Used flags (prevent double-triggering within a round)
 var opening_blow_used: bool = false
 var combo_payout_used: bool = false

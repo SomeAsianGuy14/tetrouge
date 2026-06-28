@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Technique" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "blood_offering"
+display_name = "Blood Offering"
+description = "All attacks deal +3. Whenever you defeat an enemy permanently increase this technique's damage by 2."
+cost = 64
+rarity = "epic"
+tags = ["risk"]
+effect_type = "blood_offering"
+params = {"base_bonus": 3, "kill_bonus": 2}

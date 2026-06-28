@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Technique" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "relentless_assault"
+display_name = "Relentless Assault"
+description = "All attacks deal +1 damage increased by 1 for every attack performed. Resets on enemy attack."
+cost = 64
+rarity = "epic"
+tags = ["risk"]
+effect_type = "relentless_assault"
+params = {"base": 1}

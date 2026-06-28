@@ -62,3 +62,5 @@ res://resources/data/techniques/tetris_echo.tres
 res://scenes/dungeon/encounter_room.gd
 res://scenes/game/enemy_display.gd
 res://scripts/run_flow.gd
+res://scenes/game/hud.gd
+res://scripts/run_stats.gd

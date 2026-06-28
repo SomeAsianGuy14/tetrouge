@@ -230,10 +230,32 @@ static func _eval_attack(t: Resource, ctx: AttackContext, rs: TechniqueRoundStat
 					tspin_count += 1
 			return p.get("bonus_per_technique", 3) * tspin_count
 
+		"blood_offering":
+			if not is_clear:
+				return 0
+			var base_bonus: int = p.get("base_bonus", 3)
+			var state: Dictionary = RunState.technique_state.get(t.id, {})
+			return state.get("bonus", base_bonus)
+
+		"relentless_assault":
+			if not is_clear:
+				return 0
+			return p.get("base", 1) + rs.relentless_counter
+
+		"on_garbage_buff":
+			if is_clear and rs.retribution_pending:
+				return rs.retribution_bonus
+			return 0
+
+		"concentrate":
+			if is_clear and not rs.garbage_received_this_round:
+				return p.get("bonus", 2)
+			return 0
+
 		"economy", "coupon", "specialist_discount", "smooth_haggling", "bounty_list", \
 		"combo_payout", "green_thumb", "piece_enhancer", \
 		"attack_to_shield", "height_shield", "post_quad_enhance", "post_combo_enhance", \
-		"shield_per_clear_while_combo":
+		"shield_per_clear_while_combo", "on_garbage_damage":
 			return 0  # shop/economy/shield/grant effects only — handled outside evaluator
 
 		_:

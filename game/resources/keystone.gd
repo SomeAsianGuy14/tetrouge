@@ -69,6 +69,9 @@ extends Resource
 @export var attack_to_shield_pct: float = 0.0
 @export var all_attack_multiplier: float = 0.0
 @export var burning_board: bool = false
+@export var burn_duration: float = 0.0
+@export var master_of_none: bool = false
+@export var master_of_one: bool = false
 
 # ── Piece enhancements ──────────────────────────────────────────────────────
 @export var piece_enhance_every_n: int = 0
