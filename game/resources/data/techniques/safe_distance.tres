@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Technique" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "safe_distance"
+display_name = "Safe Distance"
+description = "Clears during the last 10 seconds of enemy attack bar grant 4 shield."
+cost = 52
+rarity = "rare"
+tags = ["general"]
+effect_type = "safe_distance_shield"
+params = {"seconds": 10, "shield": 4}

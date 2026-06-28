@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="Keystone" format=3]
+
+[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "ramping_rhythm"
+display_name = "Ramping Rhythm"
+description = "All attacks deal +1 damage, increasing by 1 every 3 seconds."
+flavor_text = "Building momentum"
+category = "Risk"
+ramping_rhythm = true

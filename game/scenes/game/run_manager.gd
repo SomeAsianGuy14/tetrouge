@@ -87,6 +87,8 @@ var _burning_board_active: bool = false
 var _burn_pool: float = 0.0
 var _burn_active: bool = false
 var _burn_duration: float = 5.0
+var _ramping_rhythm_timer: float = 0.0
+var _ramping_rhythm_active: bool = false
 var _deferred_reflect_lines: int = 0
 var _flash_step_arr_pending: bool = false
 var _flash_step_arr_active: bool = false
@@ -262,12 +264,16 @@ func start_round(room: DungeonRoom) -> void:
 	_burning_board_active = false
 	_burn_active = false
 	_burn_pool = 0.0
+	_ramping_rhythm_timer = 0.0
+	_ramping_rhythm_active = false
 	for ks in RunState.keystones:
 		if ks.burning_board:
 			_burning_board_active = true
 		if ks.burn_duration > 0.0:
 			_burn_active = true
 			_burn_duration = ks.burn_duration
+		if ks.ramping_rhythm:
+			_ramping_rhythm_active = true
 	_burning_board_timer = 0.0
 	_flash_step_arr_pending = false
 	_flash_step_arr_active = false
@@ -393,8 +399,11 @@ func _build_round_config(room: DungeonRoom) -> RoundConfig:
 			_lmin = BOSS_LINES_MIN;     _lmax = BOSS_LINES_MAX
 	var _asc := AscensionManager.get_modifiers(AscensionManager.current_level)
 	var _interval_scalar := (1.0 / 1.25) if _asc.get("faster_attacks", false) else 1.0
-	cfg.garbage_interval_min = _imin * _stage_scalar * _interval_scalar
-	cfg.garbage_interval_max = _imax * _stage_scalar * _interval_scalar
+	var _ks_interval_bonus := 0.0
+	for ks in RunState.keystones:
+		_ks_interval_bonus += ks.enemy_interval_bonus
+	cfg.garbage_interval_min = _imin * _stage_scalar * _interval_scalar + _ks_interval_bonus
+	cfg.garbage_interval_max = _imax * _stage_scalar * _interval_scalar + _ks_interval_bonus
 	cfg.garbage_lines_min = _lmin + _lines_bonus + _asc.get("extra_lines", 0)
 	cfg.garbage_lines_max = _lmax + _lines_bonus + _asc.get("extra_lines", 0)
 
@@ -570,6 +579,8 @@ func _process(delta: float) -> void:
 	_tick_timer(delta)
 	_tick_burning_board(delta)
 	_tick_burn(delta)
+	if _ramping_rhythm_active:
+		_ramping_rhythm_timer += delta
 	_tick_enemy_garbage(delta)
 	_drain_popup_schedule(delta)
 	if _enemy_display and current_config:
@@ -688,6 +699,23 @@ func _tick_enemy_garbage(delta: float) -> void:
 			_next_garbage_interval *= hp_pct
 		if _enemy_display:
 			_enemy_display.update_windup(0.0, _next_garbage_interval)
+
+func _apply_shield_gain(amount: int) -> void:
+	if amount <= 0:
+		return
+	for ks in RunState.keystones:
+		if ks.shield_multiplier > 1.0:
+			amount = int(amount * ks.shield_multiplier)
+	_garbage_shield += amount
+	if _shield_bar:
+		_shield_bar.update_charges(_garbage_shield)
+	for ks in RunState.keystones:
+		if ks.shield_to_damage:
+			quota_accumulated += amount
+			if _enemy_display:
+				_enemy_display.update_hp(quota_accumulated)
+			if current_config and quota_accumulated >= current_config.quota:
+				_end_round(true)
 
 func _on_garbage_received(lines: int) -> void:
 	if lines <= 0:
@@ -819,6 +847,9 @@ func _reset_enhancement_round_state() -> void:
 	_garbage_shield = 0
 	for ks in RunState.keystones:
 		_garbage_shield += ks.start_shield
+	for t in RunState.techniques:
+		if t.effect_type == "round_start_shield":
+			_garbage_shield += t.params.get("shield", 2)
 	_pending_enh_counts = {}
 
 func _on_piece_spawned(_piece_type: String) -> void:
@@ -1156,6 +1187,9 @@ func _build_attack_context(raw_attack: int, event_type: String) -> AttackContext
 	ctx.enemy_hp_pct = maxf(0.0, 1.0 - quota_accumulated / maxf(1.0, float(current_config.quota))) if current_config else 1.0
 	ctx.cleared_enh_counts = _pending_enh_counts
 	ctx.event_type = event_type
+	var now := Time.get_ticks_msec() / 1000.0
+	ctx.time_since_last_clear = now - (_technique_round_state.last_clear_time if _technique_round_state else now)
+	ctx.enemy_timer_remaining = maxf(0.0, _next_garbage_interval - _enemy_timer) if current_config else 0.0
 	match event_type:
 		"single":          ctx.lines_cleared = 1
 		"double":          ctx.lines_cleared = 2
@@ -1184,9 +1218,7 @@ func _handle_technique_flags(flags: Array) -> void:
 						_queue_enhancement_grant(enh_type, 1)
 				elif flag.begins_with("shield_per_clear:"):
 					var shield_amount := int(flag.split(":")[1])
-					_garbage_shield += shield_amount
-					if _shield_bar:
-						_shield_bar.update_charges(_garbage_shield)
+					_apply_shield_gain(shield_amount)
 
 func _update_round_state_after_eval(ctx: AttackContext, _eval: Dictionary) -> void:
 	if _technique_round_state == null:
@@ -1212,6 +1244,7 @@ func _update_round_state_after_eval(ctx: AttackContext, _eval: Dictionary) -> vo
 			rs.tetris_echo_pending = false
 
 		rs.last_clear_type = ctx.event_type
+		rs.last_clear_time = Time.get_ticks_msec() / 1000.0
 		if rs.opening_blow_used == false:
 			rs.opening_blow_used = true
 		if rs.follow_up_pending:
@@ -1314,6 +1347,8 @@ func _apply_keystone_flat_bonuses(attack: int, event_type: String) -> int:
 	var total_bonus := 0
 	for ks in RunState.keystones:
 		total_bonus += compute_keystone_flat_bonus(ks, event_type, RunState.techniques, _t_spin_rotations)
+		if ks.ramping_rhythm and event_type not in ["b2b", "combo"]:
+			total_bonus += 1 + int(_ramping_rhythm_timer / 3.0)
 	return attack + total_bonus
 
 func _apply_keystone_multipliers(attack: int, event_type: String) -> int:
@@ -1692,6 +1727,11 @@ func _calculate_surplus_income() -> int:
 		income += 15
 	if _flow and RunState.is_boss_room(_flow.current_room) and RunState.has_technique("bounty_list"):
 		income += 40
+	for ks in RunState.keystones:
+		if ks.coins_per_10_held > 0:
+			income += int(Economy.coins / 10) * ks.coins_per_10_held
+		if ks.kill_coins > 0:
+			income += ks.kill_coins
 	return income
 
 func _on_lock_processed() -> void:

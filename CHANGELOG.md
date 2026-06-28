@@ -3,6 +3,8 @@
 ## Unreleased
 
 ### New Features
+- **11 new techniques** — Guard (quad shield), Staff Spin (tspin shield), Brace (round-start shield), Volley (first 3 attacks +2), Perfect Placement (+8 on perfect clears), Slow and Steady (+4 on slow clears), Safe Distance (shield near enemy attack), Double Barrel (+6 consecutive tspins), Concentrate (+2 when no garbage received), Whirlwind (+3 per quad technique), Charging Up technique (combo >5 spawns amplified).
+- **8 new keystones** — Investment (1 coin per 10 held after combat), Hardened Steel (2× shield gains), Shield Bash (shield gains deal damage), Cripple (+5s enemy attack interval), Nothing to Waste (+20 coins on kill), Equivalent Exchange (trade techniques in shops), Big Brain (+2 technique slots), Ramping Rhythm (scaling flat bonus over time).
 - **Garbage-reactive techniques** — Thrash (deal 1 damage per garbage line received) and Retribution (next attack deals +3 after receiving garbage) fire when the enemy attacks.
 - **Blood Offering** (Epic) — All attacks deal +3, permanently increasing by +2 each time you defeat an enemy. Bonus persists across rounds within the run.
 - **Relentless Assault** (Epic) — All attacks deal +1 damage, increasing by +1 per attack performed. Resets when the enemy fires garbage.

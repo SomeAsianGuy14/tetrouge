@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Technique" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "concentrate"
+display_name = "Concentrate"
+description = "If you have not received garbage this combat, all attacks deal +2."
+cost = 52
+rarity = "rare"
+tags = ["precision"]
+effect_type = "concentrate"
+params = {"bonus": 2}

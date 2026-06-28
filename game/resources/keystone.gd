@@ -73,6 +73,16 @@ extends Resource
 @export var master_of_none: bool = false
 @export var master_of_one: bool = false
 
+# ── New content keystones ───────────────────────────────────────────────────
+@export var coins_per_10_held: int = 0
+@export var shield_multiplier: float = 1.0
+@export var shield_to_damage: bool = false
+@export var enemy_interval_bonus: float = 0.0
+@export var kill_coins: int = 0
+@export var technique_trade: bool = false
+@export var technique_capacity_bonus: int = 0
+@export var ramping_rhythm: bool = false
+
 # ── Piece enhancements ──────────────────────────────────────────────────────
 @export var piece_enhance_every_n: int = 0
 @export var piece_enhance_type: String = ""

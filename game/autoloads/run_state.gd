@@ -141,8 +141,9 @@ func remove_technique(technique) -> void:
 	techniques.erase(technique)
 	build_changed.emit()
 
-func _apply_keystone_effects(_keystone) -> void:
-	pass
+func _apply_keystone_effects(keystone) -> void:
+	if keystone.technique_capacity_bonus > 0:
+		technique_capacity += keystone.technique_capacity_bonus
 
 func _reset_mastery() -> void:
 	mastery.clear()

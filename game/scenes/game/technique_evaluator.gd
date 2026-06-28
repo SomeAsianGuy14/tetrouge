@@ -252,10 +252,35 @@ static func _eval_attack(t: Resource, ctx: AttackContext, rs: TechniqueRoundStat
 				return p.get("bonus", 2)
 			return 0
 
+		"first_n_attacks":
+			if is_clear and rs.attack_events_this_round < p.get("max_attacks", 3):
+				return p.get("bonus", 2)
+			return 0
+
+		"slow_clear_bonus":
+			if is_clear and ctx.time_since_last_clear >= p.get("seconds", 5.0):
+				return p.get("bonus", 4)
+			return 0
+
+		"double_barrel":
+			if is_tspin and rs.last_clear_type.begins_with("tspin"):
+				return p.get("bonus", 6)
+			return 0
+
+		"per_quad_technique":
+			if ctx.lines_cleared != 4:
+				return 0
+			var quad_count := 0
+			for tech in RunState.techniques:
+				if "quad" in tech.tags:
+					quad_count += 1
+			return p.get("bonus_per_technique", 3) * quad_count
+
 		"economy", "coupon", "specialist_discount", "smooth_haggling", "bounty_list", \
 		"combo_payout", "green_thumb", "piece_enhancer", \
 		"attack_to_shield", "height_shield", "post_quad_enhance", "post_combo_enhance", \
-		"shield_per_clear_while_combo", "on_garbage_damage":
+		"shield_per_clear_while_combo", "on_garbage_damage", \
+		"shield_on_clear", "round_start_shield", "safe_distance_shield":
 			return 0  # shop/economy/shield/grant effects only — handled outside evaluator
 
 		_:
@@ -347,4 +372,16 @@ static func _collect_flags(techniques: Array, ctx: AttackContext, _rs: Technique
 				var threshold: int = t.params.get("combo_threshold", 3)
 				if ctx.lines_cleared > 0 and ctx.combo > threshold:
 					flags.append("shield_per_clear:" + str(t.params.get("shield_per_clear", 1)))
+			"shield_on_clear":
+				var on: String = t.params.get("on", "")
+				var soc_matches: bool = false
+				match on:
+					"quad": soc_matches = ctx.lines_cleared == 4
+					"tspin": soc_matches = ctx.tspin != ""
+					"all_clear": soc_matches = ctx.lines_cleared > 0
+				if soc_matches:
+					flags.append("shield_per_clear:" + str(t.params.get("shield", 2)))
+			"safe_distance_shield":
+				if ctx.lines_cleared > 0 and ctx.enemy_timer_remaining <= t.params.get("seconds", 10.0) and ctx.enemy_timer_remaining > 0.0:
+					flags.append("shield_per_clear:" + str(t.params.get("shield", 4)))
 	return flags

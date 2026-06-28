@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Technique" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "perfect_placement"
+display_name = "Perfect Placement"
+description = "Perfect clears deal +8 damage."
+cost = 40
+rarity = "common"
+tags = ["precision"]
+effect_type = "flat"
+params = {"on": "perfect_clear", "bonus": 8}

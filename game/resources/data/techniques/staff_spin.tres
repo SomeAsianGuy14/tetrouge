@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Technique" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "staff_spin"
+display_name = "Staff Spin"
+description = "T-Spins grant 2 shield."
+cost = 40
+rarity = "common"
+tags = ["tspin"]
+effect_type = "shield_on_clear"
+params = {"on": "tspin", "shield": 2}

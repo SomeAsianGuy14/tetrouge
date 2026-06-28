@@ -34,5 +34,7 @@ var relentless_counter: int = 0
 var garbage_received_this_round: bool = false
 
 # Used flags (prevent double-triggering within a round)
+var last_clear_time: float = 0.0
+
 var opening_blow_used: bool = false
 var combo_payout_used: bool = false

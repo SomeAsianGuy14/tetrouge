@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Technique" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "volley"
+display_name = "Volley"
+description = "Your first 3 attacks deal +2 damage."
+cost = 40
+rarity = "common"
+tags = ["general"]
+effect_type = "first_n_attacks"
+params = {"max_attacks": 3, "bonus": 2}

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="Keystone" format=3]
+
+[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "hardened_steel"
+display_name = "Hardened Steel"
+description = "Whenever you gain shield, gain 2x the amount."
+flavor_text = "Forged in the deep"
+category = "Defense"
+shield_multiplier = 2.0

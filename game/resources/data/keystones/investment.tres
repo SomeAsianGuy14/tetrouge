@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="Keystone" format=3]
+
+[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "investment"
+display_name = "Investment"
+description = "Gain an additional coin for every 10 coins you have after each combat."
+flavor_text = "Money makes money"
+category = "Economic"
+coins_per_10_held = 1

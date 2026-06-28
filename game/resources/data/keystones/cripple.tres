@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="Keystone" format=3]
+
+[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "cripple"
+display_name = "Cripple"
+description = "All enemies take 5 seconds longer to attack."
+flavor_text = "Patience is a virtue"
+category = "Utility"
+enemy_interval_bonus = 5.0

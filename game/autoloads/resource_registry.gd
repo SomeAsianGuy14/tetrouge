@@ -48,6 +48,14 @@ const all_keystones: Array = [
 	preload("res://resources/data/keystones/ignition.tres"),
 	preload("res://resources/data/keystones/master_of_none.tres"),
 	preload("res://resources/data/keystones/master_of_one.tres"),
+	preload("res://resources/data/keystones/investment.tres"),
+	preload("res://resources/data/keystones/hardened_steel.tres"),
+	preload("res://resources/data/keystones/shield_bash.tres"),
+	preload("res://resources/data/keystones/cripple.tres"),
+	preload("res://resources/data/keystones/nothing_to_waste.tres"),
+	preload("res://resources/data/keystones/equivalent_exchange.tres"),
+	preload("res://resources/data/keystones/big_brain.tres"),
+	preload("res://resources/data/keystones/ramping_rhythm.tres"),
 ]
 
 const all_techniques: Array = [
@@ -108,6 +116,17 @@ const all_techniques: Array = [
 	preload("res://resources/data/techniques/retribution.tres"),
 	preload("res://resources/data/techniques/blood_offering.tres"),
 	preload("res://resources/data/techniques/relentless_assault.tres"),
+	preload("res://resources/data/techniques/guard.tres"),
+	preload("res://resources/data/techniques/staff_spin.tres"),
+	preload("res://resources/data/techniques/brace.tres"),
+	preload("res://resources/data/techniques/volley.tres"),
+	preload("res://resources/data/techniques/perfect_placement.tres"),
+	preload("res://resources/data/techniques/slow_and_steady.tres"),
+	preload("res://resources/data/techniques/safe_distance.tres"),
+	preload("res://resources/data/techniques/double_barrel.tres"),
+	preload("res://resources/data/techniques/concentrate.tres"),
+	preload("res://resources/data/techniques/whirlwind.tres"),
+	preload("res://resources/data/techniques/charging_up_technique.tres"),
 ]
 
 const all_consumables: Array = [

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="Keystone" format=3]
+
+[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "nothing_to_waste"
+display_name = "Nothing to Waste"
+description = "Gain an additional 20 gold whenever you defeat an enemy."
+flavor_text = "Every victory counts"
+category = "Economic"
+kill_coins = 20

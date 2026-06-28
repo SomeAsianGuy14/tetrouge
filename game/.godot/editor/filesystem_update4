@@ -64,3 +64,4 @@ res://scenes/game/enemy_display.gd
 res://scripts/run_flow.gd
 res://scenes/game/hud.gd
 res://scripts/run_stats.gd
+res://scripts/dungeon_generator.gd

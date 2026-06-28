@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="Keystone" format=3]
+
+[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "equivalent_exchange"
+display_name = "Equivalent Exchange"
+description = "You can trade a technique you own for a technique of the same tier in shops."
+flavor_text = "Fair is fair"
+category = "Utility"
+technique_trade = true

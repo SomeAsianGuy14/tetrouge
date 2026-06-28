@@ -16,3 +16,5 @@ extends Resource
 @export var enemy_hp_pct: float = 1.0   # 0.0–1.0; used by Finisher
 @export var cleared_enh_counts: Dictionary = {}
 @export var event_type: String = ""
+@export var time_since_last_clear: float = 0.0
+@export var enemy_timer_remaining: float = 0.0

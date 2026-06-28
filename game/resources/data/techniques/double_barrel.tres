@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Technique" format=3]
+
+[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "double_barrel"
+display_name = "Double Barrel"
+description = "Consecutive T-Spins deal +6 damage."
+cost = 52
+rarity = "rare"
+tags = ["tspin"]
+effect_type = "double_barrel"
+params = {"bonus": 6}
