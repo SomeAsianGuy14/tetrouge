@@ -43,6 +43,11 @@ var _saved_highest_combo_chain: int
 var _saved_highest_b2b: int
 var _saved_best_single_run_damage: int
 var _saved_best_mastery: Dictionary
+var _saved_discovered_keystones: Array
+var _saved_discovered_techniques: Array
+var _saved_discovered_consumables: Array
+var _saved_discovered_enemies: Array
+var _saved_discovered_bosses: Array
 
 func before_each() -> void:
 	_saved_runs_completed = ProfileSave.runs_completed
@@ -63,6 +68,11 @@ func before_each() -> void:
 	_saved_highest_b2b = ProfileSave.highest_b2b
 	_saved_best_single_run_damage = ProfileSave.best_single_run_damage
 	_saved_best_mastery = ProfileSave.best_mastery.duplicate()
+	_saved_discovered_keystones = ProfileSave.discovered_keystones.duplicate()
+	_saved_discovered_techniques = ProfileSave.discovered_techniques.duplicate()
+	_saved_discovered_consumables = ProfileSave.discovered_consumables.duplicate()
+	_saved_discovered_enemies = ProfileSave.discovered_enemies.duplicate()
+	_saved_discovered_bosses = ProfileSave.discovered_bosses.duplicate()
 
 func after_each() -> void:
 	ProfileSave.runs_completed = _saved_runs_completed
@@ -83,6 +93,11 @@ func after_each() -> void:
 	ProfileSave.highest_b2b = _saved_highest_b2b
 	ProfileSave.best_single_run_damage = _saved_best_single_run_damage
 	ProfileSave.best_mastery = _saved_best_mastery
+	ProfileSave.discovered_keystones = _saved_discovered_keystones
+	ProfileSave.discovered_techniques = _saved_discovered_techniques
+	ProfileSave.discovered_consumables = _saved_discovered_consumables
+	ProfileSave.discovered_enemies = _saved_discovered_enemies
+	ProfileSave.discovered_bosses = _saved_discovered_bosses
 	ProfileSave.save_profile()
 
 # ── 9.1 – _compute_pbs: PB flag set when run exceeds stored best ─────────────

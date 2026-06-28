@@ -30,6 +30,13 @@ var highest_b2b: int = 0
 var best_single_run_damage: int = 0
 var best_mastery: Dictionary = {}
 
+# Discovery tracking
+var discovered_keystones: Array = []
+var discovered_techniques: Array = []
+var discovered_consumables: Array = []
+var discovered_enemies: Array = []
+var discovered_bosses: Array = []
+
 func load_profile() -> void:
 	var cfg := ConfigFile.new()
 	if cfg.load(SAVE_PATH) != OK:
@@ -54,6 +61,11 @@ func load_profile() -> void:
 	highest_b2b = cfg.get_value("stats", "highest_b2b", 0)
 	best_single_run_damage = cfg.get_value("stats", "best_single_run_damage", 0)
 	best_mastery = cfg.get_value("stats", "best_mastery", {})
+	discovered_keystones = cfg.get_value("compendium", "keystones", [])
+	discovered_techniques = cfg.get_value("compendium", "techniques", [])
+	discovered_consumables = cfg.get_value("compendium", "consumables", [])
+	discovered_enemies = cfg.get_value("compendium", "enemies", [])
+	discovered_bosses = cfg.get_value("compendium", "bosses", [])
 
 func save_profile() -> void:
 	var cfg := ConfigFile.new()
@@ -77,6 +89,11 @@ func save_profile() -> void:
 	cfg.set_value("stats", "highest_b2b", highest_b2b)
 	cfg.set_value("stats", "best_single_run_damage", best_single_run_damage)
 	cfg.set_value("stats", "best_mastery", best_mastery)
+	cfg.set_value("compendium", "keystones", discovered_keystones)
+	cfg.set_value("compendium", "techniques", discovered_techniques)
+	cfg.set_value("compendium", "consumables", discovered_consumables)
+	cfg.set_value("compendium", "enemies", discovered_enemies)
+	cfg.set_value("compendium", "bosses", discovered_bosses)
 	cfg.save(SAVE_PATH)
 
 func record_victory(level: int) -> void:
@@ -104,3 +121,28 @@ func accumulate_stats(run_stats) -> void:
 	for track in run_stats.mastery_levels:
 		best_mastery[track] = max(best_mastery.get(track, 0), run_stats.mastery_levels[track])
 	save_profile()
+
+func discover_keystone(id: String) -> void:
+	if id not in discovered_keystones:
+		discovered_keystones.append(id)
+		save_profile()
+
+func discover_technique(id: String) -> void:
+	if id not in discovered_techniques:
+		discovered_techniques.append(id)
+		save_profile()
+
+func discover_consumable(id: String) -> void:
+	if id not in discovered_consumables:
+		discovered_consumables.append(id)
+		save_profile()
+
+func discover_enemy(id: String) -> void:
+	if id not in discovered_enemies:
+		discovered_enemies.append(id)
+		save_profile()
+
+func discover_boss(id: String) -> void:
+	if id not in discovered_bosses:
+		discovered_bosses.append(id)
+		save_profile()

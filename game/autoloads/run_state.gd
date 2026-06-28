@@ -120,16 +120,19 @@ func add_keystone(keystone) -> void:
 	keystones.append(keystone)
 	used_keystone_ids.append(keystone.id)
 	_apply_keystone_effects(keystone)
+	ProfileSave.discover_keystone(keystone.id)
 	build_changed.emit()
 
 func add_technique(technique) -> void:
 	techniques.append(technique)
+	ProfileSave.discover_technique(technique.id)
 	build_changed.emit()
 
 func add_consumable(consumable) -> bool:
 	if consumables.size() >= consumable_capacity:
 		return false
 	consumables.append(consumable)
+	ProfileSave.discover_consumable(consumable.id)
 	build_changed.emit()
 	return true
 

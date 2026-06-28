@@ -65,3 +65,6 @@ res://scripts/run_flow.gd
 res://scenes/game/hud.gd
 res://scripts/run_stats.gd
 res://scripts/dungeon_generator.gd
+res://scenes/main_menu/main_menu.gd
+res://scripts/profile_save.gd
+res://scenes/screens/compendium_screen.gd

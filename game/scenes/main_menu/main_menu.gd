@@ -4,6 +4,7 @@ extends Control
 @onready var continue_button: Button = $Panel/VBox/ContinueButton
 @onready var new_run_button: Button = $Panel/VBox/NewRunButton
 @onready var stats_button: Button = $Panel/VBox/StatsButton
+@onready var compendium_button: Button = $Panel/VBox/CompendiumButton
 @onready var settings_button: Button = $Panel/VBox/SettingsButton
 @onready var quit_button: Button = $Panel/VBox/QuitButton
 
@@ -12,6 +13,7 @@ func _ready() -> void:
 	continue_button.connect("pressed", _on_continue)
 	new_run_button.connect("pressed", _on_new_run)
 	stats_button.connect("pressed", _on_stats)
+	compendium_button.connect("pressed", _on_compendium)
 	settings_button.connect("pressed", _on_settings)
 	quit_button.connect("pressed", _on_quit)
 
@@ -49,6 +51,11 @@ func _start_run(level: int) -> void:
 func _on_stats() -> void:
 	var stats_scene: PackedScene = load("res://scenes/screens/stats_screen.tscn")
 	add_child(stats_scene.instantiate())
+
+func _on_compendium() -> void:
+	var screen := CompendiumScreen.new()
+	get_tree().root.add_child(screen)
+	queue_free()
 
 func _on_settings() -> void:
 	var settings_scene: PackedScene = load("res://scenes/screens/settings.tscn")

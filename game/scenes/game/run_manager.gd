@@ -1673,11 +1673,18 @@ func _end_round(success: bool) -> void:
 		_flow.resolve_combat(false)
 		return
 
-	if current_config and current_config.enemy and current_config.enemy.id == "pickpocket_enemy":
-		Economy.add_coins(RunState.pickpocket_stolen_gold)
-		RunState.pickpocket_stolen_gold = 0
-	if current_config and current_config.enemy and current_config.enemy.id == "mimic_enemy":
-		Economy.add_coins(50)
+	if current_config and current_config.enemy:
+		var enemy_id: String = current_config.enemy.id
+		var enemy_tier: String = current_config.enemy.tier
+		if enemy_id == "pickpocket_enemy":
+			Economy.add_coins(RunState.pickpocket_stolen_gold)
+			RunState.pickpocket_stolen_gold = 0
+		if enemy_id == "mimic_enemy":
+			Economy.add_coins(50)
+		if enemy_tier in ["Boss", "FinalBoss"]:
+			ProfileSave.discover_boss(enemy_id)
+		else:
+			ProfileSave.discover_enemy(enemy_id)
 	var surplus_income := _calculate_surplus_income()
 	var keystone_income := _apply_keystone_economy()
 	Economy.add_coins(surplus_income)

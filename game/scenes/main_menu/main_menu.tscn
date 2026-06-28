@@ -46,6 +46,10 @@ text = "New Run"
 layout_mode = 2
 text = "Stats"
 
+[node name="CompendiumButton" type="Button" parent="Panel/VBox"]
+layout_mode = 2
+text = "Compendium"
+
 [node name="SettingsButton" type="Button" parent="Panel/VBox" unique_id=306990449]
 layout_mode = 2
 text = "Settings"
