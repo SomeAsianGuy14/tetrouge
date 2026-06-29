@@ -1,14 +1,17 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Technique" format=3 uid="uid://c3p555gj6b2vq"]
 
-[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+[ext_resource type="Script" uid="uid://eexbry3dg1u" path="res://resources/technique.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "adrenaline_rush"
 display_name = "Adrenaline Rush"
 description = "Line clears in the top 4 lines send +8 attack."
-cost = 64
 rarity = "epic"
+cost = 64
 tags = ["risk"]
 effect_type = "adrenaline_rush"
-params = {"top_rows": 4, "bonus": 8}
+params = {
+"bonus": 8,
+"top_rows": 4
+}

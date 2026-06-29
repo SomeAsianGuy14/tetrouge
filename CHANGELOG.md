@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased
+
+### New Features
+- **Damage types** — Three new damage types: Burn (1 garbage to buffer every 3s, shield blocks), Poison (1 garbage directly to board every 5s, bypasses shield), True Damage (permanent unclearable crimson row). Binary state — multiple sources extend duration but don't stack rate.
+- **Elite enemies** — 4 elite enemies with unique board-modifying attacks: Corrupted Mage (fills random cells), Possessed Blade (deletes 3 rows), Crimson Drake (burn on unblocked hit, 6s), Venomous Archer (poison on unblocked hit, 10s). One guaranteed elite room per floor with distinct "!" map tile.
+- **2 new bosses** — The Tide (1 true damage every 30s) and The Serpent (permanent poison). The Furnace reworked to permanent burn.
+- **3 cursed keystones** — Poisoned Blood (permanent poison, ×2 damage), Blazing Heart (permanent burn, ×2 damage), Glass Cannon (10 true damage rows, ×2 damage). Burning Board replaced by Poisoned Blood. Glass Cannon moved from technique to keystone.
+- **Debuff status display** — Burn and poison indicators with countdown timers appear to the left of the board during combat.
+
+### Bug Fixes
+- **Elite special rooms now route to combat** — Elite special room type was missing from RunFlow combat routing, causing blank screens on entry.
+
 ## [0.4.0] — 2026-06-28
 
 ### New Features

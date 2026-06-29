@@ -1,14 +1,15 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Technique" format=3 uid="uid://1opaim3g0gub"]
 
-[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+[ext_resource type="Script" uid="uid://eexbry3dg1u" path="res://resources/technique.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "green_thumb"
 display_name = "Green Thumb"
 description = "After clearing 6 garbage lines gain 20 coins."
-cost = 40
-rarity = "common"
 tags = ["economy", "garbage"]
 effect_type = "green_thumb"
-params = {"rows_threshold": 6, "coins": 20}
+params = {
+"coins": 20,
+"rows_threshold": 6
+}

@@ -119,6 +119,8 @@ func _accessible_label(room: DungeonRoom) -> String:
 	match room.room_type:
 		DungeonRoom.TYPE_COMBAT_SMALL, DungeonRoom.TYPE_COMBAT_BIG, DungeonRoom.TYPE_COMBAT_ELITE:
 			return "Combat"
+		DungeonRoom.TYPE_COMBAT_ELITE_SPECIAL:
+			return "!"
 		DungeonRoom.TYPE_SHOP:          return "Shop"
 		DungeonRoom.TYPE_ENCOUNTER:     return "?"
 	return "?"
@@ -127,6 +129,8 @@ func _cleared_label(room: DungeonRoom) -> String:
 	match room.room_type:
 		DungeonRoom.TYPE_COMBAT_SMALL, DungeonRoom.TYPE_COMBAT_BIG, DungeonRoom.TYPE_COMBAT_ELITE:
 			return "✓ Combat"
+		DungeonRoom.TYPE_COMBAT_ELITE_SPECIAL:
+			return "✓ !"
 		DungeonRoom.TYPE_SHOP:          return "✓ Shop"
 		DungeonRoom.TYPE_ENCOUNTER:     return "✓ ?"
 		DungeonRoom.TYPE_START:         return "START"
@@ -136,6 +140,8 @@ func _accessible_color(room: DungeonRoom) -> Color:
 	match room.room_type:
 		DungeonRoom.TYPE_SHOP:
 			return COLOR_SHOP
+		DungeonRoom.TYPE_COMBAT_ELITE_SPECIAL:
+			return Color(0.7, 0.2, 0.2)
 	return COLOR_ACCESSIBLE
 
 func _tint(btn: Button, color: Color) -> void:

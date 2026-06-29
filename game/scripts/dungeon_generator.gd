@@ -173,6 +173,16 @@ static func _attempt_generate(floor_number: int, rng: RandomNumberGenerator) -> 
 			df.rooms[pick].room_type = DungeonRoom.TYPE_SHOP
 			df.rooms[pick].encounter_subtype = ""
 
+	# ── Guarantee one elite special per floor ─────────────────────────────────
+	var elite_candidates: Array = []
+	for idx in range(2, df.rooms.size()):
+		var r: DungeonRoom = df.rooms[idx]
+		if r.room_type in [DungeonRoom.TYPE_COMBAT_BIG, DungeonRoom.TYPE_COMBAT_ELITE]:
+			elite_candidates.append(idx)
+	if not elite_candidates.is_empty():
+		var pick: int = elite_candidates[rng.randi_range(0, elite_candidates.size() - 1)]
+		df.rooms[pick].room_type = DungeonRoom.TYPE_COMBAT_ELITE_SPECIAL
+
 	# ── Branch rooms: grown from existing rooms for extra variety ─────────────
 	var branch_target := rng.randi_range(1, 2)
 	var branch_placed := 0

@@ -89,6 +89,15 @@ var _burn_active: bool = false
 var _burn_duration: float = 5.0
 var _ramping_rhythm_timer: float = 0.0
 var _ramping_rhythm_active: bool = false
+
+var _burn_debuff_active: bool = false
+var _burn_debuff_remaining: float = 0.0
+var _burn_debuff_timer: float = 0.0
+var _poison_debuff_active: bool = false
+var _poison_debuff_remaining: float = 0.0
+var _poison_debuff_timer: float = 0.0
+var _true_damage_interval_timer: float = 0.0
+var _debuff_display: Control = null
 var _deferred_reflect_lines: int = 0
 var _flash_step_arr_pending: bool = false
 var _flash_step_arr_active: bool = false
@@ -266,6 +275,13 @@ func start_round(room: DungeonRoom) -> void:
 	_burn_pool = 0.0
 	_ramping_rhythm_timer = 0.0
 	_ramping_rhythm_active = false
+	_burn_debuff_active = false
+	_burn_debuff_remaining = 0.0
+	_burn_debuff_timer = 0.0
+	_poison_debuff_active = false
+	_poison_debuff_remaining = 0.0
+	_poison_debuff_timer = 0.0
+	_true_damage_interval_timer = 0.0
 	for ks in RunState.keystones:
 		if ks.burning_board:
 			_burning_board_active = true
@@ -283,6 +299,19 @@ func start_round(room: DungeonRoom) -> void:
 			RunState.techniques.clear()
 			RunState.technique_capacity = 0
 			RunState.mastery_xp_multiplier = 2
+		if ks.get("permanent_poison") and ks.permanent_poison:
+			apply_poison(-1.0)
+		if ks.get("permanent_burn") and ks.permanent_burn:
+			apply_burn(-1.0)
+		if ks.get("true_damage_on_start") and ks.true_damage_on_start > 0:
+			for _i in ks.true_damage_on_start:
+				if current_board:
+					current_board.insert_true_damage_row()
+	if current_config and current_config.boss_modifier:
+		if current_config.boss_modifier.get("permanent_poison") and current_config.boss_modifier.permanent_poison:
+			apply_poison(-1.0)
+		if current_config.boss_modifier.get("permanent_burn") and current_config.boss_modifier.permanent_burn:
+			apply_burn(-1.0)
 	_round_technique_coins = 0
 	_round_enhancement_coins = 0
 	_reset_enhancement_round_state()
@@ -363,6 +392,10 @@ func start_round(room: DungeonRoom) -> void:
 	_shield_bar.position = Vector2(TetrisBoard.COLS * TetrisBoard.CELL_SIZE + 4, 0)
 	_shield_bar.update_charges(_garbage_shield)
 
+	_debuff_display = DebuffDisplay.new()
+	board_container.add_child(_debuff_display)
+	_debuff_display.position = Vector2(-110, 220)
+
 	hud._refresh_backpack_slots()
 
 func _build_round_config(room: DungeonRoom) -> RoundConfig:
@@ -379,7 +412,16 @@ func _build_round_config(room: DungeonRoom) -> RoundConfig:
 	for keystone in RunState.keystones:
 		keystone.apply_to_config(cfg)
 
-	var enemy := _draw_enemy(tier)
+	var enemy: Enemy
+	if room.room_type == DungeonRoom.TYPE_COMBAT_ELITE_SPECIAL:
+		var elite_pool: Array = []
+		for e in ResourceRegistry.all_enemies:
+			if e.elite_attack != "" and not e.encounter_only:
+				elite_pool.append(e)
+		RunState.seeded_shuffle(elite_pool)
+		enemy = elite_pool[0] if not elite_pool.is_empty() else _draw_enemy(tier)
+	else:
+		enemy = _draw_enemy(tier)
 	cfg.enemy = enemy
 	var _stage_scalar := maxf(0.5, 1.0 - (RunState.floor - 1) * 0.1)
 	var _lines_bonus := (RunState.floor - 1) / 2
@@ -579,6 +621,11 @@ func _process(delta: float) -> void:
 	_tick_timer(delta)
 	_tick_burning_board(delta)
 	_tick_burn(delta)
+	_tick_burn_debuff(delta)
+	_tick_poison_debuff(delta)
+	_tick_true_damage_interval(delta)
+	if _debuff_display:
+		_debuff_display.update_debuffs(_burn_debuff_active, _burn_debuff_remaining, _poison_debuff_active, _poison_debuff_remaining)
 	if _ramping_rhythm_active:
 		_ramping_rhythm_timer += delta
 	_tick_enemy_garbage(delta)
@@ -688,11 +735,13 @@ func _tick_enemy_garbage(delta: float) -> void:
 				if _enemy_display:
 					_enemy_display.on_attack_fired()
 			_notify_attack_bar()
+			var was_unblocked: bool = n > 0
 			if _technique_round_state:
 				_technique_round_state.after_receive_pending = true
 				_technique_round_state.garbage_received_this_round = true
 				_technique_round_state.relentless_counter = 0
 			_on_garbage_received(raw_lines)
+			_apply_elite_attack(was_unblocked)
 		_next_garbage_interval = randf_range(current_config.garbage_interval_min, current_config.garbage_interval_max)
 		if current_config.boss_modifier and current_config.boss_modifier.scaling_interval:
 			var hp_pct := maxf(0.2, 1.0 - quota_accumulated / maxf(1.0, float(current_config.quota)))
@@ -737,6 +786,63 @@ func _on_garbage_received(lines: int) -> void:
 				if _technique_round_state:
 					_technique_round_state.retribution_pending = true
 					_technique_round_state.retribution_bonus = t.params.get("bonus", 3)
+
+func _apply_elite_attack(unblocked: bool) -> void:
+	if current_config == null or current_config.enemy == null:
+		return
+	var atk: String = current_config.enemy.elite_attack
+	if atk == "":
+		return
+	match atk:
+		"corrupted_mage":
+			if current_board:
+				var empty_cells: Array = []
+				for r in range(TetrisBoard.HIDDEN_ROWS, TetrisBoard.TOTAL_ROWS):
+					for c in range(current_config.board_width):
+						if current_board.grid[r][c] == 0:
+							empty_cells.append(Vector2i(c, r))
+				if not empty_cells.is_empty():
+					RunState.seeded_shuffle(empty_cells)
+					var fill_count := mini(randi_range(4, 6), empty_cells.size())
+					for i in fill_count:
+						current_board.grid[empty_cells[i].y][empty_cells[i].x] = PieceData.COLOR_GARBAGE
+				current_board.queue_redraw()
+		"possessed_blade":
+			if current_board:
+				var clearable_rows: Array = []
+				for r in range(TetrisBoard.TOTAL_ROWS):
+					var has_true_damage := false
+					for c in range(current_config.board_width):
+						if current_board.grid[r][c] == TetrisBoard.CELL_TRUE_DAMAGE:
+							has_true_damage = true
+							break
+					if not has_true_damage:
+						clearable_rows.append(r)
+				if clearable_rows.size() >= 3:
+					var start_idx := randi_range(0, clearable_rows.size() - 3)
+					var rows_to_delete: Array = []
+					for i in range(start_idx, start_idx + 3):
+						rows_to_delete.append(clearable_rows[i])
+					rows_to_delete.sort()
+					rows_to_delete.reverse()
+					for r in rows_to_delete:
+						current_board.grid.remove_at(r)
+						current_board.enh_grid.remove_at(r)
+						var empty_row := []
+						empty_row.resize(TetrisBoard.COLS)
+						empty_row.fill(0)
+						current_board.grid.insert(0, empty_row)
+						var empty_enh := []
+						empty_enh.resize(TetrisBoard.COLS)
+						empty_enh.fill("")
+						current_board.enh_grid.insert(0, empty_enh)
+				current_board.queue_redraw()
+		"crimson_drake":
+			if unblocked:
+				apply_burn(6.0)
+		"venomous_archer":
+			if unblocked:
+				apply_poison(10.0)
 
 func _build_technique_states() -> Dictionary:
 	var states := {}
@@ -791,6 +897,69 @@ func _tick_burn(delta: float) -> void:
 		_enemy_display.update_hp(quota_accumulated)
 	if current_config and quota_accumulated >= current_config.quota:
 		_end_round(true)
+
+func apply_burn(duration: float) -> void:
+	if _burn_debuff_active:
+		if duration < 0.0 or _burn_debuff_remaining < 0.0:
+			_burn_debuff_remaining = -1.0
+		elif duration > _burn_debuff_remaining:
+			_burn_debuff_remaining = duration
+	else:
+		_burn_debuff_active = true
+		_burn_debuff_remaining = duration
+		_burn_debuff_timer = 0.0
+
+func apply_poison(duration: float) -> void:
+	if _poison_debuff_active:
+		if duration < 0.0 or _poison_debuff_remaining < 0.0:
+			_poison_debuff_remaining = -1.0
+		elif duration > _poison_debuff_remaining:
+			_poison_debuff_remaining = duration
+	else:
+		_poison_debuff_active = true
+		_poison_debuff_remaining = duration
+		_poison_debuff_timer = 0.0
+
+func _tick_burn_debuff(delta: float) -> void:
+	if not _burn_debuff_active:
+		return
+	if _burn_debuff_remaining > 0.0:
+		_burn_debuff_remaining -= delta
+		if _burn_debuff_remaining <= 0.0:
+			_burn_debuff_active = false
+			return
+	_burn_debuff_timer += delta
+	if _burn_debuff_timer >= 3.0:
+		_burn_debuff_timer -= 3.0
+		var col := randi() % (current_config.board_width if current_config else 10)
+		_garbage_packets.append({lines = 1, is_filth = false, col = col})
+		_notify_attack_bar()
+
+func _tick_poison_debuff(delta: float) -> void:
+	if not _poison_debuff_active:
+		return
+	if _poison_debuff_remaining > 0.0:
+		_poison_debuff_remaining -= delta
+		if _poison_debuff_remaining <= 0.0:
+			_poison_debuff_active = false
+			return
+	_poison_debuff_timer += delta
+	if _poison_debuff_timer >= 5.0:
+		_poison_debuff_timer -= 5.0
+		if current_board:
+			var col := randi() % (current_config.board_width if current_config else 10)
+			current_board.insert_garbage_rows(1, col)
+
+func _tick_true_damage_interval(delta: float) -> void:
+	if current_config == null or current_config.boss_modifier == null:
+		return
+	if current_config.boss_modifier.true_damage_interval <= 0.0:
+		return
+	_true_damage_interval_timer += delta
+	if _true_damage_interval_timer >= current_config.boss_modifier.true_damage_interval:
+		_true_damage_interval_timer -= current_config.boss_modifier.true_damage_interval
+		if current_board:
+			current_board.insert_true_damage_row()
 
 # ── Attack signal handler ─────────────────────────────────────────────────
 

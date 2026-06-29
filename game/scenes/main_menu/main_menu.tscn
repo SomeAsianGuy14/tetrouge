@@ -46,7 +46,7 @@ text = "New Run"
 layout_mode = 2
 text = "Stats"
 
-[node name="CompendiumButton" type="Button" parent="Panel/VBox"]
+[node name="CompendiumButton" type="Button" parent="Panel/VBox" unique_id=816772761]
 layout_mode = 2
 text = "Compendium"
 

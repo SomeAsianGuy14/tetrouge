@@ -1,14 +1,17 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Technique" format=3 uid="uid://bp2tspou14o3p"]
 
-[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+[ext_resource type="Script" uid="uid://eexbry3dg1u" path="res://resources/technique.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "sharpen"
 display_name = "Sharpen"
 description = "Every 6th piece spawns Honed."
-cost = 52
 rarity = "rare"
+cost = 52
 tags = ["general", "enhancement"]
 effect_type = "piece_enhancer"
-params = {"enhancement": "honed", "every_n": 6}
+params = {
+"enhancement": "honed",
+"every_n": 6
+}

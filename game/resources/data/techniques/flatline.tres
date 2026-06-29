@@ -1,14 +1,18 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Technique" format=3 uid="uid://b55duk1lci5sq"]
 
-[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+[ext_resource type="Script" uid="uid://eexbry3dg1u" path="res://resources/technique.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "flatline"
 display_name = "Flatline"
 description = "If your board height is 2 or less after a clear, gain +5 attack."
-cost = 52
 rarity = "rare"
+cost = 52
 tags = ["precision"]
 effect_type = "flat"
-params = {"on": "all_clear", "board_below_pct": 0.15, "bonus": 5}
+params = {
+"board_below_pct": 0.15,
+"bonus": 5,
+"on": "all_clear"
+}

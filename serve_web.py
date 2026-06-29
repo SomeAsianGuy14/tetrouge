@@ -27,8 +27,9 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
 def find_godot():
     """Find Godot executable."""
-    if shutil.which("godot"):
-        return "godot"
+    found = shutil.which("godot")
+    if found:
+        return found
     home = os.path.expanduser("~")
     local = os.path.join(home, "bin", "godot.exe")
     if os.path.isfile(local):
@@ -40,17 +41,15 @@ def export_web(godot_path):
     """Re-export the web build."""
     os.makedirs(BUILDS_DIR, exist_ok=True)
     output = os.path.join(BUILDS_DIR, "index.html")
-    print("Exporting web build...")
+    print(f"Exporting web build with {godot_path}...")
+    print(f"  Output: {output}")
     result = subprocess.run(
         [godot_path, "--headless", "--path", GAME_DIR, "--export-release", "Web", output],
-        capture_output=True, text=True
     )
     if result.returncode != 0:
         print(f"Export failed (exit {result.returncode})")
-        if result.stderr:
-            print(result.stderr[-500:])
         return False
-    print("Web build exported.")
+    print("Web build exported successfully.")
     return True
 
 

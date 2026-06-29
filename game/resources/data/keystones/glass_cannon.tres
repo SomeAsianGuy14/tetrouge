@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Keystone" format=3]
+
+[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "glass_cannon"
+display_name = "Glass Cannon"
+description = "Take 10 lines of true damage. All attacks deal x2 damage."
+flavor_text = "Fragile but devastating"
+category = "Risk"
+all_attack_multiplier = 2.0
+true_damage_on_start = 10

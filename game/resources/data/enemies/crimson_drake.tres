@@ -11,3 +11,5 @@ color = Color(0.8, 0.05, 0.1, 1)
 sprite = ExtResource("2_oskjg")
 tier = "Elite"
 garbage_interval = 15.0
+elite_attack = "crimson_drake"
+elite_attack_description = "Unblocked attacks burn you for 4 seconds."

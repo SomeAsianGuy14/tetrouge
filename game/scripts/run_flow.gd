@@ -17,7 +17,8 @@ func enter_room(room: DungeonRoom) -> void:
 	current_room = room
 	match room.room_type:
 		DungeonRoom.TYPE_COMBAT_SMALL, DungeonRoom.TYPE_COMBAT_BIG, \
-		DungeonRoom.TYPE_COMBAT_ELITE, DungeonRoom.TYPE_BOSS:
+		DungeonRoom.TYPE_COMBAT_ELITE, DungeonRoom.TYPE_COMBAT_ELITE_SPECIAL, \
+		DungeonRoom.TYPE_BOSS:
 			combat_entered.emit(room)
 		DungeonRoom.TYPE_SHOP:
 			shop_entered.emit(room)

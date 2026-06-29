@@ -56,6 +56,8 @@ const all_keystones: Array = [
 	preload("res://resources/data/keystones/equivalent_exchange.tres"),
 	preload("res://resources/data/keystones/big_brain.tres"),
 	preload("res://resources/data/keystones/ramping_rhythm.tres"),
+	preload("res://resources/data/keystones/blazing_heart.tres"),
+	preload("res://resources/data/keystones/glass_cannon.tres"),
 ]
 
 const all_techniques: Array = [
@@ -88,7 +90,6 @@ const all_techniques: Array = [
 	preload("res://resources/data/techniques/flurry.tres"),
 	preload("res://resources/data/techniques/follow_up.tres"),
 	preload("res://resources/data/techniques/gamblers_blade.tres"),
-	preload("res://resources/data/techniques/glass_cannon.tres"),
 	preload("res://resources/data/techniques/golden_blade.tres"),
 	preload("res://resources/data/techniques/good_planning.tres"),
 	preload("res://resources/data/techniques/greedy_hands.tres"),
@@ -182,6 +183,8 @@ const all_enemies: Array = [
 	preload("res://resources/data/enemies/boss_titan.tres"),
 	preload("res://resources/data/enemies/boss_klepto.tres"),
 	preload("res://resources/data/enemies/boss_origin.tres"),
+	preload("res://resources/data/enemies/boss_tide.tres"),
+	preload("res://resources/data/enemies/boss_serpent.tres"),
 ]
 
 # Maps ids of renamed/replaced resources to their current id, so that save
@@ -201,6 +204,7 @@ const LEGACY_ID_ALIASES: Dictionary = {
 	"whirl": "",
 	"flexible": "",
 	"enchant_keystone": "enchant",
+	"burning_board": "poisoned_blood",
 }
 
 static func find_by_id(collection: Array, id: String) -> Resource:

@@ -1,14 +1,14 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Technique" format=3 uid="uid://dmot31sviwfm3"]
 
-[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+[ext_resource type="Script" uid="uid://eexbry3dg1u" path="res://resources/technique.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "side_strike"
 display_name = "Side Strike"
 description = "If a Quad clear uses the far-left or far-right column, send +3 extra attack."
-cost = 40
-rarity = "common"
 tags = ["quad", "precision"]
 effect_type = "side_strike"
-params = {"bonus": 3}
+params = {
+"bonus": 3
+}

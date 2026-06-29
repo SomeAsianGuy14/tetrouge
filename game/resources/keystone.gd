@@ -82,6 +82,9 @@ extends Resource
 @export var technique_trade: bool = false
 @export var technique_capacity_bonus: int = 0
 @export var ramping_rhythm: bool = false
+@export var permanent_poison: bool = false
+@export var permanent_burn: bool = false
+@export var true_damage_on_start: int = 0
 
 # ── Piece enhancements ──────────────────────────────────────────────────────
 @export var piece_enhance_every_n: int = 0

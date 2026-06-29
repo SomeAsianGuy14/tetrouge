@@ -1,14 +1,11 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Technique" format=3 uid="uid://bdon1fy1s28p1"]
 
-[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+[ext_resource type="Script" uid="uid://eexbry3dg1u" path="res://resources/technique.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "coupon"
 display_name = "Haggling"
 description = "Techniques cost 10% less."
-cost = 40
-rarity = "common"
 tags = ["economy"]
 effect_type = "coupon"
-params = {}

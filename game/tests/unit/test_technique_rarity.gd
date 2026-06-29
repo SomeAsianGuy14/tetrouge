@@ -21,12 +21,12 @@ func test_rare_count_is_24() -> void:
 			count += 1
 	assert_eq(count, 24)
 
-func test_epic_count_is_11() -> void:
+func test_epic_count_is_10() -> void:
 	var count := 0
 	for t in ResourceRegistry.all_techniques:
 		if t.rarity == "epic":
 			count += 1
-	assert_eq(count, 11)
+	assert_eq(count, 10)
 
 # ── Base cost ────────────────────────────────────────────────────────────
 

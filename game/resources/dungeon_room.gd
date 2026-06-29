@@ -8,6 +8,7 @@ const TYPE_COMBAT_BIG := "combat_big"
 const TYPE_COMBAT_ELITE := "combat_elite"
 const TYPE_SHOP := "shop"
 const TYPE_ENCOUNTER := "encounter"
+const TYPE_COMBAT_ELITE_SPECIAL := "combat_elite_special"
 
 const ENCOUNTER_SUBTYPES := [
 	"wishing_well",
@@ -37,11 +38,12 @@ var adjacency: Array[int] = []  # indices into DungeonFloor.rooms
 
 func get_combat_tier() -> String:
 	match room_type:
-		TYPE_COMBAT_SMALL:  return "Small"
-		TYPE_COMBAT_BIG:    return "Big"
-		TYPE_COMBAT_ELITE:  return "Elite"
-		TYPE_BOSS:          return "Boss"
+		TYPE_COMBAT_SMALL:          return "Small"
+		TYPE_COMBAT_BIG:            return "Big"
+		TYPE_COMBAT_ELITE:          return "Elite"
+		TYPE_COMBAT_ELITE_SPECIAL:  return "Elite"
+		TYPE_BOSS:                  return "Boss"
 	return ""
 
 func is_combat() -> bool:
-	return room_type in [TYPE_COMBAT_SMALL, TYPE_COMBAT_BIG, TYPE_COMBAT_ELITE, TYPE_BOSS]
+	return room_type in [TYPE_COMBAT_SMALL, TYPE_COMBAT_BIG, TYPE_COMBAT_ELITE, TYPE_COMBAT_ELITE_SPECIAL, TYPE_BOSS]

@@ -1,14 +1,17 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Technique" format=3 uid="uid://ddp6i5cb2w54l"]
 
-[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+[ext_resource type="Script" uid="uid://eexbry3dg1u" path="res://resources/technique.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "barricade"
 display_name = "Barricade"
 description = "Every 6th piece spawns Reinforced."
-cost = 52
 rarity = "rare"
+cost = 52
 tags = ["general", "enhancement"]
 effect_type = "piece_enhancer"
-params = {"enhancement": "reinforced", "every_n": 6}
+params = {
+"enhancement": "reinforced",
+"every_n": 6
+}

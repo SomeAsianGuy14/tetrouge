@@ -1,14 +1,16 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Technique" format=3 uid="uid://cn677pes74rcb"]
 
-[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+[ext_resource type="Script" uid="uid://eexbry3dg1u" path="res://resources/technique.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "glass_cannon"
 display_name = "Glass Cannon"
 description = "All attacks send +8, but incoming garbage is +2."
-cost = 64
 rarity = "epic"
+cost = 64
 tags = ["risk"]
 effect_type = "glass_cannon"
-params = {"attack_bonus": 8}
+params = {
+"attack_bonus": 8
+}

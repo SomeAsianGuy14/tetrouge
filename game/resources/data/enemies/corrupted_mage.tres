@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Enemy" format=3]
+[gd_resource type="Resource" script_class="Enemy" format=3 uid="uid://fmkue73ajmyo"]
 
 [ext_resource type="Script" uid="uid://dqm7x3n1vp5fy" path="res://resources/enemy.gd" id="1"]
 
@@ -8,5 +8,7 @@ id = "corrupted_mage"
 display_name = "Corrupted Mage"
 flavor_text = "Once a scholar, now consumed by dark magic."
 color = Color(0.5, 0.1, 0.7, 1)
-tier = "Big"
-garbage_interval = 17.0
+tier = "Elite"
+garbage_interval = 15.0
+elite_attack = "corrupted_mage"
+elite_attack_description = "Randomly fills empty cells on your board with garbage."

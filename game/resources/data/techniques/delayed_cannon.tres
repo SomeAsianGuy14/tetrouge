@@ -1,14 +1,16 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Technique" format=3 uid="uid://bxg6nprpmm8mo"]
 
-[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+[ext_resource type="Script" uid="uid://eexbry3dg1u" path="res://resources/technique.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "one_two_punch"
 display_name = "One-Two Punch"
 description = "If your clear was the same as the previous it deals +6 damage."
-cost = 64
 rarity = "epic"
+cost = 64
 tags = ["quad"]
 effect_type = "same_clear_bonus"
-params = {"bonus": 6}
+params = {
+"bonus": 6
+}

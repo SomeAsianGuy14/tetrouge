@@ -1,14 +1,17 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Technique" format=3 uid="uid://1u3qrhi18lef"]
 
-[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+[ext_resource type="Script" uid="uid://eexbry3dg1u" path="res://resources/technique.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "combo_spike"
 display_name = "Combo Spike"
 description = "Every 3rd combo clear sends +5 attack."
-cost = 64
 rarity = "epic"
+cost = 64
 tags = ["combo"]
 effect_type = "combo_spike"
-params = {"n": 3, "bonus": 5}
+params = {
+"bonus": 5,
+"n": 3
+}

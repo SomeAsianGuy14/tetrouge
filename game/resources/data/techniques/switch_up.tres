@@ -1,14 +1,14 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Technique" format=3 uid="uid://6iofo44tlejd"]
 
-[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+[ext_resource type="Script" uid="uid://eexbry3dg1u" path="res://resources/technique.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "switch_up"
 display_name = "Switch-Up"
 description = "If your clear is different from your last clear it deals +2 damage."
-cost = 40
-rarity = "common"
 tags = ["speed"]
 effect_type = "different_clear_bonus"
-params = {"bonus": 2}
+params = {
+"bonus": 2
+}

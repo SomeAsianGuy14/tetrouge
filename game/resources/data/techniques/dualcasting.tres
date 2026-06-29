@@ -1,14 +1,15 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Technique" format=3 uid="uid://xivrhtx7pc1g"]
 
-[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+[ext_resource type="Script" uid="uid://eexbry3dg1u" path="res://resources/technique.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "dualcasting"
 display_name = "Dualcasting"
 description = "T-spin doubles send +2 extra attack."
-cost = 40
-rarity = "common"
 tags = ["tspin"]
 effect_type = "flat"
-params = {"on": "tspin_double", "bonus": 2}
+params = {
+"bonus": 2,
+"on": "tspin_double"
+}

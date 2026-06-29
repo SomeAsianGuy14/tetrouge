@@ -1,14 +1,13 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Technique" format=3 uid="uid://d1278dhln0fdy"]
 
-[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+[ext_resource type="Script" uid="uid://eexbry3dg1u" path="res://resources/technique.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "greedy_hands"
 display_name = "Sticky Fingers"
 description = "Gain an additional 15 coins every round, but enemies gain +1 attack."
-cost = 52
 rarity = "rare"
+cost = 52
 tags = ["risk", "economy"]
 effect_type = "greedy_hands"
-params = {}

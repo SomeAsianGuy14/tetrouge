@@ -1,14 +1,16 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Technique" format=3 uid="uid://c2vc4oi1echfu"]
 
-[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+[ext_resource type="Script" uid="uid://eexbry3dg1u" path="res://resources/technique.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "recycling"
 display_name = "Recycling"
 description = "T-spins that clear garbage send +4 attack."
-cost = 52
 rarity = "rare"
+cost = 52
 tags = ["tspin", "garbage"]
 effect_type = "tspin_garbage"
-params = {"bonus": 4}
+params = {
+"bonus": 4
+}

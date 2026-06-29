@@ -1,14 +1,17 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Technique" format=3 uid="uid://c51pe3xcsqbdr"]
 
-[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+[ext_resource type="Script" uid="uid://eexbry3dg1u" path="res://resources/technique.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "finisher"
 display_name = "Finisher"
 description = "If the enemy is below 25% HP, line clears send +4 attack."
-cost = 52
 rarity = "rare"
+cost = 52
 tags = ["general"]
 effect_type = "enemy_hp_below"
-params = {"threshold": 0.25, "bonus": 4}
+params = {
+"bonus": 4,
+"threshold": 0.25
+}

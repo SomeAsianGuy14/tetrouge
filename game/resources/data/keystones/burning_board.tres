@@ -1,13 +1,13 @@
-[gd_resource type="Resource" script_class="Keystone" format=3]
+[gd_resource type="Resource" script_class="Keystone" format=3 uid="uid://7xprvbmnjbru"]
 
-[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+[ext_resource type="Script" uid="uid://cbdxscbm7yog0" path="res://resources/keystone.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
-id = "burning_board"
-display_name = "Burning Board"
-description = "All attacks deal x1.5 damage, but every 5 seconds take 1 damage."
-flavor_text = "The floor is lava"
+id = "poisoned_blood"
+display_name = "Poisoned Blood"
+description = "Become permanently poisoned. All attacks deal x2 damage."
+flavor_text = "Power at a cost"
 category = "Risk"
-all_attack_multiplier = 1.5
-burning_board = true
+all_attack_multiplier = 2.0
+permanent_poison = true

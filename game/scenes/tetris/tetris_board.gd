@@ -27,7 +27,9 @@ const PIECE_COLORS: Dictionary = {
 	7: Color(0.9, 0.5, 0.0),   # L — orange
 	8: Color(0.5, 0.5, 0.5),   # ghost
 	9: Color(0.35, 0.35, 0.35), # garbage
+	10: Color(0.5, 0.05, 0.05), # true damage (dark crimson)
 }
+const CELL_TRUE_DAMAGE := 10
 
 # Each pattern is an array of [x0,y0, x1,y1] segments in normalised (0–1) coords
 # within the inner cell rect. Selected by (col*7 + screen_row*13) % 4.
@@ -101,6 +103,7 @@ var _pending_was_rotation: bool = false
 
 # ── Telemetry ─────────────────────────────────────────────────────────────
 var summit_height: int = 0  # rows from top to highest filled cell (0=empty, 20=full)
+var true_damage_rows: int = 0
 
 # ── Attack tracking ───────────────────────────────────────────────────────
 var combo: int = -1
@@ -553,6 +556,8 @@ func _is_row_full(row: int) -> bool:
 	for col in range(config.board_width):
 		if grid[row][col] == 0:
 			return false
+		if grid[row][col] == CELL_TRUE_DAMAGE:
+			return false
 	return true
 
 # ── T-spin detection (3-corner rule) ─────────────────────────────────────
@@ -670,6 +675,22 @@ func insert_garbage_rows(count: int, col: int) -> void:
 		empty_enh_row.resize(COLS)
 		empty_enh_row.fill("")
 		enh_grid.append(empty_enh_row)
+	_update_ghost()
+	_update_summit_height()
+	emit_signal("board_updated")
+
+func insert_true_damage_row() -> void:
+	grid.remove_at(0)
+	enh_grid.remove_at(0)
+	var td_row := []
+	td_row.resize(COLS)
+	td_row.fill(CELL_TRUE_DAMAGE)
+	grid.append(td_row)
+	var empty_enh_row := []
+	empty_enh_row.resize(COLS)
+	empty_enh_row.fill("")
+	enh_grid.append(empty_enh_row)
+	true_damage_rows += 1
 	_update_ghost()
 	_update_summit_height()
 	emit_signal("board_updated")

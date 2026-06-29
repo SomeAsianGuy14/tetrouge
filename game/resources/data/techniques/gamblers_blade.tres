@@ -1,14 +1,19 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Technique" format=3 uid="uid://bug22ntpvn1eb"]
 
-[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+[ext_resource type="Script" uid="uid://eexbry3dg1u" path="res://resources/technique.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "gamblers_blade"
 display_name = "Gambler's Blade"
 description = "Attacks have a 50% chance to deal +8 damage and a 50% chance to deal -4 damage."
-cost = 64
 rarity = "epic"
+cost = 64
 tags = ["risk"]
 effect_type = "gambler_rng"
-params = {"win_chance": 0.5, "win_bonus": 8, "loss_chance": 0.5, "loss_penalty": 4}
+params = {
+"loss_chance": 0.5,
+"loss_penalty": 4,
+"win_bonus": 8,
+"win_chance": 0.5
+}

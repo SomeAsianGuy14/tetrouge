@@ -1,14 +1,14 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Technique" format=3 uid="uid://d34qioscnrkqk"]
 
-[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+[ext_resource type="Script" uid="uid://eexbry3dg1u" path="res://resources/technique.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "opening_blow"
 display_name = "Opening Blow"
 description = "Your first line clear each round sends +5 attack."
-cost = 40
-rarity = "common"
 tags = ["general"]
 effect_type = "first_clear"
-params = {"bonus": 5}
+params = {
+"bonus": 5
+}

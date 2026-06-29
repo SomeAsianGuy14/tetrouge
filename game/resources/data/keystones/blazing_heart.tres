@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Keystone" format=3]
+
+[ext_resource type="Script" path="res://resources/keystone.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "blazing_heart"
+display_name = "Blazing Heart"
+description = "Become permanently burned. All attacks deal x2 damage."
+flavor_text = "Fire in your veins"
+category = "Risk"
+all_attack_multiplier = 2.0
+permanent_burn = true

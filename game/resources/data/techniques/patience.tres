@@ -1,14 +1,14 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Technique" format=3 uid="uid://xyp8eepe5m42"]
 
-[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+[ext_resource type="Script" uid="uid://eexbry3dg1u" path="res://resources/technique.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "patience"
 display_name = "Patience"
 description = "After using hold, your next line clear gains +2 attack. Cooldown: 5 pieces."
-cost = 40
-rarity = "common"
 tags = ["utility"]
 effect_type = "patience"
-params = {"bonus": 2}
+params = {
+"bonus": 2
+}

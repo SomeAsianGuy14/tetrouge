@@ -1,14 +1,17 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Technique" format=3 uid="uid://2na3x62cpqw5"]
 
-[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+[ext_resource type="Script" uid="uid://eexbry3dg1u" path="res://resources/technique.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "perfect_spark"
 display_name = "Perfect Spark"
 description = "Perfect clears send +6 attack."
-cost = 52
 rarity = "rare"
+cost = 52
 tags = ["precision"]
 effect_type = "flat"
-params = {"on": "perfect_clear", "bonus": 6}
+params = {
+"bonus": 6,
+"on": "perfect_clear"
+}

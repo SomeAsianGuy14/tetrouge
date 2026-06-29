@@ -1,10 +1,9 @@
-[gd_resource type="Resource" script_class="BossModifier" format=3]
+[gd_resource type="Resource" script_class="BossModifier" format=3 uid="uid://cwte3w7wbuhpc"]
 
-[ext_resource type="Script" path="res://resources/boss_modifier.gd" id="1"]
+[ext_resource type="Script" uid="uid://cb0ulqkbqer8l" path="res://resources/boss_modifier.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "the_forgotten"
-display_name = "The Forgotten"
+display_name = "???"
 description = "???"
-hidden_ui = true

@@ -36,6 +36,11 @@ extends Resource
 @export var scaling_per_kill: float = 0.0
 @export var composite: bool = false
 
+# Damage type abilities
+@export var permanent_burn: bool = false
+@export var permanent_poison: bool = false
+@export var true_damage_interval: float = 0.0
+
 func apply_to_config(config: RoundConfig) -> void:
 	if disable_hold:
 		config.hold_disabled = true

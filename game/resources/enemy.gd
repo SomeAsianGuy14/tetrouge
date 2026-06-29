@@ -10,3 +10,5 @@ extends Resource
 @export var garbage_interval: float = 30.0
 @export var ability: BossModifier = null
 @export var encounter_only: bool = false
+@export var elite_attack: String = ""
+@export var elite_attack_description: String = ""

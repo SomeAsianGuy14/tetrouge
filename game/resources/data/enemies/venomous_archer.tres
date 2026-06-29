@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Enemy" format=3]
+[gd_resource type="Resource" script_class="Enemy" format=3 uid="uid://c7n387xld2gr3"]
 
 [ext_resource type="Script" uid="uid://dqm7x3n1vp5fy" path="res://resources/enemy.gd" id="1"]
 
@@ -8,5 +8,7 @@ id = "venomous_archer"
 display_name = "Venomous Archer"
 flavor_text = "Their arrows drip with a sickly green venom."
 color = Color(0.2, 0.65, 0.15, 1)
-tier = "Small"
-garbage_interval = 20.0
+tier = "Elite"
+garbage_interval = 15.0
+elite_attack = "venomous_archer"
+elite_attack_description = "Unblocked attacks poison you for 6 seconds."

@@ -1,14 +1,15 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Technique" format=3 uid="uid://b4vb8ydaqa0av"]
 
-[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+[ext_resource type="Script" uid="uid://eexbry3dg1u" path="res://resources/technique.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "escalation"
 display_name = "Escalation"
 description = "Every 5 attacks deal an additional 5 damage."
-cost = 40
-rarity = "common"
 tags = ["general", "speed"]
 effect_type = "escalation"
-params = {"every_n_attacks": 5, "bonus": 5}
+params = {
+"bonus": 5,
+"every_n_attacks": 5
+}

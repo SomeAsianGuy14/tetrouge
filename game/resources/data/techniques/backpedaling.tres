@@ -1,14 +1,15 @@
-[gd_resource type="Resource" format=3]
+[gd_resource type="Resource" script_class="Technique" format=3 uid="uid://ccgb53r3hr23i"]
 
-[ext_resource type="Script" path="res://resources/technique.gd" id="1"]
+[ext_resource type="Script" uid="uid://eexbry3dg1u" path="res://resources/technique.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
 id = "backpedaling"
 display_name = "Backpedaling"
 description = "While your combo is above 3, gain 1 shield per clear."
-cost = 40
-rarity = "common"
 tags = ["combo"]
 effect_type = "shield_per_clear_while_combo"
-params = {"combo_threshold": 3, "shield_per_clear": 1}
+params = {
+"combo_threshold": 3,
+"shield_per_clear": 1
+}

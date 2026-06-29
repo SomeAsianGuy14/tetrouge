@@ -136,7 +136,10 @@ func _build_enemies_tab() -> void:
 	_counter_label.text = "%d / %d discovered" % [_count_discovered(all, discovered), all.size()]
 	for item in items:
 		if item.id in discovered:
-			_add_discovered_row(item.display_name, item.flavor_text if item.flavor_text else "", item.color)
+			var subtitle: String = item.flavor_text if item.flavor_text else ""
+			if item.elite_attack_description != "":
+				subtitle += ("\n" if subtitle != "" else "") + item.elite_attack_description
+			_add_discovered_row(item.display_name, subtitle, item.color)
 		else:
 			_add_undiscovered_row(item)
 
